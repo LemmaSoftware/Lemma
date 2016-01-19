@@ -1,11 +1,9 @@
-#add_library(lemmacore  "${PROJECT_SOURCE_DIR}/LemmaCore/lemma.cpp" )
+include_directories(${CMAKE_INSTALL_PREFIX}/include)
 
+add_compile_options(-std=c++11) # CMake 2.8.12 or newer
 
-#include_directories ("${PROJECT_SOURCE_DIR}/LemmaCore")
+# TODO fill all the files
+
 add_library(lemmacore  "lemma.cpp" )
-#e) 
-#include_directories(LemmaCore)
-# "${PROJECT_BINARY_DIR}/LemmaCore")
-#  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/mylib>
-#  $<INSTALL_INTERFACE:include/mylib>  # <prefix>/include/mylib
-#)
+add_dependencies(lemmacore YAML_CPP)
+

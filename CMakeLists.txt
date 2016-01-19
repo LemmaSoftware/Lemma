@@ -13,6 +13,8 @@ ExternalProject_Add(YAML_CPP
 	GIT_TAG  "master"
 	UPDATE_COMMAND ""
 	PATCH_COMMAND ""
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/customyamlprefix
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 )
 
 #####################
@@ -36,8 +38,11 @@ include_directories ("${PROJECT_SOURCE_DIR}/LemmaCore")
 add_subdirectory (LemmaCore) 
 
 
+add_compile_options(-std=c++11) 
+
+include_directories(${CMAKE_INSTALL_PREFIX}/include)
 add_executable(Hello "${PROJECT_SOURCE_DIR}/src/test.cpp")
 target_link_libraries(Hello lemmacore)
-#enable_testing()
+
 
 

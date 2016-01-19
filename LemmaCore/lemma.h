@@ -17,5 +17,7 @@
  * @copyright Copyright (c) 2016, Trevor Irons & Lemma Software, LLC
  */
 
+#include "yaml-cpp/yaml.h"
+
 float thingy();
 
