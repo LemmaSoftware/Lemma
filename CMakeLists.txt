@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8.7)
 
 project (Lemma)
 
@@ -8,11 +8,17 @@ project (Lemma)
 include(ExternalProject)
 
 # Eigen, this header-library is used extensively for linear algebra, matrices, and arrays
+# Mercurial (hg) repo pull, Would it be better to just download latest stable?
+#ExternalProject_Add(EIGEN
+#	HG_REPOSITORY  "https://bitbucket.org/eigen/eigen/"
+#	UPDATE_COMMAND ""
+#	PATCH_COMMAND ""
+#    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
+#    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+#)
+# Stable Eigen, requires manual updating when new releases, but lighter weight.  
 ExternalProject_Add(EIGEN
-	HG_REPOSITORY  "https://bitbucket.org/eigen/eigen/"
-	#DOWNLOAD_COMMAND wget http://bitbucket.org/eigen/eigen/get/3.2.7.tar.bz2
-	UPDATE_COMMAND ""
-	PATCH_COMMAND ""
+	URL "http://bitbucket.org/eigen/eigen/get/3.2.7.tar.gz"
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 )
@@ -54,6 +60,10 @@ ExternalProject_ADD(MATIO
 # Lemma Configuration
 #####################
 project(LEMMA_CXX)
+
+# We don't Build VTK, it is too much. 
+find_package(VTK 6.0 REQUIRED NO_MODULE)
+include(${VTK_USE_FILE})
 
 set(LEMMA_VERSION_MAJOR "0")
 set(LEMMA_VERSION_MINOR "0")

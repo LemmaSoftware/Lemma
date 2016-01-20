@@ -10,3 +10,4 @@ add_dependencies(lemmacore YAML-CPP)
 add_dependencies(lemmacore TINYXML2)
 add_dependencies(lemmacore MATIO)
 
+target_link_libraries(lemmacore ${VTK_LIBRARIES})
