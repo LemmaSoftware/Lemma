@@ -43,18 +43,22 @@ ExternalProject_Add(TINYXML2
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 )
 
-# matio, this library is used for MATLAB file IO
-ExternalProject_ADD(MATIO
-	GIT_REPOSITORY  "git://git.code.sf.net/p/matio/matio"
-	GIT_TAG  "master"
-	UPDATE_COMMAND ""
-	PATCH_COMMAND ""
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/matio
-    #CONFIGURE_COMMAND ${CMAKE_CURRENT_BINARY_DIR}/external/matio/src/MATIO/autogen.sh && configure
-    CONFIGURE_COMMAND ./autogen.sh && ./configure --prefix=${CMAKE_INSTALL_PREFIX}
-	BUILD_IN_SOURCE 1 
-    BUILD_COMMAND ${MAKE}
-)
+option(MATIO_SUPPORT  "MATIO library support for MATLAB .mat files" ON)
+
+if ( MATIO_SUPPORT )
+	# matio, this library is used for MATLAB file IO
+	ExternalProject_ADD(MATIO
+		GIT_REPOSITORY  "git://git.code.sf.net/p/matio/matio"
+		GIT_TAG  "master"
+		UPDATE_COMMAND ""
+		PATCH_COMMAND ""
+    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/matio
+    	#CONFIGURE_COMMAND ${CMAKE_CURRENT_BINARY_DIR}/external/matio/src/MATIO/autogen.sh && configure
+    	CONFIGURE_COMMAND ./autogen.sh && ./configure --prefix=${CMAKE_INSTALL_PREFIX}
+		BUILD_IN_SOURCE 1 
+    	BUILD_COMMAND ${MAKE}
+	)
+endif()
 
 #####################
 # Lemma Configuration
@@ -62,7 +66,7 @@ ExternalProject_ADD(MATIO
 project(LEMMA_CXX)
 
 # We don't Build VTK, it is too much. 
-find_package(VTK 6.0 REQUIRED NO_MODULE)
+find_package(VTK 6 REQUIRED NO_MODULE)
 include(${VTK_USE_FILE})
 
 set(LEMMA_VERSION_MAJOR "0")

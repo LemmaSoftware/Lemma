@@ -18,7 +18,8 @@ add_library( lemmacore ${SOURCE} )
 
 add_dependencies(lemmacore YAML-CPP)
 add_dependencies(lemmacore TINYXML2)
-add_dependencies(lemmacore MATIO)
-
+if (MATIO_SUPPORT)
+	add_dependencies(lemmacore MATIO)
+endif()
 target_link_libraries(lemmacore ${VTK_LIBRARIES})
 target_link_libraries(lemmacore "yaml-cpp")
