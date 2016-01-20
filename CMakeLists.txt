@@ -76,8 +76,10 @@ configure_file (
 )
 include_directories("${PROJECT_BINARY_DIR}/include")
 
-
-include_directories ("${PROJECT_SOURCE_DIR}/LemmaCore")
+include_directories ("${PROJECT_SOURCE_DIR}/LemmaCore/include")
+include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3")
+include_directories ("${CMAKE_INSTALL_PREFIX}/include/")
+link_directories ("${CMAKE_INSTALL_PREFIX}/lib/")
 add_subdirectory (LemmaCore) 
 
 # TODO add compiler specific instructions
@@ -86,6 +88,6 @@ add_compile_options(-std=c++11)
 include_directories(${CMAKE_INSTALL_PREFIX}/include)
 add_executable(Hello "${PROJECT_SOURCE_DIR}/src/test.cpp")
 target_link_libraries(Hello lemmacore)
-
+add_dependencies(Hello YAML-CPP)
 
 

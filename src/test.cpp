@@ -20,9 +20,36 @@
 #include <iostream>
 #include "LemmaConfig.h"
 #include "lemma.h"
+#include "dipolesource.h"
+
+using namespace Lemma;
 
 int main() {
     std::cout << "Hello Lemma " << LEMMA_VERSION_MAJOR << "\t" << LEMMA_VERSION_MINOR << std::endl;
-    std::cout << "thingy()\t" << thingy() << std::endl;
+//    std::cout << "thingy()\t" << thingy() << std::endl;
+
+    // Test with a single dipole
+    DipoleSource *dipole = DipoleSource::New();
+        dipole->SetType(GROUNDEDELECTRICDIPOLE);
+            //dipole->SetPolarisation(1., 0.0,  1.0);
+        //    dipole->SetPolarisation(XPOLARISATION);
+        dipole->SetPolarisation(YPOLARISATION);
+        //dipole->SetPolarisation(ZPOLARISATION);
+
+        /////////////
+        //dipole->SetType(MAGNETICDIPOLE);
+            //dipole->SetPolarisation(0., 0.0,  1.0);
+            //dipole->SetPolarisation(XPOLARISATION);
+        //dipole->SetPolarisation(YPOLARISATION);
+        //dipole->SetPolarisation(ZPOLARISATION);
+
+        //dipole->SetMoment(1);
+        //dipole->SetLocation(1,1,-.0100328);
+        dipole->SetLocation(0., 0., -0.001);
+        //dipole->SetLocation(-2.5,1.25,0);
+        dipole->SetNumberOfFrequencies(1);
+        dipole->SetFrequency(0, 2e7);
+
+    std::cout << *dipole << std::endl;
 }
 
