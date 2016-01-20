@@ -6,15 +6,48 @@ project (Lemma)
 # External Projects
 ###################
 include(ExternalProject)
-# Yaml-cpp
 
-ExternalProject_Add(YAML_CPP
+# Eigen, this header-library is used extensively for linear algebra, matrices, and arrays
+ExternalProject_Add(EIGEN
+	HG_REPOSITORY  "https://bitbucket.org/eigen/eigen/"
+	#DOWNLOAD_COMMAND wget http://bitbucket.org/eigen/eigen/get/3.2.7.tar.bz2
+	UPDATE_COMMAND ""
+	PATCH_COMMAND ""
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+)
+
+# Yaml-cpp, this library is used extensively for serialisation of classes (class persistence) 
+ExternalProject_Add(YAML-CPP
 	GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
 	GIT_TAG  "master"
 	UPDATE_COMMAND ""
 	PATCH_COMMAND ""
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/customyamlprefix
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+)
+
+# tinyxml2, this library is used for XML IO 
+ExternalProject_Add(TINYXML2
+	GIT_REPOSITORY "https://github.com/leethomason/tinyxml2.git"
+	GIT_TAG  "master"
+	UPDATE_COMMAND ""
+	PATCH_COMMAND ""
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/tinyxml2
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+)
+
+# matio, this library is used for MATLAB file IO
+ExternalProject_ADD(MATIO
+	GIT_REPOSITORY  "git://git.code.sf.net/p/matio/matio"
+	GIT_TAG  "master"
+	UPDATE_COMMAND ""
+	PATCH_COMMAND ""
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/matio
+    #CONFIGURE_COMMAND ${CMAKE_CURRENT_BINARY_DIR}/external/matio/src/MATIO/autogen.sh && configure
+    CONFIGURE_COMMAND ./autogen.sh && ./configure --prefix=${CMAKE_INSTALL_PREFIX}
+	BUILD_IN_SOURCE 1 
+    BUILD_COMMAND ${MAKE}
 )
 
 #####################
@@ -37,7 +70,7 @@ include_directories("${PROJECT_BINARY_DIR}/include")
 include_directories ("${PROJECT_SOURCE_DIR}/LemmaCore")
 add_subdirectory (LemmaCore) 
 
-
+# TODO add compiler specific instructions
 add_compile_options(-std=c++11) 
 
 include_directories(${CMAKE_INSTALL_PREFIX}/include)
