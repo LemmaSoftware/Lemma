@@ -1,12 +1,27 @@
 cmake_minimum_required (VERSION 2.8.7)
 
-project (Lemma)
+project (Lemma CXX)
+
+
+# required external programs (for runtime of nix, not buildtime)
+FIND_PROGRAM(HAVEGIT git
+  PATHS /usr/bin/ /bin ENV PATH NO_DEFAULT_PATH
+)
+if(NOT HAVEGIT)
+  message(FATAL_ERROR "Lemma requires that git is installed and in the path of your machine")
+endif(NOT HAVEGIT)
+
+# FIND_PROGRAM(HAVEHG hg
+#   PATHS /usr/bin/ /bin ENV PATH NO_DEFAULT_PATH
+# )
+# if(NOT HAVEHG)
+#   message(STATUS "Mercurial (hg) was not found.")
+# endif(NOT HAVEHG)
 
 ###################
 # External Projects
 ###################
 include(ExternalProject)
-
 # Eigen, this header-library is used extensively for linear algebra, matrices, and arrays
 # Mercurial (hg) repo pull, Would it be better to just download latest stable?
 #ExternalProject_Add(EIGEN
@@ -76,9 +91,25 @@ if (VTK_SUPPORT)
 	find_package(VTK 6 REQUIRED NO_MODULE)
 	include(${VTK_USE_FILE})
 	add_compile_options(-DLEMMAUSEVTK) 
+
+	# Compile Matplot_vtk if VTK is present
+	add_subdirectory(Matplot_vtk)	
+	include_directories ("${PROJECT_SOURCE_DIR}/Matplot_vtk")
+
 endif()
 
-add_compile_options(-std=c++11) 
+# Add the c++11 flag 
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG(-std=c++11 COMPILER_SUPPORTS_CXX11)
+CHECK_CXX_COMPILER_FLAG(-std=c++0x COMPILER_SUPPORTS_CXX0X)
+if(COMPILER_SUPPORTS_CXX11)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+elseif(COMPILER_SUPPORTS_CXX0X)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+else()
+  message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+endif()
+#add_compile_options(-std=c++11) 
 
 set(LEMMA_VERSION_MAJOR "0")
 set(LEMMA_VERSION_MINOR "0")

@@ -1,4 +1,4 @@
-FILE(GLOB  examples  "*.cpp")
+#FILE(GLOB  examples  "*.cpp")
 
 add_executable( datatem datatem.cpp )
 target_link_libraries(datatem "lemmacore")
