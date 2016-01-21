@@ -1,4 +1,10 @@
-cmake_minimum_required (VERSION 2.8.7)
+cmake_minimum_required (VERSION 2.8.12)
+
+if(POLICY CMP0015)
+	cmake_policy(SET CMP0015 NEW)
+endif()
+
+
 
 project (Lemma CXX)
 
