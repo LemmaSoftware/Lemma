@@ -1,10 +1,12 @@
 cmake_minimum_required (VERSION 2.8.12)
 
+# Mac OSX RPATH is weird 
+# enable @rpath in the install name for any shared library being built
+# note: it is planned that a future version of CMake will enable this by default
 if(POLICY CMP0015)
 	cmake_policy(SET CMP0015 NEW)
 endif()
-
-
+set(CMAKE_MACOSX_RPATH 1)
 
 project (Lemma CXX)
 
@@ -24,6 +26,11 @@ endif(NOT HAVEGIT)
 # endif(NOT HAVEHG)
 
 option(BUILD_SHARED_LIBS OFF)
+if(BUILD_SHARED_LIBS)
+	set(LABEL_SUFFIX "shared")
+else()
+	set(LABEL_SUFFIX "static")
+endif()
 
 ###################
 # External Projects
@@ -66,7 +73,7 @@ if ( TINYXML_SUPPORT )
 		PATCH_COMMAND ""
     	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/tinyxml2
     	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON 
-#-DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+		#-DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
 	)
 	add_compile_options(-DTINYXMLSUPPORT) 
 endif()
@@ -103,8 +110,6 @@ endif()
 # Lemma Configuration
 #####################
 
-
-
 ####################
 # Add the c++11 flag 
 # TODO add compiler specific instructions
@@ -112,11 +117,11 @@ include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG(-std=c++11 COMPILER_SUPPORTS_CXX11)
 CHECK_CXX_COMPILER_FLAG(-std=c++0x COMPILER_SUPPORTS_CXX0X)
 if(COMPILER_SUPPORTS_CXX11)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 elseif(COMPILER_SUPPORTS_CXX0X)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 else()
-  message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+	message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 
 set(LEMMA_VERSION_MAJOR "0")
@@ -125,8 +130,8 @@ set(LEMMA_VERSION_PATCH "1")
 set(LEMMA_VERSION "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}")
 
 configure_file (
-  "${PROJECT_SOURCE_DIR}/include/LemmaConfig.h.in"
-  "${PROJECT_BINARY_DIR}/include/LemmaConfig.h"
+	"${PROJECT_SOURCE_DIR}/include/LemmaConfig.h.in"
+	"${PROJECT_BINARY_DIR}/include/LemmaConfig.h"
 )
 include_directories("${PROJECT_BINARY_DIR}/include")
 

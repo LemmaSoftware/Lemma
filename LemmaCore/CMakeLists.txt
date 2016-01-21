@@ -12,8 +12,10 @@ add_subdirectory("src")
 add_library( lemmacore ${SOURCE} )  
 
 set_target_properties(lemmacore PROPERTIES 
-	VERSION ${LEMMA_VERSION_MAJOR}
-	SOVERSION ${LEMMA_VERSION})
+	VERSION  "${LEMMA_VERSION}"
+	SOVERSION "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}"
+	PROJECT_LABEL "Lemma ${LABEL_SUFFIX}"
+)
 
 # Linking
 add_dependencies(lemmacore YAML-CPP)
@@ -32,7 +34,7 @@ target_link_libraries(lemmacore "yaml-cpp")
 # Install
 install ( TARGETS lemmacore DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )
 
-option( BUILDEXAMPLES "Compile example Lemma applications" OFF )
-if (BUILDEXAMPLES)
+option( LEMMABUILDEXAMPLES "Compile example Lemma applications" OFF )
+if (LEMMABUILDEXAMPLES)
 	add_subdirectory(examples)
 endif()
