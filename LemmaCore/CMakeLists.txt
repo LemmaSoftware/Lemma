@@ -16,3 +16,5 @@ if (VTK_SUPPORT)
 	target_link_libraries(lemmacore ${VTK_LIBRARIES})
 endif()
 target_link_libraries(lemmacore "yaml-cpp")
+
+add_subdirectory(examples)

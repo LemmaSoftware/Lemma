@@ -1,0 +1,61 @@
+/* This file is part of Lemma, a geophysical modelling and inversion API */
+
+/* Copyright (C) 2009-2013 Trevor Irons <trevorirons@gmail.com> */
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/**
+  @file
+  @author   Trevor Irons
+  @version  $Id$
+ **/
+
+// Convenience include all of Lemma
+
+#ifndef  LEMMAINCLUDE_INC
+#define  LEMMAINCLUDE_INC
+
+// Basic EM Classes
+//#include "dipolesource.h"
+#include "emearth1d.h"
+#include "emearth3d.h"
+#include "kernel.h"
+#include "receiverpoints.h"
+#include "receivercubes.h"
+#include "hankeltransformgaussianquadrature.h"
+#include "layeredearthem.h"
+#include "WireAntenna.h"
+#include "PolygonalWireAntenna.h"
+#include "gaussianquadrature.h"
+#include "digitalfiltercostrans.h"
+#include "octreegrid.h"
+
+// TEM
+#include "TEMSurvey.h"
+#include "TEMInductiveReceiver.h"
+#include "TEMTransmitter.h"
+
+//#include "rectilineargrid.h"
+
+// Specialized EM Classes
+#include "instrumenttem.h"
+#include "instrumentfem.h"
+
+// TEM Classes
+#include "datatem.h"
+#include "modelreadertem1dubc.h"
+#include "datareadertem.h"
+
+// FEM Classes
+#include "datareaderfemubc.h"
+#include "datafem.h"
+
+// Inverse
+#include "quasinewtonbfgs.h"
+#include "inversesolvertem1d.h"
+#endif   // ----- #ifndef LEMMAINCLUDE_INC  -----
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp: */

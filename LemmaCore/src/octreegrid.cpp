@@ -617,8 +617,8 @@ namespace Lemma {
 
         //  split if needed
         if (Cursor->CurrentIsLeaf())  {
-            KernelArray->InsertValue(Cursor->GetLeafId(),
-                SampleScalarFromLayeredEarthFD(GetLayerInt(cpos(2))));
+            //KernelArray->InsertValue(Cursor->GetLeafId(),
+            //    SampleScalarFromLayeredEarthFD(GetLayerInt(cpos(2))));
         } else {
             // Evaluate function at cell centre
             for (int child=0; child < Cursor->GetNumberOfChildren(); ++ child) {

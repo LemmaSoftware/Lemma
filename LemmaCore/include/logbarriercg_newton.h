@@ -23,9 +23,6 @@
 #include "bicgstab.h"
 #include "lemma.h"
 
-#ifdef LEMMAUSEVTK
-#include "matplot.h"
-#endif
 
 namespace Lemma {
 

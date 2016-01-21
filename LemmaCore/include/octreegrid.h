@@ -38,8 +38,8 @@
 //#include "layeredearthnmr.h"
 #include "inversesolver.h"
 
-#include "FastDelegate.h"
-#include "FastDelegateBind.h"
+//#include "FastDelegate.h"
+//#include "FastDelegateBind.h"
 
 namespace Lemma {
 
@@ -202,7 +202,12 @@ namespace Lemma {
             template <class Derived>
             void SampleScalarFromLayeredEarth(LayeredEarth* earth,
                     Real (Derived::*fcnptr)(const int& id), const std::string &name) {
-
+                std::cerr << "In octreegrid.h SampleScalrFromLayeredEarth FastDelegate method was "
+                         << "removed, need to fix with move semantics or function pointer." << std::endl;
+                exit(3);
+                //TODO fix SampleScalar below, as call to SampleScalarFromLayeredEarthFD is
+                //     removed there.
+/*
                 SampleScalarFromLayeredEarthFD.bind(static_cast<Derived*>(earth), fcnptr);
                 GetLayerInt.bind(earth, &LayeredEarth::GetLayerAtThisDepth);
                 // TODO, don't use KernelArray, instead create new Array, and set it
@@ -212,6 +217,7 @@ namespace Lemma {
                 SampleScalar();
                 this->Octree->GetLeafData()->SetScalars( KernelArray );
                 this->Octree->GetLeafData()->AddArray( KernelArray );
+*/
             }
 
             /** Sends cursor to root
@@ -247,14 +253,14 @@ namespace Lemma {
              */
             void GetPosition( Real* p );
 
-            /** Used to fill leaf data with a scalar value from a layered earth
+            /* Used to fill leaf data with a scalar value from a layered earth
              *  model
              */
-            fastdelegate::FastDelegate1< const int&, Real > SampleScalarFromLayeredEarthFD;
+            //fastdelegate::FastDelegate1< const int&, Real > SampleScalarFromLayeredEarthFD;
 
-            /** Used to get the Layer of delagated model.
+            /* Used to get the Layer of delagated model.
              */
-            fastdelegate::FastDelegate1< const Real&, int >  GetLayerInt;
+            //fastdelegate::FastDelegate1< const Real&, int >  GetLayerInt;
 
             /** Recursively determines the mesh to use
              */
