@@ -2,7 +2,10 @@ include_directories(${CMAKE_INSTALL_PREFIX}/include)
 
 add_subdirectory("src")
 
-add_library( lemmacore ${SOURCE} )  
+add_library( lemmacore SHARED ${SOURCE} )  
+set_target_properties(lemmacore PROPERTIES 
+	VERSION ${LEMMA_VERSION_MAJOR}
+	SOVERSION ${LEMMA_VERSION})
 
 # Linking
 add_dependencies(lemmacore YAML-CPP)
@@ -17,6 +20,9 @@ if (VTK_SUPPORT)
 	target_link_libraries(lemmacore "matplot")
 endif()
 target_link_libraries(lemmacore "yaml-cpp")
+
+# Install
+install ( TARGETS lemmacore DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )
 
 option( BUILDEXAMPLES "Compile example Lemma applications" OFF )
 if (BUILDEXAMPLES)

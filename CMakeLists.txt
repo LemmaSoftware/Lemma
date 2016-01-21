@@ -2,7 +2,6 @@ cmake_minimum_required (VERSION 2.8.7)
 
 project (Lemma CXX)
 
-
 # required external programs (for runtime of nix, not buildtime)
 FIND_PROGRAM(HAVEGIT git
   PATHS /usr/bin/ /bin ENV PATH NO_DEFAULT_PATH
@@ -45,7 +44,7 @@ ExternalProject_Add(YAML-CPP
 	UPDATE_COMMAND ""
 	PATCH_COMMAND ""
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=ON
 )
 add_compile_options(-DHAVE_YAMLCPP) 
 
@@ -80,25 +79,24 @@ if ( MATIO_SUPPORT )
 	)
 endif()
 
-#####################
-# Lemma Configuration
-#####################
-project(LEMMA_CXX)
-
-# We don't Build VTK, it is too much.
+# We don't build VTK, it is too heavy.
 option (VTK_SUPPORT "VTK library for visualisation and grids" OFF)
 if (VTK_SUPPORT) 
 	find_package(VTK 6 REQUIRED NO_MODULE)
 	include(${VTK_USE_FILE})
 	add_compile_options(-DLEMMAUSEVTK) 
-
 	# Compile Matplot_vtk if VTK is present
 	add_subdirectory(Matplot_vtk)	
 	include_directories ("${PROJECT_SOURCE_DIR}/Matplot_vtk")
-
 endif()
 
+#####################
+# Lemma Configuration
+#####################
+
+####################
 # Add the c++11 flag 
+# TODO add compiler specific instructions
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG(-std=c++11 COMPILER_SUPPORTS_CXX11)
 CHECK_CXX_COMPILER_FLAG(-std=c++0x COMPILER_SUPPORTS_CXX0X)
@@ -107,14 +105,13 @@ if(COMPILER_SUPPORTS_CXX11)
 elseif(COMPILER_SUPPORTS_CXX0X)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 else()
-  message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+  message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
-#add_compile_options(-std=c++11) 
 
 set(LEMMA_VERSION_MAJOR "0")
 set(LEMMA_VERSION_MINOR "0")
-set(LEMMA_VERSION_PATCH "0")
-#set(LEMMA_VERSION "${LEMMA_CPP_VERSION_MAJOR}_${LEMMA_CPP_VERSION_MINOR}_${LEMMA_CPP_VERSION_PATCH}")
+set(LEMMA_VERSION_PATCH "1")
+set(LEMMA_VERSION "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}")
 
 configure_file (
   "${PROJECT_SOURCE_DIR}/include/LemmaConfig.h.in"
@@ -128,9 +125,12 @@ include_directories ("${CMAKE_INSTALL_PREFIX}/include/")
 link_directories ("${CMAKE_INSTALL_PREFIX}/lib/")
 add_subdirectory (LemmaCore) 
 
-# TODO add compiler specific instructions
+########################################################################
+# Build Modules
+add_subdirectory (Modules) 
 
-
+########################################################################
+# 
 include_directories(${CMAKE_INSTALL_PREFIX}/include)
 add_executable(Hello "${PROJECT_SOURCE_DIR}/src/test.cpp")
 target_link_libraries(Hello lemmacore)
