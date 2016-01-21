@@ -2,7 +2,15 @@ include_directories(${CMAKE_INSTALL_PREFIX}/include)
 
 add_subdirectory("src")
 
-add_library( lemmacore SHARED ${SOURCE} )  
+#option (SHARED_LEMMA_LIB off)
+#
+#if (SHARED_LEMMA_LIB)
+#	add_library( lemmacore SHARED ${SOURCE} )  
+#else()
+#	add_library( lemmacore STATIC ${SOURCE} )  
+#endif()
+add_library( lemmacore ${SOURCE} )  
+
 set_target_properties(lemmacore PROPERTIES 
 	VERSION ${LEMMA_VERSION_MAJOR}
 	SOVERSION ${LEMMA_VERSION})

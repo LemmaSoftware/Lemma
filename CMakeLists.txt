@@ -17,6 +17,8 @@ endif(NOT HAVEGIT)
 #   message(STATUS "Mercurial (hg) was not found.")
 # endif(NOT HAVEHG)
 
+option(BUILD_SHARED_LIBS OFF)
+
 ###################
 # External Projects
 ###################
@@ -44,7 +46,7 @@ ExternalProject_Add(YAML-CPP
 	UPDATE_COMMAND ""
 	PATCH_COMMAND ""
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=ON
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=ON -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
 )
 add_compile_options(-DHAVE_YAMLCPP) 
 
@@ -57,7 +59,8 @@ if ( TINYXML_SUPPORT )
 		UPDATE_COMMAND ""
 		PATCH_COMMAND ""
     	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/tinyxml2
-    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON 
+#-DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
 	)
 	add_compile_options(-DTINYXMLSUPPORT) 
 endif()
@@ -93,6 +96,8 @@ endif()
 #####################
 # Lemma Configuration
 #####################
+
+
 
 ####################
 # Add the c++11 flag 
