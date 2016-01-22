@@ -32,6 +32,10 @@ else()
 	set(LABEL_SUFFIX "static")
 endif()
 
+if (NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Release")
+endif()
+
 ###################
 # External Projects
 ###################
