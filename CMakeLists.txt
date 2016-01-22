@@ -68,8 +68,8 @@ ExternalProject_Add(YAML-CPP
 add_compile_options(-DHAVE_YAMLCPP) 
 
 # tinyxml2, this library is used for XML IO 
-option(TINYXML_SUPPORT  "MATIO library support for MATLAB .mat files" OFF)
-if ( TINYXML_SUPPORT )
+option( LEMMA_TINYXML_SUPPORT  "MATIO library support for MATLAB .mat files" OFF)
+if ( LEMMA_TINYXML_SUPPORT )
 	ExternalProject_Add(TINYXML2
 		GIT_REPOSITORY "https://github.com/leethomason/tinyxml2.git"
 		GIT_TAG  "master"
@@ -82,8 +82,8 @@ if ( TINYXML_SUPPORT )
 	add_compile_options(-DTINYXMLSUPPORT) 
 endif()
 
-option(MATIO_SUPPORT  "MATIO library support for MATLAB .mat files" OFF)
-if ( MATIO_SUPPORT )
+option( LEMMA_MATIO_SUPPORT  "MATIO library support for MATLAB .mat files" OFF)
+if ( LEMMA_MATIO_SUPPORT )
 	add_compile_options(-DHAVE_MATIO) 
 	# matio, this library is used for MATLAB file IO
 	ExternalProject_ADD(MATIO
@@ -100,10 +100,14 @@ if ( MATIO_SUPPORT )
 endif()
 
 # We don't build VTK, it is too heavy.
-option (VTK_SUPPORT "VTK library for visualisation and grids" OFF)
-if (VTK_SUPPORT) 
-	find_package(VTK 6 REQUIRED NO_MODULE)
-	include(${VTK_USE_FILE})
+option (LEMMA_VTK_SUPPORT "VTK library for visualisation and grids" OFF)
+if ( LEMMA_VTK_SUPPORT ) 
+	#find_package(VTK 6 REQUIRED NO_MODULE)
+	find_package(VTK 6.0 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
+			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkInteractionStyle 
+			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL NO_MODULE)
+	set(volumeRenderer volumerenderer.cxx)
+	include(${VTK_USE_FILE}) 
 	add_compile_options(-DLEMMAUSEVTK) 
 	# Compile Matplot_vtk if VTK is present
 	add_subdirectory(Matplot_vtk)	

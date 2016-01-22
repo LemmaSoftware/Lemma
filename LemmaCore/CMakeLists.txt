@@ -19,13 +19,13 @@ set_target_properties(lemmacore PROPERTIES
 
 # Linking
 add_dependencies(lemmacore YAML-CPP)
-if (TINYXML_SUPPORT)
+if (LEMMA_TINYXML_SUPPORT)
 	add_dependencies(lemmacore TINYXML2)
 endif()
-if (MATIO_SUPPORT)
+if (LEMMA_MATIO_SUPPORT)
 	add_dependencies(lemmacore MATIO)
 endif()
-if (VTK_SUPPORT) 
+if (LEMMA_VTK_SUPPORT) 
 	target_link_libraries(lemmacore ${VTK_LIBRARIES})
 	target_link_libraries(lemmacore "matplot")
 endif()
@@ -34,7 +34,7 @@ target_link_libraries(lemmacore "yaml-cpp")
 # Install
 install ( TARGETS lemmacore DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )
 
-option( LEMMABUILDEXAMPLES "Compile example Lemma applications" OFF )
-if (LEMMABUILDEXAMPLES)
+option( LEMMA_BUILD_EXAMPLES "Compile example Lemma applications" OFF )
+if (LEMMA_BUILD_EXAMPLES)
 	add_subdirectory(examples)
 endif()
