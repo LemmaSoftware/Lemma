@@ -25,10 +25,12 @@ endif()
 if (LEMMA_MATIO_SUPPORT)
 	add_dependencies(lemmacore MATIO)
 endif()
-if (LEMMA_VTK_SUPPORT) 
+
+if ( LEMMA_VTK6_SUPPORT OR LEMMA_VTK7_SUPPORT ) 
 	target_link_libraries(lemmacore ${VTK_LIBRARIES})
 	target_link_libraries(lemmacore "matplot")
 endif()
+
 target_link_libraries(lemmacore "yaml-cpp")
 
 # Install

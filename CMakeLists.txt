@@ -18,12 +18,12 @@ if(NOT HAVEGIT)
   message(FATAL_ERROR "Lemma requires that git is installed and in the path of your machine")
 endif(NOT HAVEGIT)
 
-# FIND_PROGRAM(HAVEHG hg
-#   PATHS /usr/bin/ /bin ENV PATH NO_DEFAULT_PATH
-# )
-# if(NOT HAVEHG)
-#   message(STATUS "Mercurial (hg) was not found.")
-# endif(NOT HAVEHG)
+FIND_PROGRAM(HAVEHG hg
+  PATHS /usr/bin/ /bin ENV PATH NO_DEFAULT_PATH
+)
+if(NOT HAVEHG)
+   message(STATUS "Mercurial (hg) was not found.")
+endif(NOT HAVEHG)
 
 option(BUILD_SHARED_LIBS OFF)
 if(BUILD_SHARED_LIBS)
@@ -38,19 +38,23 @@ endif()
 include(ExternalProject)
 # Eigen, this header-library is used extensively for linear algebra, matrices, and arrays
 # Mercurial (hg) repo pull, Would it be better to just download latest stable?
-#ExternalProject_Add(EIGEN
-#	HG_REPOSITORY  "https://bitbucket.org/eigen/eigen/"
-#	UPDATE_COMMAND ""
-#	PATCH_COMMAND ""
-#    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
-#    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
-#)
-# Stable Eigen, requires manual updating when new releases, but lighter weight.  
+if (HAVEHG)
 ExternalProject_Add(EIGEN
-	URL "http://bitbucket.org/eigen/eigen/get/3.2.7.tar.gz"
+	HG_REPOSITORY  "https://bitbucket.org/eigen/eigen/"
+	UPDATE_COMMAND ""
+	HG_TAG "default"
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 )
+ELSE() 
+# Stable Eigen, requires manual updating when new releases, but lighter weight.  
+ExternalProject_Add(EIGEN
+	URL "http://bitbucket.org/eigen/eigen/get/3.2.7.tar.gz"
+    #URL "http://bitbucket.org/eigen/eigen/get/default.tar.gz" # tip from repo
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+)
+ENDIF()
 
 # Yaml-cpp, this library is used extensively for serialisation of classes (class persistence) 
 ExternalProject_Add(YAML-CPP
@@ -96,12 +100,26 @@ if ( LEMMA_MATIO_SUPPORT )
 endif()
 
 # We don't build VTK, it is too heavy.
-option (LEMMA_VTK_SUPPORT "VTK library for visualisation and grids" OFF)
-if ( LEMMA_VTK_SUPPORT ) 
+option (LEMMA_VTK6_SUPPORT "VTK library for visualisation and grids" OFF)
+if ( LEMMA_VTK6_SUPPORT ) 
 	#find_package(VTK 6 REQUIRED NO_MODULE)
 	find_package(VTK 6.0 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
 			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkInteractionStyle 
 			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL NO_MODULE)
+	set(volumeRenderer volumerenderer.cxx)
+	include(${VTK_USE_FILE}) 
+	add_compile_options(-DLEMMAUSEVTK) 
+	# Compile Matplot_vtk if VTK is present
+	add_subdirectory(Matplot_vtk)	
+	include_directories ("${PROJECT_SOURCE_DIR}/Matplot_vtk")
+endif()
+
+option (LEMMA_VTK7_SUPPORT "VTK library for visualisation and grids" OFF)
+if ( LEMMA_VTK7_SUPPORT ) 
+	#find_package(VTK 7 REQUIRED NO_MODULE)
+	find_package(VTK 7.0 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
+			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkInteractionStyle 
+			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
 	set(volumeRenderer volumerenderer.cxx)
 	include(${VTK_USE_FILE}) 
 	add_compile_options(-DLEMMAUSEVTK) 

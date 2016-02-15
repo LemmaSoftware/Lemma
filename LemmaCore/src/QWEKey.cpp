@@ -140,14 +140,16 @@ namespace Lemma {
     //      Method:  GaussQuadWeights
     //--------------------------------------------------------------------------------------
     void QWEKey::GaussQuadWeights(const int& N) {
-        VectorXr Nv = VectorXr::LinSpaced(N-1, 1, N-1);
-        VectorXr beta  = 0.5 / (1.-(2.*Nv.array()).pow(-2)).sqrt();
-        MatrixXr T = MatrixXr::Zero(N,N);
-        //std::cerr << "Eigen ERROR BELOW, QWEKey.cpp  QWEKey::GaussQuadWeights, COMMENTED OUT ";
-        T.bottomLeftCorner(N-1, N-1) = beta.asDiagonal();
-        Eigen::SelfAdjointEigenSolver<MatrixXr> eig( T.selfadjointView< Eigen::Lower >() );
-            GaussAbscissa = eig.eigenvalues();
-            GaussWeights = 2.*eig.eigenvectors().row(0).array().pow(2);
+        std::cerr<<"QWEKey needs work to remove Boost, etc." << std::endl;
+        // Below works with older Eigen, need to find problem
+//         VectorXr Nv = VectorXr::LinSpaced(N-1, 1, N-1);
+//         VectorXr beta  = 0.5 / (1.-(2.*Nv.array()).pow(-2)).sqrt();
+//         MatrixXr T = MatrixXr::Zero(N,N);
+//         //std::cerr << "Eigen ERROR BELOW, QWEKey.cpp  QWEKey::GaussQuadWeights, COMMENTED OUT ";
+//         T.bottomLeftCorner(N-1, N-1) = beta.asDiagonal();
+//         Eigen::SelfAdjointEigenSolver<MatrixXr> eig( T.selfadjointView< Eigen::Lower >() ); // PROBLEM LINE
+//             GaussAbscissa = eig.eigenvalues();
+//             GaussWeights = 2.*eig.eigenvectors().row(0).array().pow(2);
     }
 
     //--------------------------------------------------------------------------------------
