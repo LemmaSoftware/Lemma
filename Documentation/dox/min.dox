@@ -1,0 +1,153 @@
+namespace Lemma{
+
+/** 
+\page Minimal 
+
+<div class="lemmamainmenu"> 
+    \ref Intro     "Intro"
+  | \ref Compiling "Compiling"
+  | \ref Memory    "Memory management"
+  | \b   Minimal \b programme
+  | \ref EmSources "EM Sources"
+</div>
+
+\section Download Download
+Lemma source code may be obtained via svn server 
+\code
+svn co http://cgem.ath.cx/repos/MR/Lemma Lemma
+\endcode
+
+Binary versions of the library for Microsoft Windows will be available for download shortly.
+
+To compile you will also need the Eigen3 linear algebra header library, freely available at
+<http://eigen.tuxfamily.org>. 
+We use the scons, a make replacement for builds which is available at <http://scons.org>.
+Finally a good C++ compiler is needed. We actively support gcc, intel, and 
+Microsoft Visual C++ 2010. Your mileage may vary with other compilers. Lemma has been sucessfully compiled on 
+Microsoft Windows, Mac OSX, many flavours of Linux 64 and 32 bit, and BSD's.  
+
+\section Exposing Exposing the API
+You may choose to either include individual pieces of Lemma, or instead to simply 
+include all of Lemma using '#include Lemma'. Examples will be shown both ways but 
+generally speaking including all of Lemma is a fine thing to do. All of the objects 
+are defined within the Lemma namespace, so you may want to use that, too.
+\code
+#include "Lemma"  
+using namespace Lemma;
+int main() {
+    // Any Lemma Code is OK
+} 
+\endcode
+
+\section Compiling_old
+Compiling Lemma code is fairly straightforward. For example using g++ 
+\code
+	g++ min.cpp -I/path/to/Lemma/include -L/path/to/Lemma/lib -llemma -lmatio -lticppd -lem1d 
+\endcode
+
+\subsection Libs Whoa, what are all those libs
+Compiling Lemma builds several libraries. The largest one is liblemma.so(dll). This contains all the Lemma classes.
+The libmatio is responsible for reading in MATLAB files and libticcppd is an XML reader/writer/parser. The libem1d library is a FORTRAN implimentation of a dipole em solver that is used for quality control and assurance. 
+We use scons to build Lemma. It is easy to extend scons to compile your applications as well, taking care of all 
+the compiler linker details.
+
+\section VTK 
+Lemma can be integrated with VTK to produce data visualizations. Using the VTK interfaces is a slightly more advanced
+topic and will be handled in a later tutorial.
+
+\section Small Small example application.
+We will now spend the next few pages building a Lemma application that computes fields from a wire loop in a time domain survey.
+
+When forward modelling geophysical data, it is natural to break up what is needed into several catagories: the transmitter, the receiver, the earth model, and the specific instrument.  In fact, these are exactly the classes needed by Lemma to execute a forward model.  Therefore, the first step will be to define these classes.  Continuing the code from above, we add class constructors:
+\code
+#include "Lemma"
+using namespace Lemma;
+int main() {
+	PolygonalWireAntenna* Trans = PolygonalWireAntenna::New();
+	ReceiverPoints* Receivers = ReceiverPoints::New();
+	LayeredEarthEM *Earth = LayeredEarthEM::New();
+
+	// More Lemma code to go here
+
+	return EXIT_SUCCESS;
+}
+\endcode
+
+Now that we have created objects for a transmitter, a receiver, and a layered earth model, we need to populate them with their appropriate parameters.
+
+For the transmitter, we will define a 100 metre by 100 metre loop just above the surface of the Earth with 1 A current and one turn.  We input the following after our new objects:
+
+\code
+	Trans->SetNumberOfPoints(5);
+	Trans->SetPoint(0, Vector3r(   0,   0, -1e-3));
+	Trans->SetPoint(1, Vector3r( 100,   0, -1e-3));
+	Trans->SetPoint(2, Vector3r( 100, 100, -1e-3));
+	Trans->SetPoint(3, Vector3r(   0, 100, -1e-3));
+	Trans->SetPoint(4, Vector3r(   0,   0, -1e-3));
+	Trans->SetCurrent(1);
+	Trans->SetNumberOfTurns(1);
+\endcode
+
+For the receiver location, we'll put one receiver in the centre of the transmitter loop.
+
+\code
+	Vector3r loc;
+	Real ox = 50.;
+	Real oy = 50.;
+	Real depth = -1.e-3;
+	Receivers->SetNumberOfReceivers(1);
+	loc << ox,oy,depth;
+	Receivers->SetLocation(0,loc);
+\endcode
+
+We now set our 5 layer earth model up, with conductivities in S/m.  The 5 layers include the air and basement halfspace.
+
+\code
+	Earth->SetNumberOfLayers(5);
+	Earth->SetLayerConductivity( (VectorXcr(5) << 0.,1.e-4,1.e-2,
+		1.e-4,1.e-6).finished() );
+	Earth->SetLayerThickness( (VectorXr(3) << 10,5,50).finished() );
+\endcode
+
+Finally, we set up an instrument object and attach these objects to it.  Since this is a time domain survey, we also define and attach the centre-gate times for a particular instrument.
+
+\code
+	VectorXr maintimes;
+	maintimes.resize(25);
+	maintimes << 	191.,216.,246.,286.,336.,400.,480.,584.,
+		714.,883.,1097.,1366.,1714.,2157.,2724.,3445.,4361.,
+		5535.,7032.,8858.,10724.,13151.,16196.,20047.,25012.;
+	maintimes = maintimes.array() /1000000;
+	InstrumentTem *instrument = InstrumentTem::New();
+	instrument->EMEarthModel(Earth);
+	instrument->SetTransmitLoop(Trans);
+	instrument->SetReceiver(Receivers);
+	instrument->SetTimes(maintimes);
+\endcode
+
+We are now ready to make the calculation and get our results.
+
+\code
+	instrument->MakeCalculation();
+	// Output results to file
+	std::ofstream outfile1;
+	outfile1.open("solution.out");
+	for (int ii=0;ii<ntimes;ii++) {
+		outfile1 << instrument->GetMeasurements()(ii,0)<<"    "<<
+			instrument->GetMeasurements()(ii,1)<<std::endl;
+	}
+	outfile1.close();
+
+	//A little cleanup
+	instrument->Delete();
+	Trans->Delete();
+	Earth->Delete();
+	Receivers->Delete();
+\endcode
+
+Congrats! You have used Lemma to create a forward modelling program.  Hopefully now you can see how easy it is to use Lemma to create powerful programs.
+
+
+*/
+}
+//\include utdipolesource.cpp

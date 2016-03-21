@@ -1,0 +1,72 @@
+namespace Lemma{
+
+/** 
+    \page EmSources 
+
+<div class="lemmamainmenu">             
+    \ref Intro     "Intro"
+  | \ref Compiling "Compiling"
+  | \ref Memory    "Memory management "
+  | \ref Minimal   "Minimal programme"  
+  | \b EM \b Sources
+</div>
+
+We support the following dipole types: 
+- Grounded electric
+- ungrounded electric
+- magnetic
+Each in horizontal and vertical polarizations. Dipoles may be placed anywhere in a model.
+
+\code
+    DipoleSource *dipole = DipoleSource::New();
+        dipole->SetType(GROUNDEDELECTRICDIPOLE);
+        dipole->SetPolarisation(XPOLARISATION);
+        //dipole->SetPolarisation(YPOLARISATION);
+        //dipole->SetPolarisation(ZPOLARISATION);
+
+        //dipole->SetType(UNGROUNDEDELECTRICDIPOLE);
+        //dipole->SetPolarisation(XPOLARISATION);
+        //dipole->SetPolarisation(YPOLARISATION);
+        //dipole->SetPolarisation(ZPOLARISATION);
+
+        //dipole->SetType(MAGNETICDIPOLE);
+        //dipole->SetPolarisation(XPOLARISATION);
+        //dipole->SetPolarisation(YPOLARISATION);
+        //dipole->SetPolarisation(ZPOLARISATION);
+
+        dipole->SetMoment(1);
+        dipole->SetLocation(1,1,-1e-4);
+        dipole->SetNumberOfFrequencies(1);
+        dipole->SetFrequency(0,2000);
+        dipole->SetPhase(0);
+\endcode
+Each of the above dipole types is shown in this example. Note the use of enumerations (ALLCAPS) instead of integer markers,
+making the code immediately obvious. The location is set in x,y,z order. A right hand coordinate system is used with 
+a pointing down. So this dipole is just in the air. 
+Only a sinlge frequency is computed, at 2000 Hz, and the phase is set to zero.
+
+\section Other Other sources
+Currently we also support arbitrary ungrounded wire loops. We plan to support grounded wire loops in the near future as well.
+
+For our example we will construct a wire antenna loop. To do this insert this code into your skeleton application shown on the previous page.
+
+\code 
+    PolygonalWireAntenna *pa = PolygonalWireAntenna::New();
+        pa->SetNumberOfPoints(5);
+        pa->SetPoint(0, Vector3r(   0,   0, -1e-3));
+        pa->SetPoint(1, Vector3r( 100,   0, -1e-3));
+        pa->SetPoint(2, Vector3r( 100, 100, -1e-3));
+        pa->SetPoint(3, Vector3r(   0, 100, -1e-3));
+        pa->SetPoint(4, Vector3r(   0,   0, -1e-3));
+        pa->SetNumberOfFrequencies(2);
+        pa->SetFrequency(0, 1000);
+        pa->SetFrequency(0, 5000);
+        pa->SetCurrent(10);
+        pa->SetNumberOfTurns(1);
+\endcode
+The code is basically self-explanitory. We are constructing a single turn wire loop with 5 points. The first and last 
+point are the same making this a loop, but that is not a requirement. All loops must be 'closed' in this fashion.
+We are interested in two frequencies: 1 and 5 kHz and we have a 10 A current running through a single turn wire.
+*/
+
+}

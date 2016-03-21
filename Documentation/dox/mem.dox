@@ -1,0 +1,101 @@
+namespace Lemma{
+
+/** 
+    \page Memory 
+
+<div class="lemmamainmenu"> 
+    \ref Intro     "Intro"
+  | \ref Compiling "Compiling"
+  | \b   Memory \b management 
+  | \ref Minimal   "Minimal programme"  
+  | \ref EmSources "EM Sources"
+</div>
+
+\section MemoryManagement Memory Management
+
+\subsection Reference Reference counting and memory management
+Lemma makes extensive use of reference counting. We do this for a variety of 
+reasons. 
+- It is not uncommon for multiple objects to have the same instantiations 
+of an object as members.
+- Making copies of each object is not a viable option because the objects may be large, and they must all update simultaneously.
+- Without reference counting it is very easy to leave dangling pointers.
+- It is much easier to write code, as local copies of objects can be deleted 
+as soon as they are no longer used within that context. The memory will not be 
+freed and the object persists as long as other objects still reference it.   
+
+The base class for all Lemma objects is ReferenceCountedObject. 
+The interface requires that all derived, non-abstract classes have <B>New</B> and <B>Delete</B> methods. So that objects may be created and destoyed with the 
+following syntax.
+
+\code 
+DerivedClass* Object = DerivedClass::New();
+Object->Delete();
+\endcode
+
+\warning It is important to note that the default constructors and destructors are protected so the following code is <B>NOT</B> valid.
+\code 
+DerivedClass* Object = new DerivedClass;
+delete Object; 
+\endcode
+The reasons for this will hopefully be clear soon.
+
+Many Lemma classes have other Lemma classes as data members. Classes may
+share these members, and depend on them being updated simultaneously. So 
+that a situation like this is not unusual. 
+\code 
+DerivedClass* Component = DerivedClass::New();
+AnotherDerivedClass* Object2 = AnotherDerivedClass::New();
+YetAnotherDerivedClass* Object3 = YetAnotherDerivedClass::New();
+Object2->AttachMyComponent(Component);
+Object3->AttachMyComponent(Component);
+Component->Update();       // All three classes use the updated Component
+\endcode
+At this point both Object2 and Object3 have an up to date Component and any 
+changes to Component can be seen by the Objects. Often these types of 
+connections are happening behind the scenes and end users should not be 
+troubled by any of this.
+
+Now in this example it is clear that if Component is deleted, than the objects 
+will contain dangling pointers. To avert this, calling the 
+ReferenceCountedObject::Delete() does not necessarily destroy the object.
+So that it would be safe -- continuing from the above example
+\code
+Component->Delete();                     // The 'Component' handle will no longer be used.
+Object2->CallMethodRelyingOnComponent(); // But we can still use the object
+\endcode
+
+\subsection what Whats going on?
+Whenever we declared a new handle to the object-- either by calling New, or implicitly in the Connect methods--
+the true 'Component' object updated a list of pointers that had handles to it. 
+
+\code
+DerivedClass* Component = DerivedClass::New();       // One Reference, 'Component'
+Object2->AttachMyComponent(Component);               // Two References, internal in Object2       
+Object3->AttachMyComponent(Component);               // Three References, internal in Object3
+Component->Delete();                                 // Two References, 'Component' is gone. 
+                                                     // DON'T USE Component->Method() ANYMORE!!!
+Object2->Delete();                                   // One Reference, Object2 releases handle upon Delete
+Object3->SomeFuntionReleasingComponent();            // Zero References, Component object is now deleted and
+                                                     // all memory is freed!
+\endcode
+
+\section So So what do I need to know?
+Not much. This is here to make life easy when doing high level programming. Just follow these simple rules
+- Allocate and free all variables with New and Delete, you have to do this as the default 
+versions are protected.
+
+- Once calling Delete on an object it is no longer safe to use that handle. For example don't call 
+Component->Delete(), and then call Component->Method(). Even if you 'know' that there are existing references
+and that it shouldn't have been deleted yet. Instead move your call to Delete down after your last direct use
+of each class. 
+
+- Remember to call Delete, thanks to reference counting it is safe to do this as soon as you are done 
+ using an object even if other classes are using it. If  you don't call Delete on objects you create, your
+ program <B>will</B> leak memory!
+
+- Revel in the fact that memory is being managed for you, and that dangling pointers are not a concern.
+
+*/
+
+}

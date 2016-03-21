@@ -1,0 +1,123 @@
+namespace Lemma{
+
+/**
+    \page Compiling
+
+<div class="lemmamainmenu"> 
+    \ref Intro     "Intro"
+  | \b   Compiling
+  | \ref Memory    "Memory management"
+  | \ref Minimal   "Minimal programme"
+  | \ref EmSources "EM Sources"
+</div>
+
+Compiling Lemma is fairly straightforward. The biggest hurdle is possibly installing
+the prerequisites, but on many platforms this is easy.
+
+\section Table Table of contents
+- \ref Prerequisites
+- \ref OptionalPrerequisites
+- \ref Downloading
+- \ref Configuring
+- \ref Building
+
+\section Prerequisites Prerequisites
+
+
+
+You will need to acquire the following free packages:
+- SCons - SCons is a make replacement that is written in Python. It is easily
+  configurable and directly controls the build process. It is not a Makefile
+  intermediary like some similar applications. It is freely available at
+  <http://scons.org>. On Linux, your package manager very likely provides this. On
+  Windows it is slightly more complicated. But, hey, Windows is easy... right? That's why 
+  you use it :)  The process is well documented on the SCons
+  website. You might guess that we aren't huge Windows fans.
+- Eigen3 - Eigen is a header-only linear algebra template library. It is made
+  available under the Gnu Lesser Public License. It is available at
+  <http://eigen.tuxfamily.org>. Please note that Lemma uses Version 3 of the Library.
+
+    \subsection Dependencies
+    The only dependencies are the Eigen linear algebra Library v3, a
+    C++ compiler and scons.
+    (Currently a fortran compiler is needed too, see above)
+
+    The following compilers are fully supported and tested: gnu, mingw,
+    and intelc. Several routines are parallelised for shared memory platforms
+    using OpenMP. Any of the above compilers is able to be used with OpenMP.
+    Microsoft's Visual C++ compiler will likely be supported for stable
+    releases, but is not actively tested. (Also the current FORTRAN compiler
+    dependency limits this compiler as well.) Eigen extensively uses template
+    meta programming, the Borland compiler has been shown to be subpar at
+    optimizing this type of code and will likely never be supported actively.
+    A new compiler clang, is being developed and may prove to be promising as
+    well, but current C++ support is lacking. If you are using a different
+    compiler, please share your experiences with us.
+
+    The Visualization ToolKit (VTK) is used for visualisation throughout Lemma.
+    It is not an explicit dependency, but without it, you will not be able to
+    get any graphical output.
+
+    Eigen is  freely available  under the LGPL at
+    <http://eigen.tuxfamily.org>. The necessary components of Eigen will
+    be included in stable releases of Lemma.
+    Scons is a make replacement built on top of Python, and is also free.
+
+\section OptionalPrerequisites Optional Prerequisites
+- VTK - The Visualization ToolKit is a powerful data visualization framework. This is
+  an optional dependency, but some functionality will be missing without it. Any
+  version after 5.4 is fine. VTK is available under a BSD license from <http://vtk.org>
+  Again-- on Linux-- most package managers offer VTK. Compiling from source is not
+  terribly difficult, but requires installing CMake as well. Strangely (wink wink) this is 
+  harder under Windows.
+- Qt - Limited GUI support is provided leveraging the Qt framework. You will need to have 
+  the development version of Qt 4 installed to use this. 
+- Boost - Several classes use Boost. Lemma ships with a minimalist part of Boost and should compile 
+	without it. However, if you are getting Boost errors while compiling, install the development version 
+	 of boost. Note that Ubuntu ships with a very old Boost that has caused some issues. 
+	Also, the Python wrapper requires boost.python and is not shipped with Lemma. 
+
+\section Downloading Acquiring the source
+Lemma is currently available from svn checkout only. Note that while Lemma is still in Beta only
+developers have access to the source code. Contact us if you would like to contribute. 
+\code
+svn co https://svn.lemmasoftware.org/lemma/trunk Lemma
+\endcode
+
+\section Configuring Configuring
+There is very little configuring to do. In the main Lemma directory you will find a file 
+called 'Examplesettings.py listed below'
+\include Examplesettings.py
+Configure this to your machine, and copy to a file named
+\code
+settings.py
+\endcode
+
+ If you have more questions about a parameter you can type
+\code
+scons -h
+\endcode
+For more information. After configuring, copy Examplesettings.py to a file called settings.py.
+
+\section Building
+To build the libraries simply type:
+\code
+scons  -j2
+\endcode
+To build the libraries and unit tests. The -j2 arguments tell scons how many threads compilation
+should occur on (parallel build). We recommend one per processor. Note, this only affects 
+the speed of the build, not whether or not Lemma will have OpenMP support.
+
+\section Installing
+To install the library simply type:
+\code
+scons  install
+\endcode
+To install to INSTALLDIR. Note depending on your machine, you may need sudo privileges to do this.
+Also, if you let INSTALLDIR=./lib this step will fail as those libraries are already located in Lemma/lib.
+
+Note that on a Mac, this step is crucial.    
+
+*/ 
+/** @} */ 
+}

@@ -1,0 +1,85 @@
+namespace Lemma{
+
+/**
+    \page   Tutorial
+
+   A basic tutorial outlining the goals of Lemma, how to acquire and use it, and how to extend it 
+   for your own purposes. 
+
+   - \subpage Intro - Introduction to the project
+   - \subpage Compiling - how to compile the library
+   - \subpage Memory - our implementation of garbage collection, and what it means to you
+   - \subpage Minimal - compiling your first minimal Lemma application
+   - \subpage EmSources - Electromagnetic sources
+    
+  \page   Intro
+  <div class="lemmamainmenu">  
+    \b   Intro      
+  | \ref Compiling "Compiling"
+  | \ref Memory    "Memory management"
+  | \ref Minimal   "Minimal programme"  
+  | \ref EmSources "EM Sources"
+  </div>
+
+Some basic information about Lemma to get you started. If you are familiar with
+C++ and API's you can skip this page.
+
+\section C Why C++?
+We get this a lot as most EM software seems to be written in fortran or Matlab. We
+begin by discussing why we didn't choose certain languages/platforms.
+
+\subsection  Fortran Why not fortran?
+We have  lots of reasons for choosing C++ over fortran, some of them better than others.
+- We know it better, and we like it better. Too many hours debugging old 
+  FORTRAN subroutines has left us jaded.
+- Easy integration with existing libraries. For example Lemma has built in 
+support for VTK, an extremely powerful visualization package. We also include 
+MATLAB file IO readers and an XML parser. Providing fortran wrappers for all 
+of this would be a huge undertaking.
+- Flexibility. Lemma is NOT a program, its an API that lets you build 
+ applications that fit your needs. This approach is a natural fit for object oriented
+ programming and C++ is a much more natural choice for an OO project. 
+- Infinitely better interface. We leverage the Eigen 
+   <http://eigen.tuxfamily.org>  linear algebra package
+  to deliver expressive, fast code. Their benchmarks are right in line with 
+  fast BLAS and LAPACK implimentations. If you honestly feel that 
+\code
+DGEMM ( TRANSA, TRANSB, M, N, K, ALPHA, A, LDA, B, LDB, BETA, C, LDC )
+\endcode  
+ is superior to
+\code
+  C = A*B.transpose(); 
+\endcode 
+ you are living in denial. Check the benchmarks if you are still skeptical. 
+- We know fortran 2003 has come a long way, but hey, so has C++. Give it a 
+chance.
+
+\subsection Matlab Ok, so why not MATLAB?
+First its closed source, second most large MATLAB programs suffer severe 
+performance issues. Third, support for object-oriented programming is a joke. 
+Finally, its also expensive and we don't think the graphics are all
+that great.
+
+\subsection Python How about Python?
+We like Python. While large 100% native Python applications are often very slow, it is easy to wrap fast C++ and Fortran routines around a Python interface. 
+We actually plan on doing this in the future, and it is likely that at some 
+point this may be the most common way to use Lemma. Lots of great visualization
+solutions exist in Python (including VTK) and it is a great programming environment. The hard
+part is that Eigen relies heavily on Expression templates that cannot be 
+trivially wrapped into a python interface. So any python interface would have 
+to be carefully constructed. We would welcome help in this department.
+In the mean-time our API is elegant and easy to use.
+
+\section API An API? What's that?
+Lemma is not a program. It's an API, or an Application Programming Interface.
+This offers a lot of advantages over traditional programs. 
+- First, its flexible. Its easy to put together components to do exactly what 
+  you want and nothing more. 
+- Second, its extendible. If we have a class that does almost what you want, you
+  can just extend a class. 
+- Third, it limits the amount of file IO you might need to do.
+- Four, there are lots of other good reasons too. Just give it a try. 
+*/
+
+/** @} */
+}
