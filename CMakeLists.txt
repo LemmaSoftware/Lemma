@@ -190,12 +190,15 @@ add_dependencies(Hello YAML-CPP)
 # ALL make documentation build by default if possible
 find_package(Doxygen)
 	if(DOXYGEN_FOUND)
+	option( LEMMA_BUILD_DOCUMENTATION  "Build Doxygen man pages" OFF )
+	if (LEMMA_BUILD_DOCUMENTATION)
 	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Documentation/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Documentation/Doxyfile @ONLY)
-	add_custom_target(doc
-		ALL
-		${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Documentation/Doxyfile
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-		COMMENT "Generating API documentation with Doxygen" VERBATIM
-	)
+		add_custom_target(doc
+			ALL
+			${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Documentation/Doxyfile
+			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+			COMMENT "Generating API documentation with Doxygen" VERBATIM
+		)
+	endif (LEMMA_BUILD_DOCUMENTATION)
 	endif(DOXYGEN_FOUND)
 
