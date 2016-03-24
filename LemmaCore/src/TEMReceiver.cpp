@@ -185,14 +185,21 @@ namespace Lemma {
     //      Method:  SampleNoise
     //--------------------------------------------------------------------------------------
     VectorXr TEMReceiver::SampleNoise (  ) {
-        // Consider making these static?
+        
+	/* we have C++-11 now! No Boost! 
         boost::mt19937 rng(time(0));
         boost::normal_distribution<> nd(0.0, 1.0);
         boost::variate_generator<boost::mt19937&, boost::normal_distribution<> > var_nor(rng, nd);
+	*/
+
+        std::random_device rd;
+        std::mt19937 gen(rd()); 
+        std::normal_distribution<> d(0.0, 1.00);
 
         VectorXr noise = VectorXr::Zero( windowCentres.size() );
         for (int ii=0; ii<windowCentres.size(); ++ii) {
-            noise(ii) = var_nor();
+            //noise(ii) = var_nor(); // old boost way
+            noise(ii) = d(gen);
         }
         return noise.array() * noiseSTD.array();
     }		// -----  end of method TEMReceiver::SampleNoise  -----

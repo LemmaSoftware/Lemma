@@ -22,8 +22,9 @@
 
 #include "receiverpoints.h"
 
-#include <boost/random.hpp>
-#include <boost/random/normal_distribution.hpp>
+//#include <boost/random.hpp>
+//#include <boost/random/normal_distribution.hpp>
+#include <random>
 
 namespace Lemma {
 

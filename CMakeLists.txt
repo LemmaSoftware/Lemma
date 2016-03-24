@@ -53,8 +53,8 @@ ExternalProject_Add(EIGEN
 ELSE() 
 # Stable Eigen, requires manual updating when new releases, but lighter weight.  
 ExternalProject_Add(EIGEN
-	URL "http://bitbucket.org/eigen/eigen/get/3.2.7.tar.gz"
-    #URL "http://bitbucket.org/eigen/eigen/get/default.tar.gz" # tip from repo
+    #URL "http://bitbucket.org/eigen/eigen/get/3.2.7.tar.gz"
+    URL "http://bitbucket.org/eigen/eigen/get/default.tar.gz" # tip from repo
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 )
