@@ -19,9 +19,6 @@ namespace Lemma {
 	}
 
 	DataReaderFem::~DataReaderFem() {
-		if (NumberOfReferences != 0) {
-			throw DeleteObjectWithReferences(this);
-		}
 	}
 
 	DataReaderFem* DataReaderFem::New() {

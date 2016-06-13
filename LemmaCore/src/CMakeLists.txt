@@ -9,8 +9,8 @@ set (SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/data.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/datafem.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/datareader.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/datareaderfem.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/datareaderfemubc.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/datareaderfem.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/datareaderfemubc.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/datareadertem.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/datatem.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/DCIPElectrode.cpp

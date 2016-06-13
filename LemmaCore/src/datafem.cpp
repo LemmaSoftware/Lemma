@@ -65,6 +65,8 @@ namespace Lemma {
 	}
 
 	void DataFEM::Release() {
+		if (this->NumberOfReferences != 0)
+			throw DeleteObjectWithReferences(this);
 		delete this;
 	}
 
@@ -85,8 +87,6 @@ namespace Lemma {
 	}
 
 	DataFEM::~DataFEM() {
-		if (this->NumberOfReferences != 0)
-			throw DeleteObjectWithReferences(this);
 	}
 
 	void DataFEM::Zero() {
