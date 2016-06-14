@@ -24,8 +24,9 @@
 #ifdef  LEMMAUSEVTK
 
 #include "LemmaObject.h"
-#include "rectilineargrid.h"
+#include "RectilinearGrid.h"
 
+#include <vtkSmartPointer.h>
 #include "vtkXMLRectilinearGridWriter.h"
 #include "vtkRectilinearGrid.h"
 #include "vtkDoubleArray.h"
@@ -54,10 +55,10 @@ class RectilinearGridVTKExporter : public LemmaObject {
     static RectilinearGridVTKExporter* New();
 
     /**
-     *  @copybrief   LemmaObject::Delete()
-     *  @copydetails LemmaObject::Delete()
+     *  Factory method for generating concrete class.
+     *  @return a std::shared_ptr of type RectilinearGridVTKExporter
      */
-    void Delete();
+    static std::shared_ptr< RectilinearGridVTKExporter > NewSP();
 
     // ====================  OPERATORS     =======================
 
@@ -67,14 +68,14 @@ class RectilinearGridVTKExporter : public LemmaObject {
     /**
      * Sets the Grid to be exported
      */
-    void SetGrid(RectilinearGrid* Grid);
+    void SetGrid( std::shared_ptr<RectilinearGrid> Grid);
 
     // ====================  INQUIRY       =======================
 
     /**
      *  @return Returns a pointer to a vtkRectilinearGrid containing same information as the Lemma Grid.
      */
-    vtkRectilinearGrid*  GetVTKGrid();
+    vtkSmartPointer<vtkRectilinearGrid>  GetVTKGrid();
 
     /**
      *  Writes the exported VTKGrid out to a .vtr XML file
@@ -92,12 +93,6 @@ class RectilinearGridVTKExporter : public LemmaObject {
     /** Default protected destructor, use Delete */
     ~RectilinearGridVTKExporter ();
 
-    /**
-     *  @copybrief   LemmaObject::Release()
-     *  @copydetails LemmaObject::Release()
-     */
-    void Release();
-
     private:
 
     void BuildVTKRectilinearGrid();
@@ -105,10 +100,10 @@ class RectilinearGridVTKExporter : public LemmaObject {
     // ====================  DATA MEMBERS  =========================
 
     /** The Grid to convert from */
-    RectilinearGrid*    Grid;
+    std::shared_ptr<RectilinearGrid>    Grid;
 
     /** The Grid to convert to */
-    vtkRectilinearGrid*    VTKGrid;
+    vtkSmartPointer<vtkRectilinearGrid> VTKGrid;
 
 }; // -----  end of class  RectilinearGridVTKExporter  -----
 

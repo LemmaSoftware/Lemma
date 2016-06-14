@@ -38,15 +38,11 @@ class ASCIIParser : public LemmaObject {
 
     // ====================  LIFECYCLE     =======================
 
-    /** @copybrief LemmaObject::New()
-     *  @copydetails LemmaObject::New()
+    /**
+     *  Factory method for generating concrete class.
+     *  @return a std::shared_ptr of type ASCIIParser
      */
-    static ASCIIParser* New();
-
-    /** @copybrief   LemmaObject::Delete()
-     *  @copydetails LemmaObject::Delete()
-     */
-    void Delete();
+    static std::shared_ptr< ASCIIParser >  NewSP();
 
     // ====================  OPERATORS     =======================
 

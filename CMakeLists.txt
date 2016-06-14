@@ -140,15 +140,15 @@ endif()
 # Add the c++11 flag 
 # TODO add compiler specific instructions
 include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG(-std=c++14 COMPILER_SUPPORTS_CXX14)
 CHECK_CXX_COMPILER_FLAG(-std=c++11 COMPILER_SUPPORTS_CXX11)
-CHECK_CXX_COMPILER_FLAG(-std=c++0x COMPILER_SUPPORTS_CXX0X)
 
-if(COMPILER_SUPPORTS_CXX11)
+if(COMPILER_SUPPORTS_CXX14)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+elseif(COMPILER_SUPPORTS_CXX11)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-elseif(COMPILER_SUPPORTS_CXX0X)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 else()
-	message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+	message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 or C++14 support. Please use a different C++ compiler.")
 endif()
 
 option( LEMMA_USE_OPENMP  "Use OpenMP in Lemma" OFF)
@@ -181,9 +181,10 @@ add_subdirectory (Modules)
 ########################################################################
 # 
 include_directories(${CMAKE_INSTALL_PREFIX}/include)
-add_executable(Hello "${PROJECT_SOURCE_DIR}/src/test.cpp")
-target_link_libraries(Hello lemmacore)
-add_dependencies(Hello YAML-CPP)
+
+#add_executable(Hello "${PROJECT_SOURCE_DIR}/src/test.cpp")
+#target_link_libraries(Hello lemmacore)
+#add_dependencies(Hello YAML-CPP)
 
 
 # add a target to generate API documentation with Doxygen

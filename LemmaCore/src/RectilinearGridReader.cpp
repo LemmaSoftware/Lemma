@@ -36,21 +36,22 @@ namespace Lemma {
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
     RectilinearGridReader::RectilinearGridReader (const std::string& name) : GridReader(name),
-        Grid(NULL), Parser(NULL) {
+        rGrid( nullptr ), Parser( nullptr ) {
 
     }  // -----  end of method RectilinearGridReader::RectilinearGridReader  (constructor)  -----
 
 
     //--------------------------------------------------------------------------------------
     //       Class:  RectilinearGridReader
-    //      Method:  New()
+    //      Method:  NewSP()
     // Description:  constructor
     //--------------------------------------------------------------------------------------
-    RectilinearGridReader* RectilinearGridReader::New() {
-        RectilinearGridReader*  Obj = new RectilinearGridReader("RectilinearGridReader");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr< RectilinearGridReader > RectilinearGridReader::NewSP() {
+        std::shared_ptr<RectilinearGridReader> sp(new  RectilinearGridReader("RectilinearGridReader"), LemmaObjectDeleter() );
+        return sp;
     }
+
+
 
     //--------------------------------------------------------------------------------------
     //       Class:  RectilinearGridReader
@@ -58,27 +59,7 @@ namespace Lemma {
     // Description:  destructor (protected)
     //--------------------------------------------------------------------------------------
     RectilinearGridReader::~RectilinearGridReader () {
-        if (Grid) Grid->Delete();
-        if (Parser) Parser->Delete();
     }  // -----  end of method RectilinearGridReader::~RectilinearGridReader  (destructor)  -----
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  RectilinearGridReader
-    //      Method:  Delete
-    // Description:  destructor (protected)
-    //--------------------------------------------------------------------------------------
-    void RectilinearGridReader::Delete() {
-        this->DetachFrom(this);
-    }
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  RectilinearGridReader
-    //      Method:  Release
-    // Description:  destructor (protected)
-    //--------------------------------------------------------------------------------------
-    void RectilinearGridReader::Release() {
-        delete this;
-    }
 
     //--------------------------------------------------------------------------------------
     //       Class:  RectilinearGridReader
@@ -86,20 +67,18 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     void RectilinearGridReader::ReadASCIIGridFile ( const std::string& name  ) {
 
-        if (Grid) Grid->Delete();
-        Grid = RectilinearGrid::New();
-        if (Parser) Parser->Delete();
-        Parser = ASCIIParser::New();
+        rGrid = RectilinearGrid::NewSP();
+        Parser = ASCIIParser::NewSP();
 
         Parser->SetCommentString("//");
 
         Parser->Open(name);
 
         std::vector<int> vals = Parser->ReadInts(3);
-        Grid->SetDimensions(vals[0], vals[1], vals[2]);
+        rGrid->SetDimensions(vals[0], vals[1], vals[2]);
 
         std::vector<Real> rvals = Parser->ReadReals(3);
-        Grid->SetOffset(rvals[0], rvals[1], rvals[2]);
+        rGrid->SetOffset(rvals[0], rvals[1], rvals[2]);
         rvals.clear();
 
         rvals = Parser->ReadReals( vals[0] );
@@ -114,7 +93,7 @@ namespace Lemma {
         rvals = Parser->ReadReals( vals[2] );
         VectorXr hz = VectorXr::Map(&rvals[0], vals[2]);
 
-        Grid->SetSpacing(hx, hy, hz);
+        rGrid->SetSpacing(hx, hy, hz);
 
         // Read in model(s)/data? Where should this be done?
         Parser->Close();
@@ -128,8 +107,8 @@ namespace Lemma {
     //       Class:  RectilinearGridReader
     //      Method:  GetGrid
     //--------------------------------------------------------------------------------------
-    RectilinearGrid* RectilinearGridReader::GetGrid (  ) {
-        return Grid;
+    std::shared_ptr<Grid> RectilinearGridReader::GetGrid (  ) {
+        return std::static_pointer_cast<Grid> (rGrid);
     }		// -----  end of method RectilinearGridReader::GetGrid  -----
 
 

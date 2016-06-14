@@ -15,7 +15,7 @@
 
 namespace Lemma {
 
-    std::ostream &operator << (std::ostream &stream,
+    std::ostream &operator<<(std::ostream &stream,
                 const LemmaObject &ob) {
       stream << "Class name= " << ob.Name  << "\n";
       return stream;
@@ -42,7 +42,6 @@ namespace Lemma {
 
     // Destructor
     LemmaObject::~LemmaObject() {
-        std::cout << "~LemmaObject()" << std::endl;
     }
 
     // ====================  OPERATIONS    ==============================

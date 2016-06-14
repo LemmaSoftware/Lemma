@@ -19,7 +19,7 @@
 #define  RECTILINEARGRIDREADER_INC
 
 #include "GridReader.h"
-#include "rectilineargrid.h"
+#include "RectilinearGrid.h"
 #include "ASCIIParser.h"
 
 namespace Lemma {
@@ -39,16 +39,10 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /**
-             * @copybrief LemmaObject::New()
-             * @copydetails LemmaObject::New()
+             *  Factory method for generating concrete class.
+             *  @return a std::shared_ptr of type RectilinearGridReader
              */
-            static RectilinearGridReader* New();
-
-            /**
-             *  @copybrief   LemmaObject::Delete()
-             *  @copydetails LemmaObject::Delete()
-             */
-            void Delete();
+            static std::shared_ptr< RectilinearGridReader > NewSP();
 
             // ====================  OPERATORS     =======================
 
@@ -75,7 +69,7 @@ namespace Lemma {
              * Accessor method for the underlying RectilinearGrid class constructed
              * from the input file.
              */
-            RectilinearGrid* GetGrid();
+            std::shared_ptr<Grid> GetGrid();
 
             // ====================  INQUIRY       =======================
 
@@ -89,21 +83,15 @@ namespace Lemma {
             /** Default protected constructor, use Delete */
             ~RectilinearGridReader ();
 
-            /**
-             *  @copybrief   LemmaObject::Release()
-             *  @copydetails LemmaObject::Release()
-             */
-            void Release();
-
         private:
 
             // ====================  DATA MEMBERS  =========================
 
             /** Object holding constructed Grid */
-            RectilinearGrid* Grid;
+            std::shared_ptr<RectilinearGrid> rGrid;
 
             /** Performs actual file parsing */
-            ASCIIParser* Parser;
+            std::shared_ptr<ASCIIParser> Parser;
 
     }; // -----  end of class  RectilinearGridReader  -----
 

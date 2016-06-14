@@ -50,13 +50,12 @@ namespace Lemma {
 
     //--------------------------------------------------------------------------------------
     //       Class:  CubicSplineInterpolator
-    //      Method:  New()
+    //      Method:  NewSP()
     // Description:  public constructor
     //--------------------------------------------------------------------------------------
-    CubicSplineInterpolator* CubicSplineInterpolator::New() {
-        CubicSplineInterpolator*  Obj = new CubicSplineInterpolator("CubicSplineInterpolator");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<CubicSplineInterpolator> CubicSplineInterpolator::NewSP() {
+        std::shared_ptr<CubicSplineInterpolator> sp(new  CubicSplineInterpolator("CubicSplineInterpolator"), LemmaObjectDeleter() );
+        return sp;
     }
 
     //--------------------------------------------------------------------------------------
@@ -67,15 +66,6 @@ namespace Lemma {
     CubicSplineInterpolator::~CubicSplineInterpolator () {
 
     }  // -----  end of method CubicSplineInterpolator::~CubicSplineInterpolator  (destructor)  -----
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  CubicSplineInterpolator
-    //      Method:  Delete
-    // Description:  public destructor
-    //--------------------------------------------------------------------------------------
-    void CubicSplineInterpolator::Delete() {
-        this->DetachFrom(this);
-    }
 
     //--------------------------------------------------------------------------------------
     //       Class:  CubicSplineInterpolator

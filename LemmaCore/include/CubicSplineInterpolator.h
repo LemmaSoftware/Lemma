@@ -66,16 +66,11 @@ class CubicSplineInterpolator : public LemmaObject {
     // ====================  LIFECYCLE     =======================
 
     /**
-     * @copybrief LemmaObject::New()
-     * @copydetails LemmaObject::New()
+     *  Factory method for generating concrete class.
+     *  @return a std::shared_ptr of type CubicSplineInterpolator
      */
-    static CubicSplineInterpolator* New();
+    static std::shared_ptr<CubicSplineInterpolator> NewSP();
 
-    /**
-     *  @copybrief   LemmaObject::Delete()
-     *  @copydetails LemmaObject::Delete()
-     */
-    void Delete();
 
     // ====================  OPERATORS     =======================
 
@@ -143,7 +138,7 @@ class CubicSplineInterpolator : public LemmaObject {
     /** Default protected constructor, use New */
     CubicSplineInterpolator (const std::string& name);
 
-    /** Default protected destructor, use Delete */
+    /** Default protected destructor, smart pointers auto delete */
     ~CubicSplineInterpolator ();
 
     /**

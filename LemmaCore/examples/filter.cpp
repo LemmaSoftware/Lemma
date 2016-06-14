@@ -33,12 +33,12 @@
   @version   0.0
  **/
 
-#include "windowfilter.h"
+#include "WindowFilter.h"
 using namespace Lemma;
 
 int main() {
 
-    WindowFilter* Hamming = WindowFilter::New();
+    auto Hamming = WindowFilter::NewSP();
 
         Hamming->SetWindowType( HANNING );
         Hamming->SetSamplingInterval(1e-4);
@@ -48,6 +48,5 @@ int main() {
     std::cout << Hamming->GetFilterCoefficients() //.transpose()
               << std::endl;
 
-    Hamming->Delete();
 
 }

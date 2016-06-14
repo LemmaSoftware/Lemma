@@ -7,8 +7,7 @@
 /**
   @file
   @author   Trevor Irons
-  @date     06/25/2009
-  @version  $Id: LemmaObject.h 199 2014-12-29 19:25:20Z tirons $
+  @date     06-13-2016
  **/
 
 #ifndef __LEMMAOBJECT_H
@@ -21,23 +20,20 @@
 #include "yaml-cpp/yaml.h"
 #endif
 
+#include <memory>
+
 namespace Lemma {
 
-// ==========================================================================
-//        Class:  LemmaObject
-/** \brief    Abstract class providing simple reference counting and memory
-  *           management.
-  * \details  Since objects can be members of other objects, and may be
-  *           of multiple objects it becomes useful to count the number of
-  *           Classes an object is a member of. Objects cannot be deleted that
-  *           contain references to other objects.
+/** \brief    Abstract class providing common interface for Lemma Objects.
+  * \details  Lemma objects can be members of other Lemma, and may be members
+  *           of multiple objects. Since updates should be atomic, and objects
+  *           can be large, it becomes useful to count the number of
+  *           Classes an object is a member of.
+  *           Before C++-11, this was done internally in Lemma, with the inclusion of
+  *           more sophisticated smart pointers, this logic has been offloaded to the
+  *           standard. All Lemma objects should be created as C++-11 Smart pointers, using
+  *           the supplied New method. Calls to Delete are no longer necessary or available.
   */
-// ==========================================================================
-
-/** Base class for all of Lemma. Reference counted object provides simple
- * reference counting. This allows for much easier maintainance of shared
- * objects among classes.
- */
 class LemmaObject {
 
     /** Recursively prints information about this object
@@ -48,11 +44,14 @@ class LemmaObject {
     friend YAML::Emitter& operator << (YAML::Emitter& out, const LemmaObject &ob) ;
     #endif
 
-    friend class DeleteObjectWithReferences;
+    friend class LemmaObjectDeleter;
 
     public:
 
-        // Needed because some derived classes have Eigen vectors as members,
+        // ====================  LIFECYCLE     ==============================
+        //virtual std::shared_ptr<LemmaObject> NewSP() const = 0;
+
+        // Needed because many derived classes have Eigen vectors as members,
         // causing alignment issues when vectorisation is enabled.
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
@@ -60,32 +59,12 @@ class LemmaObject {
 
         // ====================  OPERATIONS    ==============================
 
-        /**
-         * Deletes this objects self reference. If there are no remaining
-         * references, Release is called freeing all memory. Otherwise Release
-         * is called if/when the last reference is removed.
-         */
-        virtual void Delete()=0;
-
-        /** Attaches this object to another object */
-        void AttachTo(LemmaObject *);
-
-        /** Detaches this object from another object */
-        void DetachFrom(LemmaObject *);
-
         // ====================  ACCESS        ==============================
 
         // ====================  INQUIRY       ==============================
 
-        /** Returns the number of objects attached to this. */
-        unsigned int GetNumberOfReferences();
-
-        /** Returns address(s) to class(es) of which this is a member
-         */
-        std::vector<LemmaObject*> GetReferences();
-
-        /** Returns name of this model */
-        std::string GetName();
+        /** Returns the name of the class, similiar to Python's type */
+        std::string GetName() const;
 
         #ifdef HAVE_YAMLCPP
         /**
@@ -99,7 +78,7 @@ class LemmaObject {
          *        two families in to a LemmaInternalClass without serializing and perhaps this class for
          *        all external classes that might need to be serialized.
          */
-        virtual YAML::Node Serialize() const{
+        virtual YAML::Node Serialize() const {
             return YAML::Node();
         };
         #endif
@@ -118,34 +97,25 @@ class LemmaObject {
         LemmaObject (const YAML::Node& node);
         #endif
 
-        // ====================  DATA MEMBERS  ==============================
         /** Protected default destructor. This is an abstract class and
          *  cannot be instantiated.
          */
-        virtual ~LemmaObject ();
+        virtual ~LemmaObject();
 
-        /**
-         *  Releases all memory back to the heap. Just calls the protected
-         *  destructor at the derived class level.
-         */
-        virtual void Release()=0;
-
-        // ====================  OPERATIONS    ==============================
+    private:
 
         // ====================  DATA MEMBERS  ==============================
-
-        /** Number of other classes claiming this as a member. */
-        unsigned int NumberOfReferences;
-
-        /** List of the addresses of the other classes referencing this as a
-         * member
-         */
-        std::vector<LemmaObject *> RefPtrList;
 
         /** Stores an ASCII string representation of the class name */
         std::string Name;
 
 }; // -----  end of class  LemmaObject  -----
+
+class LemmaObjectDeleter
+{
+    public:
+        void operator()(LemmaObject* p) { delete p; }
+};
 
     /////////////////////////////////////////////////////////////////
     // BOILERPLATE MACROS
@@ -156,26 +126,6 @@ class LemmaObject {
 
     /////////////////////////////////////////////////////////////////
     // Error Classes
-
-    /** Error called when ReferenceCounting breaks. If an object is
-     * deleted that has refences still, this is thrown.
-     */
-    class DeleteObjectWithReferences : public std::runtime_error {
-
-        public:
-
-            /** Call this method internally when an object is deleted with
-             * references.
-             */
-            DeleteObjectWithReferences(LemmaObject *ptr);
-
-            /** @deprecated this error may be thrown, but the error message is much
-            * less insightful than
-            * DeleteObjectWithReferences(LemmaObject* ptr).
-            */
-            DeleteObjectWithReferences( );
-    };
-
 
     /** Error called when DeSerializing breaks. If the node type is not the expected one
      *  this error is thown.

@@ -26,9 +26,7 @@ namespace Lemma {
 // ====================  FRIEND METHODS  =====================
 
 std::ostream &operator<<(std::ostream &stream, const RectilinearGridVTKExporter &ob) {
-
     stream << *(LemmaObject*)(&ob);
-
     return stream;
 }
 
@@ -40,21 +38,22 @@ std::ostream &operator<<(std::ostream &stream, const RectilinearGridVTKExporter 
 // Description:  constructor (protected)
 //--------------------------------------------------------------------------------------
 RectilinearGridVTKExporter::RectilinearGridVTKExporter (const std::string& name) :
-    LemmaObject(name), Grid(NULL), VTKGrid(NULL) {
+    LemmaObject(name), Grid(nullptr), VTKGrid(nullptr) {
 
 }  // -----  end of method RectilinearGridVTKExporter::RectilinearGridVTKExporter  (constructor)  -----
 
 
 //--------------------------------------------------------------------------------------
 //       Class:  RectilinearGridVTKExporter
-//      Method:  New()
+//      Method:  NewSP()
 // Description:  public constructor
 //--------------------------------------------------------------------------------------
-RectilinearGridVTKExporter* RectilinearGridVTKExporter::New() {
-    RectilinearGridVTKExporter*  Obj = new RectilinearGridVTKExporter("RectilinearGridVTKExporter");
-    Obj->AttachTo(Obj);
-    return Obj;
+std::shared_ptr< RectilinearGridVTKExporter > RectilinearGridVTKExporter::NewSP() {
+    std::shared_ptr<RectilinearGridVTKExporter> sp(new  RectilinearGridVTKExporter("RectilinearGridVTKExporter"), LemmaObjectDeleter() );
+    return sp;
 }
+
+
 
 //--------------------------------------------------------------------------------------
 //       Class:  RectilinearGridVTKExporter
@@ -62,40 +61,16 @@ RectilinearGridVTKExporter* RectilinearGridVTKExporter::New() {
 // Description:  destructor (protected)
 //--------------------------------------------------------------------------------------
 RectilinearGridVTKExporter::~RectilinearGridVTKExporter () {
-    if (Grid) Grid->DetachFrom(this);
-    if (VTKGrid) VTKGrid->Delete();
 }  // -----  end of method RectilinearGridVTKExporter::~RectilinearGridVTKExporter  (destructor)  -----
-
-//--------------------------------------------------------------------------------------
-//       Class:  RectilinearGridVTKExporter
-//      Method:  Delete
-// Description:  public destructor
-//--------------------------------------------------------------------------------------
-void RectilinearGridVTKExporter::Delete() {
-    this->DetachFrom(this);
-}
-
-//--------------------------------------------------------------------------------------
-//       Class:  RectilinearGridVTKExporter
-//      Method:  Release
-// Description:  destructor (protected)
-//--------------------------------------------------------------------------------------
-void RectilinearGridVTKExporter::Release() {
-    delete this;
-}
 
 //--------------------------------------------------------------------------------------
 //       Class:  RectilinearGridVTKExporter
 //      Method:  SetGrid
 //--------------------------------------------------------------------------------------
-void RectilinearGridVTKExporter::SetGrid ( RectilinearGrid* GridIn ) {
-    if (Grid) Grid->DetachFrom(this);
+void RectilinearGridVTKExporter::SetGrid ( std::shared_ptr<RectilinearGrid> GridIn ) {
     Grid = GridIn;
-    Grid->AttachTo(this);
-
     // I see no harm in just doing this now.
     BuildVTKRectilinearGrid();
-
     return ;
 }		// -----  end of method RectilinearGridVTKExporter::SetGrid  -----
 
@@ -103,7 +78,7 @@ void RectilinearGridVTKExporter::SetGrid ( RectilinearGrid* GridIn ) {
 //       Class:  RectilinearGridVTKExporter
 //      Method:  GetVTKRectilinearGrid
 //--------------------------------------------------------------------------------------
-vtkRectilinearGrid* RectilinearGridVTKExporter::GetVTKGrid (  ) {
+vtkSmartPointer<vtkRectilinearGrid> RectilinearGridVTKExporter::GetVTKGrid (  ) {
     return VTKGrid;
 }		// -----  end of method RectilinearGridVTKExporter::GetVTKRectilinearGrid  -----
 
@@ -117,6 +92,7 @@ void RectilinearGridVTKExporter::WriteVTKGrid ( const std::string& fname  ) {
         gridWrite->SetFileName( (fname+std::string(".vtr")).c_str() );
         gridWrite->Update();
         gridWrite->Write();
+        gridWrite->Delete();
     return ;
 }		// -----  end of method RectilinearGridVTKExporter::WriteVTKGrid  -----
 
@@ -125,9 +101,8 @@ void RectilinearGridVTKExporter::WriteVTKGrid ( const std::string& fname  ) {
 //      Method:  BuildVTKRectilinearGrid
 //--------------------------------------------------------------------------------------
 void RectilinearGridVTKExporter::BuildVTKRectilinearGrid (  ) {
-    if (VTKGrid) VTKGrid->Delete();
 
-    // Set Coordinates
+    // Set Coordinate>s
     vtkDoubleArray *xCoords = vtkDoubleArray::New();
     xCoords->InsertNextValue(Grid->GetOx()-Grid->GetDx(0)/2.);
     double xm1 = Grid->GetOx() - Grid->GetDx(0)/2.;
@@ -152,7 +127,7 @@ void RectilinearGridVTKExporter::BuildVTKRectilinearGrid (  ) {
         zm1 += Grid->GetDz(iz);
     }
 
-    VTKGrid = vtkRectilinearGrid::New();
+    VTKGrid = vtkSmartPointer<vtkRectilinearGrid>::New();
         VTKGrid->SetDimensions(Grid->GetNx()+1, Grid->GetNy()+1, Grid->GetNz()+1);
         VTKGrid->SetXCoordinates(xCoords);
         VTKGrid->SetYCoordinates(yCoords);

@@ -46,13 +46,12 @@ namespace Lemma {
 
     //--------------------------------------------------------------------------------------
     //       Class:  ASCIIParser
-    //      Method:  New()
-    // Description:  public constructor
+    //      Method:  NewSP()
+    // Description:  public smart pointer factory constructor
     //--------------------------------------------------------------------------------------
-    ASCIIParser* ASCIIParser::New() {
-        ASCIIParser*  Obj = new ASCIIParser("ASCIIParser");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr< ASCIIParser > ASCIIParser::NewSP() {
+        std::shared_ptr<ASCIIParser> sp(new  ASCIIParser("ASCIIParser"), LemmaObjectDeleter() );
+        return sp;
     }
 
     //--------------------------------------------------------------------------------------
@@ -63,15 +62,6 @@ namespace Lemma {
     ASCIIParser::~ASCIIParser () {
 
     }  // -----  end of method ASCIIParser::~ASCIIParser  (destructor)  -----
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  ASCIIParser
-    //      Method:  Delete
-    // Description:  public destructor
-    //--------------------------------------------------------------------------------------
-    void ASCIIParser::Delete() {
-        this->DetachFrom(this);
-    }
 
     //--------------------------------------------------------------------------------------
     //       Class:  ASCIIParser
