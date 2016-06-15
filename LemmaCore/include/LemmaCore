@@ -1,0 +1,40 @@
+/* This file is part of Lemma, a geophysical modelling and inversion API */
+
+/* Copyright (C) 2009-2013 Trevor Irons <trevorirons@gmail.com> */
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/**
+  @file
+  @author   Trevor Irons
+  @version  $Id$
+ **/
+
+// Convenience include all of LemmaCore
+#ifndef  LEMMAINCLUDE_INC
+#define  LEMMAINCLUDE_INC
+#include "ASCIIParser.h"
+#include "CubicSplineInterpolator.h"
+//#include "Data.h"
+//#include "DataReader.h"
+//#include "EarthModel.h"
+//#include "Filter.h"
+//#include "Grid.h"
+//#include "GridReader.h"
+//#include "Instrument.h"
+//#include "LayeredEarth.h"
+//#include "LemmaObject.h"
+#include "RectilinearGrid.h"
+#include "RectilinearGridReader.h"
+#include "RectilinearGridVTKExporter.h"
+#include "WindowFilter.h"
+#include "banner.h"
+#include "helper.h"
+#include "timer.h"
+
+#endif   // ----- #ifndef LEMMAINCLUDE_INC  -----
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp: */

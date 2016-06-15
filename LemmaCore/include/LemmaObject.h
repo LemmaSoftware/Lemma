@@ -20,6 +20,7 @@
 #include "yaml-cpp/yaml.h"
 #endif
 
+#include <chrono>
 #include <memory>
 
 namespace Lemma {
@@ -49,7 +50,6 @@ class LemmaObject {
     public:
 
         // ====================  LIFECYCLE     ==============================
-        //virtual std::shared_ptr<LemmaObject> NewSP() const = 0;
 
         // Needed because many derived classes have Eigen vectors as members,
         // causing alignment issues when vectorisation is enabled.
@@ -79,7 +79,11 @@ class LemmaObject {
          *        all external classes that might need to be serialized.
          */
         virtual YAML::Node Serialize() const {
-            return YAML::Node();
+            YAML::Node node = YAML::Node();
+
+            std::time_t now = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
+            node["Serialized"] = std::ctime(&now);
+            return node;
         };
         #endif
 
