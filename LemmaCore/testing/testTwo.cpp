@@ -9,7 +9,7 @@
 
 /**
  * @file
- * @date      01/15/2016 09:54:13 PM
+ * @date      06/14/2016 09:43:43 PM
  * @version   $Id$
  * @author    Trevor Irons (ti)
  * @email     tirons@egi.utah.edu
@@ -17,13 +17,7 @@
  * @copyright Copyright (c) 2016, Trevor Irons & Lemma Software, LLC
  */
 
-#include <iostream>
-#include "LemmaConfig.h"
-#include "lemma.h"
-
-using namespace Lemma;
-
 int main() {
-    std::cout << "Hello Lemma " << LEMMA_VERSION_MAJOR << "\t" << LEMMA_VERSION_MINOR << std::endl;
+    return 0;
 }
 

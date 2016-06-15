@@ -9,7 +9,7 @@
 
 /**
  * @file
- * @date      01/15/2016 09:54:13 PM
+ * @date      06/14/2016 10:06:34 PM
  * @version   $Id$
  * @author    Trevor Irons (ti)
  * @email     tirons@egi.utah.edu
@@ -17,13 +17,16 @@
  * @copyright Copyright (c) 2016, Trevor Irons & Lemma Software, LLC
  */
 
-#include <iostream>
-#include "LemmaConfig.h"
-#include "lemma.h"
+          // MyTestSuite.h
+          #include <cxxtest/TestSuite.h>
 
-using namespace Lemma;
-
-int main() {
-    std::cout << "Hello Lemma " << LEMMA_VERSION_MAJOR << "\t" << LEMMA_VERSION_MINOR << std::endl;
-}
+          class MyTestSuite : public CxxTest::TestSuite
+          {
+          public:
+             void testAddition( void )
+             {
+                TS_ASSERT( 1 + 1 > 1 );
+                TS_ASSERT_EQUALS( 1 + 1, 2 );
+             }
+          };
 

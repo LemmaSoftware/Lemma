@@ -33,6 +33,11 @@ endif()
 
 target_link_libraries(lemmacore "yaml-cpp")
 
+# Testing
+if (LEMMA_ENABLE_TESTING)
+	add_subdirectory(testing)
+endif()
+
 # Install
 install ( TARGETS lemmacore DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )
 

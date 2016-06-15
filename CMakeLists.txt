@@ -158,7 +158,7 @@ if(COMPILER_SUPPORTS_OPENMP AND LEMMA_USE_OPENMP )
 endif()
 
 set(LEMMA_VERSION_MAJOR "0")
-set(LEMMA_VERSION_MINOR "0")
+set(LEMMA_VERSION_MINOR "1")
 set(LEMMA_VERSION_PATCH "1")
 set(LEMMA_VERSION "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}")
 
@@ -172,6 +172,23 @@ include_directories ("${PROJECT_SOURCE_DIR}/LemmaCore/include")
 include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3")
 include_directories ("${CMAKE_INSTALL_PREFIX}/include/")
 link_directories ("${CMAKE_INSTALL_PREFIX}/lib/")
+
+option (LEMMA_ENABLE_TESTING  "Turn on unit testing" ON)
+if (LEMMA_ENABLE_TESTING)
+find_package(CxxTest REQUIRED)
+if(CXXTEST_FOUND)
+    include_directories(${CXXTEST_INCLUDE_DIR})
+    enable_testing()
+    #CXXTEST_ADD_TEST(tester_executable runner.cpp
+    #                    ${CMAKE_CURRENT_SOURCE_DIR}/src/myTestsuite.h)
+	CXXTEST_ADD_TEST(unittest_foo foo_test.cc
+                      ${CMAKE_CURRENT_SOURCE_DIR}/src/myTestSuite.h)
+    #target_link_libraries(unittest_foo foo) # as needed
+	else()
+	message(FATAL_ERROR "CxxTest not found.")
+	endif()
+endif()
+
 add_subdirectory (LemmaCore) 
 
 ########################################################################
@@ -182,9 +199,9 @@ add_subdirectory (Modules)
 # 
 include_directories(${CMAKE_INSTALL_PREFIX}/include)
 
-#add_executable(Hello "${PROJECT_SOURCE_DIR}/src/test.cpp")
-#target_link_libraries(Hello lemmacore)
-#add_dependencies(Hello YAML-CPP)
+add_executable(Hello "${PROJECT_SOURCE_DIR}/src/test.cpp")
+target_link_libraries(Hello lemmacore)
+add_dependencies(Hello YAML-CPP)
 
 
 # add a target to generate API documentation with Doxygen
