@@ -17,16 +17,17 @@
  * @copyright Copyright (c) 2016, Trevor Irons & Lemma Software, LLC
  */
 
-          // MyTestSuite.h
-          #include <cxxtest/TestSuite.h>
+// MyTestSuite.h
+#include <cxxtest/TestSuite.h>
 
-          class MyTestSuite : public CxxTest::TestSuite
-          {
-          public:
-             void testAddition( void )
-             {
-                TS_ASSERT( 1 + 1 > 1 );
-                TS_ASSERT_EQUALS( 1 + 1, 2 );
-             }
-          };
+class MyTestSuite : public CxxTest::TestSuite
+{
+    public:
+    void testAddition( void )
+    {
+        TS_ASSERT( 1 + 1 > 1 );
+        TS_ASSERT( 1 - 1 > 1 );
+        TS_ASSERT_EQUALS( 1 + 1, 2 );
+    }
+};
 

@@ -21,9 +21,6 @@ endif(NOT HAVEGIT)
 FIND_PROGRAM(HAVEHG hg
   PATHS /usr/bin/ /bin ENV PATH NO_DEFAULT_PATH
 )
-if(NOT HAVEHG)
-   message(STATUS "Mercurial (hg) was not found.")
-endif(NOT HAVEHG)
 
 option(BUILD_SHARED_LIBS OFF)
 if(BUILD_SHARED_LIBS)
@@ -42,23 +39,29 @@ endif()
 include(ExternalProject)
 # Eigen, this header-library is used extensively for linear algebra, matrices, and arrays
 # Mercurial (hg) repo pull, Would it be better to just download latest stable?
+#find_package(Eigen3 REQUIRED)
+#if (EIGEN3_FOUND)
+#	# do nothing
+#	include_directories(EIGEN3_INCLUDE_DIR)
+#else() 
 if (HAVEHG)
-ExternalProject_Add(EIGEN
+	ExternalProject_Add(EIGEN
 	HG_REPOSITORY  "https://bitbucket.org/eigen/eigen/"
 	UPDATE_COMMAND ""
 	HG_TAG "default"
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+   	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
+   	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 )
 ELSE() 
-# Stable Eigen, requires manual updating when new releases, but lighter weight.  
+# Stable Eigen
 ExternalProject_Add(EIGEN
-    #URL "http://bitbucket.org/eigen/eigen/get/3.2.7.tar.gz"
-    URL "http://bitbucket.org/eigen/eigen/get/default.tar.gz" # tip from repo
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+   	URL "http://bitbucket.org/eigen/eigen/get/default.tar.gz" # tip from repo
+   	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
+   	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 )
 ENDIF()
+include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3")
+#endif()
 
 # Yaml-cpp, this library is used extensively for serialisation of classes (class persistence) 
 ExternalProject_Add(YAML-CPP
@@ -70,6 +73,26 @@ ExternalProject_Add(YAML-CPP
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=ON -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
 )
 add_compile_options(-DHAVE_YAMLCPP) 
+
+# CxxTest 
+find_package(CxxTest) 
+if (CXXTEST_FOUND)
+	# Do nothing
+else()
+	ExternalProject_Add(CxxTest
+		GIT_REPOSITORY "https://github.com/CxxTest/cxxtest.git"
+		GIT_TAG "master"
+		UPDATE_COMMAND ""
+		PATCH_COMMAND ""
+		CONFIGURE_COMMAND ""
+		BUILD_COMMAND ""
+		INSTALL_COMMAND ""
+    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest
+	)
+	set (CXXTEST_INCLUDE_DIR  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/")
+	set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen" )
+	find_package(CxxTest REQUIRED)
+endif()
 
 # tinyxml2, this library is used for XML IO 
 option( LEMMA_TINYXML_SUPPORT  "MATIO library support for MATLAB .mat files" OFF)
@@ -169,14 +192,14 @@ configure_file (
 include_directories("${PROJECT_BINARY_DIR}/include")
 
 include_directories ("${PROJECT_SOURCE_DIR}/LemmaCore/include")
-include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3")
+
 include_directories ("${CMAKE_INSTALL_PREFIX}/include/")
 link_directories ("${CMAKE_INSTALL_PREFIX}/lib/")
 
-option (LEMMA_ENABLE_TESTING  "Turn on unit testing" ON)
-if (LEMMA_ENABLE_TESTING)
-find_package(CxxTest REQUIRED)
+
 if(CXXTEST_FOUND)
+	option (LEMMA_ENABLE_TESTING  "Turn on unit testing" ON)
+	if (LEMMA_ENABLE_TESTING)
     include_directories(${CXXTEST_INCLUDE_DIR})
     enable_testing()
     #CXXTEST_ADD_TEST(tester_executable runner.cpp
@@ -184,8 +207,8 @@ if(CXXTEST_FOUND)
 	CXXTEST_ADD_TEST(unittest_foo foo_test.cc
                       ${CMAKE_CURRENT_SOURCE_DIR}/src/myTestSuite.h)
     #target_link_libraries(unittest_foo foo) # as needed
-	else()
-	message(FATAL_ERROR "CxxTest not found.")
+#	else()
+#	message(FATAL_ERROR "CxxTest not found.")
 	endif()
 endif()
 
