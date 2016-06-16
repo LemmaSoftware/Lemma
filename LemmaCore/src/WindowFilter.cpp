@@ -17,12 +17,12 @@ namespace Lemma {
 
     // ====================  LIFECYCLE     =======================
 
-    WindowFilter::WindowFilter(const std::string& name) : Filter(name),
+    WindowFilter::WindowFilter( ) : Filter( ),
         Width(0), SamplingRate(0), Bandwidth(0), Coefficients(),
         Type(RECTANGULAR) {}
 
     std::shared_ptr< WindowFilter > WindowFilter::NewSP() {
-        std::shared_ptr<WindowFilter> sp(new  WindowFilter("WindowFilter"), LemmaObjectDeleter() );
+        std::shared_ptr<WindowFilter> sp(new  WindowFilter( ), LemmaObjectDeleter() );
         return sp;
     }
 

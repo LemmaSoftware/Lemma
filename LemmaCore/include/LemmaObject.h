@@ -57,8 +57,10 @@ class LemmaObject {
 
         // ====================  INQUIRY       ==============================
 
-        /** Returns the name of the class, similiar to Python's type */
-        std::string GetName() const;
+        /** Returns the name of the underlying class, similiar to Python's type */
+        virtual inline std::string GetName() const {
+            return this->CName;
+        }
 
         /**
          *  Uses YAML to serialize this object.
@@ -73,6 +75,7 @@ class LemmaObject {
          */
         virtual YAML::Node Serialize() const {
             YAML::Node node = YAML::Node();
+            node.SetTag( GetName() );
             std::time_t now = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
             node["Serialized"] = std::ctime(&now);
             return node;
@@ -85,7 +88,7 @@ class LemmaObject {
         /** Protected default constructor. This is an abstract class and
          *  cannot be instantiated.
          */
-        LemmaObject (const std::string &name);
+        LemmaObject ( );
 
         /** Protected DeDerializing constructor, use factory DeSerialize  method*/
         LemmaObject (const YAML::Node& node);
@@ -99,10 +102,8 @@ class LemmaObject {
 
         // ====================  DATA MEMBERS  ==============================
 
-        static const std::string  CName;
-
-        /** Stores an ASCII string representation of the class name */
-        std::string Name;
+        /** ASCII string representation of the class name */
+        static constexpr auto CName = "LemmaObject";
 
 }; // -----  end of class  LemmaObject  -----
 
@@ -111,13 +112,6 @@ class LemmaObjectDeleter
     public:
         void operator()(LemmaObject* p) { delete p; }
 };
-
-//     /////////////////////////////////////////////////////////////////
-//     // BOILERPLATE MACROS
-//     #define DESERIALIZECHECK( node, Object ) { \
-//         if (node.Tag() != Object->GetName()) {  \
-//             throw  DeSerializeTypeMismatch(Object, node.Tag()) ; \
-//         } } \
 
     /////////////////////////////////////////////////////////////////
     // Error Classes

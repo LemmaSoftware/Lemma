@@ -42,20 +42,27 @@ class DataReader : public LemmaObject {
         virtual Data* GetData()=0;
 
         // ====================  INQUIRY       =======================
+        /** Returns the name of the underlying class, similiar to Python's type */
+        virtual inline std::string GetName() const {
+            return CName;
+        }
 
     protected:
 
         // ====================  LIFECYCLE     =======================
 
         /// Default protected constructor.
-        DataReader (const std::string &name);
+        DataReader ( );
 
         /// Default protected constructor.
-        ~DataReader ();
+        ~DataReader ( );
 
         // ====================  DATA MEMBERS  =========================
 
     private:
+
+        /** ASCII string representation of the class name */
+        static constexpr auto CName = "DataReader";
 
 }; // -----  end of class  DataReader  -----
 

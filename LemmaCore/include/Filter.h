@@ -44,7 +44,7 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /// Default protected constructor.
-            Filter (const std::string& name);
+            Filter ( );
 
             /// Default protected constructor.
             ~Filter ();
@@ -52,6 +52,9 @@ namespace Lemma {
             // ====================  DATA MEMBERS  =========================
 
         private:
+
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "Filter";
 
     }; // -----  end of class  Filter  -----
 

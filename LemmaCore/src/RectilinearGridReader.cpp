@@ -33,7 +33,7 @@ namespace Lemma {
     //      Method:  RectilinearGridReader
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    RectilinearGridReader::RectilinearGridReader (const std::string& name) : GridReader(name),
+    RectilinearGridReader::RectilinearGridReader ( ) : GridReader( ),
         rGrid( nullptr ), Parser( nullptr ) {
 
     }  // -----  end of method RectilinearGridReader::RectilinearGridReader  (constructor)  -----
@@ -45,7 +45,7 @@ namespace Lemma {
     // Description:  constructor
     //--------------------------------------------------------------------------------------
     std::shared_ptr< RectilinearGridReader > RectilinearGridReader::NewSP() {
-        std::shared_ptr<RectilinearGridReader> sp(new  RectilinearGridReader("RectilinearGridReader"), LemmaObjectDeleter() );
+        std::shared_ptr<RectilinearGridReader> sp(new  RectilinearGridReader( ), LemmaObjectDeleter() );
         return sp;
     }
 

@@ -22,8 +22,8 @@ namespace Lemma {
 
 	// ====================  LIFECYCLE     =======================
 
-	EarthModel::EarthModel(const std::string&name) :
-			LemmaObject(name), BField(0,0,0), BFieldUnit(0,0,0), BInc(0), BDec(0), BMag(0) {
+	EarthModel::EarthModel() : LemmaObject( ),
+        BField(0,0,0), BFieldUnit(0,0,0), BInc(0), BDec(0), BMag(0) {
 	}
 
     EarthModel::EarthModel(const YAML::Node& node) : LemmaObject(node) {

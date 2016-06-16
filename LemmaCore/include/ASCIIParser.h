@@ -13,7 +13,6 @@
  * @version   $Id$
  * @author    Trevor Irons (ti)
  * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2013, XRI Geophysics, LLC
  * @copyright Copyright (c) 2013, Trevor Irons
  */
 
@@ -100,6 +99,11 @@ class ASCIIParser : public LemmaObject {
      */
     int GetFileLocation();
 
+    /** Returns the name of the underlying class, similiar to Python's type */
+    virtual inline std::string GetName() const {
+        return CName;
+    }
+
     // ====================  INQUIRY       =======================
 
     protected:
@@ -107,7 +111,7 @@ class ASCIIParser : public LemmaObject {
     // ====================  LIFECYCLE     =======================
 
     /** Default protected constructor, use New */
-    ASCIIParser (const std::string& name);
+    ASCIIParser ( );
 
     /** Default protected destructor, use Delete */
     ~ASCIIParser ();
@@ -121,6 +125,9 @@ class ASCIIParser : public LemmaObject {
     private:
 
     // ====================  DATA MEMBERS  =========================
+
+    /** ASCII string representation of the class name */
+    static constexpr auto CName = "ASCIIParser";
 
     /** c++ style file IO */
     std::fstream input;

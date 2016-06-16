@@ -20,7 +20,7 @@ namespace Lemma {
         return stream;
     }
 
-	Data::Data(const std::string &name) : LemmaObject(name) {
+	Data::Data(  ) : LemmaObject( ) {
 	}
 
 

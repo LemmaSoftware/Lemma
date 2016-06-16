@@ -78,7 +78,7 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /** Default protected constructor, use New */
-            RectilinearGridReader (const std::string& name);
+            RectilinearGridReader ( );
 
             /** Default protected constructor, use Delete */
             ~RectilinearGridReader ();
@@ -86,6 +86,9 @@ namespace Lemma {
         private:
 
             // ====================  DATA MEMBERS  =========================
+
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "RectilinearGridReader";
 
             /** Object holding constructed Grid */
             std::shared_ptr<RectilinearGrid> rGrid;

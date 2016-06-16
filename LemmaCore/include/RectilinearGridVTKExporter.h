@@ -88,12 +88,15 @@ class RectilinearGridVTKExporter : public LemmaObject {
     // ====================  LIFECYCLE     =======================
 
     /** Default protected constructor, use New */
-    RectilinearGridVTKExporter (const std::string& name);
+    RectilinearGridVTKExporter ( );
 
     /** Default protected destructor, use Delete */
     ~RectilinearGridVTKExporter ();
 
     private:
+
+    /** ASCII string representation of the class name */
+    static constexpr auto CName = "VTKRectilinearGridVTKExporter";
 
     void BuildVTKRectilinearGrid();
 

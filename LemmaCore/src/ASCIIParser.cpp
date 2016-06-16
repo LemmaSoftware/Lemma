@@ -13,7 +13,6 @@
  * @version   $Id$
  * @author    Trevor Irons (ti)
  * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2013, XRI Geophysics, LLC
  * @copyright Copyright (c) 2013, Trevor Irons
  */
 
@@ -36,7 +35,7 @@ namespace Lemma {
     //      Method:  ASCIIParser
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    ASCIIParser::ASCIIParser (const std::string& name) : LemmaObject(name),
+    ASCIIParser::ASCIIParser ( ) : LemmaObject( ),
             CommentString("//"), BufferSize(255) {
 
     }  // -----  end of method ASCIIParser::ASCIIParser  (constructor)  -----
@@ -48,8 +47,9 @@ namespace Lemma {
     // Description:  public smart pointer factory constructor
     //--------------------------------------------------------------------------------------
     std::shared_ptr< ASCIIParser > ASCIIParser::NewSP() {
-        std::shared_ptr<ASCIIParser> sp(new  ASCIIParser("ASCIIParser"), LemmaObjectDeleter() );
+        std::shared_ptr<ASCIIParser> sp(new  ASCIIParser( ), LemmaObjectDeleter() );
         return sp;
+        //return  std::make_shared<ASCIIParser>();
     }
 
     //--------------------------------------------------------------------------------------

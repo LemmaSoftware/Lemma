@@ -21,7 +21,7 @@ namespace Lemma {
     }
 
 
-	Grid::Grid  ( const std::string& name ) : LemmaObject(name) {
+	Grid::Grid( ) : LemmaObject( ) {
 	}
 
 	Grid::~Grid  ( ) {

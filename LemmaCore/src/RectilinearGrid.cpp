@@ -35,8 +35,7 @@ namespace Lemma {
 
     // ====================  LIFECYCLE     =======================
 
-    RectilinearGrid::RectilinearGrid(const std::string& name) :
-        Grid(name), nx(0), ny(0), nz(0) {
+    RectilinearGrid::RectilinearGrid( ) : Grid( ), nx(0), ny(0), nz(0) {
 
     }
 
@@ -45,7 +44,7 @@ namespace Lemma {
     }
 
     std::shared_ptr< RectilinearGrid > RectilinearGrid::NewSP() {
-        std::shared_ptr<RectilinearGrid> sp(new  RectilinearGrid("RectilinearGrid"), LemmaObjectDeleter() );
+        std::shared_ptr<RectilinearGrid> sp(new  RectilinearGrid( ), LemmaObjectDeleter() );
         return sp;
     }
 

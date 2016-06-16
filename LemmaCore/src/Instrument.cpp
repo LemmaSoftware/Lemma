@@ -20,8 +20,7 @@ namespace Lemma {
         return stream;
     }
 
-	Instrument::Instrument(const std::string &name) :
-			LemmaObject(name) {
+	Instrument::Instrument( ) : LemmaObject() {
 	}
 
 	Instrument::~Instrument() {

@@ -15,8 +15,6 @@
 
 namespace Lemma {
 
-    //LemmaObject::CName = std::string("LemmaObject");
-
     YAML::Emitter& operator << (YAML::Emitter& out, const LemmaObject& ob) {
         out << YAML::BeginMap;
         out << YAML::Key <<"Class Name"    << YAML::Value << ob.GetName();
@@ -26,10 +24,12 @@ namespace Lemma {
     // ====================  LIFECYCLE     ==============================
 
     // Constructor
-    LemmaObject::LemmaObject(const std::string& name) : Name(name) {
+    LemmaObject::LemmaObject(  ) {
+
     }
 
-    LemmaObject::LemmaObject(const YAML::Node &node) : Name(node.Tag()) {
+    LemmaObject::LemmaObject(const YAML::Node &node) {
+
     }
 
     // Destructor
@@ -39,10 +39,6 @@ namespace Lemma {
     // ====================  OPERATIONS    ==============================
 
     // ====================  INQUIRY       ==============================
-
-    std::string LemmaObject::GetName() const {
-        return Name;
-    }
 
     // ====================  ACCESS        ==============================
 

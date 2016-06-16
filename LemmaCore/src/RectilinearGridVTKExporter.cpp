@@ -13,7 +13,6 @@
  * @version   $Id$
  * @author    Trevor Irons (ti)
  * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2013, XRI Geophysics, LLC
  * @copyright Copyright (c) 2013, Trevor Irons
  */
 
@@ -38,8 +37,7 @@ std::ostream &operator << (std::ostream &stream, const RectilinearGridVTKExporte
 //      Method:  RectilinearGridVTKExporter
 // Description:  constructor (protected)
 //--------------------------------------------------------------------------------------
-RectilinearGridVTKExporter::RectilinearGridVTKExporter (const std::string& name) :
-    LemmaObject(name), Grid(nullptr), VTKGrid(nullptr) {
+RectilinearGridVTKExporter::RectilinearGridVTKExporter ( ) : LemmaObject( ), Grid(nullptr), VTKGrid(nullptr) {
 
 }  // -----  end of method RectilinearGridVTKExporter::RectilinearGridVTKExporter  (constructor)  -----
 
@@ -50,7 +48,7 @@ RectilinearGridVTKExporter::RectilinearGridVTKExporter (const std::string& name)
 // Description:  public constructor
 //--------------------------------------------------------------------------------------
 std::shared_ptr< RectilinearGridVTKExporter > RectilinearGridVTKExporter::NewSP() {
-    std::shared_ptr<RectilinearGridVTKExporter> sp(new  RectilinearGridVTKExporter("RectilinearGridVTKExporter"), LemmaObjectDeleter() );
+    std::shared_ptr<RectilinearGridVTKExporter> sp(new  RectilinearGridVTKExporter( ), LemmaObjectDeleter() );
     return sp;
 }
 

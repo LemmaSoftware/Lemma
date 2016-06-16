@@ -60,13 +60,17 @@ namespace Lemma {
 
             // ====================  INQUIRY       =======================
 
+            /** Returns the name of the underlying class, similiar to Python's type */
+            virtual inline std::string GetName() const {
+                return CName;
+            }
 
         protected:
 
             // ====================  LIFECYCLE     =======================
 
             /** Default protected constructor. */
-            Data (const std::string &name);
+            Data (  );
 
             /** Default protected constructor. */
             ~Data ();
@@ -74,6 +78,9 @@ namespace Lemma {
             // ====================  DATA MEMBERS  =========================
 
         private:
+
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "Data";
 
     }; // -----  end of class  Data  -----
 

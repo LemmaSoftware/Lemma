@@ -56,7 +56,7 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /** Default protected constructor, use New */
-            GridReader (const std::string& name) : LemmaObject(name) {
+            GridReader ( ) : LemmaObject( ) {
             }
 
             /** Default protected constructor, use Delete */

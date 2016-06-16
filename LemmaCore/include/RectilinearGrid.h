@@ -146,7 +146,7 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /// Default protected constructor.
-            RectilinearGrid (const std::string &name);
+            RectilinearGrid ( );
 
             /// Default protected constructor.
             ~RectilinearGrid ();
@@ -218,6 +218,10 @@ namespace Lemma {
             std::vector<std::string> ComplexCellPropertyNames;
 */
         private:
+
+
+        /** ASCII string representation of the class name */
+        static constexpr auto CName = "RectilinearGrid";
 
     }; // -----  end of class  RectilinearGrid  -----
 

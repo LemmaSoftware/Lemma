@@ -90,7 +90,7 @@ namespace Lemma {
 			// ====================  LIFECYCLE     ===========================
 
 			/** Default protected constructor. */
-			LayeredEarth (const std::string& name);
+			LayeredEarth ( );
 
             /** Default protected constructor. */
 			LayeredEarth (const YAML::Node& node);
@@ -99,6 +99,10 @@ namespace Lemma {
 			~LayeredEarth ();
 
 			// ====================  DATA MEMBERS  ===========================
+
+        private:
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "LayeredEarth";
 
 			/** Number of layers in the model, including the air layer,
 			 * and counting from 0

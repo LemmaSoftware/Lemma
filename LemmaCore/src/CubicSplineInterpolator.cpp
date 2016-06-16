@@ -13,7 +13,6 @@
  * @version   $Id$
  * @author    Trevor Irons (ti)
  * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2014, XRI GeophysiSpline, LLC
  * @copyright Copyright (c) 2014, Trevor Irons
  */
 
@@ -41,7 +40,7 @@ namespace Lemma {
     //      Method:  CubicSplineInterpolator
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    CubicSplineInterpolator::CubicSplineInterpolator (const std::string& name) : LemmaObject(name) {
+    CubicSplineInterpolator::CubicSplineInterpolator ( ) : LemmaObject( ) {
 
     }  // -----  end of method CubicSplineInterpolator::CubicSplineInterpolator  (constructor)  -----
 
@@ -52,7 +51,7 @@ namespace Lemma {
     // Description:  public constructor
     //--------------------------------------------------------------------------------------
     std::shared_ptr<CubicSplineInterpolator> CubicSplineInterpolator::NewSP() {
-        std::shared_ptr<CubicSplineInterpolator> sp(new  CubicSplineInterpolator("CubicSplineInterpolator"), LemmaObjectDeleter() );
+        std::shared_ptr<CubicSplineInterpolator> sp(new  CubicSplineInterpolator( ), LemmaObjectDeleter() );
         return sp;
     }
 

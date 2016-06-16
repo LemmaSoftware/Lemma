@@ -20,8 +20,7 @@ namespace Lemma {
         return stream;
     }
 
-	DataReader::DataReader(const std::string &name) :
-			LemmaObject(name) {
+	DataReader::DataReader( ) : LemmaObject( ) {
 	}
 
 	DataReader::~DataReader() {

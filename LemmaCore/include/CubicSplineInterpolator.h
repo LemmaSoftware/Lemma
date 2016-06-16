@@ -131,12 +131,17 @@ class CubicSplineInterpolator : public LemmaObject {
 
     // ====================  INQUIRY       =======================
 
+    /** Returns the name of the underlying class, similiar to Python's type */
+    virtual inline std::string GetName() const {
+        return CName;
+    }
+
     protected:
 
     // ====================  LIFECYCLE     =======================
 
     /** Default protected constructor, use New */
-    CubicSplineInterpolator (const std::string& name);
+    CubicSplineInterpolator ( );
 
     /** Default protected destructor, smart pointers auto delete */
     ~CubicSplineInterpolator ();
@@ -160,6 +165,9 @@ class CubicSplineInterpolator : public LemmaObject {
     int Interval(const Real& x);
 
     private:
+
+    /** ASCII string representation of the class name */
+    static constexpr auto CName = "CubicSplineInterpolator";
 
     SplineSet Spline;
 

@@ -95,7 +95,7 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /// Default protected constructor.
-            EarthModel (const std::string& name);
+            EarthModel ( );
 
             /** Deserialize constructor */
             EarthModel (const YAML::Node& node);
@@ -104,6 +104,11 @@ namespace Lemma {
             ~EarthModel ();
 
             // ====================  DATA MEMBERS  =========================
+
+        private:
+
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "EarthModel";
 
             /// Magnetic field, in units of nT
             Vector3r          BField;

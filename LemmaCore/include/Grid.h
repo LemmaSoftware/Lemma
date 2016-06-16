@@ -47,7 +47,7 @@ class Grid : public LemmaObject {
         // ====================  LIFECYCLE     ===================================
 
         /// Default protected constructor.
-        Grid (const std::string &name);
+        Grid ( );
 
         /// Default protected constructor.
         ~Grid ();
@@ -55,6 +55,9 @@ class Grid : public LemmaObject {
         // ====================  DATA MEMBERS  ===================================
 
     private:
+
+        /** ASCII string representation of the class name */
+        static constexpr auto CName = "Grid";
 
 }; // -----  end of class  Grid  -----
 

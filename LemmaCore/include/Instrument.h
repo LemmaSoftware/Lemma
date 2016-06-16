@@ -48,12 +48,15 @@ namespace Lemma {
 			// ====================  LIFECYCLE     ===========================
 
 			/// Default protected constructor.
-			Instrument (const std::string &name);
+			Instrument ( );
 
 			/// Default protected constructor.
 			~Instrument ();
 
 		private:
+
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "Instrument";
 
 	}; // -----  end of class  Instrument  -----
 

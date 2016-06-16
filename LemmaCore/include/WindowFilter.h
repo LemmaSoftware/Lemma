@@ -81,10 +81,10 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /// Default protected constructor.
-            WindowFilter (const std::string& name);
+            WindowFilter ( );
 
             /// Default protected constructor.
-            ~WindowFilter ();
+            ~WindowFilter ( );
 
             // ====================  DATA MEMBERS  =========================
 
@@ -110,6 +110,9 @@ namespace Lemma {
             WINDOWTYPE  Type;
 
         private:
+
+        /** ASCII string representation of the class name */
+        static constexpr auto CName = "WindowFilter";
 
     }; // -----  end of class  WindowFilter  -----
 

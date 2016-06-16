@@ -15,7 +15,7 @@
 
 namespace Lemma {
 
-    Filter::Filter(const std::string& name) : LemmaObject(name) { }
+    Filter::Filter( ) : LemmaObject( ) { }
 
     Filter::~Filter( ) { }
 
