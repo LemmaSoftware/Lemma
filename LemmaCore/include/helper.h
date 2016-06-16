@@ -23,10 +23,7 @@
 #define  HELPER_INC
 
 #include "lemma.h"
-
-#ifdef HAVE_YAMLCPP
 #include "yaml-cpp/yaml.h"
-#endif
 
 namespace Lemma {
 
@@ -101,8 +98,6 @@ namespace Lemma {
 
 
 } // end namespace Lemma
-
-#ifdef HAVE_YAMLCPP
 
 ///////////////////////////////////////////////////////
 // YAML Serializing helper functions. Can we move this into helper.h
@@ -271,7 +266,6 @@ struct convert<Lemma::Vector3r> {
 };
 
 }
-#endif //HAVE_YAMLCPP
 
 #endif   // ----- #ifndef HELPER_INC  -----
 

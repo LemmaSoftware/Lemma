@@ -32,12 +32,10 @@ namespace Lemma {
         public:
 
             // ====================  LIFECYCLE     =======================
-            #ifdef HAVE_YAMLCPP
             /** YAML Serializing method
              */
             YAML::Node Serialize() const;
             //static LayeredEarth* DeSerialize(const YAML::Node& node);
-            #endif
 
             // ====================  OPERATORS     =======================
 
@@ -99,10 +97,8 @@ namespace Lemma {
             /// Default protected constructor.
             EarthModel (const std::string& name);
 
-            #ifdef HAVE_YAMLCPP
             /** Deserialize constructor */
             EarthModel (const YAML::Node& node);
-            #endif
 
             /// Default protected constructor.
             ~EarthModel ();

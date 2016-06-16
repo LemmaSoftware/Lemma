@@ -15,19 +15,13 @@
 
 namespace Lemma {
 
-    std::ostream &operator<<(std::ostream &stream,
-                const LemmaObject &ob) {
-      stream << "Class name= " << ob.Name  << "\n";
-      return stream;
-    }
+    //LemmaObject::CName = std::string("LemmaObject");
 
-    #ifdef HAVE_YAMLCPP
     YAML::Emitter& operator << (YAML::Emitter& out, const LemmaObject& ob) {
         out << YAML::BeginMap;
         out << YAML::Key <<"Class Name"    << YAML::Value << ob.GetName();
         return out;
     }
-    #endif
 
     // ====================  LIFECYCLE     ==============================
 
@@ -35,10 +29,8 @@ namespace Lemma {
     LemmaObject::LemmaObject(const std::string& name) : Name(name) {
     }
 
-    #ifdef HAVE_YAMLCPP
     LemmaObject::LemmaObject(const YAML::Node &node) : Name(node.Tag()) {
     }
-    #endif
 
     // Destructor
     LemmaObject::~LemmaObject() {
@@ -61,9 +53,9 @@ namespace Lemma {
     //////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////
 
-    DeSerializeTypeMismatch::DeSerializeTypeMismatch(LemmaObject *ptr, const std::string& got) :
+    DeSerializeTypeMismatch::DeSerializeTypeMismatch(const std::string& expected, const std::string& got) :
         runtime_error("DESERIALIZE TYPE MISMATCH") {
-            std::cerr << "Expected " << ptr->GetName() << " got " << got << std::endl;
+            std::cerr << "Expected " << expected << " got " << got << std::endl;
         }
 
     RequestToReturnNullPointer::

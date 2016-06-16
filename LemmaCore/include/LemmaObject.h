@@ -15,10 +15,7 @@
 
 #include "helper.h"
 #include "lemma.h"
-
-#ifdef HAVE_YAMLCPP
 #include "yaml-cpp/yaml.h"
-#endif
 
 #include <chrono>
 #include <memory>
@@ -37,13 +34,10 @@ namespace Lemma {
   */
 class LemmaObject {
 
-    /** Recursively prints information about this object
+    /**
+     *  Streams class information as YAML::Node
      */
-    friend std::ostream &operator<<(std::ostream &stream, const LemmaObject &ob);
-
-    #ifdef HAVE_YAMLCPP
     friend YAML::Emitter& operator << (YAML::Emitter& out, const LemmaObject &ob) ;
-    #endif
 
     friend class LemmaObjectDeleter;
 
@@ -66,7 +60,6 @@ class LemmaObject {
         /** Returns the name of the class, similiar to Python's type */
         std::string GetName() const;
 
-        #ifdef HAVE_YAMLCPP
         /**
          *  Uses YAML to serialize this object.
          *  @return a YAML::Node
@@ -80,12 +73,10 @@ class LemmaObject {
          */
         virtual YAML::Node Serialize() const {
             YAML::Node node = YAML::Node();
-
             std::time_t now = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
             node["Serialized"] = std::ctime(&now);
             return node;
         };
-        #endif
 
     protected:
 
@@ -96,10 +87,8 @@ class LemmaObject {
          */
         LemmaObject (const std::string &name);
 
-        #ifdef HAVE_YAMLCPP
         /** Protected DeDerializing constructor, use factory DeSerialize  method*/
         LemmaObject (const YAML::Node& node);
-        #endif
 
         /** Protected default destructor. This is an abstract class and
          *  cannot be instantiated.
@@ -109,6 +98,8 @@ class LemmaObject {
     private:
 
         // ====================  DATA MEMBERS  ==============================
+
+        static const std::string  CName;
 
         /** Stores an ASCII string representation of the class name */
         std::string Name;
@@ -121,12 +112,12 @@ class LemmaObjectDeleter
         void operator()(LemmaObject* p) { delete p; }
 };
 
-    /////////////////////////////////////////////////////////////////
-    // BOILERPLATE MACROS
-    #define DESERIALIZECHECK( node, Object ) { \
-        if (node.Tag() != Object->GetName()) {  \
-            throw  DeSerializeTypeMismatch(Object, node.Tag()) ; \
-        } } \
+//     /////////////////////////////////////////////////////////////////
+//     // BOILERPLATE MACROS
+//     #define DESERIALIZECHECK( node, Object ) { \
+//         if (node.Tag() != Object->GetName()) {  \
+//             throw  DeSerializeTypeMismatch(Object, node.Tag()) ; \
+//         } } \
 
     /////////////////////////////////////////////////////////////////
     // Error Classes
@@ -136,7 +127,7 @@ class LemmaObjectDeleter
      */
     class DeSerializeTypeMismatch : public std::runtime_error {
         public:
-            DeSerializeTypeMismatch(LemmaObject *ptr, const std::string& got);
+            DeSerializeTypeMismatch(const std::string& expected, const std::string& got);
 
     };
 

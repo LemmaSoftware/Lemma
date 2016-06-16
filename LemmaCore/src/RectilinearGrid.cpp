@@ -15,12 +15,15 @@
 
 namespace Lemma {
 
+    std::ostream &operator << (std::ostream &stream, const RectilinearGrid &ob) {
+        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        return stream;
+    }
 
+    /*
 	std::ostream &operator<<(std::ostream &stream, const
 	    RectilinearGrid &ob) {
-
 		stream << *(LemmaObject*)(&ob);
-
         stream << "\tnx=" << ob.nx << "\tny=" << ob.ny << "\tnz=" << ob.nz << std::endl;
         stream << "\tox=" << ob.ox << "\toy=" << ob.oy << "\toz=" << ob.oz << std::endl;
         stream << "\tdx=" << ob.dx.transpose() << std::endl;
@@ -28,6 +31,7 @@ namespace Lemma {
         stream << "\tdz=" << ob.dz.transpose() << std::endl;
 		return stream;
 	}
+    */
 
     // ====================  LIFECYCLE     =======================
 

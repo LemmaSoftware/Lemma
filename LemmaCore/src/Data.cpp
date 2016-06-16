@@ -15,11 +15,10 @@
 
 namespace Lemma {
 
-	std::ostream &operator<<(std::ostream &stream,
-			const Data &ob) {
-		stream << *(LemmaObject*)(&ob);
-		return stream;
-	}
+    std::ostream &operator << (std::ostream &stream, const Data &ob) {
+        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        return stream;
+    }
 
 	Data::Data(const std::string &name) : LemmaObject(name) {
 	}

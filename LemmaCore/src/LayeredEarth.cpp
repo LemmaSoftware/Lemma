@@ -16,14 +16,21 @@
 namespace Lemma {
 
 	// ====================    FRIENDS     ======================
+
+    /*
 	std::ostream &operator<<(std::ostream &stream,
 				const LayeredEarth &ob) {
 		stream << *(EarthModel*)(&ob);
   		//stream << "Class Name : "<< ob.Name  << "\n";
   		stream << "Number of Layers "<< ob.NumberOfLayers  << "\n";
-
   		return stream;
 	}
+    */
+
+    std::ostream &operator << (std::ostream &stream, const LayeredEarth &ob) {
+        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        return stream;
+    }
 
 	// ====================  LIFECYCLE     ===================================
 
@@ -37,7 +44,6 @@ namespace Lemma {
 	LayeredEarth::~LayeredEarth() {
 	}
 
-    #ifdef HAVE_YAMLCPP
     LayeredEarth::LayeredEarth(const YAML::Node& node) : EarthModel(node)
     {
         NumberOfLayers = node["NumberOfLayers"].as<int>();
@@ -47,14 +53,12 @@ namespace Lemma {
 
     YAML::Node LayeredEarth::Serialize() const {
         YAML::Node node = EarthModel::Serialize();
-
         node["NumberOfLayers"] = NumberOfLayers;
         node["NumberOfInterfaces"] = NumberOfInterfaces;
         node["LayerThickness"] = LayerThickness;
         node.SetTag( this->GetName() );
         return node;
     }
-    #endif
 
 	// ====================  OPERATIONS    ===================================
 

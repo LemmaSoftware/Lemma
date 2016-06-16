@@ -15,12 +15,11 @@
 
 namespace Lemma {
 
-	std::ostream &operator<<(std::ostream &stream,
-				const Grid &ob) {
+    std::ostream &operator << (std::ostream &stream, const Grid &ob) {
+        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        return stream;
+    }
 
-		stream << *(LemmaObject*)(&ob);
-		return stream;
-	}
 
 	Grid::Grid  ( const std::string& name ) : LemmaObject(name) {
 	}

@@ -1,0 +1,675 @@
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+$
+== cpp.cin ==
+cin	>> <CURSOR>;
+$
+== cpp.cout-variabe ==
+cout	<< <CURSOR> << endl;
+$
+== cpp.cout-string ==
+cout	<< "<CURSOR>\n";
+$
+== cpp.cout-operator == insert ==
+<< "<CURSOR>"
+$
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.output-manipulator-boolalpha       == insert ==
+<< boolalpha <CURSOR>
+== cpp.output-manipulator-dec             == insert ==
+<< dec <CURSOR>
+== cpp.output-manipulator-endl            == insert ==
+<< endl <CURSOR>
+== cpp.output-manipulator-fixed           == insert ==
+<< fixed <CURSOR>
+== cpp.output-manipulator-flush           == insert ==
+<< flush <CURSOR>
+== cpp.output-manipulator-hex             == insert ==
+<< hex <CURSOR>
+== cpp.output-manipulator-internal        == insert ==
+<< internal <CURSOR>
+== cpp.output-manipulator-left            == insert ==
+<< left <CURSOR>
+== cpp.output-manipulator-oct             == insert ==
+<< oct <CURSOR>
+== cpp.output-manipulator-right           == insert ==
+<< right <CURSOR>
+== cpp.output-manipulator-scientific      == insert ==
+<< scientific <CURSOR>
+== cpp.output-manipulator-setbase         == insert ==
+<< setbase(10<CURSOR>)
+== cpp.output-manipulator-setfill         == insert ==
+<< setfill(<CURSOR>)
+== cpp.output-manipulator-setiosflag      == insert ==
+<< setiosflags(<CURSOR>)
+== cpp.output-manipulator-setprecision    == insert ==
+<< setprecision(6<CURSOR>)
+== cpp.output-manipulator-setw            == insert ==
+<< setw(0<CURSOR>)
+== cpp.output-manipulator-showbase        == insert ==
+<< showbase <CURSOR>
+== cpp.output-manipulator-showpoint       == insert ==
+<< showpoint <CURSOR>
+== cpp.output-manipulator-showpos         == insert ==
+<< showpos <CURSOR>
+== cpp.output-manipulator-uppercase       == insert ==
+<< uppercase <CURSOR>
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.method-implementation ==
+//--------------------------------------------------------------------------------------
+//       Class:  |?CLASSNAME|
+//      Method:  |?METHODNAME|
+//--------------------------------------------------------------------------------------
+<CURSOR>void |CLASSNAME|::|METHODNAME| (  ) {
+    return ;
+}		// -----  end of method |CLASSNAME|::|METHODNAME|  -----
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.accessor-implementation ==
+//--------------------------------------------------------------------------------------
+//       Class:  |?CLASSNAME|
+//      Method:  get_|?ATTRIBUTE|
+//--------------------------------------------------------------------------------------
+inline <CURSOR>int |CLASSNAME|::get_|ATTRIBUTE| (  ) {
+	return |ATTRIBUTE|;
+}		// -----  end of method |CLASSNAME|::get_|ATTRIBUTE|  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  set_|ATTRIBUTE|
+//--------------------------------------------------------------------------------------
+inline void |CLASSNAME|::set_|ATTRIBUTE| ( int value ) {
+	|ATTRIBUTE|	= value;
+	return ;
+}		// -----  end of method |CLASSNAME|::set_|ATTRIBUTE|  -----
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.class-definition ==
+/**
+   \brief  <CURSOR>
+   \details
+ */
+class |?CLASSNAME:c| : public |?BASECLASS:c| {
+
+// ====================  LIFECYCLE     =======================
+
+/** Default constructor */
+|CLASSNAME| ( );
+
+/** Default destructor */
+~|CLASSNAME| ();
+
+// ====================  OPERATORS     =======================
+
+// ====================  OPERATIONS    =======================
+
+// ====================  ACCESS        =======================
+
+// ====================  INQUIRY       =======================
+
+protected:
+
+// ====================  DATA MEMBERS  =========================
+
+private:
+
+}; // -----  end of class  |CLASSNAME|  -----
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.class-definitionLemma ==
+#pragma once
+#include "|?BASECLASS|.h"
+
+namespace Lemma {
+
+/**
+   \brief  <CURSOR>
+   \details
+ */
+class |?CLASSNAME:c| : public |BASECLASS:c| {
+
+	friend std::ostream &operator<<(std::ostream &stream, const |CLASSNAME| &ob);
+
+	public:
+
+	    // ====================  LIFECYCLE     =======================
+
+        /*
+         *  Factory method for generating concrete class.
+         *  @return a std::shared_ptr of type |CLASSNAME|
+         */
+	    static std::shared_ptr< |CLASSNAME| > NewSP();
+
+        /**
+         *  Uses YAML to serialize this object.
+         *  @return a YAML::Node
+         *   @see |CLASSNAME|::DeSerialize
+         */
+        YAML::Node Serialize() const;
+
+        /**
+         *   Constructs an |CLASSNAME| object from a YAML::Node.
+         *   @see |CLASSNAME|::Serialize
+         */
+        static std::shared_ptr<|CLASSNAME|> DeSerialize(const YAML::Node& node);
+
+        // ====================  OPERATORS     =======================
+
+        // ====================  OPERATIONS    =======================
+
+        // ====================  ACCESS        =======================
+
+        // ====================  INQUIRY       =======================
+
+
+
+    protected:
+
+        // ====================  LIFECYCLE     =======================
+
+        /**
+         * Default protected constructor, use NewSP methods to construct
+         * @see |CLASSNAME|::NewSP
+         */
+        |CLASSNAME| (const std::string& name);
+
+        /**
+         * Protected DeDerializing constructor, use factory DeSerialize  method.
+         * @see |CLASSNAME|::DeSerialize
+         */
+        |CLASSNAME| (const YAML::Node& node);
+
+        /** Default protected destructor, use smart pointers (std::shared_ptr) */
+        ~|CLASSNAME| ();
+
+	// ====================  DATA MEMBERS  =========================
+
+    private:
+
+}; // -----  end of class  |CLASSNAME|  -----
+}  // -----  end of namespace Lemma ----
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp: */
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.class-definitionLemmaAbstract ==
+/**
+   \brief  <CURSOR>
+   \details
+ */
+class |?CLASSNAME:c| : public |?BASECLASS:c| {
+
+    friend std::ostream &operator<<(std::ostream &stream,
+            const |CLASSNAME| &ob) {
+        stream << *(|BASECLASS|*)(&ob);
+        return stream;
+    }
+
+    public:
+
+// ====================  LIFECYCLE     =======================
+
+// ====================  OPERATORS     =======================
+
+// ====================  OPERATIONS    =======================
+virtual void APIDemo()=0; // REMEMBER TO MAKE PURE VIRTUAL DUMMY
+
+// ====================  ACCESS        =======================
+
+// ====================  INQUIRY       =======================
+
+protected:
+
+// ====================  LIFECYCLE     =======================
+
+/** Default protected constructor, abstract class this cannot be called */
+|CLASSNAME| (const std::string& name);
+
+/** Default protected destructor, this is an abstract class, this cannot be called */
+~|CLASSNAME| ();
+
+// ====================  DATA MEMBERS  =========================
+
+private:
+
+}; // -----  end of class  |CLASSNAME|  -----
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.class-implementationLemma ==
+#include "|?CLASSNAME|.h"
+
+namespace Lemma {
+
+// ====================  FRIEND METHODS  =====================
+
+std::ostream &operator << (std::ostream &stream, const |CLASSNAME| &ob) {
+    stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+    return stream;
+}
+
+// ====================  LIFECYCLE     =======================
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  |CLASSNAME|
+// Description:  constructor (protected)
+//--------------------------------------------------------------------------------------
+|CLASSNAME|::|CLASSNAME| (const std::string& name) : |?BASECLASS|(name) {
+
+}  // -----  end of method |CLASSNAME|::|CLASSNAME|  (constructor)  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  |CLASSNAME|
+// Description:  DeSerializing constructor (protected)
+//--------------------------------------------------------------------------------------
+|CLASSNAME|::|CLASSNAME| (const YAML::Node& node) : |BASECLASS|(node) {
+
+}  // -----  end of method |CLASSNAME|::|CLASSNAME|  (constructor)  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  NewSP()
+// Description:  public constructor returing a shared_ptr
+//--------------------------------------------------------------------------------------
+std::shared_ptr< |CLASSNAME| >  |CLASSNAME|::NewSP() {
+    std::shared_ptr< |CLASSNAME| > sp(new  |CLASSNAME|("|CLASSNAME|"), LemmaObjectDeleter() );
+    return sp;
+}
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  ~|CLASSNAME|
+// Description:  destructor (protected)
+//--------------------------------------------------------------------------------------
+|CLASSNAME|::~|CLASSNAME| () {
+
+}  // -----  end of method |CLASSNAME|::~|CLASSNAME|  (destructor)  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  Serialize
+//--------------------------------------------------------------------------------------
+YAML::Node  |CLASSNAME|::Serialize (  ) const {
+    YAML::Node node = |BASECLASS|::Serialize();
+    node.SetTag( GetName() );
+    // FILL IN CLASS SPECIFICS HERE
+    return node;
+}		// -----  end of method |CLASSNAME|::Serialize  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  DeSerialize
+//--------------------------------------------------------------------------------------
+std::shared_ptr<|CLASSNAME|> |CLASSNAME|::DeSerialize ( const YAML::Node& node  ) {
+    if (node.Tag() !=  "|CLASSNAME|" ) {
+        throw  DeSerializeTypeMismatch( "|CLASSNAME|", node.Tag());
+    }
+    std::shared_ptr< |CLASSNAME| > Object(new |CLASSNAME|(node), LemmaObjectDeleter() );
+    return Object ;
+}		// -----  end of method |CLASSNAME|::DeSerialize  -----
+
+} // ----  end of namespace Lemma  ----
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp: */
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.class-implementation ==
+
+// ====================  LIFECYCLE     =======================
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  |CLASSNAME|
+// Description:  constructor (protected)
+//--------------------------------------------------------------------------------------
+|CLASSNAME|::|CLASSNAME| ( ) : |BASECLASS|(name) {
+
+}  // -----  end of method |CLASSNAME|::|CLASSNAME|  (constructor)  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  ~|CLASSNAME|
+// Description:  destructor
+//--------------------------------------------------------------------------------------
+|CLASSNAME|::~|CLASSNAME| () {
+<CURSOR>
+}  // -----  end of method |CLASSNAME|::~|CLASSNAME|  (destructor)  -----
+
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.class-using-new-definition ==
+// =====================================================================================
+//        Class:  |?CLASSNAME:c|
+//  Description:  <CURSOR>
+// =====================================================================================
+class |CLASSNAME|
+{
+  public:
+
+    // ====================  LIFECYCLE     =======================================
+    |CLASSNAME| ();                             // constructor
+    |CLASSNAME| ( const |CLASSNAME| &other );   // copy constructor
+    ~|CLASSNAME| ();                            // destructor
+
+    // ====================  OPERATORS     =======================================
+    const |CLASSNAME|& operator = ( const |CLASSNAME| &other ); // assignment operator
+
+    // ====================  OPERATIONS    =======================================
+
+    // ====================  ACCESS        =======================================
+
+    // ====================  INQUIRY       =======================================
+
+    // ====================  DATA MEMBERS  =======================================
+  protected:
+
+  private:
+
+}; // -----  end of class  |CLASSNAME|  -----
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.class-using-new-implementation ==
+//--------------------------------------------------------------------------------------
+//       Class:  |?CLASSNAME|
+//      Method:  |CLASSNAME|
+// Description:  constructor
+//--------------------------------------------------------------------------------------
+|CLASSNAME|::|CLASSNAME| ()
+{
+}  // -----  end of method |CLASSNAME|::|CLASSNAME|  (constructor)  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  |CLASSNAME|
+// Description:  copy constructor
+//--------------------------------------------------------------------------------------
+|CLASSNAME|::|CLASSNAME| ( const |CLASSNAME| &other )
+{
+}  // -----  end of method |CLASSNAME|::|CLASSNAME|  (copy constructor)  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  ~|CLASSNAME|
+// Description:  destructor
+//--------------------------------------------------------------------------------------
+|CLASSNAME|::~|CLASSNAME| ()
+{
+}  // -----  end of method |CLASSNAME|::~|CLASSNAME|  (destructor)  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  operator =
+// Description:  assignment operator
+//--------------------------------------------------------------------------------------
+const |CLASSNAME|&
+|CLASSNAME|::operator = ( const |CLASSNAME| &other )
+{
+  if ( this != &other ) {
+  }
+  return *this;
+}  // -----  end of method |CLASSNAME|::operator =  (assignment operator)  -----
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.error-class ==
+// =====================================================================================
+//        Class:  |?CLASSNAME:c|
+//  Description:  <CURSOR>
+// =====================================================================================
+class |CLASSNAME|
+{
+  public:     |CLASSNAME| ( string msg = "|CLASSNAME|" ):message(msg)  { }
+              virtual ~|CLASSNAME| ( )  { }
+              virtual string what ( ) const throw ( )  { return message; }
+  protected:  string  message;
+}; // ----------  end of class  |CLASSNAME|  ----------
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.template-method-implementation ==
+template < class T >
+void<CURSOR> |?CLASSNAME|<T>::|?METHODNAME| (  )
+{
+	return ;
+}		// -----  end of method |CLASSNAME|<T>::|METHODNAME|  -----
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.template-accessor-implementation ==
+//--------------------------------------------------------------------------------------
+//       Class:  |?CLASSNAME|
+//      Method:  get_|?ATTRIBUTE|
+//--------------------------------------------------------------------------------------
+template < class T >
+inline  <CURSOR>int |CLASSNAME|<T>::get_|ATTRIBUTE| (  )
+{
+	return |ATTRIBUTE|;
+}		// -----  end of method |CLASSNAME|<T>::get_|ATTRIBUTE|  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  set_|ATTRIBUTE|
+//--------------------------------------------------------------------------------------
+template < class T >
+inline  void |CLASSNAME|<T>::set_|ATTRIBUTE| ( int value )
+{
+	|ATTRIBUTE|	= value;
+	return ;
+}		// -----  end of method |CLASSNAME|<T>::set_|ATTRIBUTE|  -----
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.template-class-definition ==
+// =====================================================================================
+//        Class:  |?CLASSNAME:c|
+//  Description:  <CURSOR>
+// =====================================================================================
+
+template < class T >
+class |CLASSNAME|
+{
+  public:
+
+    // ====================  LIFECYCLE     =======================================
+    |CLASSNAME| ();                             // constructor
+
+    // ====================  OPERATORS     =======================================
+
+    // ====================  OPERATIONS    =======================================
+
+    // ====================  ACCESS        =======================================
+
+    // ====================  INQUIRY       =======================================
+
+    // ====================  DATA MEMBERS  =======================================
+  protected:
+
+  private:
+
+}; // -----  end of template class  |CLASSNAME|  -----
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.template-class-implementation ==
+//--------------------------------------------------------------------------------------
+//       Class:  |?CLASSNAME|
+//      Method:  |CLASSNAME|
+// Description:  constructor
+//--------------------------------------------------------------------------------------
+template < class T >
+|CLASSNAME| <T>:: |CLASSNAME| ()
+{
+}  // -----  end of constructor of template class |CLASSNAME|  -----
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.template-class-using-new-definition ==
+// =====================================================================================
+//        Class:  |?CLASSNAME:c|
+//  Description:  <CURSOR>
+// =====================================================================================
+
+template < class T >
+class |CLASSNAME|
+{
+  public:
+
+    // ====================  LIFECYCLE     =======================================
+    |CLASSNAME| ();                           // constructor
+    |CLASSNAME| ( const |CLASSNAME| &other ); // copy constructor
+    ~|CLASSNAME| ();                          // destructor
+
+    // ====================  OPERATORS     =======================================
+
+    const |CLASSNAME|& operator = ( const |CLASSNAME| &other ); // assignment operator
+
+    // ====================  OPERATIONS    =======================================
+
+    // ====================  ACCESS        =======================================
+
+    // ====================  INQUIRY       =======================================
+
+    // ====================  DATA MEMBERS  =======================================
+  protected:
+
+  private:
+
+}; // -----  end of template class  |CLASSNAME|  -----
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.template-class-using-new-implementation ==
+//--------------------------------------------------------------------------------------
+//       Class:  |?CLASSNAME|
+//      Method:  |CLASSNAME|
+// Description:  constructor
+//--------------------------------------------------------------------------------------
+template < class T >
+|CLASSNAME|<T>::|CLASSNAME| ()
+{
+}  // -----  end of constructor of template class |CLASSNAME|  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  |CLASSNAME|
+// Description:  copy constructor
+//--------------------------------------------------------------------------------------
+template < class T >
+|CLASSNAME|<T>::|CLASSNAME| ( const |CLASSNAME| &other )
+{
+}  // -----  end of copy constructor of template class |CLASSNAME|  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  ~|CLASSNAME|
+// Description:  destructor
+//--------------------------------------------------------------------------------------
+template < class T >
+|CLASSNAME|<T>::~|CLASSNAME| ()
+{
+}  // -----  end of destructor of template class |CLASSNAME|  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  |CLASSNAME|
+//      Method:  operator =
+// Description:  assignment operator
+//--------------------------------------------------------------------------------------
+template < class T >
+const |CLASSNAME|<T>& |CLASSNAME|<T>::operator = ( const |CLASSNAME| &other )
+{
+  if ( this != &other ) {
+  }
+  return *this;
+}  // -----  end of assignment operator of template class |CLASSNAME|  -----
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.template-function ==
+template <class T>
+<CURSOR>void |?TEMPALTE_FUNCTION_NAME| ( T param )
+{
+	return ;
+}		// -----  end of template function |?TEMPALTE_FUNCTION_NAME|  -----
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.operator-in ==
+ostream &
+operator << ( ostream & os, const |?CLASSNAME| & obj )
+{
+	os << obj.<CURSOR> ;
+	return os;
+}		// -----  end of function operator <<  -----
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.operator-out ==
+istream &
+operator >> ( istream & is, |?CLASSNAME| & obj )
+{
+	is >> obj.<CURSOR> ;
+	return is;
+}		// -----  end of function operator >>  -----
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.try-catch ==
+try {
+<SPLIT>}
+catch ( const <CURSOR> &ExceptObj ) {		// handle exception:
+}
+catch (...) {		// handle exception: unspezified
+}
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.catch ==
+catch ( <CURSOR>const &ExceptObj ) {		// handle exception:
+<SPLIT>}
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.catch-points ==
+catch (...) {		// handle exception:
+<SPLIT>}
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.extern ==
+extern "C" {<CURSOR>
+<SPLIT>}
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.open-input-file ==
+string    ifs_file_name = "<CURSOR>";                 // input  file name
+ifstream  ifs;                                // create ifstream object
+
+ifs.open ( ifs_file_name.c_str() );           // open ifstream
+if (!ifs) {
+	cerr << "\nERROR : failed to open input  file " << ifs_file_name << endl;
+	exit (EXIT_FAILURE);
+}
+
+
+ifs.close ();                                 // close ifstream
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.open-output-file ==
+string    ofs_file_name = "<CURSOR>";                 // input  file name
+ofstream  ofs;                                // create ofstream object
+
+ofs.open ( ofs_file_name.c_str() );           // open ofstream
+if (!ofs) {
+	cerr << "\nERROR : failed to open output file " << ofs_file_name << endl;
+	exit (EXIT_FAILURE);
+}
+
+
+ofs.close ();                                 // close ofstream
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.namespace-std ==
+using namespace std;
+== cpp.namespace ==
+using namespace |?NAMESPACE|;
+== cpp.namespace-block ==
+namespace |?NAMESPACE| {
+<CURSOR>
+<SPLIT>}		// -----  end of |NAMESPACE|  name  -----
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== cpp.rtti-typeid == insert ==
+typeid(<CURSOR><SPLIT>)
+$
+== cpp.rtti-static-cast == insert ==
+static_cast<>(<CURSOR><SPLIT>)
+$
+== cpp.rtti-const-cast == insert ==
+const_cast<>(<CURSOR><SPLIT>)
+$
+== cpp.rtti-reinterpret-cast == insert ==
+reinterpret_cast<>(<CURSOR><SPLIT>)
+$
+== cpp.rtti-dynamic-cast == insert ==
+dynamic_cast<>(<CURSOR><SPLIT>)
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp: */

@@ -80,12 +80,10 @@ namespace Lemma {
              */
 			Real GetLayerDepth(const int & lay);
 
-            #ifdef HAVE_YAMLCPP
             /** YAML Serializing method
              */
             YAML::Node Serialize() const;
             //static LayeredEarth* DeSerialize(const YAML::Node& node);
-            #endif
 
 		protected:
 
@@ -94,10 +92,8 @@ namespace Lemma {
 			/** Default protected constructor. */
 			LayeredEarth (const std::string& name);
 
-            #ifdef HAVE_YAMLCPP
             /** Default protected constructor. */
 			LayeredEarth (const YAML::Node& node);
-            #endif
 
 			/** Default protected constructor. */
 			~LayeredEarth ();

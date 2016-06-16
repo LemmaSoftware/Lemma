@@ -30,9 +30,8 @@ namespace Lemma {
      */
     class GridReader : public LemmaObject {
 
-        friend std::ostream &operator<<(std::ostream &stream,
-                const GridReader &ob) {
-            stream << *(LemmaObject*)(&ob);
+        friend std::ostream &operator << (std::ostream &stream, const GridReader &ob) {
+            stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
             return stream;
         }
 

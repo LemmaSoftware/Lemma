@@ -15,12 +15,10 @@
 
 namespace Lemma {
 
-	std::ostream &operator<<(std::ostream &stream,
-				const EarthModel &ob) {
-
-		stream << *(LemmaObject*)(&ob);
-		return stream;
-	}
+    std::ostream &operator << (std::ostream &stream, const EarthModel &ob) {
+        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        return stream;
+    }
 
 	// ====================  LIFECYCLE     =======================
 
@@ -28,7 +26,6 @@ namespace Lemma {
 			LemmaObject(name), BField(0,0,0), BFieldUnit(0,0,0), BInc(0), BDec(0), BMag(0) {
 	}
 
-    #ifdef HAVE_YAMLCPP
     EarthModel::EarthModel(const YAML::Node& node) : LemmaObject(node) {
         BInc = node["BInc"].as<double>();
         BDec = node["BDec"].as<double>();
@@ -46,7 +43,6 @@ namespace Lemma {
         node["BMag"] = BMag;
         return node;
     }
-    #endif
 
 	EarthModel::~EarthModel() {
 	}
