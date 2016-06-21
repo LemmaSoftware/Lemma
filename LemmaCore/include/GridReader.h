@@ -51,6 +51,11 @@ namespace Lemma {
 
             // ====================  INQUIRY       =======================
 
+            /** Returns the name of the underlying class, similiar to Python's type */
+            virtual inline std::string GetName() const {
+                return this->CName;
+            }
+
         protected:
 
             // ====================  LIFECYCLE     =======================
@@ -64,6 +69,9 @@ namespace Lemma {
             }
 
         private:
+
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "GridReader";
 
             // ====================  DATA MEMBERS  =========================
 

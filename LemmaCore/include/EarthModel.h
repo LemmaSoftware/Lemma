@@ -90,6 +90,11 @@ namespace Lemma {
             /// \mathbf{B}_0 \Vert \f$ in Gauss units
             Real GetMagneticFieldMagnitudeInGauss( );
 
+            /** Returns the name of the underlying class, similiar to Python's type */
+            virtual inline std::string GetName() const {
+                return this->CName;
+            }
+
         protected:
 
             // ====================  LIFECYCLE     =======================

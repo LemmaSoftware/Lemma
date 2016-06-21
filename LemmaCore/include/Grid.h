@@ -42,6 +42,11 @@ class Grid : public LemmaObject {
 
         // ====================  INQUIRY       ===================================
 
+        /** Returns the name of the underlying class, similiar to Python's type */
+        virtual inline std::string GetName() const {
+            return this->CName;
+        }
+
     protected:
 
         // ====================  LIFECYCLE     ===================================

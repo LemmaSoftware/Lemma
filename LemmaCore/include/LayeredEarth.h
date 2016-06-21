@@ -85,6 +85,11 @@ namespace Lemma {
             YAML::Node Serialize() const;
             //static LayeredEarth* DeSerialize(const YAML::Node& node);
 
+            /** Returns the name of the underlying class, similiar to Python's type */
+            virtual inline std::string GetName() const {
+                return this->CName;
+            }
+
 		protected:
 
 			// ====================  LIFECYCLE     ===========================

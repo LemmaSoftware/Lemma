@@ -30,10 +30,10 @@
 #include "RectilinearGridReader.h"
 #include "RectilinearGridVTKExporter.h"
 #include "WindowFilter.h"
+// helpers and utilities
 #include "banner.h"
 #include "helper.h"
 #include "timer.h"
-
 #endif   // ----- #ifndef LEMMAINCLUDE_INC  -----
 
 /* vim: set tabstop=4 expandtab: */

@@ -1,4 +1,11 @@
-add_executable(testOne testOne.cpp)
-add_executable(testTwo testTwo.cpp)
-add_test( testLemmaCoreOne testOne )
-add_test( testLemmaCoreTwo testTwo )
+#add_executable(testOne testOne.cpp)
+#add_executable(testTwo testTwo.cpp)
+#add_test( testLemmaCoreOne testOne )
+#add_test( testLemmaCoreTwo testTwo )
+
+CXXTEST_ADD_TEST(unittest_GetNameCheck GetNameCheck.cc ${CMAKE_CURRENT_SOURCE_DIR}/GetNameCheck.h)
+target_link_libraries(unittest_GetNameCheck "lemmacore")
+
+CXXTEST_ADD_TEST(unittest_SerializeCheck SerializeCheck.cc ${CMAKE_CURRENT_SOURCE_DIR}/SerializeCheck.h)
+target_link_libraries(unittest_SerializeCheck "lemmacore")
+ 

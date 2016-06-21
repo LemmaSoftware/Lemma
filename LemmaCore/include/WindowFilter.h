@@ -76,6 +76,11 @@ namespace Lemma {
             /// Returns a Vector of the filter coefficients.
             VectorXr GetFilterCoefficients( );
 
+            /** Returns the name of the underlying class, similiar to Python's type */
+            virtual inline std::string GetName() const {
+                return this->CName;
+            }
+
         protected:
 
             // ====================  LIFECYCLE     =======================

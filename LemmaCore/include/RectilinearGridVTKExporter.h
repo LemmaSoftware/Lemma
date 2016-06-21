@@ -83,6 +83,11 @@ class RectilinearGridVTKExporter : public LemmaObject {
      */
     void WriteVTKGrid( const std::string& name );
 
+    /** Returns the name of the underlying class, similiar to Python's type */
+    virtual inline std::string GetName() const {
+        return this->CName;
+    }
+
     protected:
 
     // ====================  LIFECYCLE     =======================
@@ -96,7 +101,7 @@ class RectilinearGridVTKExporter : public LemmaObject {
     private:
 
     /** ASCII string representation of the class name */
-    static constexpr auto CName = "VTKRectilinearGridVTKExporter";
+    static constexpr auto CName = "RectilinearGridVTKExporter";
 
     void BuildVTKRectilinearGrid();
 
