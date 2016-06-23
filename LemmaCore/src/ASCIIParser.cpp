@@ -54,12 +54,46 @@ namespace Lemma {
 
     //--------------------------------------------------------------------------------------
     //       Class:  ASCIIParser
+    //      Method:  Serialize
+    //--------------------------------------------------------------------------------------
+    YAML::Node  ASCIIParser::Serialize (  ) const {
+        YAML::Node node = LemmaObject::Serialize();;
+        node.SetTag( GetName() );
+        node["CommentString"] = CommentString;
+        node["BufferSize"] = BufferSize;
+        return node;
+    }		// -----  end of method ASCIIParser::Serialize  -----
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  ASCIIParser
+    //      Method:  DeSerialize
+    //--------------------------------------------------------------------------------------
+    std::shared_ptr<ASCIIParser> ASCIIParser::DeSerialize ( const YAML::Node& node  ) {
+        if (node.Tag() != "ASCIIParser") {
+            throw  DeSerializeTypeMismatch( "ASCIIParser", node.Tag());
+        }
+        std::shared_ptr<ASCIIParser> Object(new  ASCIIParser(node), LemmaObjectDeleter() );
+        return Object ;
+    }		// -----  end of method ASCIIParser::DeSerialize  -----
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  ASCIIParser
     //      Method:  ~ASCIIParser
     // Description:  destructor (protected)
     //--------------------------------------------------------------------------------------
     ASCIIParser::~ASCIIParser () {
 
     }  // -----  end of method ASCIIParser::~ASCIIParser  (destructor)  -----
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  ASCIIParser
+    //      Method:  ASCIIParser
+    // Description:  DeSerializing constructor (protected)
+    //--------------------------------------------------------------------------------------
+    ASCIIParser::ASCIIParser (const YAML::Node& node) : LemmaObject(node) {
+        this->CommentString = node["CommentString"].as<std::string>();
+        this->BufferSize = node["BufferSize"].as<int>();
+    }  // -----  end of method ASCIIParser::ASCIIParser  (constructor)  -----
 
     //--------------------------------------------------------------------------------------
     //       Class:  ASCIIParser

@@ -44,6 +44,13 @@ namespace Lemma {
 
     }  // -----  end of method CubicSplineInterpolator::CubicSplineInterpolator  (constructor)  -----
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  CubicSplineInterpolator
+    //      Method:  CubicSplineInterpolator
+    // Description:  DeSerializing constructor (protected)
+    //--------------------------------------------------------------------------------------
+    CubicSplineInterpolator::CubicSplineInterpolator (const YAML::Node& node) : LemmaObject(node) {
+    }  // -----  end of method CubicSplineInterpolator::CubicSplineInterpolator  (constructor)  -----
 
     //--------------------------------------------------------------------------------------
     //       Class:  CubicSplineInterpolator
@@ -53,6 +60,29 @@ namespace Lemma {
     std::shared_ptr<CubicSplineInterpolator> CubicSplineInterpolator::NewSP() {
         std::shared_ptr<CubicSplineInterpolator> sp(new  CubicSplineInterpolator( ), LemmaObjectDeleter() );
         return sp;
+    }
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  CubicSplineInterpolator
+    //      Method:  Serialize
+    //--------------------------------------------------------------------------------------
+    YAML::Node  CubicSplineInterpolator::Serialize (  ) const {
+        YAML::Node node = LemmaObject::Serialize();;
+        node.SetTag( GetName() );
+        // FILL IN CLASS SPECIFICS HERE
+        return node;
+    }		// -----  end of method CubicSplineInterpolator::Serialize  -----
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  CubicSplineInterpolator
+    //      Method:  DeSerialize
+    //--------------------------------------------------------------------------------------
+    std::shared_ptr<CubicSplineInterpolator> CubicSplineInterpolator::DeSerialize ( const YAML::Node& node  ) {
+        if (node.Tag() != "CubicSplineInterpolator") {
+            throw  DeSerializeTypeMismatch( "CubicSplineInterpolator", node.Tag());
+        }
+        std::shared_ptr<CubicSplineInterpolator> Object(new  CubicSplineInterpolator(node), LemmaObjectDeleter() );
+        return Object ;
     }
 
     //--------------------------------------------------------------------------------------
@@ -320,3 +350,6 @@ namespace Lemma {
 
 
 }		// -----  end of Lemma  name  -----
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp: */

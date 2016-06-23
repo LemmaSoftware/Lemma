@@ -44,6 +44,17 @@ namespace Lemma {
              */
             static std::shared_ptr<RectilinearGrid> NewSP();
 
+            /**
+             *  Uses YAML to serialize this object.
+             *  @return a YAML::Node
+             */
+            YAML::Node Serialize() const;
+
+            /**
+             *   Constructs an object from a YAML::Node.
+             */
+            static std::shared_ptr< RectilinearGrid > DeSerialize(const YAML::Node& node);
+
             // ====================  OPERATORS     =======================
 
             // ====================  OPERATIONS    =======================
@@ -150,10 +161,13 @@ namespace Lemma {
 
             // ====================  LIFECYCLE     =======================
 
-            /// Default protected constructor.
+            /** Default protected constructor. */
             RectilinearGrid ( );
 
-            /// Default protected constructor.
+            /** Protected DeDerializing constructor, use factory DeSerialize  method*/
+            RectilinearGrid (const YAML::Node& node);
+
+            /** Default protected constructor. */
             ~RectilinearGrid ();
 
             // ====================  DATA MEMBERS  =========================
@@ -185,51 +199,16 @@ namespace Lemma {
             /// Cell spacing in the z dimension
             VectorXr dz;
 
-/*          @todo find a good way to store models that works with portions threadprivate
-            /// Container holding Vectors of Real data at centre of cell.
-            std::vector<VectorXr>   RealCellData;
-
-            /// Container holding names of Real data
-            std::vector<std::string> RealCellDataNames;
-
-            /// Container holding Vectors of Real data on edges.
-            std::vector<VectorXr>   RealEdgeData;
-
-            /// Container holding names of Real data on edges
-            std::vector<std::string> RealEdgeDataNames;
-
-            /// Container holding Vectors of Complex data on edges.
-            std::vector<VectorXcr>   ComplexEdgeData;
-
-            /// Container holding names of Real data on edges
-            std::vector<std::string> ComplexEdgeDataNames;
-
-            /// Container holding Vectors of Real properties.
-            std::vector<VectorXr>   RealCellProperties;
-
-            /// Container holding names of Real cell properties
-            std::vector<std::string> RealCellPropertyNames;
-
-            /// Container holding Vectors of Real data.
-            std::vector<VectorXcr>   ComplexCellData;
-
-            /// Container holding names of Real data
-            std::vector<std::string> ComplexCellDataNames;
-
-            /// Container holding Vectors of Complex properties.
-            std::vector<VectorXcr>   ComplexCellProperties;
-
-            /// Container holding names of Real cell properties
-            std::vector<std::string> ComplexCellPropertyNames;
-*/
         private:
 
-
-        /** ASCII string representation of the class name */
-        static constexpr auto CName = "RectilinearGrid";
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "RectilinearGrid";
 
     }; // -----  end of class  RectilinearGrid  -----
 
 }		// -----  end of Lemma  name  -----
 
 #endif   // ----- #ifndef RECTILINEARGRID_INC  -----
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp: */

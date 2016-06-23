@@ -174,3 +174,6 @@ namespace Lemma {
     }		// -----  end of method RectilinearGrid::GetDz  -----
 
 }		// -----  end of Lemma  name  -----
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp: */

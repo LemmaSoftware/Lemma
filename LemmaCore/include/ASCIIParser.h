@@ -43,6 +43,18 @@ class ASCIIParser : public LemmaObject {
      */
     static std::shared_ptr< ASCIIParser >  NewSP();
 
+    /**
+     *  Constructs an object from a YAML serialization
+     *  @return a std::shared_ptr of type ASCIIParser
+     */
+    static std::shared_ptr< ASCIIParser >  DeSerialize( const YAML::Node& node );
+
+    /**
+     *  Uses YAML to serialize this object.
+     *  @return a YAML::Node
+     */
+    YAML::Node Serialize() const;
+
     // ====================  OPERATORS     =======================
 
     // ====================  OPERATIONS    =======================
@@ -112,6 +124,9 @@ class ASCIIParser : public LemmaObject {
 
     /** Default protected constructor, use New */
     ASCIIParser ( );
+
+    /** Constructor using YAML::Node */
+    ASCIIParser ( const YAML::Node& node );
 
     /** Default protected destructor, use Delete */
     ~ASCIIParser ();

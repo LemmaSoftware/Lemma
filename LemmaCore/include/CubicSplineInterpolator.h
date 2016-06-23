@@ -71,6 +71,16 @@ class CubicSplineInterpolator : public LemmaObject {
      */
     static std::shared_ptr<CubicSplineInterpolator> NewSP();
 
+    /**
+     *  Uses YAML to serialize this object.
+     *  @return a YAML::Node
+     */
+    YAML::Node Serialize() const;
+
+    /**
+     *   Constructs an object from a YAML::Node.
+     */
+    static std::shared_ptr< CubicSplineInterpolator > DeSerialize(const YAML::Node& node);
 
     // ====================  OPERATORS     =======================
 
@@ -143,6 +153,9 @@ class CubicSplineInterpolator : public LemmaObject {
     /** Default protected constructor, use New */
     CubicSplineInterpolator ( );
 
+    /** Protected DeDerializing constructor, use factory DeSerialize  method*/
+    CubicSplineInterpolator (const YAML::Node& node);
+
     /** Default protected destructor, smart pointers auto delete */
     ~CubicSplineInterpolator ();
 
@@ -153,12 +166,6 @@ class CubicSplineInterpolator : public LemmaObject {
     void Release();
 
     // ====================  OPERATIONS    =======================
-
-    /**
-        Performs spline fitting.
-     */
-    //void Spline() {
-    // }
 
     /** Finds the interval of knots in spline to use for integration.
      */
@@ -182,3 +189,6 @@ class CubicSplineInterpolator : public LemmaObject {
 }		// -----  end of Lemma  name  -----
 
 #endif   // ----- #ifndef CUBICSPLINEINTERPOLATOR_INC  -----
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp: */
