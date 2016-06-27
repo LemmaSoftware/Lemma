@@ -34,6 +34,8 @@ class Grid : public LemmaObject {
 
         // ====================  LIFECYCLE     ===================================
 
+        YAML::Node Serialize() const;
+
         // ====================  OPERATORS     ===================================
 
         // ====================  OPERATIONS    ===================================
@@ -50,6 +52,9 @@ class Grid : public LemmaObject {
     protected:
 
         // ====================  LIFECYCLE     ===================================
+
+        /** Protected DeDerializing constructor, use factory DeSerialize  method on non abstract classes*/
+        Grid (const YAML::Node& node);
 
         /// Default protected constructor.
         Grid ( );

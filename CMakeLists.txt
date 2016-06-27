@@ -222,10 +222,6 @@ add_subdirectory (Modules)
 # 
 include_directories(${CMAKE_INSTALL_PREFIX}/include)
 
-#add_executable(Hello "${PROJECT_SOURCE_DIR}/src/test.cpp")
-#target_link_libraries(Hello lemmacore)
-#add_dependencies(Hello YAML-CPP)
-
 # add a target to generate API documentation with Doxygen
 # ALL make documentation build by default if possible
 find_package(Doxygen)

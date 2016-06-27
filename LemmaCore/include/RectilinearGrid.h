@@ -44,6 +44,7 @@ namespace Lemma {
              */
             static std::shared_ptr<RectilinearGrid> NewSP();
 
+
             /**
              *  Uses YAML to serialize this object.
              *  @return a YAML::Node

@@ -20,11 +20,24 @@ namespace Lemma {
         return stream;
     }
 
+    // ====================  LIFECYCLE     ===================================
 
 	Grid::Grid( ) : LemmaObject( ) {
 	}
 
+    Grid::Grid( const YAML::Node& node ) : LemmaObject(node) {
+
+    }
+
 	Grid::~Grid  ( ) {
 	}
+
+    YAML::Node Grid::Serialize() const {
+
+        YAML::Node node = LemmaObject::Serialize();
+        node.SetTag( this->GetName() );
+        return node;
+
+    }
 
 }

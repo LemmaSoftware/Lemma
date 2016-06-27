@@ -52,8 +52,6 @@ class MyTestSuite : public CxxTest::TestSuite
     }
 
 // /*
-
-//
 //     void testRectilinearGridReader( void )
 //     {
 //         auto Obj = RectilinearGridReader::NewSP();

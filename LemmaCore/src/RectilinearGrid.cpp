@@ -20,22 +20,25 @@ namespace Lemma {
         return stream;
     }
 
-    /*
-	std::ostream &operator<<(std::ostream &stream, const
-	    RectilinearGrid &ob) {
-		stream << *(LemmaObject*)(&ob);
-        stream << "\tnx=" << ob.nx << "\tny=" << ob.ny << "\tnz=" << ob.nz << std::endl;
-        stream << "\tox=" << ob.ox << "\toy=" << ob.oy << "\toz=" << ob.oz << std::endl;
-        stream << "\tdx=" << ob.dx.transpose() << std::endl;
-        stream << "\tdy=" << ob.dy.transpose() << std::endl;
-        stream << "\tdz=" << ob.dz.transpose() << std::endl;
-		return stream;
-	}
-    */
-
     // ====================  LIFECYCLE     =======================
 
     RectilinearGrid::RectilinearGrid( ) : Grid( ), nx(0), ny(0), nz(0) {
+
+    }
+
+    RectilinearGrid::RectilinearGrid( const YAML::Node& node ) : Grid(node) {
+
+        nx = node["nx"].as<int>( );
+        ny = node["ny"].as<int>( );
+        nz = node["nz"].as<int>( );
+
+        ox = node["ox"].as<Real>( );
+        oy = node["oy"].as<Real>( );
+        oz = node["oz"].as<Real>( );
+
+        dx = node["dx"].as< VectorXr >();
+        dy = node["dy"].as< VectorXr >();
+        dz = node["dz"].as< VectorXr >();
 
     }
 
@@ -47,6 +50,39 @@ namespace Lemma {
         std::shared_ptr<RectilinearGrid> sp(new  RectilinearGrid( ), LemmaObjectDeleter() );
         return sp;
     }
+
+    YAML::Node RectilinearGrid::Serialize() const {
+        YAML::Node node = Grid::Serialize();
+
+        node["nx"] = nx;
+        node["ny"] = ny;
+        node["nz"] = nz;
+
+        node["ox"] = ox;
+        node["oy"] = oy;
+        node["oz"] = oz;
+
+        node["dx"] = dx;
+        node["dy"] = dy;
+        node["dz"] = dz;
+
+        node.SetTag( this->GetName() );
+        return node;
+    }
+
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  RectilinearGrid
+    //      Method:  DeSerialize
+    //--------------------------------------------------------------------------------------
+    std::shared_ptr<RectilinearGrid> RectilinearGrid::DeSerialize ( const YAML::Node& node  ) {
+        if (node.Tag() != "RectilinearGrid") {
+            throw  DeSerializeTypeMismatch( "RectilinearGrid", node.Tag());
+        }
+        std::shared_ptr<RectilinearGrid> Object(new  RectilinearGrid(node), LemmaObjectDeleter() );
+        return Object ;
+    }
+
 
     // ====================  OPERATIONS    =======================
 
