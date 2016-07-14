@@ -1,0 +1,6 @@
+set (FEM1DSOURCE
+	${FEM1DSOURCE}
+	${CMAKE_CURRENT_SOURCE_DIR}/LayeredEarthEM.cpp
+	#${CMAKE_CURRENT_SOURCE_DIR}/UngroundedElectricDipole.cpp
+	PARENT_SCOPE
+)

@@ -94,7 +94,8 @@ class LemmaObject {
         LemmaObject (const YAML::Node& node);
 
         /** Protected default destructor. This is an abstract class and
-         *  cannot be instantiated.
+         *  cannot be instantiated. Virtual is necessary so that if base class destructor is
+         *  called, we get the right behaviour.
          */
         virtual ~LemmaObject();
 

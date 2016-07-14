@@ -14,7 +14,7 @@
 #ifndef __LAYEREDEARTHEM_H
 #define __LAYEREDEARTHEM_H
 
-#include "layeredearth.h"
+#include "LayeredEarth.h"
 #include <iomanip>
 
 namespace Lemma {
@@ -38,29 +38,23 @@ namespace Lemma {
             // ====================  LIFECYCLE     ===========================
 
             /**
-             *  Public constructor. Creates a new instance of the class and
-             *  assigns a reference to the thrown pointer.
+             *  Factory method for generating concrete class.
+             *  @return a std::shared_ptr of type LayeredEarthEM
              */
-            static LayeredEarthEM* New();
+            static std::shared_ptr<LayeredEarthEM> NewSP();
 
-            /**
-             * @copybrief LemmaObject::Delete()
-             * @copydetails LemmaObject::Delete()
-             */
-            void Delete();
-
-            #ifdef HAVE_YAMLCPP
             /** YAML Serializing method
              */
             YAML::Node Serialize() const;
 
-
-            //static LayeredEarthEM* DeSerialize(const YAML::Node& node);
-            #endif
+            /**
+             *   Constructs an object from a YAML::Node.
+             */
+            static std::shared_ptr< LayeredEarthEM > DeSerialize(const YAML::Node& node);
 
             /** @return a deep copy
              */
-			LayeredEarthEM* Clone();
+			std::shared_ptr<LayeredEarthEM> Clone();
 
             // ====================  OPERATORS     ===========================
 
@@ -243,12 +237,10 @@ namespace Lemma {
             // ====================  LIFECYCLE     ===========================
 
             /** Default protected constructor. */
-            LayeredEarthEM (const std::string &name);
+            LayeredEarthEM ( );
 
-            #ifdef HAVE_YAMLCPP
             /** Default protected constructor. */
 			LayeredEarthEM (const YAML::Node& node);
-            #endif
 
             /** Default protected constructor. */
             ~LayeredEarthEM ();
@@ -306,9 +298,17 @@ namespace Lemma {
             /** Relaxation breath for each layer */
             VectorXr          LayerBreathPermitivity;
 
+            private:
+
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "LayeredEarthEM";
+
     }; // -----  end of class  LayeredEarthEM  -----
 
 
 } // namespace Lemma
 
 #endif // __LAYEREDEARTHEM_H
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp: */

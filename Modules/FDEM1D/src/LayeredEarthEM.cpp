@@ -11,75 +11,31 @@
   @version  $Id: layeredearthem.cpp 216 2015-03-09 02:26:49Z tirons $
  **/
 
-#include "layeredearthem.h"
+#include "LayeredEarthEM.h"
 
 namespace Lemma {
 
-#ifdef HAVE_YAMLCPP
     std::ostream &operator << (std::ostream &stream, const LayeredEarthEM &ob) {
         stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
         return stream;
     }
-#else
-    std::ostream &operator<<(std::ostream &stream,
-                const LayeredEarthEM &ob) {
-        stream << *(LayeredEarth*)(&ob);
-        //stream << "Class Name : "<< ob.Name  << "\n";
-        stream << std::setw(15) << "LayerNumber"         << "\t"
-               << std::setw(15) << "Thickness"           << "\t"
-               << std::setw(15) << "BottomInterface"     << "\t"
-               << std::setw(15) << "Conductivity"        << "\t"
-               << std::setw(15) << "Susceptibility"      << "\t"
-               << std::setw(15) << "Permitivity"         << "\n";
-        stream << std::setw(15) << " "                   << "\t"
-               << std::setw(15) << "[m]"                 << "\t"
-               << std::setw(15) << "[m]"                 << "\t"
-               << std::setw(15) << "[Sm^-1]"             << "\t"
-               << std::setw(15) << "[]"                  << "\t"
-               << std::setw(15) << "[F/m]"               << "\n";
-        for (int i=0; i< ob.NumberOfLayers; ++i) {
-            stream << std::setw(15) <<  i << "\t"
-                   << std::setw(15) << ((LayeredEarth*)(&ob))->GetLayerThickness(i) << "\t"
-                   << std::setw(15) << ((LayeredEarth*)(&ob))->GetLayerDepth(i) << "\t"
-                   << std::setw(15) << ob.LayerConductivity(i)     << "\t"
-                   << std::setw(15) << ob.LayerSusceptibility(i)   << "\t"
-                   << std::setw(15) << ob.LayerPermitivity(i)      << "\n";
-        }
-
-        return stream;
-    }
-#endif
 
     // ====================  LIFECYCLE     ===================================
 
-    LayeredEarthEM::LayeredEarthEM(const std::string &name) :
-        LayeredEarth(name) {
+    LayeredEarthEM::LayeredEarthEM( ) : LayeredEarth() {
     }
 
     LayeredEarthEM::~LayeredEarthEM() {
-        if (NumberOfReferences != 0) {
-            throw DeleteObjectWithReferences(this);
-        }
     }
 
-    LayeredEarthEM* LayeredEarthEM::New() {
-        LayeredEarthEM* Obj = new LayeredEarthEM("LayeredEarthEM");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<LayeredEarthEM> LayeredEarthEM::NewSP() {
+        std::shared_ptr<LayeredEarthEM> sp(new  LayeredEarthEM( ), LemmaObjectDeleter() );
+        return sp;
     }
 
-    void LayeredEarthEM::Delete() {
-        this->DetachFrom(this);
-    }
-
-    void LayeredEarthEM::Release() {
-        delete this;
-    }
-
-    #ifdef HAVE_YAMLCPP
     YAML::Node LayeredEarthEM::Serialize() const {
         YAML::Node node = LayeredEarth::Serialize();
-        node.SetTag( this->Name );
+        node.SetTag( GetName() );
         node["LayerConductivity"] = LayerConductivity;
         node["LayerSusceptibility"] = LayerSusceptibility;
         node["LayerLowFreqSusceptibility"] = LayerLowFreqSusceptibility;
@@ -93,12 +49,11 @@ namespace Lemma {
         node["LayerBreathPermitivity"] = LayerBreathPermitivity;
         return node;
     }
-    #endif
 
     // ====================  OPERATIONS    ===================================
     void LayeredEarthEM::EvaluateColeColeModel(const Real& omega) {
 
-        for (int ilay=0; ilay<NumberOfLayers; ++ilay) {
+        for (int ilay=0; ilay<GetNumberOfLayers(); ++ilay) {
             if ( LayerTauSusceptibility(ilay) > 1e-10) {
                 LayerSusceptibility(ilay) = LayerHighFreqSusceptibility(ilay) + (LayerLowFreqSusceptibility(ilay) -
                      LayerHighFreqSusceptibility(ilay)) /
@@ -122,9 +77,8 @@ namespace Lemma {
         }
     }
 
-	LayeredEarthEM* LayeredEarthEM::Clone() {
-		LayeredEarthEM* copy = LayeredEarthEM::New();
-
+	std::shared_ptr<LayeredEarthEM> LayeredEarthEM::Clone() {
+		auto copy = LayeredEarthEM::NewSP();
 		copy->LayerConductivity = this->LayerConductivity;
 		copy->LayerSusceptibility = this->LayerSusceptibility;
 		copy->LayerLowFreqSusceptibility = this->LayerLowFreqSusceptibility;
@@ -136,24 +90,22 @@ namespace Lemma {
 		copy->LayerHighFreqPermitivity = this->LayerHighFreqPermitivity;
 		copy->LayerTauPermitivity = this->LayerTauPermitivity;
 		copy->LayerBreathPermitivity = this->LayerBreathPermitivity;
-		copy->NumberOfLayers = this->NumberOfLayers;
+		copy->SetNumberOfLayers( this->GetNumberOfLayers() );
 		copy->NumberOfInterfaces = this->NumberOfInterfaces;
 		copy->LayerThickness = this->LayerThickness;
-
 		return copy;
-
 	}
 
     // ====================  ACCESS        ==================================
 
     void LayeredEarthEM::SetLayerConductivity(const VectorXcr &sig) {
-        if (sig.size() != this->NumberOfLayers )
+        if (sig.size() != this->GetNumberOfLayers() )
             throw EarthModelParametersDoNotMatchNumberOfLayers( );
         LayerConductivity = sig;
     }
 
     void LayeredEarthEM::SetLayerConductivity(const int& ilay, const Complex &sig) {
-        if (ilay > this->NumberOfLayers || ilay < 1 )
+        if (ilay > this->GetNumberOfLayers() || ilay < 1 )
             throw EarthModelParametersDoNotMatchNumberOfLayers( );
         LayerConductivity[ilay] = sig;
     }
@@ -167,55 +119,55 @@ namespace Lemma {
 */
 
     void LayeredEarthEM::SetLayerHighFreqSusceptibility(const VectorXr &sus) {
-        if (sus.size() != this->NumberOfLayers )
+        if (sus.size() != this->GetNumberOfLayers() )
             throw EarthModelParametersDoNotMatchNumberOfLayers( );
         LayerHighFreqSusceptibility = sus;
     }
 
     void LayeredEarthEM::SetLayerLowFreqSusceptibility(const VectorXr &sus) {
-        if (sus.size() != this->NumberOfLayers )
+        if (sus.size() != this->GetNumberOfLayers() )
             throw EarthModelParametersDoNotMatchNumberOfLayers( );
         LayerLowFreqSusceptibility = sus;
     }
 
     void LayeredEarthEM::SetLayerBreathSusceptibility(const VectorXr &sus) {
-        if (sus.size() != this->NumberOfLayers )
+        if (sus.size() != this->GetNumberOfLayers() )
             throw EarthModelParametersDoNotMatchNumberOfLayers( );
         LayerBreathSusceptibility = sus;
     }
 
     void LayeredEarthEM::SetLayerTauSusceptibility(const VectorXr &sus) {
-        if (sus.size() != this->NumberOfLayers )
+        if (sus.size() != this->GetNumberOfLayers() )
             throw EarthModelParametersDoNotMatchNumberOfLayers( );
         LayerTauSusceptibility = sus;
     }
 
     void LayeredEarthEM::SetLayerHighFreqPermitivity(const VectorXr &per) {
-        if (per.size() != this->NumberOfLayers )
+        if (per.size() != this->GetNumberOfLayers() )
             throw EarthModelParametersDoNotMatchNumberOfLayers( );
         LayerHighFreqPermitivity = per;
     }
 
     void LayeredEarthEM::SetLayerLowFreqPermitivity(const VectorXr &per) {
-        if (per.size() != this->NumberOfLayers )
+        if (per.size() != this->GetNumberOfLayers() )
             throw EarthModelParametersDoNotMatchNumberOfLayers( );
         LayerLowFreqPermitivity = per;
     }
 
     void LayeredEarthEM::SetLayerBreathPermitivity(const VectorXr &per) {
-        if (per.size() != this->NumberOfLayers )
+        if (per.size() != this->GetNumberOfLayers() )
             throw EarthModelParametersDoNotMatchNumberOfLayers( );
         LayerBreathPermitivity = per;
     }
 
     void LayeredEarthEM::SetLayerTauPermitivity(const VectorXr &per) {
-        if (per.size() != this->NumberOfLayers )
+        if (per.size() != this->GetNumberOfLayers() )
             throw EarthModelParametersDoNotMatchNumberOfLayers( );
         LayerTauPermitivity = per;
     }
 
     void LayeredEarthEM::SetLayerThickness(const VectorXr &thick) {
-        if (thick.size() != this->NumberOfLayers - 2)
+        if (thick.size() != this->GetNumberOfLayers() - 2)
             throw EarthModelParametersDoNotMatchNumberOfLayers( );
         LayerThickness = thick;
     }
@@ -231,7 +183,7 @@ namespace Lemma {
 
         // Otherwise
         this->NumberOfLayers = nlay;
-
+        this->NumberOfInterfaces = nlay-1;
 
         // Resize all layers
 
@@ -243,7 +195,6 @@ namespace Lemma {
         ///////////////////////////////////
         // Conducitivy set to zero
         LayerConductivity = VectorXcr::Zero(NumberOfLayers);
-
 
         ////////////////////////////////////
         // Susceptibility set to One (free space)
@@ -359,3 +310,6 @@ namespace Lemma {
         return this->LayerBreathPermitivity;
     }
 }
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp: */

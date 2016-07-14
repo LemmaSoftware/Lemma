@@ -26,6 +26,8 @@ namespace Lemma {
 	// =======================================================================
 	class LayeredEarth : public EarthModel {
 
+        friend class LayeredEarthEM;
+
 		public:
 
 			// ====================    FRIENDS     ===========================
