@@ -50,11 +50,13 @@ class MyTestSuite : public CxxTest::TestSuite
         TS_ASSERT_EQUALS( Obj->GetName(), std::string("RectilinearGridReader") );
     }
 
+#ifdef LEMMAUSEVTK
     void testRectilinearGridVTKExporter( void )
     {
         auto Obj = RectilinearGridVTKExporter::NewSP();
         TS_ASSERT_EQUALS( Obj->GetName(), std::string("RectilinearGridVTKExporter") );
     }
+#endif
 
     void testWindowFilter( void )
     {
