@@ -57,7 +57,10 @@ class LemmaObject {
 
         // ====================  INQUIRY       ==============================
 
-        /** Returns the name of the underlying class, similiar to Python's type */
+        /** Returns the name of the underlying class; Run-time type information (RTTI). This approach
+            Was chosen over typeid due to name mangling among various compilers, and the need for consistency
+            in Serialized objects.
+         */
         virtual inline std::string GetName() const {
             return this->CName;
         }

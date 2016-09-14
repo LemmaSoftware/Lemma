@@ -232,6 +232,11 @@ namespace Lemma {
              */
             VectorXr GetLayerBreathPermitivity( );
 
+            /** Returns the name of the underlying class, similiar to Python's type */
+            virtual inline std::string GetName() const {
+                return CName;
+            }
+
         protected:
 
             // ====================  LIFECYCLE     ===========================
