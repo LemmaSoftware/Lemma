@@ -25,6 +25,7 @@ namespace Lemma {
 
     /**
       @class
+      \ingroup LemmaCore
       \brief   Abstract class for grid readers.
       \details Provides a consistent interface for reading grid files in Lemma.
      */

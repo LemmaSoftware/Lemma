@@ -20,6 +20,7 @@ namespace Lemma {
     //  Class:  Filter
     /**
       @class  Filter
+      \ingroup LemmaCore
       \brief  Abstract class for filtering.
       \details Derived classes include fourier domain and time domain filters.
      */

@@ -27,6 +27,15 @@
 
 namespace Lemma {
 
+/** \addtogroup LemmaCore
+ * @{
+ */
+
+    /**
+     *  Convenience function for string conversion
+     *  @param[in] t input value to be converted to string
+     *  @return string representation of input value
+     */
     template <class T>
     inline std::string to_string (const T& t) {
         std::stringstream ss;
@@ -34,16 +43,23 @@ namespace Lemma {
         return ss.str();
     }
 
-
-    // handy little way to convert enums, saves repeated code useful for YAML serializing
+    /// convert enums to string saves repeated code useful for YAML serializing
     std::string enum2String(const FREQUENCYUNITS& Units);
+    /// convert enums to string saves repeated code useful for YAML serializing
     std::string enum2String(const TIMEUNITS& Units);
+    /// convert enums to string saves repeated code useful for YAML serializing
     std::string enum2String(const MAGUNITS& Units);
+    /// convert enums to string saves repeated code useful for YAML serializing
     std::string enum2String(const TEMPUNITS& Units);
+    /// convert enums to string saves repeated code useful for YAML serializing
     std::string enum2String(const FEMCOILORIENTATION& Units);
+    /// convert enums to string saves repeated code useful for YAML serializing
     std::string enum2String(const ORIENTATION& Units);
+    /// convert enums to string saves repeated code useful for YAML serializing
     std::string enum2String(const FIELDCOMPONENT& Comp);
+    /// convert enums to string saves repeated code useful for YAML serializing
     std::string enum2String(const HANKELTRANSFORMTYPE& Htype);
+    /// convert enums to string saves repeated code useful for YAML serializing
     std::string enum2String(const FIELDCALCULATIONS& Htype);
 
     // other way around is a template, where template argument lets us know
@@ -96,6 +112,7 @@ namespace Lemma {
         }
     };
 
+/** @}*/
 
 } // end namespace Lemma
 

@@ -21,6 +21,7 @@ namespace Lemma {
 
 // ===================================================================
 //        Class:  DataReader
+/// \ingroup LemmaCore
 /// \brief  Abstract class whose derived members read data files and
 /// converts them to Data Classes
 /// \details

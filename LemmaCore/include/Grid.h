@@ -20,6 +20,7 @@ namespace Lemma {
 
 // ===============================================================================
 //        Class:  Grid
+/// \ingroup LemmaCore
 /// \brief Abstract base class for grids.
 /// \details Grids define values in space, they may either be an integral part
 /// of models, or simply the output of a forward modelling procedure.

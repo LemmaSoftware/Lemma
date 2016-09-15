@@ -15,9 +15,10 @@
 #define __DIPOLESOURCE_H
 
 #include "LemmaObject.h"
-#include "layeredearthem.h"
-//#include "kernelem1dmanager.h"
+#include "LayeredEarthEM.h"
 
+#include "receiverpoints.h"
+#include "emearth1d.h"
 
 #ifdef LEMMAUSEVTK
 #include "vtkActor.h"

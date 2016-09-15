@@ -20,7 +20,9 @@ namespace Lemma {
 
     // ===================================================================
     //        Class:  Data
-    /** \brief Abstract class for data from an instrument
+    /**
+     *  \ingroup LemmaCore
+     *  \brief Abstract class for data from an instrument
      *  \details Currently provides no functionality, but this will likely
      *          change in the near future.
      */

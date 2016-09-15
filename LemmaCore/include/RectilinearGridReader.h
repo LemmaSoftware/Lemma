@@ -26,8 +26,10 @@ namespace Lemma {
 
     /**
       @class
-      \brief
+      \ingroup LemmaCore
+      \brief   Base Class for rectilinear grid reader data files
       \details
+     \todo this set of classes is deprecated, use serialize methods!
      */
     class RectilinearGridReader : public GridReader {
 

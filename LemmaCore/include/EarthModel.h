@@ -20,6 +20,7 @@ namespace Lemma {
 
     // ===================================================================
     //        Class:  EarthModel
+    /// \ingroup LemmaGroup
     /// \brief abstract class for Earth models
     /// \details
     // ===================================================================

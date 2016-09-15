@@ -22,6 +22,7 @@ namespace Lemma {
     //  Class:  RectilinearGrid
     /**
       @class
+      \ingroup LemmaCore
       \brief   Impliments a rectilinear grid.
       \details A rectilinear grid can vary regularily in space but must be
                constant variation across each dimension. In this way three

@@ -20,6 +20,7 @@ namespace Lemma {
 
 	// =======================================================================
 	//        Class:  Instrument
+    /// \ingroup LemmaCore
 	/// \brief    Abstract class for instruments
 	/// \details
 	// =======================================================================

@@ -33,14 +33,8 @@
 
 #include <iostream>
 #include <fstream>
-#include "dipolesource.h"
-#include "layeredearthem.h"
-#include "receiverpoints.h"
-#include "emearth1d.h"
+#include "DipoleSource.h"
 
-#ifdef LEMMAUSEOMP
-#include "omp.h"
-#endif
 
 // For testing purposes disable VTK and run scale.sh
 #undef LEMMAUSEVTK

@@ -36,6 +36,7 @@
 namespace Lemma {
 
 /**
+  \ingroup LemmaCore
   \brief   Exports a LemmaRectilinearGrid into a VTKRectilinearGrid.
   \details Results can then be dumped to a VTK file or used directly.
  */

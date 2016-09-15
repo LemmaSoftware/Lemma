@@ -25,8 +25,9 @@
 namespace Lemma {
 
 /**
-  \brief   Provides ASCII input file parsing
-  \details Able to accomodate various inputs and comment styles
+ * \ingroup LemmaCore
+ * \brief   Provides ASCII input file parsing
+ * \details Able to accomodate various inputs and comment styles
  */
 class ASCIIParser : public LemmaObject {
 

@@ -22,7 +22,9 @@
 
 namespace Lemma {
 
-/** \brief    Abstract class providing common interface for Lemma Objects.
+/**
+  * \ingroup  LemmaCore
+  * \brief    Abstract class providing common interface for Lemma Objects.
   * \details  Lemma objects can be members of other Lemma, and may be members
   *           of multiple objects. Since updates should be atomic, and objects
   *           can be large, it becomes useful to count the number of

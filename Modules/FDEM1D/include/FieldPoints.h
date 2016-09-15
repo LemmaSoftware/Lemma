@@ -11,8 +11,8 @@
   @version  $Id: receiverpoints.h 199 2014-12-29 19:25:20Z tirons $
  **/
 
-#ifndef __RECEIVERPOINTS_H
-#define __RECEIVERPOINTS_H
+#ifndef __FIELDPOINTS_H
+#define __FIELDPOINTS_H
 
 #ifdef LEMMAUSEVTK
 #include "vtkPointData.h"
@@ -37,20 +37,22 @@
 namespace Lemma {
 
     // =======================================================================
-    //        Class:  ReceiverPoints
-    /// \brief  Points in the subsurface to make EM calculations,
-    ///  more general than the grids.
+    //        Class:  FieldPoints
+    /**
+     *  \brief  Points in the subsurface where 1D EM calculations are made
+     */ \details
     // =======================================================================
-    class ReceiverPoints : public LemmaObject {
+    class FieldPoints : public LemmaObject {
 
         public:
 
             // ====================    FRIENDS     ===========================
 
-            /** Stream operator printing out information about this class.
+            /**
+             *  Stream operator printing out information about this class.
              */
             friend std::ostream &operator<<(std::ostream &stream,
-                        const ReceiverPoints &ob);
+                        const FieldPoints &ob);
 
             friend class EMEarth1D;
             friend class DipoleSource;
@@ -58,19 +60,23 @@ namespace Lemma {
             // ====================  LIFECYCLE     ===========================
 
             /**
-             *  Returns pointer to new DipoleSource. Location is
-             *  initialized to (0,0,0) type and polarization are
-             *  initialized  to nonworking values that will throw
-             *  exceptions if used.
+             *  Factory method for generating concrete class.
+             *  @return a std::shared_ptr of type FieldPoints
              */
-            static ReceiverPoints* New();
+            static std::shared_ptr<FieldPoints*> NewSP();
 
+        	/**
+             *  Uses YAML to serialize this object.
+             *  @return a YAML::Node
+             */
+            YAML::Node Serialize() const;
 
             /**
-             * @copybrief LemmaObject::Delete()
-             * @copydetails LemmaObject::Delete()
+             *   Constructs an object from a YAML::Node.
+             *   @param[in] node is a YAML node containing the serialized class information
+             *   @return a std::shared_ptr object of FieldPoints
              */
-            void Delete();
+            static std::shared_ptr< FieldPoints* > DeSerialize(const YAML::Node& node);
 
             // ====================  OPERATORS     ===========================
 
@@ -78,10 +84,10 @@ namespace Lemma {
 
             // ====================  ACCESS        ===========================
 
-            /// Sets the number of receivers
+            /** Sets the number of receivers */
             virtual void SetNumberOfReceivers(const int &nrec);
 
-            /// Returns the location of a single receiver as an Eigen Vector
+            /** Returns the location of a single receiver as an Eigen Vector */
             void SetLocation(const int& nrec, const Vector3r& loc);
 
             /// Returns the location of a single receiver as an Eigen Vector
@@ -181,33 +187,21 @@ namespace Lemma {
             /// Returns the mask for this point
             int GetMask(const int& i);
 
-            #ifdef HAVE_YAMLCPP
-        	/**
-             *  Uses YAML to serialize this object.
-             *  @return a YAML::Node
-             */
-            YAML::Node Serialize() const;
-
-            /**
-             *   Constructs an object from a YAML::Node.
-             */
-            static ReceiverPoints* DeSerialize(const YAML::Node& node);
-            #endif
 
         protected:
 
             // ====================  LIFECYCLE     ===========================
 
-            /// Default protected constructor.
-            ReceiverPoints (const std::string& name);
+            /** Default protected constructor. */
+            FieldPoints ( );
 
             #ifdef HAVE_YAMLCPP
-            /// Default protected constructor.
-            ReceiverPoints (const YAML::Node& node);
+            /** Default protected constructor. */
+            FieldPoints (const YAML::Node& node);
             #endif
 
-            /// Default protected constructor.
-            ~ReceiverPoints ();
+            /** Default protected constructor. */
+            ~FieldPoints ();
 
             /**
              * @copybrief LemmaObject::Release()
@@ -275,7 +269,11 @@ namespace Lemma {
             /// H field at receiver locations
             std::vector<Vector3Xcr>     Hfield;
 
-    }; // -----  end of class  ReceiverPoints  -----
+
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "FieldPoints";
+
+    }; // -----  end of class  FieldPoints  -----
 }
 
-#endif // __RECEIVERPOINTS
+#endif // __FIELDPOINTS

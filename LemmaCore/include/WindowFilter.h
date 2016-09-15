@@ -27,6 +27,7 @@ namespace Lemma {
     //  Class:  WindowFilter
     /**
       @class   WindowFilter
+      \ingroup LemmaCore
       \brief   Fourier domain window filter.
       \details Current types are Hamming and Hanning. Others to be added.
      */

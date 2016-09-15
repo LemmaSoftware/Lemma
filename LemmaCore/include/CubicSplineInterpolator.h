@@ -45,16 +45,17 @@ struct SplineSet{
 };
 
 /**
-  \brief   Real 1D Natural cubic spline interpolator.
-  \details Splines are fit between knots \f$j\f$ according to the forulae
-           \f[ S_j(x) =  a_j + b_j(x - x_j) + c_j(x-x_j)^2 + d_j(x-x_y)^3  \f]
-           The spline must satisfy the following conditions
-            \f{eqnarray} {
-                S_i(x_i) & = & y_i = S_{i-1}(x_i), i = 1,..., n-1 \\
-                S'_i(x_i) & = &  S'_{i-1}(x_i), i = 1,..., n-1 \\
-                S''_i(x_i) & = & S''_{i-1}(x_i), i = 1,..., n-1 \\
-                S''_0(x_0) & = & S''_{n-1}(x_n) = 0
-            \f}
+ * \ingroup LemmaCore
+ * \brief   Real 1D Natural cubic spline interpolator.
+ * \details Splines are fit between knots \f$j\f$ according to the forulae
+ *          \f[ S_j(x) =  a_j + b_j(x - x_j) + c_j(x-x_j)^2 + d_j(x-x_y)^3  \f]
+ *          The spline must satisfy the following conditions
+ *           \f{eqnarray} {
+ *               S_i(x_i) & = & y_i = S_{i-1}(x_i), i = 1,..., n-1 \\
+ *               S'_i(x_i) & = &  S'_{i-1}(x_i), i = 1,..., n-1 \\
+ *               S''_i(x_i) & = & S''_{i-1}(x_i), i = 1,..., n-1 \\
+ *               S''_0(x_0) & = & S''_{n-1}(x_n) = 0
+ *           \f}
  */
 class CubicSplineInterpolator : public LemmaObject {
 

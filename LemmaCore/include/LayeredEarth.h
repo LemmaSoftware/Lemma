@@ -22,7 +22,8 @@ namespace Lemma {
 
 	// =======================================================================
 	//        Class:  LayeredEarth
-	/// Abstract 1D layered earth.
+    /// \ingroup LemmaCore
+	/// \brief Abstract 1D layered earth.
 	// =======================================================================
 	class LayeredEarth : public EarthModel {
 
