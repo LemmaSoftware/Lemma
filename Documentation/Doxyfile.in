@@ -32,7 +32,7 @@ PROJECT_NAME           = Lemma
 # This could be handy for archiving the generated documentation or
 # if some version control system is used.
 
-PROJECT_NUMBER         = 0.4 (Beta)
+PROJECT_NUMBER         = @LEMMA_VERSION_MAJOR@.@LEMMA_VERSION_MINOR@.@LEMMA_VERSION_PATCH@ 
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute)
 # base path where the generated documentation will be put.

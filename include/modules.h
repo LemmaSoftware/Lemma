@@ -22,4 +22,3 @@
       @details  Provides multidimensional wavelet transforms and solver routines.
  */
 
-
