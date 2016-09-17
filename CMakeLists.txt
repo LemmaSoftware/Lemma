@@ -70,7 +70,7 @@ ExternalProject_Add(YAML-CPP
 	UPDATE_COMMAND ""
 	PATCH_COMMAND ""
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=ON -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
 		-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
 )
 add_compile_options(-DHAVE_YAMLCPP) 
@@ -89,6 +89,8 @@ else()
 		BUILD_COMMAND ""
 		INSTALL_COMMAND ""
     	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest
+    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
+			-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
 	)
 	set (CXXTEST_INCLUDE_DIR  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/")
 	set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen" )
@@ -104,8 +106,8 @@ if ( LEMMA_TINYXML_SUPPORT )
 		UPDATE_COMMAND ""
 		PATCH_COMMAND ""
     	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/tinyxml2
-    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON 
-		#-DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
+			-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
 	)
 	add_compile_options(-DTINYXMLSUPPORT) 
 endif()
@@ -138,7 +140,7 @@ if ( LEMMA_VTK6_SUPPORT )
 	include(${VTK_USE_FILE}) 
 	add_compile_options(-DLEMMAUSEVTK) 
 	# Compile Matplot_vtk if VTK is present
-	add_subdirectory(Matplot_vtk)	
+	#add_subdirectory(Matplot_vtk)	
 	include_directories ("${PROJECT_SOURCE_DIR}/Matplot_vtk")
 endif()
 
@@ -152,7 +154,7 @@ if ( LEMMA_VTK7_SUPPORT )
 	include(${VTK_USE_FILE}) 
 	add_compile_options(-DLEMMAUSEVTK) 
 	# Compile Matplot_vtk if VTK is present
-	add_subdirectory(Matplot_vtk)	
+	#add_subdirectory(Matplot_vtk)	
 	include_directories ("${PROJECT_SOURCE_DIR}/Matplot_vtk")
 endif()
 
@@ -178,6 +180,8 @@ else()
 	message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 or C++14 support. Please use a different C++ compiler.")
 endif()
 
+option( LEMMA_BUILD_EXAMPLES "Compile example Lemma applications" OFF )
+
 option( LEMMA_USE_OPENMP  "Use OpenMP in Lemma" OFF)
 CHECK_CXX_COMPILER_FLAG(-fopenmp COMPILER_SUPPORTS_OPENMP)
 if(COMPILER_SUPPORTS_OPENMP AND LEMMA_USE_OPENMP )
@@ -190,42 +194,29 @@ set(LEMMA_VERSION_PATCH "1")
 set(LEMMA_VERSION "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}")
 
 configure_file (
-	"${PROJECT_SOURCE_DIR}/include/LemmaConfig.h.in"
+	"${PROJECT_SOURCE_DIR}/config/LemmaConfig.h.in"
 	"${PROJECT_BINARY_DIR}/include/LemmaConfig.h"
 )
+
 include_directories("${PROJECT_BINARY_DIR}/include")
-
-include_directories ("${PROJECT_SOURCE_DIR}/LemmaCore/include")
-
 include_directories ("${CMAKE_INSTALL_PREFIX}/include/")
 link_directories ("${CMAKE_INSTALL_PREFIX}/lib/")
 
-
+#######################################################################
+# CXXTEST Framework
 if(CXXTEST_FOUND)
 	option (LEMMA_ENABLE_TESTING  "Turn on unit testing" ON)
 	if (LEMMA_ENABLE_TESTING)
-    include_directories(${CXXTEST_INCLUDE_DIR})
-    enable_testing()
-    #CXXTEST_ADD_TEST(tester_executable runner.cpp
-    #                    ${CMAKE_CURRENT_SOURCE_DIR}/src/myTestsuite.h)
-	#CXXTEST_ADD_TEST(unittest_foo foo_test.cc
-    #                  ${CMAKE_CURRENT_SOURCE_DIR}/src/myTestSuite.h)
-    #target_link_libraries(unittest_foo foo) # as needed
-#	else()
-#	message(FATAL_ERROR "CxxTest not found.")
+    	#include_directories(${CXXTEST_INCLUDE_DIR}) # Add this in testing CMakeLists.txt instead, cleaner
+    	enable_testing()
 	endif()
 endif()
-
-add_subdirectory (LemmaCore) 
 
 ########################################################################
 # Build Modules
 add_subdirectory (Modules) 
 
 ########################################################################
-# 
-include_directories(${CMAKE_INSTALL_PREFIX}/include)
-
 # add a target to generate API documentation with Doxygen
 # ALL make documentation build by default if possible
 find_package(Doxygen)

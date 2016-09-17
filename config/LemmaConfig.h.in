@@ -1,0 +1,25 @@
+/* This file is part of Lemma, a geophysical modelling and inversion API.
+ * More information is available at http://lemmasoftware.org
+ */
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * @file
+ * @date      01/15/2016 09:52:10 PM
+ * @author    Trevor Irons (ti)
+ * @email     tirons@egi.utah.edu
+ * @copyright Copyright (c) 2016, University of Utah
+ * @copyright Copyright (c) 2016, Trevor Irons & Lemma Software, LLC
+ */
+
+// the configured options and settings for Tutorial
+#define LEMMA_VERSION_MAJOR @LEMMA_VERSION_MAJOR@
+#define LEMMA_VERSION_MINOR @LEMMA_VERSION_MINOR@
+#define LEMMA_VERSION_PATCH @LEMMA_VERSION_PATCH@
+//#define LEMMA_VERSION @LEMMA_VERSION@
+
+
