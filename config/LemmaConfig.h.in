@@ -16,7 +16,8 @@
  * @copyright Copyright (c) 2016, Trevor Irons & Lemma Software, LLC
  */
 
-// the configured options and settings for Tutorial
+// the configured options and settings
+// Sets the Lemma version used in keeping track of releases
 #define LEMMA_VERSION_MAJOR @LEMMA_VERSION_MAJOR@
 #define LEMMA_VERSION_MINOR @LEMMA_VERSION_MINOR@
 #define LEMMA_VERSION_PATCH @LEMMA_VERSION_PATCH@
