@@ -21,6 +21,7 @@ namespace Lemma {
 
     // =======================================================================
     //        Class:  LayeredEarthEM
+    /// \ingroup FDEM1D
     /// \brief  1D layered earth. Attributes include all aspects of
     /// Cole-Cole model.
     /// \details   Primarily used for EM calculations.

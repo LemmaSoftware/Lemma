@@ -140,7 +140,7 @@ if ( LEMMA_VTK6_SUPPORT )
 	include(${VTK_USE_FILE}) 
 	add_compile_options(-DLEMMAUSEVTK) 
 	# Compile Matplot_vtk if VTK is present
-	#add_subdirectory(Matplot_vtk)	
+	add_subdirectory(Matplot_vtk)	
 	include_directories ("${PROJECT_SOURCE_DIR}/Matplot_vtk")
 endif()
 
@@ -154,7 +154,7 @@ if ( LEMMA_VTK7_SUPPORT )
 	include(${VTK_USE_FILE}) 
 	add_compile_options(-DLEMMAUSEVTK) 
 	# Compile Matplot_vtk if VTK is present
-	#add_subdirectory(Matplot_vtk)	
+	add_subdirectory(Matplot_vtk)	
 	include_directories ("${PROJECT_SOURCE_DIR}/Matplot_vtk")
 endif()
 
