@@ -9,23 +9,16 @@
 
 /**
  * @file
- * @date      02/27/2015 11:02:43 AM
- * @version   $Id$
+ * @date      09/15/2016 04:28:16 PM
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2015, XRI Geophysics, LLC
- * @copyright Copyright (c) 2015, Trevor Irons
+ * @email     tirons@egi.utah.edu
+ * @copyright Copyright (c) 2016, University of Utah
+ * @copyright Copyright (c) 2016, Lemma Software, LLC
  */
 
-// SkyTEM forward modelling programme
-
-#include "TEMSurvey.h"
-
-int main() {
-
-    std::cout << "SkyTEM modelling\n";
-
-
-
-}
+/**
+    \defgroup FDEM1D FDEM1D
+    @brief    FDEM1D provides 1D frequency-domain EM capabilities.
+    @details  FDEM1D provides classes and methods for 1D EM calculations.
+*/
 

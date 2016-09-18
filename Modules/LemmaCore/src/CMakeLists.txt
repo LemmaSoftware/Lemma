@@ -1,7 +1,6 @@
 set (SOURCE 
 	${SOURCE}
 	${CMAKE_CURRENT_SOURCE_DIR}/helper.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/banner.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ASCIIParser.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/CubicSplineInterpolator.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Data.cpp

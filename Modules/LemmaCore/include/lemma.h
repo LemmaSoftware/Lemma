@@ -20,11 +20,10 @@
     <B>E</B>lectro<B>M</B>agnetics <B>M</B>odelling <B>A</B>PI.
     Lemma is a cross-platform library delivering an expressive API that
     can be used to easily create versatile programs.
-    We are building a powerful, flexible,
-    expresive framework that allows for the straightforward creation of
-    geophysical EM applications. Lemma is not itself a program, instead
-    it is a collection of building blocks to make applications.
-    We chose this name because:
+    We are building a powerful, flexible, expresive framework that allows
+    for the straightforward creation of geophysical EM applications.
+    Lemma is not itself a program, instead it is a collection of building
+    blocks to make applications. We chose this name because:
 
     - In mathematics a Lemma is a proven proposition which is used as a
     stepping stone to a larger result rather than as a statement in-and-of
@@ -45,14 +44,6 @@
     them is a major undertaking. Lemma's approach is much different, by
     providing a set of general tools users can easily assemble applications
     that suite their needs.
-
-    While most geophysical EM modeling packages are concerned with forward
-    modeling <B>DATA</B> between specific transmitters and receivers located
-    on the surface of the earth; Lemma is fundamentally concerned with
-    modelling <B>FIELDS</B> due to sources, the field values can be calculated
-    everywhere within the domain. This allows for solving multiphysics EM
-    problems. Tradional EM data may be forward modelled using the Lemma::Instrument
-    classes.
 
     \section Capabilities Capabilities
     In the long term, we have many goals for this software project. Due to its
@@ -107,10 +98,6 @@
     ElectroMagnetics. The following modules utilise parts of Lemma to provide
     their functionality.
 
-    \subsection Merlin Merlin.
-    This module provides nuclear magnetic resonance functionality.
-
-
     \section Tutorials
         - \ref Tutorial - Basic intruduction to Lemma, including aquiring and
           compiling the code, class structure, and building your own
@@ -119,34 +106,35 @@
 
 
     \section Development Development and design
-    Ths package is primarily being developed by the Center for Gravity,
-    Electrical, and Magnetic Studies (CGEM) at the Colorado School of Mines (CSM), the United
-    States Geological Survey (USGS), and Broken Spoke Development, LLC. It draws on work by
-    many others including Ki Ha Lee, and Walt Anderson. All new work and
+    Ths package was initially developed by the Center for Gravity, Electrical, and
+    Magnetic Studies (CGEM) at the Colorado School of Mines (CSM), the United
+    States Geological Survey (USGS), and Broken Spoke Development, LLC. Where it drew
+    on work by many others including Ki Ha Lee, and Walt Anderson. All new work and
     interfaces are written entirely in C++. Several small external projects are
     included, which are written in standard C, and FORTRAN 77. We adapt a
     modern, test driven, object oriented, C++ framework.
+    More recent development has been undertaken at the University of Utah through the Energy
+    and Geoscience Institute.
 
     \section Legalities
 
     \subsection Copyrights
     The following copyrights apply to the source.
     Most of the code was developed either by Trevor
-    Copyright (C) 2008-2010 Trevor Irons <tirons@mines.edu> or
-    M. Andrew Kass Copyright (C) 2010 <mkass@numericalgeo.com>.
+    Copyright (C) 2008-2010 Trevor Irons <trevor.irons@lemmasoftware.org> or
+    M. Andrew Kass Copyright (C) 2010 <mkass@usgs.gov>.
 
-    The 1D EM solver was derived (but updated heavily) from a fortran
+    The 1D EM solver was derived (but updated heavily) from a Fortran
     programme written by Ki Ha Lee in 1984. We have communicated with Ki Ha,
     and he assured us that this code is in the public domian.
 
     A Gaussian quadrature hankel transform originally written by Alan Chave was
-    ported to C++. This code is in the public domain, and was published in Geophysics.
+    ported to C++. This code is in the public domain, and the source code was
+    published in Geophysics.
 
     A digital filtering approach to the Hankel transform written by Walt
-    Anderson was also rewritten for Lemma. The origional fortran code is also in
-    the public domain. Using this Hankel transform works
-    arround the copyright issue mentioned above, but may not produce accurate
-    results for high frequencies.
+    Anderson was also rewritten for Lemma. The original Fortran code is also in
+    the public domain.
 
     Please note that Ki Ha Lee and Walt Anderson had no part in this work, and
     the above should not be interpreted as any sort of endorsement by those
@@ -166,9 +154,10 @@
 
     \section Useful Useful links
         - Home page https://lemmasoftware.org
-        - SVN repository https://svn.lemmasoftware.org
+        - Git repository https://git.lemmasoftware.org
         - Broken Spoke Develpment http://numericalgeo.com
         - CGEM at the Coloroado School of Mines http://geophysics.mines.edu/cgem/
+        - EGI at the Eniversity of Utah http://egi.utah.edu/
 **/
 
 #pragma once
