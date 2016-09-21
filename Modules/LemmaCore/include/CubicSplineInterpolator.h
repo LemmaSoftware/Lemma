@@ -62,9 +62,20 @@ class CubicSplineInterpolator : public LemmaObject {
     friend std::ostream &operator<<(std::ostream &stream,
             const CubicSplineInterpolator &ob);
 
+    struct ctor_cookie {};
+
     public:
 
     // ====================  LIFECYCLE     =======================
+
+    /** Default constructor */
+    explicit CubicSplineInterpolator ( const ctor_cookie& );
+
+    /** DeSerializing constructor, usees factory DeSerialize  method*/
+    CubicSplineInterpolator ( const YAML::Node& node, const ctor_cookie& );
+
+    /** Destructor use smart pointers to auto delete */
+    virtual ~CubicSplineInterpolator ();
 
     /**
      *  Factory method for generating concrete class.
@@ -148,23 +159,6 @@ class CubicSplineInterpolator : public LemmaObject {
     }
 
     protected:
-
-    // ====================  LIFECYCLE     =======================
-
-    /** Default protected constructor, use New */
-    CubicSplineInterpolator ( );
-
-    /** Protected DeDerializing constructor, use factory DeSerialize  method*/
-    CubicSplineInterpolator (const YAML::Node& node);
-
-    /** Default protected destructor, smart pointers auto delete */
-    ~CubicSplineInterpolator ();
-
-    /**
-     *  @copybrief   LemmaObject::Release()
-     *  @copydetails LemmaObject::Release()
-     */
-    void Release();
 
     // ====================  OPERATIONS    =======================
 

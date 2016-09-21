@@ -35,7 +35,7 @@ namespace Lemma {
     //      Method:  ASCIIParser
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    ASCIIParser::ASCIIParser ( ) : LemmaObject( ),
+    ASCIIParser::ASCIIParser ( const ctor_cookie& ) : LemmaObject( ), input(),
             CommentString("//"), BufferSize(255) {
 
     }  // -----  end of method ASCIIParser::ASCIIParser  (constructor)  -----
@@ -47,9 +47,9 @@ namespace Lemma {
     // Description:  public smart pointer factory constructor
     //--------------------------------------------------------------------------------------
     std::shared_ptr< ASCIIParser > ASCIIParser::NewSP() {
-        std::shared_ptr<ASCIIParser> sp(new  ASCIIParser( ), LemmaObjectDeleter() );
-        return sp;
-        //return  std::make_shared<ASCIIParser>();
+        //std::shared_ptr<ASCIIParser> sp(new  ASCIIParser( ), LemmaObjectDeleter() );
+        //return sp;
+        return  std::make_shared<ASCIIParser>( ctor_cookie() );
     }
 
     //--------------------------------------------------------------------------------------
@@ -68,12 +68,12 @@ namespace Lemma {
     //       Class:  ASCIIParser
     //      Method:  DeSerialize
     //--------------------------------------------------------------------------------------
-    std::shared_ptr<ASCIIParser> ASCIIParser::DeSerialize ( const YAML::Node& node  ) {
+    std::shared_ptr<ASCIIParser> ASCIIParser::DeSerialize ( const YAML::Node& node ) {
         if (node.Tag() != "ASCIIParser") {
             throw  DeSerializeTypeMismatch( "ASCIIParser", node.Tag());
         }
-        std::shared_ptr<ASCIIParser> Object(new  ASCIIParser(node), LemmaObjectDeleter() );
-        return Object ;
+        //std::shared_ptr<ASCIIParser> Object(new  ASCIIParser(node), LemmaObjectDeleter() );
+        return std::make_shared< ASCIIParser >( node, ctor_cookie() );
     }		// -----  end of method ASCIIParser::DeSerialize  -----
 
     //--------------------------------------------------------------------------------------
@@ -85,24 +85,27 @@ namespace Lemma {
 
     }  // -----  end of method ASCIIParser::~ASCIIParser  (destructor)  -----
 
+/*
+    //--------------------------------------------------------------------------------------
+    //       Class:  ASCIIParser
+    //      Method:  ASCIIParser(ASCIIParser)
+    // Description:  copy
+    //--------------------------------------------------------------------------------------
+    ASCIIParser::ASCIIParser ( const ASCIIParser& cp ) {
+        //input = cp.input; // Problem line
+        CommentString = cp.CommentString;
+        BufferSize = cp.BufferSize;
+    }  // -----  end of method ASCIIParser::~ASCIIParser  (destructor)  -----
+*/
     //--------------------------------------------------------------------------------------
     //       Class:  ASCIIParser
     //      Method:  ASCIIParser
     // Description:  DeSerializing constructor (protected)
     //--------------------------------------------------------------------------------------
-    ASCIIParser::ASCIIParser (const YAML::Node& node) : LemmaObject(node) {
+    ASCIIParser::ASCIIParser (const YAML::Node& node, const ctor_cookie& ) : LemmaObject(node) {
         this->CommentString = node["CommentString"].as<std::string>();
         this->BufferSize = node["BufferSize"].as<int>();
     }  // -----  end of method ASCIIParser::ASCIIParser  (constructor)  -----
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  ASCIIParser
-    //      Method:  Release
-    // Description:  destructor (protected)
-    //--------------------------------------------------------------------------------------
-    void ASCIIParser::Release() {
-        delete this;
-    }
 
     //--------------------------------------------------------------------------------------
     //       Class:  ASCIIParser

@@ -27,7 +27,11 @@
 #add_executable( femforward  femforward.cpp )
 #target_link_libraries(femforward "lemmacore")
 
+add_executable( CubicSplineInterpolator  CubicSplineInterpolator.cpp )
+target_link_libraries(CubicSplineInterpolator "lemmacore")
+
 add_executable( filter  filter.cpp )
 target_link_libraries(filter "lemmacore")
+
 
 

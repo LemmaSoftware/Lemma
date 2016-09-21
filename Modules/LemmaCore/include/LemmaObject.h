@@ -95,7 +95,7 @@ class LemmaObject {
          */
         LemmaObject ( );
 
-        /** Protected DeDerializing constructor, use factory DeSerialize  method*/
+        /** Protected DeSerializing constructor */
         LemmaObject (const YAML::Node& node);
 
         /** Protected default destructor. This is an abstract class and

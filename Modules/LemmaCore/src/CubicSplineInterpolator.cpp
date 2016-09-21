@@ -40,7 +40,7 @@ namespace Lemma {
     //      Method:  CubicSplineInterpolator
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    CubicSplineInterpolator::CubicSplineInterpolator ( ) : LemmaObject( ) {
+    CubicSplineInterpolator::CubicSplineInterpolator ( const ctor_cookie& ) : LemmaObject( ) {
 
     }  // -----  end of method CubicSplineInterpolator::CubicSplineInterpolator  (constructor)  -----
 
@@ -49,7 +49,7 @@ namespace Lemma {
     //      Method:  CubicSplineInterpolator
     // Description:  DeSerializing constructor (protected)
     //--------------------------------------------------------------------------------------
-    CubicSplineInterpolator::CubicSplineInterpolator (const YAML::Node& node) : LemmaObject(node) {
+    CubicSplineInterpolator::CubicSplineInterpolator (const YAML::Node& node, const ctor_cookie& ) : LemmaObject(node) {
     }  // -----  end of method CubicSplineInterpolator::CubicSplineInterpolator  (constructor)  -----
 
     //--------------------------------------------------------------------------------------
@@ -58,8 +58,9 @@ namespace Lemma {
     // Description:  public constructor
     //--------------------------------------------------------------------------------------
     std::shared_ptr<CubicSplineInterpolator> CubicSplineInterpolator::NewSP() {
-        std::shared_ptr<CubicSplineInterpolator> sp(new  CubicSplineInterpolator( ), LemmaObjectDeleter() );
-        return sp;
+        //std::shared_ptr<CubicSplineInterpolator> sp(new  CubicSplineInterpolator( CubicSplineInterpolator::ctor_cookie ), LemmaObjectDeleter() );
+        //return sp;
+        return std::make_shared<CubicSplineInterpolator>( ctor_cookie() );
     }
 
     //--------------------------------------------------------------------------------------
@@ -81,8 +82,9 @@ namespace Lemma {
         if (node.Tag() != "CubicSplineInterpolator") {
             throw  DeSerializeTypeMismatch( "CubicSplineInterpolator", node.Tag());
         }
-        std::shared_ptr<CubicSplineInterpolator> Object(new  CubicSplineInterpolator(node), LemmaObjectDeleter() );
-        return Object ;
+        //std::shared_ptr<CubicSplineInterpolator> Object(new  CubicSplineInterpolator(node), LemmaObjectDeleter() );
+        //return Object ;
+        return std::make_shared<CubicSplineInterpolator>( node, ctor_cookie() );
     }
 
     //--------------------------------------------------------------------------------------
@@ -94,14 +96,6 @@ namespace Lemma {
 
     }  // -----  end of method CubicSplineInterpolator::~CubicSplineInterpolator  (destructor)  -----
 
-    //--------------------------------------------------------------------------------------
-    //       Class:  CubicSplineInterpolator
-    //      Method:  Release
-    // Description:  destructor (protected)
-    //--------------------------------------------------------------------------------------
-    void CubicSplineInterpolator::Release() {
-        delete this;
-    }
 
     // ====================  OPERATIONS    =======================
 

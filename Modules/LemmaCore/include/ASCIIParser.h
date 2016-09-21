@@ -34,9 +34,20 @@ class ASCIIParser : public LemmaObject {
     friend std::ostream &operator<<(std::ostream &stream,
             const ASCIIParser &ob);
 
+    struct ctor_cookie {};
+
     public:
 
     // ====================  LIFECYCLE     =======================
+
+    /** Default constructor */
+    explicit ASCIIParser ( const ctor_cookie& );
+
+    /** Constructor using YAML::Node */
+    ASCIIParser ( const YAML::Node& node, const ctor_cookie& );
+
+    /** Default  destructor */
+    virtual ~ASCIIParser ();
 
     /**
      *  Factory method for generating concrete class.
@@ -121,22 +132,8 @@ class ASCIIParser : public LemmaObject {
 
     protected:
 
-    // ====================  LIFECYCLE     =======================
-
-    /** Default protected constructor, use New */
-    ASCIIParser ( );
-
-    /** Constructor using YAML::Node */
-    ASCIIParser ( const YAML::Node& node );
-
-    /** Default protected destructor, use Delete */
-    ~ASCIIParser ();
-
-    /**
-     *  @copybrief   LemmaObject::Release()
-     *  @copydetails LemmaObject::Release()
-     */
-    void Release();
+    /** Copy constructor */
+    ASCIIParser( const ASCIIParser& ) = delete;
 
     private:
 
