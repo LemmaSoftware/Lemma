@@ -62,17 +62,17 @@ class CubicSplineInterpolator : public LemmaObject {
     friend std::ostream &operator<<(std::ostream &stream,
             const CubicSplineInterpolator &ob);
 
-    struct ctor_cookie {};
+    struct ctor_key {};
 
     public:
 
     // ====================  LIFECYCLE     =======================
 
     /** Default constructor */
-    explicit CubicSplineInterpolator ( const ctor_cookie& );
+    explicit CubicSplineInterpolator ( const ctor_key& );
 
     /** DeSerializing constructor, usees factory DeSerialize  method*/
-    CubicSplineInterpolator ( const YAML::Node& node, const ctor_cookie& );
+    CubicSplineInterpolator ( const YAML::Node& node, const ctor_key& );
 
     /** Destructor use smart pointers to auto delete */
     virtual ~CubicSplineInterpolator ();
@@ -167,6 +167,9 @@ class CubicSplineInterpolator : public LemmaObject {
     int Interval(const Real& x);
 
     private:
+
+    /** Copy */
+    CubicSplineInterpolator( const CubicSplineInterpolator& ) = delete;
 
     /** ASCII string representation of the class name */
     static constexpr auto CName = "CubicSplineInterpolator";

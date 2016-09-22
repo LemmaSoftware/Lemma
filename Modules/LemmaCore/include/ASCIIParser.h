@@ -34,17 +34,17 @@ class ASCIIParser : public LemmaObject {
     friend std::ostream &operator<<(std::ostream &stream,
             const ASCIIParser &ob);
 
-    struct ctor_cookie {};
+    struct ctor_key {};
 
     public:
 
     // ====================  LIFECYCLE     =======================
 
     /** Default constructor */
-    explicit ASCIIParser ( const ctor_cookie& );
+    explicit ASCIIParser ( const ctor_key& );
 
     /** Constructor using YAML::Node */
-    ASCIIParser ( const YAML::Node& node, const ctor_cookie& );
+    ASCIIParser ( const YAML::Node& node, const ctor_key& );
 
     /** Default  destructor */
     virtual ~ASCIIParser ();
@@ -132,10 +132,10 @@ class ASCIIParser : public LemmaObject {
 
     protected:
 
+    private:
+
     /** Copy constructor */
     ASCIIParser( const ASCIIParser& ) = delete;
-
-    private:
 
     // ====================  DATA MEMBERS  =========================
 

@@ -26,30 +26,33 @@ class MyTestSuite : public CxxTest::TestSuite
 {
     public:
 
-//     void testASCIIParser( void )
+    void testASCIIParser( void )
+    {
+        auto Obj = ASCIIParser::NewSP();
+        //TS_ASSERT_THROWS_ANYTHING( auto Obj2 = Obj );
+        auto Obj2 = ASCIIParser::DeSerialize(Obj->Serialize());
+        TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
+    }
+
+
+//     void testCubicSplineInterpolator(void)
 //     {
-//         auto Obj = ASCIIParser::NewSP();
+//         auto Obj = CubicSplineInterpolator::NewSP();
 //         YAML::Node node = Obj->Serialize();
-//         auto Obj2 = ASCIIParser::DeSerialize(node);
+//         auto Obj2 = CubicSplineInterpolator::DeSerialize(node);
 //         TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
 //     }
 
+// /*
+//     void testRectilinearGrid( void )
+//     {
+//         auto Obj = RectilinearGrid::NewSP();
+//         YAML::Node node = Obj->Serialize();
+//         auto Obj2 = RectilinearGrid::DeSerialize(node);
+//         TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
+//     }
+// */
 
-    void testCubicSplineInterpolator(void)
-    {
-        auto Obj = CubicSplineInterpolator::NewSP();
-        YAML::Node node = Obj->Serialize();
-        auto Obj2 = CubicSplineInterpolator::DeSerialize(node);
-        TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
-    }
-
-    void testRectilinearGrid( void )
-    {
-        auto Obj = RectilinearGrid::NewSP();
-        YAML::Node node = Obj->Serialize();
-        auto Obj2 = RectilinearGrid::DeSerialize(node);
-        TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
-    }
 
 // /*
 //     void testRectilinearGridReader( void )

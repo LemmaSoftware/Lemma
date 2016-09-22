@@ -9,4 +9,7 @@ target_link_libraries(unittest_GetNameCheck "lemmacore")
 
 CXXTEST_ADD_TEST(unittest_SerializeCheck SerializeCheck.cc ${CMAKE_CURRENT_SOURCE_DIR}/SerializeCheck.h)
 target_link_libraries(unittest_SerializeCheck "lemmacore")
+
+CXXTEST_ADD_TEST(unittest_CopyDisableCheck CopyDisableCheck.cc ${CMAKE_CURRENT_SOURCE_DIR}/CopyDisableCheck.h)
+target_link_libraries(unittest_CopyDisableCheck "lemmacore")
  

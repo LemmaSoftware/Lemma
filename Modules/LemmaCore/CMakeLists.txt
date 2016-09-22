@@ -20,7 +20,7 @@ endif()
 # Linking
 if ( LEMMA_VTK6_SUPPORT OR LEMMA_VTK7_SUPPORT ) 
 	target_link_libraries(lemmacore ${VTK_LIBRARIES})
-	target_link_libraries(lemmacore "matplot")
+#	target_link_libraries(lemmacore "matplot")
 endif()
 
 target_link_libraries(lemmacore "yaml-cpp")

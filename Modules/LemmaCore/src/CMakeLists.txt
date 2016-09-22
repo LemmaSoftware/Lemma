@@ -2,8 +2,8 @@ set (SOURCE
 	${SOURCE}
 	${CMAKE_CURRENT_SOURCE_DIR}/helper.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/LemmaObject.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ASCIIParser.cpp                # fixed 
-	${CMAKE_CURRENT_SOURCE_DIR}/CubicSplineInterpolator.cpp    # fixed, cookie 
+	${CMAKE_CURRENT_SOURCE_DIR}/ASCIIParser.cpp                # fixed, key 
+	${CMAKE_CURRENT_SOURCE_DIR}/CubicSplineInterpolator.cpp    # fixed, key 
 	${CMAKE_CURRENT_SOURCE_DIR}/Data.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/DataReader.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/EarthModel.cpp

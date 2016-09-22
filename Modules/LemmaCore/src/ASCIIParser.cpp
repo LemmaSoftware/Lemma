@@ -35,7 +35,7 @@ namespace Lemma {
     //      Method:  ASCIIParser
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    ASCIIParser::ASCIIParser ( const ctor_cookie& ) : LemmaObject( ), input(),
+    ASCIIParser::ASCIIParser ( const ctor_key& ) : LemmaObject( ), input(),
             CommentString("//"), BufferSize(255) {
 
     }  // -----  end of method ASCIIParser::ASCIIParser  (constructor)  -----
@@ -47,9 +47,7 @@ namespace Lemma {
     // Description:  public smart pointer factory constructor
     //--------------------------------------------------------------------------------------
     std::shared_ptr< ASCIIParser > ASCIIParser::NewSP() {
-        //std::shared_ptr<ASCIIParser> sp(new  ASCIIParser( ), LemmaObjectDeleter() );
-        //return sp;
-        return  std::make_shared<ASCIIParser>( ctor_cookie() );
+        return  std::make_shared<ASCIIParser>( ctor_key() );
     }
 
     //--------------------------------------------------------------------------------------
@@ -72,8 +70,7 @@ namespace Lemma {
         if (node.Tag() != "ASCIIParser") {
             throw  DeSerializeTypeMismatch( "ASCIIParser", node.Tag());
         }
-        //std::shared_ptr<ASCIIParser> Object(new  ASCIIParser(node), LemmaObjectDeleter() );
-        return std::make_shared< ASCIIParser >( node, ctor_cookie() );
+        return std::make_shared< ASCIIParser >( node, ctor_key() ); //, ctor_key() );
     }		// -----  end of method ASCIIParser::DeSerialize  -----
 
     //--------------------------------------------------------------------------------------
@@ -85,24 +82,12 @@ namespace Lemma {
 
     }  // -----  end of method ASCIIParser::~ASCIIParser  (destructor)  -----
 
-/*
-    //--------------------------------------------------------------------------------------
-    //       Class:  ASCIIParser
-    //      Method:  ASCIIParser(ASCIIParser)
-    // Description:  copy
-    //--------------------------------------------------------------------------------------
-    ASCIIParser::ASCIIParser ( const ASCIIParser& cp ) {
-        //input = cp.input; // Problem line
-        CommentString = cp.CommentString;
-        BufferSize = cp.BufferSize;
-    }  // -----  end of method ASCIIParser::~ASCIIParser  (destructor)  -----
-*/
     //--------------------------------------------------------------------------------------
     //       Class:  ASCIIParser
     //      Method:  ASCIIParser
     // Description:  DeSerializing constructor (protected)
     //--------------------------------------------------------------------------------------
-    ASCIIParser::ASCIIParser (const YAML::Node& node, const ctor_cookie& ) : LemmaObject(node) {
+    ASCIIParser::ASCIIParser (const YAML::Node& node, const ctor_key&  key) : LemmaObject(node) {
         this->CommentString = node["CommentString"].as<std::string>();
         this->BufferSize = node["BufferSize"].as<int>();
     }  // -----  end of method ASCIIParser::ASCIIParser  (constructor)  -----
@@ -119,7 +104,6 @@ namespace Lemma {
         return ;
     }		// -----  end of method ASCIIParser::Open  -----
 
-
     //--------------------------------------------------------------------------------------
     //       Class:  ASCIIParser
     //      Method:  Close
@@ -128,7 +112,6 @@ namespace Lemma {
         input.close();
         return ;
     }		// -----  end of method ASCIIParser::Close  -----
-
 
     //--------------------------------------------------------------------------------------
     //       Class:  ASCIIParser
@@ -171,7 +154,6 @@ namespace Lemma {
                 delete [] dump;
                 return vals;
             }
-
         }
         delete [] dump;
         return vals;
@@ -195,12 +177,10 @@ namespace Lemma {
                 delete [] dump;
                 return vals;
             }
-
         }
         delete [] dump;
         return vals;
     }		// -----  end of method ASCIIParser::ReadInts  -----
-
 
     //--------------------------------------------------------------------------------------
     //       Class:  ASCIIParser
@@ -234,7 +214,6 @@ namespace Lemma {
         input.seekg( loc );
         return ;
     }		// -----  end of method ASCIIParser::JumpToLocation  -----
-
 
 }		// -----  end of Lemma  name  -----
 

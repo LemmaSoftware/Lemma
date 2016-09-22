@@ -22,14 +22,26 @@
 using namespace Lemma;
 
 int main() {
-    auto Spline = CubicSplineInterpolator::NewSP();
+    //auto Spline = CubicSplineInterpolator::NewSP();
     //auto Spline2 = CubicSplineInterpolator();
     auto Parser = ASCIIParser::NewSP();
     //ASCIIParser Parser2 = ASCIIParser();
     //    Parser2.SetCommentString( "#");
     //auto Parser3 = ASCIIParser(Parser2);
+//    auto Parser3 = *Parser;
 
-    std::cout << *Parser << std::endl;
+    //std::cout << Parser3;
+
+    //std::cout << *Parser << std::endl;
+    //YAML::Node node = Parser->Serialize();
+    //std::cout << node << std::endl;
+    //auto Obj2 = ASCIIParser::DeSerialize(Parser->Serialize());
+    //std::cout << *Obj2 << std::endl;
+
+
+//    std::cout << "string " << Parser->GetName() << "\t" << Obj2->GetName() << "\n";
+//         TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
+
     //std::cout << Parser2 << std::endl;
     //std::cout << Parser3 << std::endl;
 }
