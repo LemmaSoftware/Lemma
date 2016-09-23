@@ -35,7 +35,7 @@ class Grid : public LemmaObject {
 
         // ====================  LIFECYCLE     ===================================
 
-        YAML::Node Serialize() const;
+        virtual YAML::Node Serialize() const;
 
         // ====================  OPERATORS     ===================================
 
@@ -61,7 +61,7 @@ class Grid : public LemmaObject {
         Grid ( );
 
         /// Default protected constructor.
-        ~Grid ();
+        virtual ~Grid ( );
 
         // ====================  DATA MEMBERS  ===================================
 

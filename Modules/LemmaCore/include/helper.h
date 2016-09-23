@@ -61,6 +61,8 @@ namespace Lemma {
     std::string enum2String(const HANKELTRANSFORMTYPE& Htype);
     /// convert enums to string saves repeated code useful for YAML serializing
     std::string enum2String(const FIELDCALCULATIONS& Htype);
+    /// convert enums to string saves repeated code useful for YAML serializing
+    std::string enum2String(const WINDOWTYPE& Wtype);
 
     // other way around is a template, where template argument lets us know
     // which specialisation to use.

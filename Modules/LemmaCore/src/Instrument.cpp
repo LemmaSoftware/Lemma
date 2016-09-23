@@ -23,7 +23,22 @@ namespace Lemma {
 	Instrument::Instrument( ) : LemmaObject() {
 	}
 
+    Instrument::Instrument( const YAML::Node& node ) : LemmaObject( node ) {
+	    // Fill in class specifics
+    }
+
 	Instrument::~Instrument() {
 	}
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  Instrument
+    //      Method:  Serialize
+    //--------------------------------------------------------------------------------------
+    YAML::Node  Instrument::Serialize (  ) const {
+        YAML::Node node = LemmaObject::Serialize();;
+        node.SetTag( GetName() );
+        // Fill in class specifics
+        return node;
+    }		// -----  end of method Instrument::Serialize  -----
 
 }		// -----  end of Lemma  name  -----

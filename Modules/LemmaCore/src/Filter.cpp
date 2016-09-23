@@ -15,8 +15,41 @@
 
 namespace Lemma {
 
+    std::ostream &operator << (std::ostream &stream, const Filter &ob) {
+        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        return stream;
+    }
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  Filter
+    //      Method:  Filter
+    // Description:  constructor (protected)
+    //--------------------------------------------------------------------------------------
     Filter::Filter( ) : LemmaObject( ) { }
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  Filter
+    //      Method:  ~Filter
+    // Description:  destructor (protected)
+    //--------------------------------------------------------------------------------------
     Filter::~Filter( ) { }
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  Filter
+    //      Method:  Filter
+    // Description:  DeSerializing constructor (protected)
+    //--------------------------------------------------------------------------------------
+    Filter::Filter ( const YAML::Node& node ) : LemmaObject(node) {
+    }
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  Filter
+    //      Method:  Serialize
+    //--------------------------------------------------------------------------------------
+    YAML::Node  Filter::Serialize (  ) const {
+        YAML::Node node = LemmaObject::Serialize();;
+        node.SetTag( GetName() );
+        // FILL IN CLASS SPECIFICS HERE
+        return node;
+    }		// -----  end of method Filter::Serialize  -----
 }		// -----  end of Lemma  name  -----

@@ -17,14 +17,15 @@
  * @copyright Copyright (c) 2016, Trevor Irons & Lemma Software, LLC
  */
 
-#include "CubicSplineInterpolator.h"
-#include "ASCIIParser.h"
+#include "LemmaCore"
 using namespace Lemma;
 
 int main() {
+    auto win = WindowFilter::NewSP();
+        std::cout << *win << std::endl;
     //auto Spline = CubicSplineInterpolator::NewSP();
     //auto Spline2 = CubicSplineInterpolator();
-    auto Parser = ASCIIParser::NewSP();
+    //auto Parser = ASCIIParser::NewSP();
     //ASCIIParser Parser2 = ASCIIParser();
     //    Parser2.SetCommentString( "#");
     //auto Parser3 = ASCIIParser(Parser2);

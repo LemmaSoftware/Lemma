@@ -21,9 +21,15 @@ namespace Lemma {
     }
 
 	DataReader::DataReader( ) : LemmaObject( ) {
+
+	}
+
+    DataReader::DataReader( const YAML::Node& node ) : LemmaObject( node ) {
+
 	}
 
 	DataReader::~DataReader() {
+
 	}
 
 }		// -----  end of Lemma  name  -----

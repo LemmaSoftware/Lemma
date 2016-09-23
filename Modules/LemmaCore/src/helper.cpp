@@ -150,6 +150,20 @@ std::string enum2String(const HANKELTRANSFORMTYPE& Type) {
     return t;
 }
 
+std::string enum2String( const WINDOWTYPE& Type ) {
+    std::string t;
+    switch (Type) {
+        case HAMMING:
+            return std::string("HAMMING");
+        case HANNING:
+            return  std::string("HANNING");
+        case RECTANGULAR:
+            return std::string("RECTANGULAR");
+        default:
+            throw( std::runtime_error( "In enum2String WINDOWTYPE, type not identified" ) );
+    }
+}
+
 template<>
 FREQUENCYUNITS string2Enum<FREQUENCYUNITS>( const std::string& str ) {
     if       (str ==  "HZ") return   HZ;
@@ -194,6 +208,16 @@ FIELDCOMPONENT string2Enum<FIELDCOMPONENT>( const std::string& str) {
     else if  (str == "ZCOMPONENT")      return ZCOMPONENT;
     else {
         throw std::runtime_error("string not recognized as FieldComponent");
+    }
+}
+
+template<>
+WINDOWTYPE string2Enum<WINDOWTYPE>( const std::string& str ) {
+    if      (str == "HAMMING")      return HAMMING;
+    if      (str == "HANNING")      return HANNING;
+    if      (str == "RECTANGULAR")  return RECTANGULAR;
+    else {
+        throw std::runtime_error("string not recognized as WindowType");
     }
 }
 

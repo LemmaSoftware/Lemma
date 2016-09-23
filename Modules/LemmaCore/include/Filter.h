@@ -28,13 +28,21 @@ namespace Lemma {
 
     class Filter : public LemmaObject {
 
+        friend std::ostream &operator<<(std::ostream &stream, const Filter& ob);
+
         public:
 
             // ====================  LIFECYCLE     =======================
+            /**
+             *  Uses YAML to serialize this object.
+             *  @return a YAML::Node
+             */
+            virtual YAML::Node Serialize() const;
 
             // ====================  OPERATORS     =======================
 
             // ====================  OPERATIONS    =======================
+
 
             // ====================  ACCESS        =======================
 
@@ -53,7 +61,10 @@ namespace Lemma {
             Filter ( );
 
             /// Default protected constructor.
-            ~Filter ();
+            Filter ( const YAML::Node& node );
+
+            /// Default protected constructor.
+            virtual ~Filter ();
 
             // ====================  DATA MEMBERS  =========================
 

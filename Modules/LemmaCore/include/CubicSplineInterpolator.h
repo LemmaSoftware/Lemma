@@ -60,7 +60,7 @@ struct SplineSet{
 class CubicSplineInterpolator : public LemmaObject {
 
     friend std::ostream &operator<<(std::ostream &stream,
-            const CubicSplineInterpolator &ob);
+            const CubicSplineInterpolator& ob);
 
     struct ctor_key {};
 
@@ -87,7 +87,7 @@ class CubicSplineInterpolator : public LemmaObject {
      *  Uses YAML to serialize this object.
      *  @return a YAML::Node
      */
-    YAML::Node Serialize() const;
+    virtual YAML::Node Serialize() const;
 
     /**
      *   Constructs an object from a YAML::Node.

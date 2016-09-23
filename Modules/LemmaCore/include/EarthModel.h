@@ -20,7 +20,7 @@ namespace Lemma {
 
     // ===================================================================
     //        Class:  EarthModel
-    /// \ingroup LemmaGroup
+    /// \ingroup LemmaCore
     /// \brief abstract class for Earth models
     /// \details
     // ===================================================================
@@ -112,6 +112,8 @@ namespace Lemma {
             // ====================  DATA MEMBERS  =========================
 
         private:
+
+            EarthModel(const EarthModel& ) = delete;
 
             /** ASCII string representation of the class name */
             static constexpr auto CName = "EarthModel";

@@ -38,7 +38,7 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     //       Class:  CubicSplineInterpolator
     //      Method:  CubicSplineInterpolator
-    // Description:  constructor (protected)
+    // Description:  constructor (locked with ctor_key)
     //--------------------------------------------------------------------------------------
     CubicSplineInterpolator::CubicSplineInterpolator ( const ctor_key& ) : LemmaObject( ) {
 
@@ -47,7 +47,7 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     //       Class:  CubicSplineInterpolator
     //      Method:  CubicSplineInterpolator
-    // Description:  DeSerializing constructor (protected)
+    // Description:  DeSerializing constructor (locked with ctor_key)
     //--------------------------------------------------------------------------------------
     CubicSplineInterpolator::CubicSplineInterpolator (const YAML::Node& node, const ctor_key& ) : LemmaObject(node) {
     }  // -----  end of method CubicSplineInterpolator::CubicSplineInterpolator  (constructor)  -----
@@ -58,8 +58,6 @@ namespace Lemma {
     // Description:  public constructor
     //--------------------------------------------------------------------------------------
     std::shared_ptr<CubicSplineInterpolator> CubicSplineInterpolator::NewSP() {
-        //std::shared_ptr<CubicSplineInterpolator> sp(new  CubicSplineInterpolator( CubicSplineInterpolator::ctor_key ), LemmaObjectDeleter() );
-        //return sp;
         return std::make_shared<CubicSplineInterpolator>( ctor_key() );
     }
 
@@ -82,8 +80,6 @@ namespace Lemma {
         if (node.Tag() != "CubicSplineInterpolator") {
             throw  DeSerializeTypeMismatch( "CubicSplineInterpolator", node.Tag());
         }
-        //std::shared_ptr<CubicSplineInterpolator> Object(new  CubicSplineInterpolator(node), LemmaObjectDeleter() );
-        //return Object ;
         return std::make_shared<CubicSplineInterpolator>( node, ctor_key() );
     }
 

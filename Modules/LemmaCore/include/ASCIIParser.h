@@ -33,20 +33,34 @@ class ASCIIParser : public LemmaObject {
 
     friend std::ostream &operator<<(std::ostream &stream,
             const ASCIIParser &ob);
-
+    /*
+     *  This key is used to lock the constructors
+     */
     struct ctor_key {};
 
     public:
 
     // ====================  LIFECYCLE     =======================
 
-    /** Default constructor */
+    /** Default constructor
+     * @note This method is locked
+     * @see ASCIIParser::NewSP
+     */
     explicit ASCIIParser ( const ctor_key& );
 
-    /** Constructor using YAML::Node */
+    /**
+     * DeSerializing constructor.
+     * @note This method is locked, and cannot be called directly.
+     *       The reason that the method is public is to enable the use
+     *       of make_shared whilst enforcing the use of shared_ptr,
+     *       in c++-17, this curiosity may be resolved.
+     * @see ASCIIParser::DeSerialize
+     */
     ASCIIParser ( const YAML::Node& node, const ctor_key& );
 
-    /** Default  destructor */
+    /** Default  destructor
+     *  @note This should never be called explicitly, use NewSP
+     */
     virtual ~ASCIIParser ();
 
     /**
@@ -65,7 +79,7 @@ class ASCIIParser : public LemmaObject {
      *  Uses YAML to serialize this object.
      *  @return a YAML::Node
      */
-    YAML::Node Serialize() const;
+    virtual YAML::Node Serialize() const;
 
     // ====================  OPERATORS     =======================
 
@@ -112,7 +126,7 @@ class ASCIIParser : public LemmaObject {
      */
     void SetCommentString( const std::string& key );
 
-    /** Sets the buffer size. This affects the maximum number of column in a line. Defaults
+    /** Sets the buffer size. This affects the maximum number of columns in a line. Defaults
      *  is 255.
      *  @param[in] BufferSize is the size of the buffer to use
      */

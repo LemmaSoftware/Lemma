@@ -16,12 +16,6 @@
 #include "Filter.h"
 
 namespace Lemma {
-    /** Types of filter window that are supported.
-     */
-    enum WINDOWTYPE { HAMMING, /*!< A hamming window */
-                      HANNING, /*!< A hanning window */
-                      RECTANGULAR /*!< Rectangular window */
-                    };
 
     // ===================================================================
     //  Class:  WindowFilter
@@ -34,14 +28,38 @@ namespace Lemma {
     // ===================================================================
     class WindowFilter : public Filter {
 
+        friend std::ostream &operator<<(std::ostream &stream, const WindowFilter& ob);
+
+        struct ctor_key {};
+
         public:
 
             // ====================  LIFECYCLE     =======================
 
-           /**
-            *  Factory method for generating concrete class.
-            *  @return a std::shared_ptr of type WindowFilter
-            */
+            /** Default constructor, inaccessible use NewSP  */
+            explicit WindowFilter ( const ctor_key& );
+
+            /** DeSerializing constructor, usees factory DeSerialize  method, inaccessible use DeSerialize*/
+            WindowFilter ( const YAML::Node& node, const ctor_key& );
+
+            /** Default constructor. */
+            virtual ~WindowFilter ( );
+
+            /**
+             *  Uses YAML to serialize this object.
+             *  @return a YAML::Node
+             */
+            YAML::Node Serialize() const;
+
+            /**
+             *   Constructs an object from a YAML::Node.
+             */
+            static std::shared_ptr< WindowFilter > DeSerialize(const YAML::Node& node);
+
+            /**
+             *  Factory method for generating concrete class.
+             *  @return a std::shared_ptr of type WindowFilter
+             */
             static std::shared_ptr< WindowFilter > NewSP();
 
             // ====================  OPERATORS     =======================
@@ -86,12 +104,8 @@ namespace Lemma {
 
             // ====================  LIFECYCLE     =======================
 
-            /// Default protected constructor.
-            WindowFilter ( );
 
-            /// Default protected constructor.
-            ~WindowFilter ( );
-
+        private:
             // ====================  DATA MEMBERS  =========================
 
             /// Width of the window
@@ -115,10 +129,10 @@ namespace Lemma {
             /// The type of filter to use
             WINDOWTYPE  Type;
 
-        private:
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "WindowFilter";
 
-        /** ASCII string representation of the class name */
-        static constexpr auto CName = "WindowFilter";
+            WindowFilter ( const WindowFilter& ) = delete;
 
     }; // -----  end of class  WindowFilter  -----
 

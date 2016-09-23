@@ -40,7 +40,7 @@ class DataReader : public LemmaObject {
         // ====================  OPERATIONS    =======================
 
         // ====================  ACCESS        =======================
-        virtual Data* GetData()=0;
+        virtual std::shared_ptr< Data > GetData()=0;
 
         // ====================  INQUIRY       =======================
         /** Returns the name of the underlying class, similiar to Python's type */
@@ -56,6 +56,9 @@ class DataReader : public LemmaObject {
         DataReader ( );
 
         /// Default protected constructor.
+        DataReader ( const YAML::Node& node );
+
+        /// Default protected constructor.
         ~DataReader ( );
 
         // ====================  DATA MEMBERS  =========================
@@ -64,6 +67,8 @@ class DataReader : public LemmaObject {
 
         /** ASCII string representation of the class name */
         static constexpr auto CName = "DataReader";
+
+        DataReader( const DataReader& ) = delete;
 
 }; // -----  end of class  DataReader  -----
 

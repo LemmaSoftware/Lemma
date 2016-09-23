@@ -317,6 +317,14 @@
         */
         enum FIELDCALCULATIONS {E, H, BOTH};
 
+        /** Windowing function type
+         */
+        enum WINDOWTYPE { HAMMING, /*!< A hamming window */
+                          HANNING, /*!< A hanning window */
+                          RECTANGULAR /*!< Rectangular window */
+        };
+
+
     }
 
 #endif // __Lemma_H

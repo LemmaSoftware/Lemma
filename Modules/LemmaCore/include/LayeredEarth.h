@@ -86,7 +86,6 @@ namespace Lemma {
             /** YAML Serializing method
              */
             YAML::Node Serialize() const;
-            //static LayeredEarth* DeSerialize(const YAML::Node& node);
 
             /** Returns the name of the underlying class, similiar to Python's type */
             virtual inline std::string GetName() const {
@@ -109,8 +108,12 @@ namespace Lemma {
 			// ====================  DATA MEMBERS  ===========================
 
         private:
+
             /** ASCII string representation of the class name */
             static constexpr auto CName = "LayeredEarth";
+
+            /** no copy */
+            LayeredEarth ( const LayeredEarth& ) = delete;
 
 			/** Number of layers in the model, including the air layer,
 			 * and counting from 0

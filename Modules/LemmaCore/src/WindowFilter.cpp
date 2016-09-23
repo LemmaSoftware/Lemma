@@ -15,20 +15,87 @@
 
 namespace Lemma {
 
-    // ====================  LIFECYCLE     =======================
+    // ====================  FRIEND METHODS  =====================
 
-    WindowFilter::WindowFilter( ) : Filter( ),
-        Width(0), SamplingRate(0), Bandwidth(0), Coefficients(),
-        Type(RECTANGULAR) {}
-
-    std::shared_ptr< WindowFilter > WindowFilter::NewSP() {
-        std::shared_ptr<WindowFilter> sp(new  WindowFilter( ), LemmaObjectDeleter() );
-        return sp;
+    std::ostream &operator << (std::ostream &stream, const WindowFilter &ob) {
+        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        return stream;
     }
 
+    // ====================  LIFECYCLE     =======================
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  WindowFilter
+    //      Method:  WindowFilter
+    // Description:  constructor (locked with ctor_key)
+    //--------------------------------------------------------------------------------------
+    WindowFilter::WindowFilter( const ctor_key& ) : Filter( ),
+        Width(0), SamplingRate(0), Bandwidth(0), Coefficients(), Type(RECTANGULAR)
+    {
+    }   // -----  end of method WindowFilter::WindowFilter  (constructor)  -----
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  WindowFilter
+    //      Method:  WindowFilter
+    // Description:  DeSerializing constructor (locked with ctor_key)
+    //--------------------------------------------------------------------------------------
+    WindowFilter::WindowFilter( const YAML::Node& node, const ctor_key& ) : Filter( node ),
+        Width(0), SamplingRate(0), Bandwidth(0), Coefficients(), Type(RECTANGULAR)
+    {
+        Width = node["Width"].as<int>( );
+        Nt = node["Nt"].as<int>( );
+        Nw = node["Nw"].as<int>( );
+        SamplingRate = node["SamplingRate"].as<Real>();
+        Bandwidth = node["Bandwidth"].as<Real>();
+        Coefficients = node["Coefficients"].as<VectorXr>();
+        Type = string2Enum<WINDOWTYPE>( node["WINDOWTYPE"].as<std::string>() );
+    } // -----  end of method WindowFilter::WindowFilter  (constructor)  -----
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  WindowFilter
+    //      Method:  NewSP()
+    // Description:  public constructor
+    //--------------------------------------------------------------------------------------
+    std::shared_ptr< WindowFilter > WindowFilter::NewSP() {
+        return std::make_shared< WindowFilter >( ctor_key() );
+    }
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  WindowFilter
+    //      Method:  ~WindowFilter
+    // Description:  destructor (protected)
+    //--------------------------------------------------------------------------------------
     WindowFilter::~WindowFilter() {
     }
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  WindowFilter
+    //      Method:  Serialize
+    //--------------------------------------------------------------------------------------
+    YAML::Node  WindowFilter::Serialize (  ) const {
+        YAML::Node node = Filter::Serialize();;
+        node.SetTag( GetName() );
+        // FILL IN CLASS SPECIFICS HERE
+        node["Width"] = Width;
+        node["Nt"] = Nt;
+        node["Nw"] = Nw;
+        node["SamplingRate"] = SamplingRate;
+        node["Bandwidth"] = Bandwidth;
+        node["Coefficients"] = Coefficients;
+        node["WINDOWTYPE"] = enum2String(Type);
+        return node;
+    }
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  WindowFilter
+    //      Method:  DeSerialize
+    //--------------------------------------------------------------------------------------
+    std::shared_ptr<WindowFilter> WindowFilter::DeSerialize ( const YAML::Node& node  ) {
+        if (node.Tag() != "WindowFilter") {
+            throw  DeSerializeTypeMismatch( "WindowFilter", node.Tag());
+        }
+        return std::make_shared<WindowFilter>( node, ctor_key() );
+    }
 
     // ====================  OPERATIONS    =======================
 

@@ -129,22 +129,56 @@ class |?CLASSNAME:c| : public |BASECLASS:c| {
 
 	friend std::ostream &operator<<(std::ostream &stream, const |CLASSNAME| &ob);
 
+    /*
+     *  This key is used to lock the constructor.
+     */
+    struct ctor_key {};
+
 	public:
 
 	    // ====================  LIFECYCLE     =======================
+
+        /**
+         * Default constructor.
+         * @note This method is locked, and cannot be called directly.
+         *       The reason that the method is public is to enable the use
+         *       of make_shared whilst enforcing the use of shared_ptr,
+         *       in c++-17, this curiosity may be resolved.
+         * @see |CLASSNAME|::NewSP
+         */
+        explicit |CLASSNAME| ( const ctor_key& );
+
+        /**
+         * DeSerializing constructor.
+         * @note This method is locked, and cannot be called directly.
+         *       The reason that the method is public is to enable the use
+         *       of make_shared whilst enforcing the use of shared_ptr,
+         *       in c++-17, this curiosity may be resolved.
+         * @see |CLASSNAME|::DeSerialize
+         */
+        |CLASSNAME| (const YAML::Node& node);
+
+        /**
+         * Default destructor.
+         * @note This method should never be called due to the mandated
+         *       use of smart pointers. It is necessary to keep the method
+         *       public in order to allow for the use of the more efficeint
+         *       make_shared constructor.
+         */
+        virtual ~|CLASSNAME| ();
+
+        /**
+         *  Uses YAML to serialize this object.
+         *  @return a YAML::Node
+         *  @see |CLASSNAME|::DeSerialize
+         */
+        virtual YAML::Node Serialize() const;
 
         /*
          *  Factory method for generating concrete class.
          *  @return a std::shared_ptr of type |CLASSNAME|
          */
 	    static std::shared_ptr< |CLASSNAME| > NewSP();
-
-        /**
-         *  Uses YAML to serialize this object.
-         *  @return a YAML::Node
-         *   @see |CLASSNAME|::DeSerialize
-         */
-        YAML::Node Serialize() const;
 
         /**
          *   Constructs an |CLASSNAME| object from a YAML::Node.
@@ -160,30 +194,16 @@ class |?CLASSNAME:c| : public |BASECLASS:c| {
 
         // ====================  INQUIRY       =======================
 
-
-
     protected:
 
         // ====================  LIFECYCLE     =======================
 
-        /**
-         * Default protected constructor, use NewSP methods to construct
-         * @see |CLASSNAME|::NewSP
-         */
-        |CLASSNAME| (const std::string& name);
-
-        /**
-         * Protected DeDerializing constructor, use factory DeSerialize  method.
-         * @see |CLASSNAME|::DeSerialize
-         */
-        |CLASSNAME| (const YAML::Node& node);
-
-        /** Default protected destructor, use smart pointers (std::shared_ptr) */
-        ~|CLASSNAME| ();
-
-	// ====================  DATA MEMBERS  =========================
+    	// ====================  DATA MEMBERS  =========================
 
     private:
+
+        /** ASCII string representation of the class name */
+        static constexpr auto CName = "|CLASSNAME|";
 
 }; // -----  end of class  |CLASSNAME|  -----
 }  // -----  end of namespace Lemma ----

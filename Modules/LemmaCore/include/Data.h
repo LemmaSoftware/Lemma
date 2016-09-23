@@ -36,12 +36,10 @@ namespace Lemma {
 
             // ====================  LIFECYCLE     =======================
 
-            /** Copies the *structure* of this class to a new object and
-             * returns a pointer to this object. Memory management is
-             * the responsibility of the receiver!. The data values are
-             * not copied.
+            /**
+             * Returns a deep copy
              */
-            virtual Data* Clone()=0;
+            virtual std::shared_ptr<Data> DeepCopy()=0;
 
             // ====================  OPERATORS     =======================
 
@@ -74,8 +72,11 @@ namespace Lemma {
             /** Default protected constructor. */
             Data (  );
 
+            /** Deserializing contructor */
+            Data ( const YAML::Node& node );
+
             /** Default protected constructor. */
-            ~Data ();
+            ~Data ( );
 
             // ====================  DATA MEMBERS  =========================
 
@@ -83,6 +84,8 @@ namespace Lemma {
 
             /** ASCII string representation of the class name */
             static constexpr auto CName = "Data";
+
+            Data ( const Data& ) = delete;
 
     }; // -----  end of class  Data  -----
 

@@ -50,7 +50,7 @@ namespace Lemma {
              *  Uses YAML to serialize this object.
              *  @return a YAML::Node
              */
-            YAML::Node Serialize() const;
+            virtual YAML::Node Serialize() const;
 
             /**
              *   Constructs an object from a YAML::Node.

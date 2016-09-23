@@ -33,8 +33,7 @@ namespace Lemma {
 	LayeredEarth::~LayeredEarth() {
 	}
 
-    LayeredEarth::LayeredEarth(const YAML::Node& node) : EarthModel(node)
-    {
+    LayeredEarth::LayeredEarth(const YAML::Node& node) : EarthModel(node) {
         NumberOfLayers = node["NumberOfLayers"].as<int>();
         NumberOfInterfaces = node["NumberOfInterfaces"].as<int>();
         LayerThickness = node["LayerThickness"].as<VectorXr>();

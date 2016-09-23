@@ -26,14 +26,13 @@ class MyTestSuite : public CxxTest::TestSuite
 {
     public:
 
-//     void testASCIIParser( void )
-//     {
-//         auto Obj = ASCIIParser::NewSP();
-//         YAML::Node node = Obj->Serialize();
-//         auto Obj2 = ASCIIParser::DeSerialize(node);
-//         TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
-//     }
-
+    void testASCIIParser( void )
+    {
+        auto Obj = ASCIIParser::NewSP();
+        YAML::Node node = Obj->Serialize();
+        auto Obj2 = ASCIIParser::DeSerialize(node);
+        TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
+    }
 
     void testCubicSplineInterpolator(void)
     {
@@ -51,6 +50,14 @@ class MyTestSuite : public CxxTest::TestSuite
         TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
     }
 
+    void testWindowFilter( void )
+    {
+        auto Obj = WindowFilter::NewSP();
+        YAML::Node node = Obj->Serialize();
+        auto Obj2 = WindowFilter::DeSerialize(node);
+        TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
+    }
+
 // /*
 //     void testRectilinearGridReader( void )
 //     {
@@ -64,11 +71,7 @@ class MyTestSuite : public CxxTest::TestSuite
 //         TS_ASSERT_EQUALS( Obj->GetName(), std::string("RectilinearGridVTKExporter") );
 //     }
 //
-//     void testWindowFilter( void )
-//     {
-//         auto Obj = WindowFilter::NewSP();
-//         TS_ASSERT_EQUALS( Obj->GetName(), std::string("WindowFilter") );
-//     }
+
 // */
 
 };

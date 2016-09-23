@@ -1,21 +1,24 @@
-"===================================================================================
-"
-"         FILE:  c.vim
-"  DESCRIPTION:  syntax file
-"                enable syntax based folding
-"                part of the c-support plugin
-"
-"       AUTHOR:  Trevor Irons
-"        EMAIL:  tirons@mines.edu
-"      COMPANY:  FH Südwestfalen, Iserlohn
-"      VERSION:  1.0
-"      CREATED:  11.03.2006
-"     REVISION:  ---
-"===================================================================================
-"
-" fold C blocks
-"
-syn region cBlock start="{" end="}" transparent fold
-set foldmethod=syntax
-set foldlevel=999
+"highlight cComment ctermfg=Green guifg=Green
+highlight cType ctermfg=Green guifg=Green
+syn keyword cType Real Complex VectorXr VectorXcr Vector3r Vector3Xr VectorXi Vector3cr Vector3Xcr MatrixXr MatrixXi MatrixXcr shared_ptr make_shared
 
+highlight constType ctermfg=Red guifg=Red
+syn keyword constType  PI EPSILON0 MU0 QPI  
+
+highlight eType ctermfg=Magenta guifg=Magenta
+syn keyword eType  MAGUNITS  TEMPUNITS  TIMEUNITS FREQUENCYUNITS FEMCOILORIENTATION ORIENTATION FIELDTYPE FIELDCOMPONENT SPATIALCOORDINANT HANKELTRANSFORMTYPE FIELDCALCULATIONS WINDOWTYPE 
+
+highlight eeType ctermfg=Cyan guifg=Cyan
+syn keyword eeType  TESLA NANOTESLA GAUSS CELCIUS KELVIN SEC MILLISEC MICROSEC NANOSEC PICOSEC HZ KHZ MHZ GHZ COAXIAL COPLANAR HFIELDREAL HFIELDIMAG EFIELDREAL EFIELDIMAG XCOMPONENT YCOMPONENT ZCOMPONENT XCOORD YCOORD ZCOORD X Y Z NX  NY  NZ ANDERSON801 CHAVE FHTKEY201 FHTKEY101 FHTKEY51 QWEKEY E H BOTH HAMMING HANNING RECTANGULAR
+
+" Namespaces
+highlight nspace ctermfg=Red guifg=Red
+syn keyword nspace Lemma YAML Eigen 
+
+" Lemma types
+highlight leType ctermfg=Yellow guifg=Yellow
+syn keyword leType HankelTransform KernelEm1D KernelEM1DManager DipoleSource EarthModel LayeredEarth LayeredEarthEM TEMSurvey TEMSurveyLine TEMSurveyLineRecord TEMInductiveReceiver PolygonalWireAntenna TEMTransmitter TEMReceiver Instrument InstrumentTem LemmaObject ReceiverPoints DCIPElectrode TEMSurveyData TEMSurveyLineData TEMSurveyLineRecordData  ASCIIParser CubicSplineInterpolator RectilinearGrid RectilinearGridReader RectilinearGridVTKExporter Filter WindowFilter DEMParticle DEMGrain Data DataReader
+
+" Deprecated Lemma Types
+highlight dleType ctermfg=Blue guifg=Blue 
+syn keyword dleType  ReferenceCountedObject 

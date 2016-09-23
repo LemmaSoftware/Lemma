@@ -23,6 +23,9 @@ namespace Lemma {
 	Data::Data(  ) : LemmaObject( ) {
 	}
 
+    Data::Data( const YAML::Node& node ) : LemmaObject( node ) {
+	}
+
 
 	Data::~Data() {
 	}

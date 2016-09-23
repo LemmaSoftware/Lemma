@@ -33,6 +33,12 @@ namespace Lemma {
 
 			// ====================  LIFECYCLE     ===========================
 
+            /**
+             *  Uses YAML to serialize this object.
+             *  @return a YAML::Node
+             */
+            YAML::Node Serialize() const;
+
 			// ====================  OPERATORS     ===========================
 
 			// ====================  OPERATIONS    ===========================
@@ -52,6 +58,9 @@ namespace Lemma {
 		protected:
 
 			// ====================  LIFECYCLE     ===========================
+
+            /// Default protected constructor.
+			Instrument ( const YAML::Node& node );
 
 			/// Default protected constructor.
 			Instrument ( );

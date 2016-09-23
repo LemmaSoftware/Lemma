@@ -33,11 +33,9 @@ namespace Lemma {
 	}
 
     YAML::Node Grid::Serialize() const {
-
         YAML::Node node = LemmaObject::Serialize();
         node.SetTag( this->GetName() );
         return node;
-
     }
 
 }

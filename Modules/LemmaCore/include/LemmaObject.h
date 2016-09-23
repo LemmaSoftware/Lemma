@@ -44,28 +44,11 @@ class LemmaObject {
     friend class LemmaObjectDeleter;
 
     public:
-
-        // ====================  LIFECYCLE     ==============================
-
         // Needed because many derived classes have Eigen vectors as members,
         // causing alignment issues when vectorisation is enabled.
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-        // ====================  OPERATORS     ==============================
-
-        // ====================  OPERATIONS    ==============================
-
-        // ====================  ACCESS        ==============================
-
-        // ====================  INQUIRY       ==============================
-
-        /** Returns the name of the underlying class; Run-time type information (RTTI). This approach
-            Was chosen over typeid due to name mangling among various compilers, and the need for consistency
-            in Serialized objects.
-         */
-        virtual inline std::string GetName() const {
-            return this->CName;
-        }
+        // ====================  LIFECYCLE     ==============================
 
         /**
          *  Uses YAML to serialize this object.
@@ -85,6 +68,22 @@ class LemmaObject {
             node["Serialized"] = std::ctime(&now);
             return node;
         };
+
+        // ====================  OPERATORS     ==============================
+
+        // ====================  OPERATIONS    ==============================
+
+        // ====================  ACCESS        ==============================
+
+        // ====================  INQUIRY       ==============================
+
+        /** Returns the name of the underlying class; Run-time type information (RTTI). This approach
+            Was chosen over typeid due to name mangling among various compilers, and the need for consistency
+            in Serialized objects.
+         */
+        virtual inline std::string GetName() const {
+            return this->CName;
+        }
 
     protected:
 
