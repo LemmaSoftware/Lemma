@@ -14,31 +14,46 @@ namespace Lemma{
 \section MemoryManagement Memory Management
 
 \subsection Reference Reference counting and memory management
-Lemma makes extensive use of reference counting. We do this for a variety of 
-reasons. 
-- It is not uncommon for multiple objects to have the same instantiations 
-of an object as members.
+
+\note Previous versions of Lemma used an internal reference counting mechanism, what 
+	is described below represents a significant change in the structure, philosophy, 
+	and internals of Lemma. To a large extent this has been possible due to changes 
+	in the C++ language specifications since C++-0x. These changes should improve the 
+	readability of Lemma code, decrease errors, improve performance, and reduce code length.
+	The C++-17 standard promises to close a remaining oddities in the Lemma API, discussed below. 
+
+Lemma relies heavily on smart pointer which utilize internal reference counting for several reasons: 
+- It is not uncommon for multiple objects to have the same instantiations of an object as members.
 - Making copies of each object is not a viable option because the objects may be large, and they must all update simultaneously.
 - Without reference counting it is very easy to leave dangling pointers.
 - It is much easier to write code, as local copies of objects can be deleted 
 as soon as they are no longer used within that context. The memory will not be 
 freed and the object persists as long as other objects still reference it.   
 
-The base class for all Lemma objects is ReferenceCountedObject. 
-The interface requires that all derived, non-abstract classes have <B>New</B> and <B>Delete</B> methods. So that objects may be created and destoyed with the 
-following syntax.
+The C++-0x standard introduced std::shared_ptr as a widely available, standard-compliant, high performance option to use 
+in instances like this. The other smart pointer types specifically weak_ptr and unique_ptr are less handy in our application. As such, 
+all Lemma classes expose a factory method returning a shared_ptr as the only publicly available means by which to construct objects. 
+Internally, in cases where higher performance can be realized, manual memory management is employed.  
+
+The base class for all Lemma objects is LemmaObject. 
+The interface requires that all derived, non-abstract classes have <B>NewSP</B> and <B>DeSerialize</B> methods. These methods are the only 
+mechanisms by which you should be creating Lemma objects. 
 
 \code 
-DerivedClass* Object = DerivedClass::New();
-Object->Delete();
+std::shared_ptr< DerivedClass > Object = DerivedClass::NewSP();
+// Or alternatively 
+auto Object2 = DerivedClass::NewSP();
 \endcode
 
-\warning It is important to note that the default constructors and destructors are protected so the following code is <B>NOT</B> valid.
+\warning It is important to note that the default constructors and destructors are inaccessible so the following code is <B>NOT</B> valid.
 \code 
 DerivedClass* Object = new DerivedClass;
 delete Object; 
 \endcode
-The reasons for this will hopefully be clear soon.
+Interestingly, the default constructors and destructors <B>are</B> public, however they are locked using a key struct 
+<a href=http://stackoverflow.com/questions/8147027/how-do-i-call-stdmake-shared-on-a-class-with-only-protected-or-private-const/8147326#8147326> (link)</a>. 
+The reason that this is necessary, is this arrangement allows for the use of std::make_shared to construct objects. The performance increase of this was 
+chosen over the higher overhead associated with making the default methods protected. 
 
 Many Lemma classes have other Lemma classes as data members. Classes may
 share these members, and depend on them being updated simultaneously. So 

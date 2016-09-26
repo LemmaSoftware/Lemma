@@ -21,33 +21,32 @@ the prerequisites, but on many platforms this is easy.
 - \ref Configuring
 - \ref Building
 
+\section OptionalPrerequisites Optional Prerequisites
+- VTK - The Visualization ToolKit is a powerful data visualization framework. This is
+  an optional dependency, but some functionality will be missing without it. Any
+  version after 6.0 is fine. VTK is available under a BSD license from <http://vtk.org>
+  Again--on Linux-- most package managers offer VTK. Compiling from source is not
+  terribly difficult, but requires installing CMake as well. 
+
+\note Some Lemma modules may impose additional (optional or mandatory) prerequisites, see the 
+      module documentation.  
+
 \section Prerequisites Prerequisites
-
-
-
-You will need to acquire the following free packages:
-- SCons - SCons is a make replacement that is written in Python. It is easily
-  configurable and directly controls the build process. It is not a Makefile
-  intermediary like some similar applications. It is freely available at
-  <http://scons.org>. On Linux, your package manager very likely provides this. On
-  Windows it is slightly more complicated. But, hey, Windows is easy... right? That's why 
-  you use it :)  The process is well documented on the SCons
-  website. You might guess that we aren't huge Windows fans.
-- Eigen3 - Eigen is a header-only linear algebra template library. It is made
-  available under the Gnu Lesser Public License. It is available at
-  <http://eigen.tuxfamily.org>. Please note that Lemma uses Version 3 of the Library.
+Lemma uses CMake to manage the build process (https://cmake.org). CMake is free software 
+that is easy to install on about any operating system.  
 
     \subsection Dependencies
+    Hard dependencies are 
+
     The only dependencies are the Eigen linear algebra Library v3, a
     C++ compiler and scons.
-    (Currently a fortran compiler is needed too, see above)
 
     The following compilers are fully supported and tested: gnu, mingw,
     and intelc. Several routines are parallelised for shared memory platforms
     using OpenMP. Any of the above compilers is able to be used with OpenMP.
     Microsoft's Visual C++ compiler will likely be supported for stable
-    releases, but is not actively tested. (Also the current FORTRAN compiler
-    dependency limits this compiler as well.) Eigen extensively uses template
+    releases, but is not actively tested. 
+    Eigen extensively uses template
     meta programming, the Borland compiler has been shown to be subpar at
     optimizing this type of code and will likely never be supported actively.
     A new compiler clang, is being developed and may prove to be promising as
@@ -63,19 +62,11 @@ You will need to acquire the following free packages:
     be included in stable releases of Lemma.
     Scons is a make replacement built on top of Python, and is also free.
 
-\section OptionalPrerequisites Optional Prerequisites
-- VTK - The Visualization ToolKit is a powerful data visualization framework. This is
-  an optional dependency, but some functionality will be missing without it. Any
-  version after 5.4 is fine. VTK is available under a BSD license from <http://vtk.org>
-  Again-- on Linux-- most package managers offer VTK. Compiling from source is not
-  terribly difficult, but requires installing CMake as well. Strangely (wink wink) this is 
-  harder under Windows.
-- Qt - Limited GUI support is provided leveraging the Qt framework. You will need to have 
-  the development version of Qt 4 installed to use this. 
-- Boost - Several classes use Boost. Lemma ships with a minimalist part of Boost and should compile 
-	without it. However, if you are getting Boost errors while compiling, install the development version 
-	 of boost. Note that Ubuntu ships with a very old Boost that has caused some issues. 
-	Also, the Python wrapper requires boost.python and is not shipped with Lemma. 
+- Eigen3 - Eigen is a header-only linear algebra template library. It is made
+  available under the Gnu Lesser Public License. It is available at
+  <http://eigen.tuxfamily.org>. Please note that Lemma uses Version 3 of the Library.
+
+
 
 \section Downloading Acquiring the source
 Lemma is currently available from svn checkout only. Note that while Lemma is still in Beta only
