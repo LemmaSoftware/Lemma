@@ -33,10 +33,15 @@ approach we have taken. Rather than provide programs performing specific tasks L
 flexible application programming interface (API) which can be though of as building blocks used 
 to construct programs or projects.   
 
-\subsection API An API? What's that?
+\subsection Design Our design philosophy 
+Software should be flexible, intuitive, and simple. Many times, less is more and offering 
+Note that simple is not necessarily synonymous with easy, although we do strive to make Lemma 
+as easy to use as possible without sacrificing our other goals.    
+
+\subsubsection API An API? What's that?
 Lemma is not a program. It's an API, or an Application Programming Interface.
 This offers a lot of advantages over traditional programs. 
-- First, its flexible. Its easy to put together components to do exactly what 
+- First, its flexible. Its easy to put together components to do exactly what  
   you want and nothing more. 
 - Second, its extendible. If we have a class that does almost what you want, but is missing 
   something, you can just extend a class. 

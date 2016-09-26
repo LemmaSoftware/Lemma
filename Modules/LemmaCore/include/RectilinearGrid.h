@@ -35,6 +35,11 @@ namespace Lemma {
         friend std::ostream &operator<<(std::ostream &stream,
 			const RectilinearGrid &ob);
 
+        /*
+         *  This key is used to lock the constructors
+         */
+        struct ctor_key {};
+
         public:
 
             // ====================  LIFECYCLE     =======================
