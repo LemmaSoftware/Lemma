@@ -71,7 +71,7 @@ class CubicSplineInterpolator : public LemmaObject {
     /** Default constructor */
     explicit CubicSplineInterpolator ( const ctor_key& );
 
-    /** DeSerializing constructor, usees factory DeSerialize  method*/
+    /** DeSerializing constructor, locked use factory DeSerialize  method*/
     CubicSplineInterpolator ( const YAML::Node& node, const ctor_key& );
 
     /** Destructor use smart pointers to auto delete */
@@ -189,4 +189,4 @@ class CubicSplineInterpolator : public LemmaObject {
 #endif   // ----- #ifndef CUBICSPLINEINTERPOLATOR_INC  -----
 
 /* vim: set tabstop=4 expandtab: */
-/* vim: set filetype=cpp: */
+/* vim: set filetype=cpp syntax=cpp.doxygen: */

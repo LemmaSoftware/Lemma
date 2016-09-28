@@ -56,7 +56,7 @@ class ASCIIParser : public LemmaObject {
      *       in c++-17, this curiosity may be resolved.
      * @see ASCIIParser::DeSerialize
      */
-    ASCIIParser ( const YAML::Node& node, const ctor_key& );
+    explicit ASCIIParser ( const YAML::Node& node, const ctor_key& );
 
     /** Default  destructor
      *  @note This should never be called explicitly, use NewSP
@@ -170,3 +170,6 @@ class ASCIIParser : public LemmaObject {
 }		// -----  end of Lemma  name  -----
 
 #endif   // ----- #ifndef ASCIIPARSER_INC  -----
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp syntax=cpp.doxygen: */

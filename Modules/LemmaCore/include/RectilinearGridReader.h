@@ -36,15 +36,53 @@ namespace Lemma {
         friend std::ostream &operator<<(std::ostream &stream,
                 const RectilinearGridReader &ob);
 
+        /*
+         *  This key is used to lock the constructors
+         */
+        struct ctor_key {};
+
         public:
 
             // ====================  LIFECYCLE     =======================
+
+            /** Default constructor
+             * @note This method is locked
+             * @see NewSP
+             */
+            explicit RectilinearGridReader ( const ctor_key& );
+
+            /**
+             * DeSerializing constructor.
+             * @note This method is locked, and cannot be called directly.
+             *       The reason that the method is public is to enable the use
+             *       of make_shared whilst enforcing the use of shared_ptr,
+             *       in c++-17, this curiosity may be resolved.
+             * @see DeSerialize
+             */
+            explicit RectilinearGridReader ( const YAML::Node& node, const ctor_key& );
+
+            /** Default destructor.
+             *  @note This should never be called explicitly, use NewSP
+             */
+            ~RectilinearGridReader ( );
 
             /**
              *  Factory method for generating concrete class.
              *  @return a std::shared_ptr of type RectilinearGridReader
              */
             static std::shared_ptr< RectilinearGridReader > NewSP();
+
+            /**
+             *  Constructs an object from a YAML serialization
+             *  @return a std::shared_ptr of type RectilinearGridReader
+             */
+            static std::shared_ptr< RectilinearGridReader >  DeSerialize( const YAML::Node& node );
+
+            /**
+             *  Uses YAML to serialize this object.
+             *  @return a YAML::Node
+             */
+            virtual YAML::Node Serialize() const;
 
             // ====================  OPERATORS     =======================
 
@@ -84,12 +122,6 @@ namespace Lemma {
 
             // ====================  LIFECYCLE     =======================
 
-            /** Default protected constructor, use New */
-            RectilinearGridReader ( );
-
-            /** Default protected constructor, use Delete */
-            ~RectilinearGridReader ();
-
         private:
 
             // ====================  DATA MEMBERS  =========================
@@ -108,3 +140,7 @@ namespace Lemma {
 }		// -----  end of Lemma  name  -----
 
 #endif   // ----- #ifndef RECTILINEARGRIDREADER_INC  -----
+
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp syntax=cpp.doxygen: */

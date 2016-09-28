@@ -26,6 +26,16 @@ class MyTestSuite : public CxxTest::TestSuite
 {
     public:
 
+//     void test_trace(void)
+//     {
+//         TS_TRACE("This is a test tracing message.");
+//     }
+//
+//     void test_warn(void)
+//     {
+//         TS_WARN("This is a test warning message.");
+//     }
+
     void testASCIIParser( void )
     {
         auto Obj = ASCIIParser::NewSP();
@@ -50,6 +60,14 @@ class MyTestSuite : public CxxTest::TestSuite
         TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
     }
 
+    void testRectilinearGridReader( void )
+    {
+        auto Obj = RectilinearGridReader::NewSP();
+        YAML::Node node = Obj->Serialize();
+        auto Obj2 = RectilinearGridReader::DeSerialize(node);
+        TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
+    }
+
     void testWindowFilter( void )
     {
         auto Obj = WindowFilter::NewSP();
@@ -58,21 +76,11 @@ class MyTestSuite : public CxxTest::TestSuite
         TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
     }
 
-// /*
-//     void testRectilinearGridReader( void )
-//     {
-//         auto Obj = RectilinearGridReader::NewSP();
-//         TS_ASSERT_EQUALS( Obj->GetName(), std::string("RectilinearGridReader") );
-//     }
-//
 //     void testRectilinearGridVTKExporter( void )
 //     {
 //         auto Obj = RectilinearGridVTKExporter::NewSP();
 //         TS_ASSERT_EQUALS( Obj->GetName(), std::string("RectilinearGridVTKExporter") );
 //     }
-//
-
-// */
 
 };
 

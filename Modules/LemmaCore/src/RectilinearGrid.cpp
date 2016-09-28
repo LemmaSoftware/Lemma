@@ -22,11 +22,11 @@ namespace Lemma {
 
     // ====================  LIFECYCLE     =======================
 
-    RectilinearGrid::RectilinearGrid( ) : Grid( ), nx(0), ny(0), nz(0) {
+    RectilinearGrid::RectilinearGrid( const ctor_key& ) : Grid( ), nx(0), ny(0), nz(0) {
 
     }
 
-    RectilinearGrid::RectilinearGrid( const YAML::Node& node ) : Grid(node) {
+    RectilinearGrid::RectilinearGrid( const YAML::Node& node, const ctor_key& ) : Grid(node) {
 
         nx = node["nx"].as<int>( );
         ny = node["ny"].as<int>( );
@@ -47,8 +47,7 @@ namespace Lemma {
     }
 
     std::shared_ptr< RectilinearGrid > RectilinearGrid::NewSP() {
-        std::shared_ptr<RectilinearGrid> sp(new  RectilinearGrid( ), LemmaObjectDeleter() );
-        return sp;
+        return std::make_shared< RectilinearGrid > ( ctor_key() );
     }
 
     YAML::Node RectilinearGrid::Serialize() const {
@@ -79,8 +78,7 @@ namespace Lemma {
         if (node.Tag() != "RectilinearGrid") {
             throw  DeSerializeTypeMismatch( "RectilinearGrid", node.Tag());
         }
-        std::shared_ptr<RectilinearGrid> Object(new  RectilinearGrid(node), LemmaObjectDeleter() );
-        return Object ;
+        return std::make_shared< RectilinearGrid > ( node, ctor_key() );
     }
 
 
@@ -212,4 +210,4 @@ namespace Lemma {
 }		// -----  end of Lemma  name  -----
 
 /* vim: set tabstop=4 expandtab: */
-/* vim: set filetype=cpp: */
+/* vim: set filetype=cpp: syntax=cpp.doxygen*/

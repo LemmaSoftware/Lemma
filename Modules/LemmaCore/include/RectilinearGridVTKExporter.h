@@ -45,21 +45,37 @@ class RectilinearGridVTKExporter : public LemmaObject {
     friend std::ostream &operator<<(std::ostream &stream,
             const RectilinearGridVTKExporter &ob);
 
+    struct ctor_key {};
+
     public:
 
     // ====================  LIFECYCLE     =======================
-
-    /**
-     * @copybrief LemmaObject::New()
-     * @copydetails LemmaObject::New()
-     */
-    static RectilinearGridVTKExporter* New();
 
     /**
      *  Factory method for generating concrete class.
      *  @return a std::shared_ptr of type RectilinearGridVTKExporter
      */
     static std::shared_ptr< RectilinearGridVTKExporter > NewSP();
+
+    /** Default constructor */
+    explicit RectilinearGridVTKExporter ( const ctor_key& );
+
+    /** Deserializing constructor */
+    explicit RectilinearGridVTKExporter ( const YAML::Node& node, const ctor_key& );
+
+    /** Default protected destructor, use Delete */
+    virtual ~RectilinearGridVTKExporter ();
+
+    /**
+     *  Uses YAML to serialize this object.
+     *  @return a YAML::Node
+     */
+    virtual YAML::Node Serialize() const;
+
+    /**
+     *   Constructs an object from a YAML::Node.
+     */
+    static std::shared_ptr< RectilinearGridVTKExporter > DeSerialize(const YAML::Node& node);
 
     // ====================  OPERATORS     =======================
 
@@ -93,12 +109,6 @@ class RectilinearGridVTKExporter : public LemmaObject {
 
     // ====================  LIFECYCLE     =======================
 
-    /** Default protected constructor, use New */
-    RectilinearGridVTKExporter ( );
-
-    /** Default protected destructor, use Delete */
-    ~RectilinearGridVTKExporter ();
-
     private:
 
     /** ASCII string representation of the class name */
@@ -122,3 +132,5 @@ class RectilinearGridVTKExporter : public LemmaObject {
 
 #endif   // ----- #ifndef RECTILINEARGRIDVTKEXPORTER_INC  -----
 
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp syntax=cpp.doxygen: */

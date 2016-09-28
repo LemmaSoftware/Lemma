@@ -12,7 +12,7 @@
  * @date      09/25/2013 08:20:14 AM
  * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
+ * @email     tirons@egi.utah.edu
  * @copyright Copyright (c) 2013, Trevor Irons
  */
 
@@ -25,10 +25,9 @@ namespace Lemma {
 // ====================  FRIEND METHODS  =====================
 
 std::ostream &operator << (std::ostream &stream, const RectilinearGridVTKExporter &ob) {
-    stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+    stream << ob.Serialize()  << "\n---\n"; // End of doc
     return stream;
 }
-
 
 // ====================  LIFECYCLE     =======================
 
@@ -37,10 +36,20 @@ std::ostream &operator << (std::ostream &stream, const RectilinearGridVTKExporte
 //      Method:  RectilinearGridVTKExporter
 // Description:  constructor (protected)
 //--------------------------------------------------------------------------------------
-RectilinearGridVTKExporter::RectilinearGridVTKExporter ( ) : LemmaObject( ), Grid(nullptr), VTKGrid(nullptr) {
+RectilinearGridVTKExporter::RectilinearGridVTKExporter ( const ctor_key& ) : LemmaObject( ), Grid(nullptr), VTKGrid(nullptr) {
 
 }  // -----  end of method RectilinearGridVTKExporter::RectilinearGridVTKExporter  (constructor)  -----
 
+//--------------------------------------------------------------------------------------
+//       Class:  RectilinearGridVTKExporter
+//      Method:  RectilinearGridVTKExporter
+// Description:  DeSerializing constructor (protected)
+//--------------------------------------------------------------------------------------
+RectilinearGridVTKExporter::RectilinearGridVTKExporter (const YAML::Node& node, const ctor_key&  key) : LemmaObject(node) {
+    if (node["Grid"]) {
+        this->Grid = RectilinearGrid::DeSerialize( node["Grid"] );
+    }
+}  // -----  end of method RectilinearGridVTKExporter::RectilinearGridVTKExporter  (constructor)  -----
 
 //--------------------------------------------------------------------------------------
 //       Class:  RectilinearGridVTKExporter
@@ -48,11 +57,8 @@ RectilinearGridVTKExporter::RectilinearGridVTKExporter ( ) : LemmaObject( ), Gri
 // Description:  public constructor
 //--------------------------------------------------------------------------------------
 std::shared_ptr< RectilinearGridVTKExporter > RectilinearGridVTKExporter::NewSP() {
-    std::shared_ptr<RectilinearGridVTKExporter> sp(new  RectilinearGridVTKExporter( ), LemmaObjectDeleter() );
-    return sp;
+    return std::make_shared< RectilinearGridVTKExporter > ( ctor_key() );
 }
-
-
 
 //--------------------------------------------------------------------------------------
 //       Class:  RectilinearGridVTKExporter
@@ -72,6 +78,30 @@ void RectilinearGridVTKExporter::SetGrid ( std::shared_ptr<RectilinearGrid> Grid
     BuildVTKRectilinearGrid();
     return ;
 }		// -----  end of method RectilinearGridVTKExporter::SetGrid  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  RectilinearGridVTKExporter
+//      Method:  Serialize
+//--------------------------------------------------------------------------------------
+YAML::Node  RectilinearGridVTKExporter::Serialize (  ) const {
+    YAML::Node node = LemmaObject::Serialize();;
+    node.SetTag( GetName() );
+    if (Grid != nullptr) {
+        node["Grid"] = Grid->Serialize();
+    }
+    return node;
+}		// -----  end of method RectilinearGridVTKExporter::Serialize  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  RectilinearGridVTKExporter
+//      Method:  DeSerialize
+//--------------------------------------------------------------------------------------
+std::shared_ptr<RectilinearGridVTKExporter> RectilinearGridVTKExporter::DeSerialize ( const YAML::Node& node ) {
+    if (node.Tag() != "RectilinearGridVTKExporter") {
+        throw  DeSerializeTypeMismatch( "RectilinearGridVTKExporter", node.Tag());
+    }
+    return std::make_shared< RectilinearGridVTKExporter >( node, ctor_key() ); //, ctor_key() );
+}		// -----  end of method RectilinearGridVTKExporter::DeSerialize  -----
 
 //--------------------------------------------------------------------------------------
 //       Class:  RectilinearGridVTKExporter
@@ -140,8 +170,9 @@ void RectilinearGridVTKExporter::BuildVTKRectilinearGrid (  ) {
     return ;
 }		// -----  end of method RectilinearGridVTKExporter::BuildVTKRectilinearGrid  -----
 
-
-
 }		// -----  end of Lemma  name  -----
 
 #endif     // -----  not LEMMAUSEVTK  -----
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp syntax=cpp.doxygen: */

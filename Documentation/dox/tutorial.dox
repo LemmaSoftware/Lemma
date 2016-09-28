@@ -73,11 +73,11 @@ wrappers for all of this would be a huge undertaking.
   to deliver expressive, fast code. Their benchmarks are right in line with 
   fast BLAS and LAPACK implementations. If you honestly feel that 
 \code
-DGEMM ( TRANSA, TRANSB, M, N, K, ALPHA, A, LDA, B, LDB, BETA, C, LDC )
+    DGEMM ( TRANSA, TRANSB, M, N, K, ALPHA, A, LDA, B, LDB, BETA, C, LDC )
 \endcode  
  is superior to
 \code
-  C = A*B.transpose(); 
+    C = A*B.transpose(); 
 \endcode 
  you are living in denial. Check out the benchmarks if you are still sceptical
 http://eigen.tuxfamily.org/index.php?title=Benchmark 

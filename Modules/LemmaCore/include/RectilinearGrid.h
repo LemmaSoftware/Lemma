@@ -18,18 +18,14 @@
 
 namespace Lemma {
 
-    // ===================================================================
-    //  Class:  RectilinearGrid
     /**
-      @class
-      \ingroup LemmaCore
-      \brief   Impliments a rectilinear grid.
-      \details A rectilinear grid can vary regularily in space but must be
-               constant variation across each dimension. In this way three
-               vectors can define the entire grid, and each cell is right
-               aligned with all its neighbours.
+     * \ingroup LemmaCore
+     * \brief   Impliments a rectilinear grid.
+     * \details A rectilinear grid can vary regularily in space but must be
+     *         constant variation across each dimension. In this way three
+     *         vectors can define the entire grid, and each cell is right
+     *         aligned with all its neighbours.
      */
-    // ===================================================================
     class RectilinearGrid : public Grid {
 
         friend std::ostream &operator<<(std::ostream &stream,
@@ -45,17 +41,41 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /**
-             *  Factory method for generating concrete class.
-             *  @return a std::shared_ptr of type RectilinearGrid
+             * DeSerializing constructor.
+             * @note This method is locked, and cannot be called directly.
+             *       The reason that the method is public is to enable the use
+             *       of make_shared whilst enforcing the use of shared_ptr,
+             *       in c++-17, this curiosity may be resolved.
+             * @see RectilinearGrid::NewSP
              */
-            static std::shared_ptr<RectilinearGrid> NewSP();
+            explicit RectilinearGrid ( const ctor_key& );
 
+            /**
+             * DeSerializing constructor.
+             * @note This method is locked, and cannot be called directly.
+             *       The reason that the method is public is to enable the use
+             *       of make_shared whilst enforcing the use of shared_ptr,
+             *       in c++-17, this curiosity may be resolved.
+             * @see DeSerialize
+             */
+            explicit RectilinearGrid (const YAML::Node& node, const ctor_key& );
+
+            /** Default destructor.
+             *  @note This should never be called explicitly, use NewSP
+             */
+            virtual ~RectilinearGrid ();
 
             /**
              *  Uses YAML to serialize this object.
              *  @return a YAML::Node
              */
             virtual YAML::Node Serialize() const;
+
+            /**
+             *  Factory method for generating concrete class.
+             *  @return a std::shared_ptr of type RectilinearGrid
+             */
+            static std::shared_ptr<RectilinearGrid> NewSP();
 
             /**
              *   Constructs an object from a YAML::Node.
@@ -168,14 +188,10 @@ namespace Lemma {
 
             // ====================  LIFECYCLE     =======================
 
-            /** Default protected constructor. */
-            RectilinearGrid ( );
+        private:
 
-            /** Protected DeDerializing constructor, use factory DeSerialize  method*/
-            RectilinearGrid (const YAML::Node& node);
-
-            /** Default protected constructor. */
-            ~RectilinearGrid ();
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "RectilinearGrid";
 
             // ====================  DATA MEMBERS  =========================
 
@@ -206,11 +222,6 @@ namespace Lemma {
             /// Cell spacing in the z dimension
             VectorXr dz;
 
-        private:
-
-            /** ASCII string representation of the class name */
-            static constexpr auto CName = "RectilinearGrid";
-
     }; // -----  end of class  RectilinearGrid  -----
 
 }		// -----  end of Lemma  name  -----
@@ -218,4 +229,4 @@ namespace Lemma {
 #endif   // ----- #ifndef RECTILINEARGRID_INC  -----
 
 /* vim: set tabstop=4 expandtab: */
-/* vim: set filetype=cpp: */
+/* vim: set filetype=cpp syntax=cpp.doxygen: */

@@ -24,7 +24,7 @@ namespace Lemma {
     // ====================  FRIEND METHODS  =====================
 
     std::ostream &operator << (std::ostream &stream, const ASCIIParser &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        stream << ob.Serialize()  << "\n---\n"; // End of doc
         return stream;
     }
 
@@ -33,7 +33,7 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     //       Class:  ASCIIParser
     //      Method:  ASCIIParser
-    // Description:  constructor (protected)
+    // Description:  constructor (locked)
     //--------------------------------------------------------------------------------------
     ASCIIParser::ASCIIParser ( const ctor_key& ) : LemmaObject( ), input(),
             CommentString("//"), BufferSize(255) {
@@ -217,4 +217,5 @@ namespace Lemma {
 
 }		// -----  end of Lemma  name  -----
 
-
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp syntax=cpp.doxygen: */

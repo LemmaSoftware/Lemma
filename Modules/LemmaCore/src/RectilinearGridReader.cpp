@@ -22,7 +22,7 @@ namespace Lemma {
     // ====================  FRIEND METHODS  =====================
 
     std::ostream &operator << (std::ostream &stream, const RectilinearGridReader &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        stream << ob.Serialize()  << "\n---\n"; // End of doc
         return stream;
     }
 
@@ -31,13 +31,20 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     //       Class:  RectilinearGridReader
     //      Method:  RectilinearGridReader
-    // Description:  constructor (protected)
+    // Description:  constructor (locked)
     //--------------------------------------------------------------------------------------
-    RectilinearGridReader::RectilinearGridReader ( ) : GridReader( ),
+    RectilinearGridReader::RectilinearGridReader ( const ctor_key& ) : GridReader( ),
         rGrid( nullptr ), Parser( nullptr ) {
 
     }  // -----  end of method RectilinearGridReader::RectilinearGridReader  (constructor)  -----
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  RectilinearGridReader
+    //      Method:  RectilinearGridReader
+    // Description:  DeSerializing constructor (protected)
+    //--------------------------------------------------------------------------------------
+    RectilinearGridReader::RectilinearGridReader (const YAML::Node& node, const ctor_key&  key) : GridReader(node) {
+    }  // -----  end of method RectilinearGridReader::RectilinearGridReader  (constructor)  -----
 
     //--------------------------------------------------------------------------------------
     //       Class:  RectilinearGridReader
@@ -45,11 +52,8 @@ namespace Lemma {
     // Description:  constructor
     //--------------------------------------------------------------------------------------
     std::shared_ptr< RectilinearGridReader > RectilinearGridReader::NewSP() {
-        std::shared_ptr<RectilinearGridReader> sp(new  RectilinearGridReader( ), LemmaObjectDeleter() );
-        return sp;
+        return std::make_shared< RectilinearGridReader > ( ctor_key() );
     }
-
-
 
     //--------------------------------------------------------------------------------------
     //       Class:  RectilinearGridReader
@@ -58,6 +62,29 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     RectilinearGridReader::~RectilinearGridReader () {
     }  // -----  end of method RectilinearGridReader::~RectilinearGridReader  (destructor)  -----
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  ASCIIParser
+    //      Method:  Serialize
+    //--------------------------------------------------------------------------------------
+    YAML::Node  RectilinearGridReader::Serialize (  ) const {
+        YAML::Node node = GridReader::Serialize();;
+        node.SetTag( GetName() );
+        //node["CommentString"] = CommentString;
+        //node["BufferSize"] = BufferSize;
+        return node;
+    }		// -----  end of method ASCIIParser::Serialize  -----
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  RectilinearGridReader
+    //      Method:  DeSerialize
+    //--------------------------------------------------------------------------------------
+    std::shared_ptr<RectilinearGridReader> RectilinearGridReader::DeSerialize ( const YAML::Node& node ) {
+        if (node.Tag() != "RectilinearGridReader") {
+            throw  DeSerializeTypeMismatch( "RectilinearGridReader", node.Tag());
+        }
+        return std::make_shared< RectilinearGridReader >( node, ctor_key() ); //, ctor_key() );
+    }		// -----  end of method ASCIIParser::DeSerialize  -----
 
     //--------------------------------------------------------------------------------------
     //       Class:  RectilinearGridReader

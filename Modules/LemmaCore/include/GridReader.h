@@ -65,6 +65,10 @@ namespace Lemma {
             GridReader ( ) : LemmaObject( ) {
             }
 
+            /** Default protected constructor, use New */
+            GridReader ( const YAML::Node& node ) : LemmaObject( node ) {
+            }
+
             /** Default protected constructor, use Delete */
             ~GridReader () {
             }
