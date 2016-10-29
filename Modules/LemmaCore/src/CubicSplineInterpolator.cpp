@@ -29,7 +29,7 @@ namespace Lemma {
     // ====================  FRIEND METHODS  =====================
 
     std::ostream &operator << (std::ostream &stream, const CubicSplineInterpolator &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
         return stream;
     }
 

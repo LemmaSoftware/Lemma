@@ -25,18 +25,31 @@ namespace Lemma {
     /// \brief  1D layered earth. Attributes include all aspects of
     /// Cole-Cole model.
     /// \details   Primarily used for EM calculations.
+    /** @todo Layer 0 can be set right now, but all logic ignores and assumes
+              air layer. This is surprising to users and constitutes a bug.
+     */
     // =======================================================================
     class LayeredEarthEM : public LayeredEarth {
 
+        // ====================    FRIENDS     ===========================
+        /** Recursively streams information about this class */
+        friend std::ostream &operator<<(std::ostream &stream, const LayeredEarthEM &ob);
+
+
+        struct ctor_key {};
+
         public:
 
-            // ====================    FRIENDS     ===========================
-
-            /** Recursively streams information about this class */
-            friend std::ostream &operator<<(std::ostream &stream,
-                        const LayeredEarthEM &ob);
-
             // ====================  LIFECYCLE     ===========================
+
+            /** Default protected constructor. */
+            explicit LayeredEarthEM ( const ctor_key& );
+
+            /** Default protected constructor. */
+			LayeredEarthEM ( const YAML::Node& node, const ctor_key& );
+
+            /** Default protected constructor. */
+            virtual ~LayeredEarthEM ();
 
             /**
              *  Factory method for generating concrete class.
@@ -240,23 +253,8 @@ namespace Lemma {
 
         protected:
 
-            // ====================  LIFECYCLE     ===========================
 
-            /** Default protected constructor. */
-            LayeredEarthEM ( );
-
-            /** Default protected constructor. */
-			LayeredEarthEM (const YAML::Node& node);
-
-            /** Default protected constructor. */
-            ~LayeredEarthEM ();
-
-            /**
-             * @copybrief LemmaObject::Release()
-             * @copydetails LemmaObject::Release()
-             */
-            void Release();
-
+        private:
             // ====================  DATA MEMBERS  ===========================
 
             /** Vector of layer Conductivity */
@@ -303,8 +301,6 @@ namespace Lemma {
 
             /** Relaxation breath for each layer */
             VectorXr          LayerBreathPermitivity;
-
-            private:
 
             /** ASCII string representation of the class name */
             static constexpr auto CName = "LayeredEarthEM";

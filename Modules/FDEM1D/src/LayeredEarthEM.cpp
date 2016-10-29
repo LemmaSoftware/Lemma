@@ -16,22 +16,48 @@
 namespace Lemma {
 
     std::ostream &operator << (std::ostream &stream, const LayeredEarthEM &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
         return stream;
     }
 
     // ====================  LIFECYCLE     ===================================
 
-    LayeredEarthEM::LayeredEarthEM( ) : LayeredEarth() {
+    LayeredEarthEM::LayeredEarthEM( const ctor_key& ) : LayeredEarth() {
+    }
+
+    LayeredEarthEM::LayeredEarthEM( const YAML::Node& node, const ctor_key& ) : LayeredEarth(node) {
+
+        LayerConductivity = node["LayerConductivity"].as<VectorXcr>();
+
+        LayerSusceptibility = node["LayerSusceptibility"].as<VectorXcr>();
+        LayerLowFreqSusceptibility = node["LayerLowFreqSusceptibility"].as<VectorXr>();
+        LayerHighFreqSusceptibility = node["LayerHighFreqSusceptibility"].as<VectorXr>();
+        LayerTauSusceptibility = node["LayerTauSusceptibility"].as<VectorXr>();
+        LayerBreathSusceptibility = node["LayerBreathSusceptibility"].as<VectorXr>();
+
+        LayerPermitivity = node["LayerPermitivity"].as<VectorXcr>();
+        LayerLowFreqPermitivity = node["LayerLowFreqPermitivity"].as<VectorXr>();
+        LayerHighFreqPermitivity = node["LayerHighFreqPermitivity"].as<VectorXr>();
+        LayerTauPermitivity = node["LayerTauPermitivity"].as<VectorXr>();
+        LayerBreathPermitivity = node["LayerBreathPermitivity"].as<VectorXr>();
+
     }
 
     LayeredEarthEM::~LayeredEarthEM() {
     }
 
     std::shared_ptr<LayeredEarthEM> LayeredEarthEM::NewSP() {
-        std::shared_ptr<LayeredEarthEM> sp(new  LayeredEarthEM( ), LemmaObjectDeleter() );
-        return sp;
+        return std::make_shared<LayeredEarthEM> ( ctor_key() );
     }
+
+    std::shared_ptr<LayeredEarthEM> LayeredEarthEM::DeSerialize( const YAML::Node& node ) {
+        if (node.Tag() != "LayeredEarthEM") {
+            throw  DeSerializeTypeMismatch( "LayeredEarthEM", node.Tag());
+        }
+        return std::make_shared<LayeredEarthEM> ( node, ctor_key() );
+    }
+
+
 
     YAML::Node LayeredEarthEM::Serialize() const {
         YAML::Node node = LayeredEarth::Serialize();
@@ -110,7 +136,7 @@ namespace Lemma {
         LayerConductivity[ilay] = sig;
     }
 
-/*
+/*  // TODO fix layer 0 problem, 1/0 --> infty, plus layer 0 is ignored anyway
     void LayeredEarthEM::SetLayerResistivity(const VectorXcr &rhos) {
         if (rhos.size() != this->NumberOfLayers )
             throw EarthModelParametersDoNotMatchNumberOfLayers( );
