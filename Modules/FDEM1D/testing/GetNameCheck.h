@@ -19,7 +19,7 @@
 
 #include <cxxtest/TestSuite.h>
 #include <LemmaCore>
-#include <FEM1D>
+#include <FDEM1D>
 
 using namespace Lemma;
 

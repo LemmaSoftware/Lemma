@@ -34,6 +34,7 @@ namespace Lemma {
 	}
 
     LayeredEarth::LayeredEarth(const YAML::Node& node) : EarthModel(node) {
+        std::cout << "LayeredEarth(YAML::Node )" << std::endl;
         NumberOfLayers = node["NumberOfLayers"].as<int>();
         NumberOfInterfaces = node["NumberOfInterfaces"].as<int>();
         LayerThickness = node["LayerThickness"].as<VectorXr>();
@@ -68,6 +69,10 @@ namespace Lemma {
 		return this->NumberOfLayers - 1;
 	}
 
+    VectorXr LayeredEarth::GetLayerThickness( ) {
+        return LayerThickness;
+    }
+
 	Real LayeredEarth::GetLayerThickness(const int &ilay) {
 		// Take into account infinite top and bottom layers
 		// estimate infinity by 1000 m
@@ -83,10 +88,7 @@ namespace Lemma {
 	}
 
 	Real LayeredEarth::GetLayerDepth(const int &ilay) {
-
 		Real depth = 0;
-
-
 		if (ilay == 0) {
 			return depth;
 		} else {
@@ -98,17 +100,14 @@ namespace Lemma {
 	}
 
 	int LayeredEarth::GetLayerAtThisDepth(const Real& depth) {
-
 		if (depth <= 0 || NumberOfLayers < 2) {
 			return 0;
 		}
-
 		Real laydep = 0;
 		for (int ilay=0; ilay<NumberOfLayers-2; ++ilay) {
 			laydep += LayerThickness[ilay];
 			if (laydep >= depth) { return ilay+1; }
 		}
-
 		return NumberOfLayers-1;
 	}
 

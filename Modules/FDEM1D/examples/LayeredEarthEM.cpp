@@ -17,16 +17,34 @@
  * @copyright Copyright (c) 2016, Lemma Software, LLC
  */
 
-#include "FEM1D"
+#include <random>
+#include "FDEM1D"
 
 using namespace Lemma;
 
 int main() {
 
+       std::random_device rd;
+       std::mt19937 gen(rd());
+       std::discrete_distribution<> d({0,0,40, 10, 10, 40});
+           int nl = d(gen);
+
+    std::uniform_real_distribution<> dis(0, 1);
+    VectorXcr con = VectorXcr(nl);
+    con(0) = 0;
+    for ( int i=1; i<nl; ++i ) {
+        con(i) = Complex(dis(gen), dis(gen));
+    }
+    std::cout << con << std::endl;
+
     auto model = LayeredEarthEM::NewSP();
-        model->SetNumberOfLayers(6);
-        model->SetLayerThickness( (VectorXr(4) << 10,10,10,10).finished() );
-        model->SetLayerConductivity( (VectorXcr(6) << .1, .10,.10,.10,.10,.10).finished() );
-    std::cout << *model << std::endl;
+        model->SetNumberOfLayers(nl);
+        //model->SetLayerThickness( (VectorXr(4) << 10,10,10,10).finished() );
+        //model->SetLayerConductivity( (VectorXcr(6) << .1, .10,.10,.10,.10,.10).finished() );
+    auto model2 = LayeredEarthEM::DeSerialize(model->Serialize());
+
+    std::cout << model->GetNumberOfLayers() << std::endl;
+    std::cout << model2->GetNumberOfLayers() << std::endl;
+
 }
 

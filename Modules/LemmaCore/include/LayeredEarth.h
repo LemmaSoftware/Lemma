@@ -77,6 +77,12 @@ namespace Lemma {
              */
 			Real GetLayerThickness(const int & lay);
 
+            /** Returns the thickness of a layer
+             *  @param[in] lay is the layer indice
+             *  @return the thickness of all intermediary (non-infinite) layers
+             */
+			VectorXr GetLayerThickness( );
+
 			/** Returns the depth of the bottom interface of a layer
              *  @param[in] lay is the layer indice
              *  @return the depth of the bottom interface of a layer

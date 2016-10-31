@@ -50,14 +50,16 @@ class MyTestSuite : public CxxTest::TestSuite
         TS_ASSERT_EQUALS( Obj->GetName(), std::string("RectilinearGridReader") );
     }
 
-// INCLUDE GUARDS DON'T WORK WITH CXXTEST, NEED TO MOVE VTK TESTS OUT
-// #ifdef LEMMAUSEVTK
-//     void testRectilinearGridVTKExporter( void )
-//     {
-//         auto Obj = RectilinearGridVTKExporter::NewSP();
-//         TS_ASSERT_EQUALS( Obj->GetName(), std::string("RectilinearGridVTKExporter") );
-//     }
-// #endif
+    void testRectilinearGridVTKExporter( void )
+    {
+        #ifdef LEMMAUSEVTK
+        auto Obj = RectilinearGridVTKExporter::NewSP();
+        TS_ASSERT_EQUALS( Obj->GetName(), std::string("RectilinearGridVTKExporter") );
+        #else
+        // dummy test if no VTK
+        TS_ASSERT_EQUALS( 3, 2+1 );
+        #endif
+    }
 
     void testWindowFilter( void )
     {

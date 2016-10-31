@@ -24,7 +24,7 @@
 //#include "Grid.h"
 //#include "GridReader.h"
 //#include "Instrument.h"
-//#include "LayeredEarth.h"
+#include "LayeredEarth.h"
 //#include "LemmaObject.h"
 #include "RectilinearGrid.h"
 #include "RectilinearGridReader.h"

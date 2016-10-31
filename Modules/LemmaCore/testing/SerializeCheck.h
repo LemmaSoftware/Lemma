@@ -76,6 +76,23 @@ class MyTestSuite : public CxxTest::TestSuite
         TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
     }
 
+// How do we test abstract classes?
+//     void testLayeredEarth( void )
+//     {
+//         std::random_device rd;
+//         std::mt19937 gen(rd());
+//         std::discrete_distribution<> d({0,40, 10, 10, 40});
+//         auto Obj = LayeredEarth::NewSP();
+//             int nl = d(gen);
+//             Obj->SetNumberOfLayers(nl);
+//         YAML::Node node = Obj->Serialize();
+//         auto Obj2 = LayeredEarth::DeSerialize(node);
+//         TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
+//         TS_ASSERT_EQUALS( Obj->GetNumberOfLayers(), Obj2->GetNumberOfLayers() );
+//
+//     }
+
+
 //     void testRectilinearGridVTKExporter( void )
 //     {
 //         auto Obj = RectilinearGridVTKExporter::NewSP();
