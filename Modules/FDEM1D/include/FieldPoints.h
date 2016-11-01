@@ -28,45 +28,60 @@
 #endif
 
 #include "LemmaObject.h"
-#include "dipolesource.h"
-
-#ifdef HAVE_YAMLCPP
-#include "yaml-cpp/yaml.h"
-#endif
+//#include "dipolesource.h"
 
 namespace Lemma {
+
+    // Forward Declarations
+    class DipoleSource;
 
     // =======================================================================
     //        Class:  FieldPoints
     /**
      *  \brief  Points in the subsurface where 1D EM calculations are made
-     */ \details
+     *  \details These are the points where Hankel transform calculations are
+     *           made.
+     *  \note In previous versions of Lemma, this class was called ReceiverPoints,
+     *        the functionality remains roughly the same, but the name is more
+     *        appropriate.
+     */
     // =======================================================================
     class FieldPoints : public LemmaObject {
+
+        /**
+         *  Stream operator printing out information about this class.
+         */
+        friend std::ostream &operator<<(std::ostream &stream, const FieldPoints &ob);
+
+        struct ctor_key {};
 
         public:
 
             // ====================    FRIENDS     ===========================
 
-            /**
-             *  Stream operator printing out information about this class.
-             */
-            friend std::ostream &operator<<(std::ostream &stream,
-                        const FieldPoints &ob);
-
-            friend class EMEarth1D;
-            friend class DipoleSource;
+            //friend class EMEarth1D;
+            //friend class DipoleSource;
 
             // ====================  LIFECYCLE     ===========================
+
+            /** Default locked constructor. */
+            explicit FieldPoints ( const ctor_key& );
+
+            /** Locked deserializing constructor. */
+            FieldPoints (const YAML::Node& node, const ctor_key&);
+
+            /** Default destructor. */
+            ~FieldPoints ();
 
             /**
              *  Factory method for generating concrete class.
              *  @return a std::shared_ptr of type FieldPoints
              */
-            static std::shared_ptr<FieldPoints*> NewSP();
+            static std::shared_ptr<FieldPoints> NewSP();
 
         	/**
              *  Uses YAML to serialize this object.
+             *  @note The actual calculation results are not serialized, currently.
              *  @return a YAML::Node
              */
             YAML::Node Serialize() const;
@@ -76,7 +91,7 @@ namespace Lemma {
              *   @param[in] node is a YAML node containing the serialized class information
              *   @return a std::shared_ptr object of FieldPoints
              */
-            static std::shared_ptr< FieldPoints* > DeSerialize(const YAML::Node& node);
+            static std::shared_ptr<FieldPoints> DeSerialize(const YAML::Node& node);
 
             // ====================  OPERATORS     ===========================
 
@@ -85,7 +100,7 @@ namespace Lemma {
             // ====================  ACCESS        ===========================
 
             /** Sets the number of receivers */
-            virtual void SetNumberOfReceivers(const int &nrec);
+            virtual void SetNumberOfPoints(const int &nrec);
 
             /** Returns the location of a single receiver as an Eigen Vector */
             void SetLocation(const int& nrec, const Vector3r& loc);
@@ -96,8 +111,13 @@ namespace Lemma {
 
             // ====================  INQUIRY       ===========================
 
+            /** Returns the name of the underlying class, similiar to Python's type */
+            virtual inline std::string GetName() const {
+                return CName;
+            }
+
             /// Returns the number of receiverpoints.
-            int GetNumberOfReceivers();
+            int GetNumberOfPoints();
 
             /// Returns all the receiver locations as a 3 X matrix
             Vector3Xr GetLocations();
@@ -187,27 +207,7 @@ namespace Lemma {
             /// Returns the mask for this point
             int GetMask(const int& i);
 
-
         protected:
-
-            // ====================  LIFECYCLE     ===========================
-
-            /** Default protected constructor. */
-            FieldPoints ( );
-
-            #ifdef HAVE_YAMLCPP
-            /** Default protected constructor. */
-            FieldPoints (const YAML::Node& node);
-            #endif
-
-            /** Default protected constructor. */
-            ~FieldPoints ();
-
-            /**
-             * @copybrief LemmaObject::Release()
-             * @copydetails LemmaObject::Release()
-             */
-            void Release();
 
             // ====================  OPERATIONS    ===========================
 
@@ -243,8 +243,10 @@ namespace Lemma {
 
             // ====================  DATA MEMBERS  ===========================
 
+        private:
+
             /// Number of receivers
-            int                         NumberOfReceivers;
+            int                         NumberOfPoints;
 
             /// Number of fields
             int                         NumberOfBinsE;
@@ -259,16 +261,12 @@ namespace Lemma {
             /// Locations of receivers
             Vector3Xr                   Locations;
 
-        private:
-
             // NOTE, these are not serialized in output!
-
             /// Electric field at receiver locations
             std::vector<Vector3Xcr>     Efield;
 
             /// H field at receiver locations
             std::vector<Vector3Xcr>     Hfield;
-
 
             /** ASCII string representation of the class name */
             static constexpr auto CName = "FieldPoints";

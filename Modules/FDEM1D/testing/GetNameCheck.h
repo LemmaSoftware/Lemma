@@ -33,5 +33,11 @@ class MyTestSuite : public CxxTest::TestSuite
         TS_ASSERT_EQUALS( Obj->GetName(), std::string("LayeredEarthEM") );
     }
 
+    void testFieldPoints( void )
+    {
+        auto Obj = FieldPoints::NewSP();
+        TS_ASSERT_EQUALS( Obj->GetName(), std::string("FieldPoints") );
+    }
+
 };
 

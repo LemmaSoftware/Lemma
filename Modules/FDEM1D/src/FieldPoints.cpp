@@ -11,77 +11,80 @@
   @version  $Id: receiverpoints.cpp 203 2015-01-09 21:19:04Z tirons $
  **/
 
-#include "receiverpoints.h"
+#include "FieldPoints.h"
 
 namespace Lemma {
 
     // ====================    FRIENDS     ======================
 
-#ifdef HAVE_YAMLCPP
-    std::ostream &operator << (std::ostream &stream, const ReceiverPoints &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+    std::ostream &operator << (std::ostream &stream, const FieldPoints &ob) {
+        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
         return stream;
     }
-#else
-    std::ostream &operator<<(std::ostream &stream,
-                const ReceiverPoints &ob) {
-
-        stream << *(LemmaObject*)(&ob);
-        stream << "Number of Receivers "<< ob.NumberOfReceivers  << "\n";
-        return stream;
-    }
-#endif
 
     // ====================  LIFECYCLE     ===================================
 
-    ReceiverPoints::ReceiverPoints(const std::string& name) :
-        LemmaObject(name),
-        NumberOfReceivers(0), NumberOfBinsE(0), NumberOfBinsH(0) {
+    FieldPoints::FieldPoints( const ctor_key& ) : LemmaObject( ),
+        NumberOfPoints(0), NumberOfBinsE(0), NumberOfBinsH(0) {
     }
 
-#ifdef HAVE_YAMLCPP
     //--------------------------------------------------------------------------------------
-    //       Class:  ReceiverPoints
-    //      Method:  ReceiverPoints
+    //       Class:  FieldPoints
+    //      Method:  FieldPoints
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    ReceiverPoints::ReceiverPoints (const YAML::Node& node) : LemmaObject(node) {
-
+    FieldPoints::FieldPoints (const YAML::Node& node, const ctor_key&) : LemmaObject(node) {
         //DeSerialize
-        NumberOfReceivers = node["NumberOfReceivers"].as<int>();
+        NumberOfPoints = node["NumberOfPoints"].as<int>();
         NumberOfBinsE = node["NumberOfBinsE"].as<int>();
         NumberOfBinsH = node["NumberOfBinsH"].as<int>();
         Mask = node["Mask"].as<VectorXi>();
         Locations = node["Locations"].as<Vector3Xr>();
+    }  // -----  end of method FieldPoints::FieldPoints  (constructor)  -----
 
-    }  // -----  end of method ReceiverPoints::ReceiverPoints  (constructor)  -----
-#endif
-
-    ReceiverPoints::~ReceiverPoints() {
-        if (this->NumberOfReferences != 0)
-            throw DeleteObjectWithReferences( this );
+    FieldPoints::~FieldPoints() {
     }
 
-    ReceiverPoints* ReceiverPoints::New() {
-        ReceiverPoints* Obj = new ReceiverPoints("ReceiverPoints");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<FieldPoints> FieldPoints::NewSP() {
+        return std::make_shared<FieldPoints> ( ctor_key() );
     }
 
-    void ReceiverPoints::Delete() {
-        this->DetachFrom(this);
-    }
+    //--------------------------------------------------------------------------------------
+    //       Class:  FieldPoints
+    //      Method:  Serialize
+    //--------------------------------------------------------------------------------------
+    YAML::Node  FieldPoints::Serialize (  ) const {
+        YAML::Node node = LemmaObject::Serialize();
+        node.SetTag( GetName() );
 
-    void ReceiverPoints::Release() {
-        delete this;
-    }
+        // update here
+        node["NumberOfPoints"] = NumberOfPoints;
+        node["NumberOfBinsE"] = NumberOfBinsE;
+        node["NumberOfBinsH"] = NumberOfBinsH;
+        node["Mask"] = Mask;
+        node["Locations"] = Locations;// Can be huge
+        //std::cout << "Locations.data" << Locations.data()[0] << std::endl;
+        return node;
+    }		// -----  end of method FieldPoints::Serialize  -----
+
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  FieldPoints
+    //      Method:  DeSerialize
+    //--------------------------------------------------------------------------------------
+    std::shared_ptr<FieldPoints> FieldPoints::DeSerialize ( const YAML::Node& node  ) {
+        if (node.Tag() != "FieldPoints") {
+            throw  DeSerializeTypeMismatch( "FieldPoints", node.Tag());
+        }
+        return std::make_shared<FieldPoints> ( node, ctor_key() );
+    }		// -----  end of method FieldPoints::DeSerialize  -----
 
     // ====================  ACCESS        ===================================
 
-    void ReceiverPoints::SetNumberOfReceivers(const int &nrec) {
+    void FieldPoints::SetNumberOfPoints(const int &nrec) {
 
         if (nrec > 0)
-            this->NumberOfReceivers = nrec;
+            this->NumberOfPoints = nrec;
         else
             throw std::runtime_error("NUMBER RECEIVERS LESS THAN 1");
 
@@ -95,52 +98,52 @@ namespace Lemma {
         ResizeHField();
     }
 
-    void ReceiverPoints::ResizeEField() {
+    void FieldPoints::ResizeEField() {
         Efield.clear();
         for (int i=0; i<NumberOfBinsE; ++i) {
             Eigen::Matrix<Complex, 3, Eigen::Dynamic> tempe;
             this->Efield.push_back(tempe);
-            this->Efield[i].resize(Eigen::NoChange, NumberOfReceivers);
+            this->Efield[i].resize(Eigen::NoChange, NumberOfPoints);
             this->Efield[i].setZero();
         }
     }
 
-    void ReceiverPoints::ResizeHField() {
+    void FieldPoints::ResizeHField() {
         Hfield.clear();
         for (int i=0; i<NumberOfBinsH; ++i) {
             Eigen::Matrix<Complex, 3, Eigen::Dynamic> temph;
             this->Hfield.push_back(temph);
-            this->Hfield[i].resize(Eigen::NoChange, NumberOfReceivers);
+            this->Hfield[i].resize(Eigen::NoChange, NumberOfPoints);
             this->Hfield[i].setZero();
         }
     }
 
-    void ReceiverPoints::SetNumberOfBinsE(const int& nbins) {
+    void FieldPoints::SetNumberOfBinsE(const int& nbins) {
         NumberOfBinsE = nbins;
         ResizeEField();
     }
 
-    void ReceiverPoints::SetNumberOfBinsH(const int& nbins) {
+    void FieldPoints::SetNumberOfBinsH(const int& nbins) {
         NumberOfBinsH = nbins;
         ResizeHField();
     }
 
-    void ReceiverPoints::SetLocation(const int&nrec,const  Vector3r& loc) {
+    void FieldPoints::SetLocation(const int&nrec,const  Vector3r& loc) {
         this->Locations.col(nrec) = loc;
     }
 
-    void ReceiverPoints::SetLocation(const int&nrec,const  Real& xp,
+    void FieldPoints::SetLocation(const int&nrec,const  Real& xp,
                     const Real& yp, const Real& zp) {
         this->Locations.col(nrec) << xp, yp, zp;
     }
 
-    void ReceiverPoints::SetEfield(const int& nbin,
+    void FieldPoints::SetEfield(const int& nbin,
                     const int& loc, const Complex &ex,
                     const Complex &ey, const Complex &ez) {
         this->Efield[nbin].col(loc) << ex, ey, ez;
     }
 
-    void ReceiverPoints::AppendEfield(const int&nbin, const int& loc,
+    void FieldPoints::AppendEfield(const int&nbin, const int& loc,
                     const Complex &ex,
                     const Complex &ey, const Complex &ez) {
         #ifdef LEMMAUSEOMP
@@ -149,13 +152,13 @@ namespace Lemma {
         this->Efield[nbin].col(loc) += Vector3cr(ex, ey, ez); //temp;
     }
 
-    void ReceiverPoints::SetHfield(const int &nbin, const int& loc,
+    void FieldPoints::SetHfield(const int &nbin, const int& loc,
                     const Complex &hx, const Complex &hy,
                     const Complex &hz) {
         this->Hfield[nbin].col(loc) << hx, hy, hz;
     }
 
-    void ReceiverPoints::AppendHfield(const int &nbin, const int& loc,
+    void FieldPoints::AppendHfield(const int &nbin, const int& loc,
                     const Complex &hx, const Complex &hy,
                     const Complex &hz) {
 //      #ifdef LEMMAUSEOMP
@@ -182,83 +185,83 @@ namespace Lemma {
 
 
     // ====================  INQUIRY       ===================================
-    Vector3Xr ReceiverPoints::GetLocations() {
+    Vector3Xr FieldPoints::GetLocations() {
         return this->Locations;
     }
 
-    MatrixXr ReceiverPoints::GetLocationsMat() {
+    MatrixXr FieldPoints::GetLocationsMat() {
         return MatrixXr(this->Locations);
     }
 
-    Vector3r ReceiverPoints::GetLocation(const int &nrec) {
+    Vector3r FieldPoints::GetLocation(const int &nrec) {
         return this->Locations.col(nrec);
     }
 
-    Real ReceiverPoints::GetLocationX(const int &nrec) {
+    Real FieldPoints::GetLocationX(const int &nrec) {
         return this->Locations.col(nrec)[0];
     }
 
-    Real ReceiverPoints::GetLocationY(const int &nrec) {
+    Real FieldPoints::GetLocationY(const int &nrec) {
         return this->Locations.col(nrec)[1];
     }
 
-    Real ReceiverPoints::GetLocationZ(const int &nrec) {
+    Real FieldPoints::GetLocationZ(const int &nrec) {
         return this->Locations.col(nrec)[2];
     }
 
-    Vector3cr ReceiverPoints::GetEfield(const int &nfreq, const int&nrec) {
+    Vector3cr FieldPoints::GetEfield(const int &nfreq, const int&nrec) {
         return this->Efield[nfreq].col(nrec);
     }
 
-    Vector3cr ReceiverPoints::GetHfield(const int &nfreq, const int&nrec) {
+    Vector3cr FieldPoints::GetHfield(const int &nfreq, const int&nrec) {
         return this->Hfield[nfreq].col(nrec);
     }
 
-    std::vector<Vector3Xcr> ReceiverPoints::GetHfield( ) {
+    std::vector<Vector3Xcr> FieldPoints::GetHfield( ) {
         return this->Hfield;
     }
 
-    std::vector<Vector3Xcr> ReceiverPoints::GetEfield( ) {
+    std::vector<Vector3Xcr> FieldPoints::GetEfield( ) {
         return this->Efield;
     }
 
-    Vector3Xcr ReceiverPoints::GetEfield (const int &nfreq) {
+    Vector3Xcr FieldPoints::GetEfield (const int &nfreq) {
         return this->Efield[nfreq];
     }
 
-    MatrixXcr ReceiverPoints::GetEfieldMat (const int &nfreq) {
+    MatrixXcr FieldPoints::GetEfieldMat (const int &nfreq) {
         return MatrixXcr(this->Efield[nfreq]);
     }
 
-    MatrixXcr ReceiverPoints::GetHfieldMat (const int &nfreq) {
+    MatrixXcr FieldPoints::GetHfieldMat (const int &nfreq) {
         return MatrixXcr(this->Hfield[nfreq]);
     }
 
-    Vector3Xcr ReceiverPoints::GetHfield (const int &nfreq) {
+    Vector3Xcr FieldPoints::GetHfield (const int &nfreq) {
         return this->Hfield[nfreq];
     }
 
-    void ReceiverPoints::MaskPoint(const int& imask) {
+    void FieldPoints::MaskPoint(const int& imask) {
         Mask(imask) = true;
     }
 
-    void ReceiverPoints::UnMaskPoint(const int& imask) {
+    void FieldPoints::UnMaskPoint(const int& imask) {
         Mask(imask) = false;
     }
 
-    void ReceiverPoints::UnMaskAllPoints() {
+    void FieldPoints::UnMaskAllPoints() {
         Mask.setZero();
     }
 
-    int ReceiverPoints::GetMask(const int& i) {
+    int FieldPoints::GetMask(const int& i) {
         return Mask(i);
     }
 
-    int ReceiverPoints::GetNumberOfReceivers() {
-        return this->NumberOfReceivers;
+    int FieldPoints::GetNumberOfPoints() {
+        return this->NumberOfPoints;
     }
 
-    void ReceiverPoints::ClearFields() {
+    void FieldPoints::ClearFields() {
         for (int i=0; i<NumberOfBinsE; ++i) {
             this->Efield[i].setZero();
         }
@@ -267,42 +270,8 @@ namespace Lemma {
         }
     }
 
-
-#ifdef HAVE_YAMLCPP
-    //--------------------------------------------------------------------------------------
-    //       Class:  ReceiverPoints
-    //      Method:  Serialize
-    //--------------------------------------------------------------------------------------
-    YAML::Node  ReceiverPoints::Serialize (  ) const {
-        YAML::Node node = LemmaObject::Serialize(); //static_cast<const LemmaObject*>(this)->Serialize();
-        node.SetTag( this->Name ); // Set Tag after doing parents
-
-        // update here
-        node["NumberOfReceivers"] = NumberOfReceivers;
-        node["NumberOfBinsE"] = NumberOfBinsE;
-        node["NumberOfBinsH"] = NumberOfBinsH;
-        //node["Mask"] = Mask;
-        //std::cout << "Locations.data" << Locations.data()[0] << std::endl;
-        // node["Locations"] = Locations.data(); // HUGE
-        return node;
-    }		// -----  end of method ReceiverPoints::Serialize  -----
-
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  ReceiverPoints
-    //      Method:  DeSerialize
-    //--------------------------------------------------------------------------------------
-    ReceiverPoints* ReceiverPoints::DeSerialize ( const YAML::Node& node  ) {
-        ReceiverPoints* Object = new ReceiverPoints(node);
-        Object->AttachTo(Object);
-        DESERIALIZECHECK( node, Object )
-        return Object ;
-    }		// -----  end of method ReceiverPoints::DeSerialize  -----
-#endif
-
-
     #ifdef LEMMAUSEVTK
-    vtkActor* ReceiverPoints::GetVtkGlyphActor(const FIELDTYPE &ftype,
+    vtkActor* FieldPoints::GetVtkGlyphActor(const FIELDTYPE &ftype,
                     const Real &clip, const Real &scale,
                     const int &nfreq) {
 
@@ -325,7 +294,7 @@ namespace Lemma {
         vVects->SetNumberOfComponents(3);
 
         // Make PointData
-        for (int ic=0; ic<NumberOfReceivers; ++ic) {
+        for (int ic=0; ic<NumberOfPoints; ++ic) {
 
             Vector3r loc = this->GetLocation(ic);
 
@@ -401,14 +370,14 @@ namespace Lemma {
         return vActor;
     }
 
-    vtkDataObject* ReceiverPoints::GetVtkDataObject(const FIELDTYPE &ftype,
+    vtkDataObject* FieldPoints::GetVtkDataObject(const FIELDTYPE &ftype,
                     const int& nbin,
                     const int& start, const int& end,
                     const FIELDCOMPONENT& fcomp,
                     const SPATIALCOORDINANT &scord) {
 
         if (start < 0) throw 77;
-        if (end > NumberOfReceivers) throw 78;
+        if (end > NumberOfPoints) throw 78;
         if (start > end) throw 79;
 
         int ifc(-1);
@@ -487,7 +456,7 @@ namespace Lemma {
         return _dataObject;
     }
 
-    vtkDataObject* ReceiverPoints::GetVtkDataObjectFreq(const FIELDTYPE &ftype,
+    vtkDataObject* FieldPoints::GetVtkDataObjectFreq(const FIELDTYPE &ftype,
                     const int& nrec,
                     const int& fstart, const int& fend,
                     const FIELDCOMPONENT& fcomp,

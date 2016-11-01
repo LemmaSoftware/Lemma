@@ -62,10 +62,12 @@ class LemmaObject {
          *        all external classes that might need to be serialized.
          */
         virtual YAML::Node Serialize() const {
+            std::cout.precision( 21 );
             YAML::Node node = YAML::Node();
             node.SetTag( GetName() );
             std::time_t now = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
             node["Serialized"] = std::ctime(&now);
+            node["Lemma_VERSION"] = LEMMA_VERSION;
             return node;
         };
 

@@ -1,4 +1,5 @@
 #include "LayeredEarthEM.h"
+#include "FieldPoints.h"
 
 /* vim: set tabstop=4 expandtab: */
 /* vim: set filetype=cpp: */

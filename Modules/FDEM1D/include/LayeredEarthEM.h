@@ -35,20 +35,19 @@ namespace Lemma {
         /** Recursively streams information about this class */
         friend std::ostream &operator<<(std::ostream &stream, const LayeredEarthEM &ob);
 
-
         struct ctor_key {};
 
         public:
 
             // ====================  LIFECYCLE     ===========================
 
-            /** Default protected constructor. */
+            /** Default locked constructor. */
             explicit LayeredEarthEM ( const ctor_key& );
 
-            /** Default protected constructor. */
+            /** Locked deserializing constructor. */
 			LayeredEarthEM ( const YAML::Node& node, const ctor_key& );
 
-            /** Default protected constructor. */
+            /** Default destructor */
             virtual ~LayeredEarthEM ();
 
             /**

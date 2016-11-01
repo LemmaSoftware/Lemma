@@ -165,6 +165,8 @@
 #ifndef __LEMMA_H
 #define __LEMMA_H
 
+    #include <LemmaConfig.h>
+
     // Include some basic stuff that will always be needed
     #include <iostream>
     #include <iomanip>

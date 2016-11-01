@@ -31,20 +31,24 @@ int main() {
 
     std::uniform_real_distribution<> dis(0, 1);
     VectorXcr con = VectorXcr(nl);
+    VectorXr thick = VectorXr(nl-2);
     con(0) = 0;
     for ( int i=1; i<nl; ++i ) {
         con(i) = Complex(dis(gen), dis(gen));
     }
-    std::cout << con << std::endl;
+    for ( int i=0; i<nl-2; ++i ) {
+        thick(i) = dis(gen);
+    }
+    auto Obj = LayeredEarthEM::NewSP();
+         Obj->SetNumberOfLayers(nl);
+         Obj->SetLayerConductivity(con);
+         Obj->SetLayerThickness(thick);
 
-    auto model = LayeredEarthEM::NewSP();
-        model->SetNumberOfLayers(nl);
-        //model->SetLayerThickness( (VectorXr(4) << 10,10,10,10).finished() );
-        //model->SetLayerConductivity( (VectorXcr(6) << .1, .10,.10,.10,.10,.10).finished() );
-    auto model2 = LayeredEarthEM::DeSerialize(model->Serialize());
+    auto model2 = LayeredEarthEM::DeSerialize(Obj->Serialize());
 
-    std::cout << model->GetNumberOfLayers() << std::endl;
-    std::cout << model2->GetNumberOfLayers() << std::endl;
+    std::cout << *Obj << std::endl;
+    //std::cout << model->GetNumberOfLayers() << std::endl;
+    //std::cout << model2->GetNumberOfLayers() << std::endl;
 
 }
 
