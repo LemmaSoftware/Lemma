@@ -10,11 +10,11 @@
   @date     05/18/2010
   @version  $Id: PolygonalWireAntenna.h 211 2015-02-27 05:43:26Z tirons $
  **/
-
-#include "WireAntenna.h"
-
 #ifndef  POLYGONALWIREANTENNA_INC
 #define  POLYGONALWIREANTENNA_INC
+
+#include "DipoleSource.h"
+#include "WireAntenna.h"
 
 namespace Lemma {
 
@@ -27,27 +27,42 @@ namespace Lemma {
     // ===================================================================
     class PolygonalWireAntenna : public WireAntenna {
 
-        friend std::ostream &operator<<(std::ostream &stream,
-                const PolygonalWireAntenna &ob);
+        friend std::ostream &operator<<(std::ostream &stream, const PolygonalWireAntenna &ob);
+
+        struct ctor_key {};
 
         public:
 
             // ====================  LIFECYCLE     =======================
 
+            /// Default protected constructor.
+            explicit PolygonalWireAntenna ( const ctor_key& );
+
+            /// Default protected constructor.
+            PolygonalWireAntenna (const YAML::Node& node, const ctor_key& );
+
+            /// Default protected constructor.
+            virtual ~PolygonalWireAntenna ();
+
             /**
              * Declares all memory and returns a new instance.
              */
-            static PolygonalWireAntenna* New();
-
-            /**
-             * @copybrief LemmaObject::Delete()
-             * @copydetails LemmaObject::Delete()
-             */
-            void Delete();
+            static std::shared_ptr<PolygonalWireAntenna> NewSP();
 
             /// Makes a deep copy of this antenna with all connections except
             /// the dipole approximation.
-            PolygonalWireAntenna* Clone();
+            std::shared_ptr<PolygonalWireAntenna> Clone();
+
+            /**
+             *  Uses YAML to serialize this object.
+             *  @return a YAML::Node
+             */
+            YAML::Node Serialize() const;
+
+            /**
+             *   Constructs an object from a YAML::Node.
+             */
+            static std::shared_ptr<PolygonalWireAntenna> DeSerialize(const YAML::Node& node);
 
             // ====================  OPERATORS     =======================
 
@@ -77,39 +92,12 @@ namespace Lemma {
 
             // ====================  INQUIRY       =======================
 
-            #ifdef HAVE_YAMLCPP
-            /**
-             *  Uses YAML to serialize this object.
-             *  @return a YAML::Node
-             */
-            YAML::Node Serialize() const;
-
-            /**
-             *   Constructs an object from a YAML::Node.
-             */
-            static PolygonalWireAntenna* DeSerialize(const YAML::Node& node);
-            #endif
+            /** Returns the name of the underlying class, similiar to Python's type */
+            virtual inline std::string GetName() const {
+                return CName;
+            }
 
         protected:
-
-            // ====================  LIFECYCLE     =======================
-
-            /// Default protected constructor.
-            PolygonalWireAntenna (const std::string& name);
-
-#ifdef HAVE_YAMLCPP
-            /// Default protected constructor.
-            PolygonalWireAntenna (const YAML::Node& node);
-#endif
-
-            /// Default protected constructor.
-            ~PolygonalWireAntenna ();
-
-            /**
-             * @copybrief LemmaObject::Release()
-             * @copydetails LemmaObject::Release()
-             */
-            void Release();
 
             // ====================  DATA MEMBERS  =======================
 
@@ -123,15 +111,15 @@ namespace Lemma {
             Real maxDipoleMoment;
 
             /// appends
-            void PushXYZDipoles(const Vector3r &step, const Vector3r &cp,
+            void PushXYZDipoles( const Vector3r &step, const Vector3r &cp,
                             const Vector3r &dir,
-                            std::vector<DipoleSource*> &Dipoles) ;
+                            std::vector< std::shared_ptr<DipoleSource> > &Dipoles) ;
 
             /// corrects for overstep
-            void CorrectOverstepXYZDipoles(const Vector3r &step,
+            void CorrectOverstepXYZDipoles( const Vector3r &step,
                             const Vector3r &cp,
                             const Vector3r &dir,
-                            std::vector<DipoleSource*> &Dipoles );
+                            std::vector< std::shared_ptr<DipoleSource> > &Dipoles );
 
             // ====================  OPERATIONS    =======================
 
@@ -161,6 +149,8 @@ namespace Lemma {
         private:
 
             Vector3r                               rRepeat;
+
+            static constexpr auto CName = "PolygonalWireAntenna";
 
     }; // -----  end of class  PolygonalWireAntenna  -----
 

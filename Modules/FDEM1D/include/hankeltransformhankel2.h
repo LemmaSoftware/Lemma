@@ -16,7 +16,7 @@
 
 #include "hankeltransform.h"
 #include "kernelem1dbase.h"
-#include "kernelem1dspec.h"
+#include "KernelEM1DSpec.h"
 #include "CubicSplineInterpolator.h"
 
 namespace Lemma {

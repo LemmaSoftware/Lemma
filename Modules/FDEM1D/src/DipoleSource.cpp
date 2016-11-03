@@ -11,122 +11,51 @@
   @version  $Id: dipolesource.cpp 203 2015-01-09 21:19:04Z tirons $
  **/
 
-#include "dipolesource.h"
-#include "kernelem1dmanager.h"
+#include "DipoleSource.h"
+#include "KernelEM1DManager.h"
+#include "FieldPoints.h"
 
-#include "GroundedElectricDipole.h"
-#include "UngroundedElectricDipole.h"
-#include "MagneticDipole.h"
-#include "receiverpoints.h"
+//#include "GroundedElectricDipole.h"
+//#include "UngroundedElectricDipole.h"
+//#include "MagneticDipole.h"
+
 #include "hankeltransform.h"
 
 namespace Lemma {
 
 
     // ====================    FRIENDS     ======================
-    std::ostream &operator<<(std::ostream &stream,
-                const DipoleSource &ob) {
-
-        stream << *(LemmaObject*)(&ob);
-        switch (ob.Type) {
-            case (NOSOURCETYPE):
-                stream << "\tType=" << ob.Type << " (Uninitialized dipole)"
-                << "\n";
-                break;
-            case (GROUNDEDELECTRICDIPOLE):
-                stream << "\tType=" << ob.Type << " (Grounded Electric dipole)"
-                << "\n";
-                break;
-            case (UNGROUNDEDELECTRICDIPOLE):
-                stream << "\tType=" << ob.Type << " (Ungrounded Electric dipole)"
-                << "\n";
-                break;
-            case (MAGNETICDIPOLE):
-                stream << "\tType=" << ob.Type << " (Magnetic dipole)"
-                << "\n";
-                break;
-            default:
-                throw NonValidDipoleType( );
-        }
-
-        /*
-        switch (ob.Polarisation) {
-
-            case(NOPOLARISATION):
-                stream << "Polarisation=" << ob.Polarisation <<
-                        " (Unset polarisation)" << "\n";
-                break;
-
-            case(XPOLARISATION):
-                stream << "Polarisation=" << ob.Polarisation <<
-                        " (X polarised)" << "\n";
-                break;
-
-            case(YPOLARISATION):
-                stream << "Polarisation=" << ob.Polarisation <<
-                        " (Y polarised)" << "\n";
-                break;
-
-            case(ZPOLARISATION):
-                stream << "Polarisation=" << ob.Polarisation <<
-                        " (Z polarised)" << "\n";
-                break;
-        }
-        */
-        stream << "\tPolarisation " << ob.Phat.transpose() << "\n";
-        stream << "\tLocation= " << ob.Location.transpose()
-                << " [metres] \n";
-        stream << "\tFrequencies= " << ob.Freqs.transpose() << " [Hz] \n";
-        stream << "\tPhase= " << ob.Phase << "\n";
-        stream << "\tMoment= " << ob.Moment << "\n";
+    std::ostream &operator<<(std::ostream &stream, const DipoleSource &ob) {
+        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
         return stream;
     }
 
 
     // ====================  LIFECYCLE     ======================
 
-    DipoleSource::DipoleSource(const std::string &name) :
-                    LemmaObject(name),
+    DipoleSource::DipoleSource( const ctor_key& ) : LemmaObject( ),
                     Type(NOSOURCETYPE),
                     Phase(0),
                     Moment(1),
-                    KernelManager(NULL),
-                    Receivers(NULL),
-                    Earth(NULL)
+                    KernelManager(nullptr),
+                    Receivers(nullptr),
+                    Earth(nullptr)
     {
         this->Location.setZero();
         this->Phat.setZero();
     }
 
     DipoleSource::~DipoleSource() {
-        if (this->NumberOfReferences != 0)
-            throw DeleteObjectWithReferences(this);
-        /* These are not attched as they are connected for such a short time that the reference counting
-           was getting tricked and calling delete
-        if (Receivers != NULL) {
-            Receivers->DetachFrom(this);
-        }
-
-        if (Earth != NULL) {
-            Earth->DetachFrom(this);
-        }
-        */
-        if (KernelManager != NULL) {
-            KernelManager->Delete();
-        }
-
     }
 
-    DipoleSource* DipoleSource::New() {
-        DipoleSource* Obj = new DipoleSource("DipoleSource");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<DipoleSource> DipoleSource::NewSP() {
+        return std::make_shared<DipoleSource> ( ctor_key() );
     }
 
-    DipoleSource* DipoleSource::Clone() {
 
-        DipoleSource* Obj = new DipoleSource("DipoleSource");
-        Obj->AttachTo(Obj);
+    std::shared_ptr<DipoleSource> DipoleSource::Clone() {
+
+        auto Obj = DipoleSource::NewSP();
 
         // copy
         Obj->Type = Type;
@@ -157,14 +86,6 @@ namespace Lemma {
         Obj->Freqs = Freqs;
 
         return Obj;
-    }
-
-    void DipoleSource::Delete() {
-        this->DetachFrom(this);
-    }
-
-    void DipoleSource::Release() {
-        delete this;
     }
 
     // ====================  ACCESS        ======================
@@ -275,21 +196,15 @@ namespace Lemma {
 
     // ====================  OPERATIONS     =====================
 
-    void DipoleSource::SetKernels(const int& ifreq, const FIELDCALCULATIONS&  Fields , ReceiverPoints* ReceiversIn, const int& irecin,
-            LayeredEarthEM* EarthIn  ) {
+    void DipoleSource::SetKernels(const int& ifreq, const FIELDCALCULATIONS&  Fields , std::shared_ptr<FieldPoints> ReceiversIn, const int& irecin,
+            std::shared_ptr<LayeredEarthEM> EarthIn  ) {
 
-        // These are not properly attached because in tight parallel loops reference counting is unreliable. This is safe as this
-        // method is not exposed to the public API and we know what we are doing here -TI
         if (Receivers != ReceiversIn) {
-            //if (Receivers != NULL) Receivers->DetachFrom(this);
             Receivers = ReceiversIn;
-            //ReceiversIn->AttachTo(this);
         }
 
         if (Earth != EarthIn) {
-            //if (Earth != NULL) Earth->DetachFrom(this);
             Earth = EarthIn;
-            //EarthIn->AttachTo(this);
         }
 
         if (irecin != irec) {
@@ -317,10 +232,9 @@ namespace Lemma {
         lays = Earth->GetLayerAtThisDepth(Location[2]);
         layr = Earth->GetLayerAtThisDepth(Receivers->GetLocation(irec)[2]);
 
-        if (KernelManager != NULL) KernelManager->Delete();
-        KernelManager = KernelEM1DManager::New();
+        KernelManager = KernelEM1DManager::NewSP();
             KernelManager->SetEarth(Earth);
-            KernelManager->SetDipoleSource(this, ifreq, Receivers->GetLocation(irec)[2]);
+            KernelManager->SetDipoleSource(shared_from_this(), ifreq, Receivers->GetLocation(irec)[2]);
         kernelFreq = Freqs(ifreq); // this is never used
         ReSetKernels( ifreq, Fields, Receivers, irec, Earth );
 
@@ -329,8 +243,8 @@ namespace Lemma {
 
     // TODO we could make the dipoles template specializations avoiding this rats nest of switch statements. Probably
     //      not the most critical piece though
-    void DipoleSource::ReSetKernels(const int& ifreq, const FIELDCALCULATIONS&  Fields , ReceiverPoints* Receivers, const int& irec,
-            LayeredEarthEM* Earth  ) {
+    void DipoleSource::ReSetKernels(const int& ifreq, const FIELDCALCULATIONS&  Fields , std::shared_ptr<FieldPoints> Receivers, const int& irec,
+            std::shared_ptr<LayeredEarthEM> Earth  ) {
 
         Vector3r Pol = Phat;
 
@@ -807,7 +721,7 @@ namespace Lemma {
 
     }
 
-    void DipoleSource::UpdateFields( const int& ifreq, HankelTransform* Hankel, const Real& wavef) {
+    void DipoleSource::UpdateFields( const int& ifreq, std::shared_ptr<HankelTransform> Hankel, const Real& wavef) {
 
         Vector3r Pol = Phat;
 
@@ -1189,7 +1103,7 @@ namespace Lemma {
 
     // ====================  INQUIRY       ======================
 
-    KernelEM1DManager*  DipoleSource::GetKernelManager() {
+    std::shared_ptr<KernelEM1DManager>  DipoleSource::GetKernelManager() {
         return KernelManager;
     }
 

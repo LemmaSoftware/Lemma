@@ -15,65 +15,35 @@
 
 namespace Lemma {
 
-    #ifdef HAVE_YAMLCPP
     std::ostream &operator << (std::ostream &stream, const WireAntenna &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
         return stream;
     }
-    #else
-    std::ostream &operator<<(std::ostream &stream,
-                const WireAntenna &ob) {
 
-        stream << *(LemmaObject*)(&ob);
-        stream << "Current: " << ob.Current << " [A]\n";
-        stream << "Frequencies: " << ob.Freqs.transpose() << " [Hz]\n";
-        stream << "Number of points " << ob.NumberOfPoints << "\n";
-        stream << "Number of turns " << ob.NumberOfTurns << "\n";
-
-        if (ob.NumberOfPoints) {
-            stream << "Points:\n" << ob.Points.transpose() << "\n";
-            //stream << "Dipoles used to approximate " << ob.Dipoles.size() << "\n";
-        }
-        return stream;
-    }
-    #endif
     // ====================  LIFECYCLE     =======================
 
-    WireAntenna::WireAntenna(const std::string &name) :
-        LemmaObject(name),
+    WireAntenna::WireAntenna( const ctor_key& ) : LemmaObject( ),
         NumberOfPoints(0), Current(1), NumberOfTurns(1) {
     }
 
-#ifdef HAVE_YAMLCPP
-    WireAntenna::WireAntenna(const YAML::Node &node) :
-        LemmaObject(node) {
+    WireAntenna::WireAntenna( const YAML::Node& node, const ctor_key& ) : LemmaObject( node ) {
         Points =  node["Points"].as<Vector3Xr>();
         Freqs = node["Freqs"].as<VectorXr>();
         NumberOfPoints = node["NumberOfPoints"].as<int>();
         NumberOfTurns = node["NumberOfTurns"].as<int>();
         Current = node["Current"].as<Real>();
     }
-#endif
 
     WireAntenna::~WireAntenna() {
-        for (unsigned int id=0; id<Dipoles.size(); ++id) {
-            Dipoles[id]->Delete();
-        }
-        Dipoles.clear();
-        if (this->NumberOfReferences != 0) {
-            throw DeleteObjectWithReferences(this);
-        }
     }
 
-    WireAntenna* WireAntenna::New() {
-        WireAntenna* Obj = new WireAntenna("WireAntenna");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<WireAntenna> WireAntenna::NewSP() {
+        return std::make_shared<WireAntenna>( ctor_key() );
     }
 
-    WireAntenna* WireAntenna::Clone() {
-        WireAntenna* copy = WireAntenna::New();
-		//copy->AttachTo(copy); // NO! Attached above!
+    std::shared_ptr<WireAntenna> WireAntenna::Clone() {
+        auto copy = WireAntenna::NewSP();
+
 		copy->NumberOfPoints = this->NumberOfPoints;
 		copy->Freqs = this->Freqs;
 		copy->Current = this->Current;
@@ -83,13 +53,32 @@ namespace Lemma {
 		return copy;
     }
 
-    void WireAntenna::Delete() {
-        this->DetachFrom(this);
-    }
+    //--------------------------------------------------------------------------------------
+    //       Class:  WireAntenna
+    //      Method:  Serialize
+    //--------------------------------------------------------------------------------------
+    YAML::Node WireAntenna::Serialize (  ) const {
+        YAML::Node node = LemmaObject::Serialize();
+        node.SetTag( GetName() );
+        node["NumberOfPoints"] = NumberOfPoints;
+        node["NumberOfTurns"] = NumberOfTurns;
+        node["Current"] = Current;
+        node["Points"] = Points;
+        node["Freqs"] = Freqs;
+        return node;
+    }		// -----  end of method WireAntenna::Serialize  -----
 
-    void WireAntenna::Release() {
-        delete this;
-    }
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  WireAntenna
+    //      Method:  DeSerialize
+    //--------------------------------------------------------------------------------------
+    std::shared_ptr<WireAntenna> WireAntenna::DeSerialize ( const YAML::Node& node ) {
+        if (node.Tag() != "WireAntenna") {
+            throw  DeSerializeTypeMismatch( "WireAntenna", node.Tag());
+        }
+        return std::make_shared<WireAntenna> ( node, ctor_key() );
+    }		// -----  end of method WireAntenna::DeSerialize  -----
 
 
     // ====================  ACCESS        =======================
@@ -165,9 +154,6 @@ namespace Lemma {
     void WireAntenna::ApproximateWithElectricDipoles(const Real &deltai) {
 
         // Get rid of any dipoles
-        for (unsigned int id=0; id<Dipoles.size(); ++id) {
-            Dipoles[id]->Delete();
-        }
         Dipoles.clear();
 
         Real Dist(0);
@@ -190,7 +176,7 @@ namespace Lemma {
 
                 // X dipoles
                 if (std::abs(r[0]) > 1e-6) {
-                    DipoleSource *tx = DipoleSource::New();
+                    auto tx = DipoleSource::NewSP();
                     tx->SetLocation(p);
                     tx->SetType(GROUNDEDELECTRICDIPOLE);
                     tx->SetPolarisation(XPOLARISATION);
@@ -201,7 +187,7 @@ namespace Lemma {
 
                 // Y dipoles
                 if (std::abs(r[1]) > 1e-6) {
-                    DipoleSource *ty = DipoleSource::New();
+                    auto ty = DipoleSource::NewSP();
                     ty->SetLocation(p);
                     ty->SetType(GROUNDEDELECTRICDIPOLE);
                     ty->SetPolarisation(YPOLARISATION);
@@ -212,7 +198,7 @@ namespace Lemma {
 
                 // Z dipoles
                 if (std::abs(r[2]) > 1e-6) {
-                    DipoleSource *tz = DipoleSource::New();
+                    auto tz = DipoleSource::NewSP();
                     tz->SetLocation(p);
                     tz->SetType(GROUNDEDELECTRICDIPOLE);
                     tz->SetPolarisation(ZPOLARISATION);
@@ -233,7 +219,7 @@ namespace Lemma {
         return Dipoles.size();
     }
 
-    DipoleSource* WireAntenna::GetDipoleSource(const int &dip) {
+    std::shared_ptr<DipoleSource> WireAntenna::GetDipoleSource(const int &dip) {
         return this->Dipoles[dip];
     }
 
@@ -242,37 +228,6 @@ namespace Lemma {
         return Dipoles[idip]->GetVtkActor();
     }
     #endif
-
-    #ifdef HAVE_YAMLCPP
-    //--------------------------------------------------------------------------------------
-    //       Class:  WireAntenna
-    //      Method:  Serialize
-    //--------------------------------------------------------------------------------------
-    YAML::Node WireAntenna::Serialize (  ) const {
-        YAML::Node node = LemmaObject::Serialize();
-        node.SetTag( this->Name );
-        node["NumberOfPoints"] = NumberOfPoints;
-        node["NumberOfTurns"] = NumberOfTurns;
-        node["Current"] = Current;
-        node["Points"] = Points;
-        node["Freqs"] = Freqs;
-        return node;
-    }		// -----  end of method WireAntenna::Serialize  -----
-
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  WireAntenna
-    //      Method:  DeSerialize
-    //--------------------------------------------------------------------------------------
-    WireAntenna* WireAntenna::DeSerialize ( const YAML::Node& node ) {
-        WireAntenna* Object = new WireAntenna(node);
-        Object->AttachTo(Object);
-        DESERIALIZECHECK( node, Object )
-        return Object ;
-    }		// -----  end of method WireAntenna::DeSerialize  -----
-
-    #endif
-
 
     //--------------------------------------------------------------------------------------
     //       Class:  WireAntenna

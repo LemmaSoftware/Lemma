@@ -14,12 +14,14 @@
 #ifndef __hankeltransform_h
 #define __hankeltransform_h
 
-#include "LemmaObject.h"
-#include "kernelem1dbase.h"
-#include "kernelem1dspec.h"
-#include "kernelem1dmanager.h"
+//#include "kernelem1dbase.h"
+#include "KernelEM1DSpec.h"
+#include "KernelEM1DManager.h"
 
 namespace Lemma {
+
+
+        class KernelEM1DBase;
 
         // ===================================================================
         //        Class:  HankelTransform
@@ -55,15 +57,15 @@ namespace Lemma {
                 /// = omega * sqrt( EP*AMU )  amu = 4 pi e-7  ep = 8.85e-12
                 virtual Complex Zgauss(const int &ikk, const EMMODE &imode,
                             const int &itype, const Real &rho,
-                            const Real &wavef, KernelEm1DBase *Kernel)=0;
+                            const Real &wavef, std::shared_ptr<KernelEm1DBase> Kernel)=0;
 
                 /// Computes related kernels, if applicable, otherwise this is
                 /// just a dummy function.
                 virtual void ComputeRelated(const Real& rho, KernelEm1DBase* Kernel);
 
-                virtual void ComputeRelated(const Real& rho, std::vector< KernelEm1DBase* > KernelVec);
+                virtual void ComputeRelated(const Real& rho, std::vector< std::shared_ptr<KernelEM1DBase> > KernelVec);
 
-                virtual void ComputeRelated(const Real& rho, KernelEM1DManager* KernelManager);
+                virtual void ComputeRelated(const Real& rho, std::shared_ptr<KernelEM1DManager> KernelManager);
 
                 // ====================  ACCESS        =======================
 

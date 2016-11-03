@@ -14,8 +14,7 @@
 #ifndef __WIREANTENNA_H
 #define __WIREANTENNA_H
 
-#include "LemmaObject.h"
-#include "dipolesource.h"
+#include "DipoleSource.h"
 
 #ifdef LEMMAUSEVTK
 #include "vtkActor.h"
@@ -32,29 +31,44 @@ namespace Lemma {
     // ===================================================================
     class WireAntenna : public LemmaObject {
 
-        friend std::ostream &operator<<(std::ostream &stream,
-            const WireAntenna &ob);
+        friend std::ostream &operator<<(std::ostream &stream, const WireAntenna &ob);
+
+        struct ctor_key {};
 
         public:
 
             // ====================  LIFECYCLE     =======================
 
+            /** Locked default constructor */
+            explicit WireAntenna ( const ctor_key& );
+
+            /** Locked deserializing constructor */
+            WireAntenna ( const YAML::Node& node, const ctor_key& );
+
+            /** Destructor */
+            virtual ~WireAntenna();
+
             /**
              * Initialises antenna to contain no points, with no current
              * and no frequency. NumberOfTurns set to 1
              */
-            static WireAntenna* New();
+            static std::shared_ptr<WireAntenna> NewSP();
 
             /**
              * Provides deep copy
              */
-            virtual WireAntenna* Clone();
+            virtual std::shared_ptr<WireAntenna> Clone();
 
             /**
-             * @copybrief LemmaObject::Delete()
-             * @copydetails LemmaObject::Delete()
+             *  Uses YAML to serialize this object.
+             *  @return a YAML::Node
              */
-            void Delete();
+            YAML::Node Serialize() const;
+
+            /**
+             *   Constructs an object from a YAML::Node.
+             */
+            static std::shared_ptr<WireAntenna> DeSerialize( const YAML::Node& node );
 
             // ====================  OPERATORS     =======================
 
@@ -113,19 +127,6 @@ namespace Lemma {
 
             // ====================  INQUIRY       =======================
 
-            #ifdef HAVE_YAMLCPP
-            /**
-             *  Uses YAML to serialize this object.
-             *  @return a YAML::Node
-             */
-            YAML::Node Serialize() const;
-
-            /**
-             *   Constructs an object from a YAML::Node.
-             */
-            static WireAntenna* DeSerialize(const YAML::Node& node);
-            #endif
-
 			/**
               * Returns the number of turns
               * @return the number of turns of the loop.
@@ -159,7 +160,7 @@ namespace Lemma {
 			/**
               * Returns pointer to a dipole source
 			  */
-            DipoleSource* GetDipoleSource(const int &dip);
+            std::shared_ptr<DipoleSource> GetDipoleSource(const int &dip);
 
 			/**
               * returns number of dipoles used to approximate this
@@ -184,30 +185,12 @@ namespace Lemma {
              */
             bool IsHorizontallyPlanar();
 
+            /** Returns the name of the underlying class, similiar to Python's type */
+            virtual inline std::string GetName() const {
+                return CName;
+            }
+
         protected:
-
-            // ====================  LIFECYCLE     =======================
-
-			/**
-              * Default protected constructor.
-			  */
-            WireAntenna (const std::string &name);
-
-#ifdef HAVE_YAMLCPP
-        /** Protected DeDerializing constructor, use factory DeSerialize  method*/
-            WireAntenna (const YAML::Node& node);
-#endif
-
-			/**
-              * Default protected destructor.
-			  */
-            ~WireAntenna ();
-
-            /**
-             * @copybrief LemmaObject::Release()
-             * @copydetails LemmaObject::Release()
-             */
-            void Release();
 
             // ====================  DATA MEMBERS  =======================
 
@@ -229,7 +212,7 @@ namespace Lemma {
 			/**
               * List of the dipoles
 			  */
-            std::vector<DipoleSource*>           Dipoles;
+            std::vector< std::shared_ptr<DipoleSource> > Dipoles;
 
 			/**
               * Points that define this loop
@@ -242,6 +225,8 @@ namespace Lemma {
             VectorXr                             Freqs;
 
         private:
+
+            static constexpr auto CName = "WireAntenna";
 
     }; // -----  end of class  WireAntenna  -----
 

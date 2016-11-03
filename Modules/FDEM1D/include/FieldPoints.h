@@ -28,12 +28,12 @@
 #endif
 
 #include "LemmaObject.h"
-//#include "dipolesource.h"
+//#include "DipoleSource.h"
 
 namespace Lemma {
 
     // Forward Declarations
-    class DipoleSource;
+    //class DipoleSource;
 
     // =======================================================================
     //        Class:  FieldPoints
@@ -48,6 +48,9 @@ namespace Lemma {
     // =======================================================================
     class FieldPoints : public LemmaObject {
 
+        friend class EMEarth1D;
+        friend class DipoleSource;
+
         /**
          *  Stream operator printing out information about this class.
          */
@@ -59,8 +62,7 @@ namespace Lemma {
 
             // ====================    FRIENDS     ===========================
 
-            //friend class EMEarth1D;
-            //friend class DipoleSource;
+
 
             // ====================  LIFECYCLE     ===========================
 

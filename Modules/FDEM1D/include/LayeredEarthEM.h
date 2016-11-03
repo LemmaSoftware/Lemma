@@ -15,7 +15,6 @@
 #define __LAYEREDEARTHEM_H
 
 #include "LayeredEarth.h"
-#include <iomanip>
 
 namespace Lemma {
 

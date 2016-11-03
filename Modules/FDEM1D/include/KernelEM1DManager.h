@@ -17,7 +17,7 @@
 //#include "dipolesource.h"
 //#include "kernelem1dreflbase.h"
 #include "kernelem1dbase.h"
-#include "kernelem1dspec.h"
+#include "KernelEM1DSpec.h"
 
 namespace Lemma {
 
@@ -34,22 +34,24 @@ namespace Lemma {
     // ===================================================================
     class KernelEM1DManager : public LemmaObject {
 
+        struct ctor_key {};
+
+        friend std::ostream &operator<<(std::ostream &stream, const KernelEM1DManager &ob);
+
         public:
 
-            friend std::ostream &operator<<(std::ostream &stream,
-                        const KernelEM1DManager &ob);
-
             // ====================  LIFECYCLE     =======================
+
+            /** Default protected constructor. */
+            KernelEM1DManager (const std::string& name);
+
+            /** Default protected constructor. */
+            ~KernelEM1DManager ();
 
             /** Returns a pointer to a new object of type KernelEM1DManager.
              * It allocates all necessary memory.
              */
-            static KernelEM1DManager* New();
-
-            /** Deletes this object. Delete also disconnects any
-             * attachments to this object.
-             */
-            void Delete();
+            static std::shared_ptr<KernelEM1DManager> NewSP();
 
             // ====================  OPERATORS     =======================
 
@@ -60,8 +62,8 @@ namespace Lemma {
             /*
             {
 
-                KernelEm1DSpec<Mode, Ikernel, Isource, Irecv>* NewKern =
-                    KernelEm1DSpec<Mode, Ikernel, Isource, Irecv>::New();
+                KernelEM1DSpec<Mode, Ikernel, Isource, Irecv>* NewKern =
+                    KernelEM1DSpec<Mode, Ikernel, Isource, Irecv>::New();
                 KernelVec.push_back( NewKern );
                 NewKern->managerIdx = KernelVec.size()-1;
                 switch (Mode) {
@@ -99,9 +101,6 @@ namespace Lemma {
 
             /** Clears the vector of kernels */
             void ClearVec() {
-                for (unsigned int ik=0; ik<this->KernelVec.size(); ++ik) {
-                    this->KernelVec[ik]->Delete();
-                }
                 KernelVec.clear();
             }
 
@@ -109,66 +108,61 @@ namespace Lemma {
 
             /** Sets the LayeredEarthEM class that will be used by the kernels.
              */
-            void SetEarth( LayeredEarthEM*   Earth);
+            void SetEarth( std::shared_ptr<LayeredEarthEM>   Earth);
 
             /** Sets the source of the kernels */
-            void SetDipoleSource( DipoleSource*   Dipole, const int& ifreq, const Real& rx_zin);
+            void SetDipoleSource( std::shared_ptr<DipoleSource> Dipole, const int& ifreq, const Real& rx_zin);
 
             /** Returns pointer to specified kernel indice. Indices are assigned in the same
                 order as they are created by AddKernel.
              */
-            KernelEm1DBase*    GetKernel(const unsigned int& ik);
+            std::shared_ptr<KernelEm1DBase>    GetKernel(const unsigned int& ik);
 
             /** Returns pointer to connected dipole.
              */
-            DipoleSource*    GetDipole( );
+            std::shared_ptr<DipoleSource>    GetDipole( );
 
-            inline std::vector<KernelEm1DBase*>  GetSTLVector() {
+            inline std::vector< std::shared_ptr<KernelEm1DBase> >  GetSTLVector() {
                 return KernelVec;
             }
 
             // ====================  INQUIRY       =======================
 
+            /** Returns the name of the underlying class, similiar to Python's type */
+            virtual inline std::string GetName() const {
+                return CName;
+            }
+
         protected:
 
             // ====================  LIFECYCLE     =======================
 
-            /** Default protected constructor. */
-            KernelEM1DManager (const std::string& name);
-
-            /** Default protected constructor. */
-            ~KernelEM1DManager ();
-
-            /**
-             * @copybrief LemmaObject::Release()
-             * @copydetails LemmaObject::Release()
-             */
-            void Release();
-
             // ====================  DATA MEMBERS  =========================
 
             /** List of KernelEm1D instances */
-            std::vector<KernelEm1DBase*>           KernelVec;
+            std::vector< std::shared_ptr<KernelEm1DBase> >  KernelVec;
 
             /** Reflection base used for TE mode */
-            KernelEM1DReflBase*                    TEReflBase;
+            std::shared_ptr<KernelEM1DReflBase>        TEReflBase;
 
             /** Reflection base used for TM mode */
-            KernelEM1DReflBase*                    TMReflBase;
+            std::shared_ptr<KernelEM1DReflBase>        TMReflBase;
 
             /** EmEarth Class */
-            LayeredEarthEM*                        Earth;
+            std::shared_ptr<LayeredEarthEM>            Earth;
 
             /** EM dipole souce */
-            DipoleSource*                          Dipole;
+            std::shared_ptr<DipoleSource>              Dipole;
 
             /** Frequency index for the sources */
-            int                                    ifreq;
+            int                                        ifreq;
 
             /** Receiver height */
-            Real                                   rx_z;
+            Real                                       rx_z;
 
         private:
+
+            static constexpr auto CName = "KernelEM1DManager";
 
     }; // -----  end of class  KernelEM1DManager  -----
 
@@ -176,14 +170,13 @@ namespace Lemma {
     template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
     int KernelEM1DManager::AddKernel( ) {
 
-        KernelEm1DSpec<Mode, Ikernel, Isource, Irecv>* NewKern =
-                    KernelEm1DSpec<Mode, Ikernel, Isource, Irecv>::New();
+        auto NewKern = KernelEM1DSpec<Mode, Ikernel, Isource, Irecv>::NewSP();
         KernelVec.push_back( NewKern );
         NewKern->managerIdx = KernelVec.size()-1;
         switch (Mode) {
             case TE:
-                if (TEReflBase == NULL) {
-                    TEReflBase = KernelEM1DReflSpec<TE, Isource, Irecv>::New();
+                if (TEReflBase == nullptr) {
+                    TEReflBase = KernelEM1DReflSpec<TE, Isource, Irecv>::NewSP();
                     TEReflBase->Initialise(Earth);
                     TEReflBase->SetUpSource(Dipole, ifreq);
                     TEReflBase->SetUpReceiver( rx_z );
@@ -191,8 +184,8 @@ namespace Lemma {
                 NewKern->SetReflBase(TEReflBase);
                 break;
             case TM:
-                if (TMReflBase == NULL) {
-                    TMReflBase = KernelEM1DReflSpec<TM, Isource, Irecv>::New();
+                if (TMReflBase == nullptr) {
+                    TMReflBase = KernelEM1DReflSpec<TM, Isource, Irecv>::NewSP();
                     TMReflBase->Initialise(Earth);
                     TMReflBase->SetUpSource(Dipole, ifreq);
                     TMReflBase->SetUpReceiver( rx_z );

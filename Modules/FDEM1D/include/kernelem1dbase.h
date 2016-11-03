@@ -38,6 +38,15 @@ namespace Lemma {
 
             // ====================  LIFECYCLE     =======================
 
+            /// Default protected constructor.
+            KernelEm1DBase ( ) : LemmaObject( ) {
+
+            }
+
+            /// Default protected constructor.
+            ~KernelEm1DBase () {
+            }
+
             // ====================  OPERATORS     =======================
 
             // ====================  OPERATIONS    =======================
@@ -77,32 +86,15 @@ namespace Lemma {
 
         protected:
 
-            // ====================  LIFECYCLE     =======================
-
-            /// Default protected constructor.
-            KernelEm1DBase (const std::string& name) : LemmaObject(name)
-            {
-            }
-
-            /// Default protected constructor.
-            ~KernelEm1DBase () {
-                if (this->NumberOfReferences > 0)
-                    throw DeleteObjectWithReferences( this );
-            }
-
-            void Release() {
-                delete this;
-            }
-
-            // ====================  OPERATIONS    =======================
-
-
             // ====================  DATA MEMBERS  =========================
 
             /** Where does this kernel live on the vector managed by the manager */
             int  managerIdx;
 
         private:
+
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "KernelEM1DBase";
 
     }; // -----  end of class  KernelEm1DBase  -----
 

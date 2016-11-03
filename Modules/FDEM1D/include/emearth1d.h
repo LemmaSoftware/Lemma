@@ -14,13 +14,17 @@
 #ifndef __EMEARTH1D_H
 #define __EMEARTH1D_H
 
-#include "dipolesource.h"
-#include "layeredearthem.h"
-#include "receiverpoints.h"
-#include "WireAntenna.h"
-#include "PolygonalWireAntenna.h"
-#include "kernelem1dspec.h"
-#include "kernelem1dmanager.h"
+
+
+// forward declare these due to include cycle
+//#include "LayeredEarthEM.h"
+//#include "DipoleSource.h"
+//#include "FieldPoints.h"
+//#include "WireAntenna.h"
+//#include "PolygonalWireAntenna.h"
+//#include "KernelEM1DManager.h"
+
+#include "KernelEM1DSpec.h"
 #include "hankeltransformgaussianquadrature.h"
 #include "hankeltransformhankel2.h"
 #include "FHTKey.h"
@@ -35,6 +39,12 @@
 
 namespace Lemma {
 
+    class WireAntenna;
+    class PolygonalWireAntenna;
+    class FieldPoints;
+    class DipoleSource;
+    class LayeredEarthEM;
+
     // =======================================================================
     //        Class:  EmEarth1D
     /// \brief  Implimentation of 1D EM solution.
@@ -45,11 +55,22 @@ namespace Lemma {
 		friend std::ostream &operator<<(std::ostream &stream,
 			const EMEarth1D &ob);
 
+        struct ctor_key{};
+
         public:
 
             //friend class KernelEm1D;
 
             // ====================  LIFECYCLE     ===========================
+
+            /** Default protected constructor. */
+            EMEarth1D ( const ctor_key& );
+
+            /** Default protected constructor. */
+			EMEarth1D ( const YAML::Node& node, const ctor_key& );
+
+            /** Default protected constructor. */
+            ~EMEarth1D ();
 
             /**
              *  Returns pointer to new EMEarth1D. Location is
@@ -57,25 +78,17 @@ namespace Lemma {
              *  initialized  to nonworking values that will throw
              *  exceptions if used.
              */
-            static EMEarth1D* New();
-
-            /**
-             * @copybrief LemmaObject::Delete()
-             * @copydetails LemmaObject::Delete()
-             */
-            void Delete();
+            static std::shared_ptr<EMEarth1D> NewSP();
 
             /** stream debugging info to std::out
              */
             void Query();
 
-            #ifdef HAVE_YAMLCPP
             /** YAML Serializing method
              */
             YAML::Node Serialize() const;
 
             //static EMEarth1D* DeSerialize(const YAML::Node& node);
-            #endif
 
             // ====================  OPERATORS     ===========================
 
@@ -99,13 +112,13 @@ namespace Lemma {
             void AttachWireAntenna(WireAntenna *antennae);
 
             /** Attaches a dipole for calculation */
-            void AttachDipoleSource(DipoleSource *dipole);
+            void AttachDipoleSource( std::shared_ptr<DipoleSource> dipole);
 
             /** Attaches a layered earth model for calculation */
-            void AttachLayeredEarthEM(LayeredEarthEM *Earth);
+            void AttachLayeredEarthEM( std::shared_ptr<LayeredEarthEM> Earth);
 
             /** Attaches a set of receiver points for calculation */
-            void AttachReceiverPoints(ReceiverPoints *Receivers);
+            void AttachFieldPoints( std::shared_ptr<FieldPoints> Receivers);
 
             /** Sets the fields that are calcultated, E,H or BOTH */
             void SetFieldsToCalculate(const FIELDCALCULATIONS &calc);
@@ -118,41 +131,22 @@ namespace Lemma {
 
         protected:
 
-            // ====================  LIFECYCLE     ===========================
-
-            /** Default protected constructor. */
-            EMEarth1D (const std::string& name);
-
-            #ifdef HAVE_YAMLCPP
-            /** Default protected constructor. */
-			EMEarth1D (const YAML::Node& node);
-            #endif
-
-            /** Default protected constructor. */
-            ~EMEarth1D ();
-
-            /**
-             * @copybrief LemmaObject::Release()
-             * @copydetails LemmaObject::Release()
-             */
-            void Release();
-
             // ====================  OPERATIONS    ===========================
 
             /** Used internally, this is the innermost loop of the MakeCalc3,
              *  and CalculateWireAntennaField routines.
              */
             void SolveSingleTxRxPair(const int &irec,
-                    HankelTransform *Hankel,
+                    std::shared_ptr<HankelTransform> Hankel,
                     const Real &wavef, const int &ifreq,
-                    DipoleSource *tDipole);
+                    std::shared_ptr<DipoleSource> tDipole);
 
             /** Used internally, this is the innermost loop of the MakeCalc3,
              *  and CalculateWireAntennaField routines.
              */
-            void SolveLaggedTxRxPair(const int &irec, Hankel2* Hankel,
+            void SolveLaggedTxRxPair(const int &irec, std::shared_ptr<Hankel2> Hankel,
                     const Real &wavef, const int &ifreq,
-                    PolygonalWireAntenna* antenna);
+                    std::shared_ptr<PolygonalWireAntenna> antenna);
 
             /** Removes all connections */
             void DetachAll();
@@ -160,16 +154,16 @@ namespace Lemma {
             // ====================  DATA MEMBERS  ===========================
 
             /** Computes field due to dipole */
-            DipoleSource*        Dipole;
+            std::shared_ptr<DipoleSource>        Dipole;
 
             /** Earth model (Cole-cole) */
-            LayeredEarthEM*      Earth;
+            std::shared_ptr<LayeredEarthEM>      Earth;
 
             /** Receiver points */
-            ReceiverPoints*      Receivers;
+            std::shared_ptr<FieldPoints>         Receivers;
 
             /** Wire antennae tx */
-            WireAntenna*         Antenna;
+            std::shared_ptr<WireAntenna>         Antenna;
 
             /** What fields are wanted */
             FIELDCALCULATIONS    FieldsToCalculate;

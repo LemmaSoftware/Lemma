@@ -14,11 +14,10 @@
 #ifndef __DIPOLESOURCE_H
 #define __DIPOLESOURCE_H
 
-#include "LemmaObject.h"
 #include "LayeredEarthEM.h"
+#include "FieldPoints.h"
 
-#include "receiverpoints.h"
-#include "emearth1d.h"
+//#include "emearth1d.h"
 
 #ifdef LEMMAUSEVTK
 #include "vtkActor.h"
@@ -32,8 +31,8 @@
 
 namespace Lemma {
 
+    // Forward declarations
     class KernelEM1DManager;
-    class ReceiverPoints;
     class HankelTransform;
 
     // ==========================================================================
@@ -44,35 +43,48 @@ namespace Lemma {
     // ==========================================================================
     class DipoleSource : public LemmaObject {
 
+        // ====================    FRIENDS     ======================
+
+        friend std::ostream &operator<<(std::ostream &stream, const DipoleSource &ob);
+
+        struct ctor_key{};
+
         public:
-
-            // ====================    FRIENDS     ======================
-
-            friend std::ostream &operator<<(std::ostream &stream,
-                        const DipoleSource &ob);
-
 
             // ====================  LIFECYCLE     ======================
 
+            /** Default locked constructor. */
+            explicit DipoleSource ( const ctor_key& );
+
+            /** Locked deserializing constructor */
+            DipoleSource ( const YAML::Node& node, const ctor_key& );
+
+            /** Default locked constructor. */
+            ~DipoleSource ();
+
             /**
-             *  Returns pointer to new DipoleSource. Location is
+             *  Returns shared_ptr  to new DipoleSource. Location is
              *  initialized to (0,0,0) type and polarization are
              *  initialized  to nonworking values that will throw
              *  exceptions if used.
              */
-            static DipoleSource* New();
+            static std::shared_ptr< DipoleSource > NewSP();
+
+            /**
+             *   YAML Serializing method
+             */
+            YAML::Node Serialize() const;
+
+            /**
+             *   Constructs an object from a YAML::Node.
+             */
+            static std::shared_ptr< DipoleSource > DeSerialize(const YAML::Node& node);
 
 
             /** Returns a deep copy of the dipole. Used to make thread safe methods. Does not
                 copy attachments.
              */
-            DipoleSource* Clone();
-
-            /**
-             * @copybrief LemmaObject::Delete()
-             * @copydetails LemmaObject::Delete()
-             */
-            void Delete();
+            std::shared_ptr< DipoleSource > Clone();
 
             // ====================  OPERATORS     ======================
 
@@ -80,15 +92,15 @@ namespace Lemma {
 
             /** Determines if kernels have been loaded already, and if so if they can be reused
              */
-            void SetKernels(const int& ifreq,  const FIELDCALCULATIONS&  Fields, ReceiverPoints* Receivers, const int& irec,
-                    LayeredEarthEM* Earth );
+            void SetKernels(const int& ifreq,  const FIELDCALCULATIONS&  Fields, std::shared_ptr<FieldPoints> Receivers, const int& irec,
+                    std::shared_ptr<LayeredEarthEM> Earth );
 
             /** resets the kernels if they cannot be reused */
-            virtual void ReSetKernels(const int& ifreq,  const FIELDCALCULATIONS&  Fields, ReceiverPoints* Receivers, const int& irec,
-                    LayeredEarthEM* Earth );
+            virtual void ReSetKernels(const int& ifreq,  const FIELDCALCULATIONS&  Fields, std::shared_ptr<FieldPoints> Receivers,
+                    const int& irec, std::shared_ptr<LayeredEarthEM> Earth );
 
             /** Updates the receiver fields */
-            virtual void UpdateFields(const int& ifreq, HankelTransform* Hankel, const Real& wavef);
+            virtual void UpdateFields(const int& ifreq, std::shared_ptr<HankelTransform> Hankel, const Real& wavef);
 
             // ====================  ACCESS        ======================
 
@@ -169,7 +181,7 @@ namespace Lemma {
             DipoleSourceType GetType();
 
             /// Returns pointer to KernelEM1DManager
-            KernelEM1DManager*  GetKernelManager();
+            std::shared_ptr<KernelEM1DManager>  GetKernelManager();
 
             // Returns enumerated DipoleSourcePolarization
             //DipoleSourcePolarisation GetDipoleSourcePolarisation();
@@ -199,21 +211,12 @@ namespace Lemma {
             vtkActor* GetVtkActor();
             #endif
 
-        protected:
+            /** Returns the name of the underlying class, similiar to Python's type */
+            virtual inline std::string GetName() const {
+                return CName;
+            }
 
-            // ====================  LIFECYCLE     ======================
-
-            /// Default protected constructor.
-            DipoleSource (const std::string &name);
-
-            /// Default protected constructor.
-            ~DipoleSource ();
-
-            /**
-             * @copybrief LemmaObject::Release()
-             * @copydetails LemmaObject::Release()
-             */
-            void Release();
+        private:
 
             // ====================  DATA MEMBERS  ======================
 
@@ -263,13 +266,16 @@ namespace Lemma {
             VectorXr                     Freqs;
 
             /// Storage of the EM1D kernels used by this dipole
-            KernelEM1DManager*          KernelManager;
+            std::shared_ptr<KernelEM1DManager>          KernelManager;
 
             /// Receiver points, keep track if these have changed
-            ReceiverPoints*             Receivers;
+            std::shared_ptr<FieldPoints>                Receivers;
 
             /// Layered Earth used by Kernels
-            LayeredEarthEM*             Earth;
+            std::shared_ptr<LayeredEarthEM>             Earth;
+
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "DipoleSource";
 
     }; // -----  end of class  DipoleSource  -----
 

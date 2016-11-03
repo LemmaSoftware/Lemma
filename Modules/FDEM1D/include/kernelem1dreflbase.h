@@ -14,20 +14,18 @@
 #ifndef  KERNELEM1DREFLBASE_INC
 #define  KERNELEM1DREFLBASE_INC
 
-#include "dipolesource.h"
-#include "kernelem1dbase.h"
-#include "layeredearthem.h"
-//#include "kernelem1dspec.h"
+#include "KernelEM1DSpec.h"
+//#include "kernelem1dbase.h"
+#include "DipoleSource.h"
+#include "LayeredEarthEM.h"
 
 namespace Lemma {
-
-    //class DipoleSource;
 
     enum DIPOLE_LOCATION { INAIR, INGROUND };
 
     // forward declaration for friend
-    template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
-    class KernelEm1DSpec;
+    //template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
+    //class KernelEM1DSpec;
 
 
     // ===================================================================
@@ -40,9 +38,10 @@ namespace Lemma {
     // ===================================================================
     class KernelEM1DReflBase : public LemmaObject {
 
-        template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
-        friend class KernelEm1DSpec;
-        friend class KernelEM1DManager;
+        //template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
+        friend class KernelEM1DSpec;
+        //friend class KernelEM1DManager;
+        //friend class DipoleSource;
 
         public:
 
@@ -52,7 +51,7 @@ namespace Lemma {
 
             // ====================  OPERATIONS    =======================
 
-            void Initialise(LayeredEarthEM* EarthIn) {
+            void Initialise( std::shared_ptr<LayeredEarthEM> EarthIn) {
 
                 nlay = EarthIn->GetNumberOfLayers();
                 zh = VectorXcr::Zero(nlay);
@@ -88,7 +87,7 @@ namespace Lemma {
 
             }
 
-            void SetUpSource(DipoleSource *Dipole, const int &ifreq) {
+            void SetUpSource( std::shared_ptr<DipoleSource> Dipole, const int &ifreq ) {
 
                 zh(0) = Complex(0, Dipole->GetAngularFrequency(ifreq)*MU0);
                 yh(0) = Complex(0, Dipole->GetAngularFrequency(ifreq)*EPSILON0);
@@ -150,18 +149,12 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /// Default protected constructor.
-            KernelEM1DReflBase (const std::string& name) : LemmaObject(name)
+            KernelEM1DReflBase ( ) : LemmaObject( )
             {
             }
 
             /// Default protected constructor.
             ~KernelEM1DReflBase () {
-                if (this->NumberOfReferences > 0)
-                    throw DeleteObjectWithReferences( this );
-            }
-
-            void Release() {
-                delete this;
             }
 
             // ====================  OPERATIONS    =======================
@@ -220,7 +213,7 @@ namespace Lemma {
 			EMMODE mode;
 
             /// Pointer to layered earth
-            LayeredEarthEM *Earth;
+            std::shared_ptr<LayeredEarthEM> Earth;
 
 			Complex       uk;
 			Complex       um;

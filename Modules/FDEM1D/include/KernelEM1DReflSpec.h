@@ -14,40 +14,16 @@
 #ifndef  KERNELEM1DREFLSPEC_INC
 #define  KERNELEM1DREFLSPEC_INC
 
-#include "dipolesource.h"
-#include "kernelem1dreflbase.h"
-#include "layeredearthem.h"
+#include "DipoleSource.h"
+#include "LayeredEarthEM.h"
 
-// #include<unordered_map> // for caching results
+#include "kernelem1dreflbase.h"
 
 namespace Lemma {
 
-    // forward declare
-    //struct cache;
-    // Simple container to hold reflection results
-    struct  cache {
-        Real                       rho0;
-        Real                       lambda[805];
-        Real                       rams[805];
-        Complex                    uk[805];
-        Complex                    um[805];
-        Real                       zh0i[805];
-        VectorXcr                  Rtd[805];
-        VectorXcr                  Rtu[805];
-        VectorXcr                  u[805];
-        VectorXcr                  cf[805];
-        VectorXcr                  kk[805];
-        const Real                 epsilon;
-        //bool                       nc;
-        cache( ) : epsilon (std::numeric_limits<Real>::epsilon() ) { // TODO reset to precision of Real
-            //Rtd = VectorXcr::Zero(805);
-            //Rtu = VectorXcr::Zero(805);
-        }
-    };
-
     // forward declaration for friend
     template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
-    class KernelEm1DSpec;
+    class KernelEM1DSpec;
 
     // ===================================================================
     //  Class:  KernelEM1DReflSpec
@@ -55,29 +31,37 @@ namespace Lemma {
       @class
       \brief   Specialized version of KernelEM1DReflBase
       \details Through use of template specialisations, this KernelEm1D
-               class delivers much better performance.
+               class delivers much better performance. This class is internal
+               to Lemma, you should never need to instantiate it. The constructors
+               are public to allow make_shared. Additonally, this class is not
+               serializable.
      */
     // ===================================================================
     template<EMMODE Mode, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
     class KernelEM1DReflSpec : public KernelEM1DReflBase {
 
+        // TODO can we use the manager's key instead to lock for that?
+        struct ctor_key{};
+
         public:
 
+            // what do these template parameters do -TI
             template<EMMODE Mode2, int Ikernel2, DIPOLE_LOCATION Isource2, DIPOLE_LOCATION Irecv2>
-            friend class KernelEm1DSpec;
+            friend class KernelEM1DSpec;
             friend class KernelEM1DManager;
 
             // ====================  LIFECYCLE     =======================
 
-            static KernelEM1DReflSpec* New() {
-                KernelEM1DReflSpec<Mode, Isource, Irecv>*  Obj =
-                    new KernelEM1DReflSpec<Mode, Isource, Irecv>("KernelEM1DReflSpec<>");
-                Obj->AttachTo(Obj);
-                return Obj;
+            /// Default locked constructor.
+            explicit KernelEM1DReflSpec ( const ctor_key& ) : KernelEM1DReflBase( ) {
             }
 
-            void Delete() {
-                this->DetachFrom(this);
+            /// Default protected constructor.
+            ~KernelEM1DReflSpec () {
+            }
+
+            static std::shared_ptr<KernelEM1DReflSpec<Mode, Isource, Irecv> > NewSP() {
+                return std::make_shared<KernelEM1DReflSpec<Mode, Isource, Irecv> >( ctor_key() );
             }
 
             // ====================  OPERATORS     =======================
@@ -89,23 +73,9 @@ namespace Lemma {
             // ====================  INQUIRY       =======================
 
         protected:
+        private:
 
             // ====================  LIFECYCLE     =======================
-
-            /// Default protected constructor.
-            KernelEM1DReflSpec (const std::string& name) : KernelEM1DReflBase(name)
-            {
-            }
-
-            /// Default protected constructor.
-            ~KernelEM1DReflSpec () {
-                if (this->NumberOfReferences > 0)
-                    throw DeleteObjectWithReferences( this );
-            }
-
-            void Release() {
-                delete this;
-            }
 
             // ====================  OPERATIONS    =======================
 
@@ -133,15 +103,6 @@ namespace Lemma {
             //void SetTCache(const Real& rho0);
 
             // ====================  DATA MEMBERS  =========================
-
-        private:
-
-            //** Storage container for reused results */
-            //static std::unordered_map<Real, cache> CACHE;
-
-            //** Currenly used cache */
-            //cache* tcache;
-            //#pragma omp threadprivate(tcache)
 
     }; // -----  end of class  KernelEM1DReflSpec  -----
 
@@ -180,63 +141,6 @@ namespace Lemma {
 
     ///////////////////////////////////////////////
     // Default mode definitions
-
-/*
-    template<EMMODE Mode, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
-    void KernelEM1DReflSpec<Mode, Isource, Irecv>::SetTCache(const Real& rho0) {
-       #ifdef LEMMAUSEOMP
-        #pragma omp critical
-        #endif
-        {
-        this->tcache = &this->CACHE[rho0];
-        }
-    }
-*/
-
-/*
-    template<EMMODE Mode, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
-    void KernelEM1DReflSpec<Mode, Isource, Irecv>::ComputeReflectionCoeffs(const Real& lambda, const int& idx) {
-
-        if ( (std::abs(this->tcache->lambda[idx]-lambda) <= this->tcache->epsilon) &&
-            this->tcache->u[idx].size() > 0  && std::abs(this->kk(0) - this->tcache->kk[idx](0)) <= this->tcache->epsilon ) {
-            //std::cout << "USING CACHED RESULTS !!!!!!" << std::endl;
-            // load all the values we need
-            this->u   = this->tcache->u[idx];
-            this->rams = this->tcache->rams[idx];
-            this->cf = this->tcache->cf[idx];
-            //this->kk = this->tcache->kk[idx];
-            this->uk = this->tcache->uk[idx];
-            this->um = this->tcache->um[idx];
-            this->rtd = this->tcache->Rtd[idx];
-            this->rtu = this->tcache->Rtu[idx];
-
-        } else { // else do the work
-        }
-
-        ComputeReflectionCoeffs(lambda);
-
-        //#pragma omp critical
-        //{
-        //std::cout << idx << "\t" << lambda << "\t" << rtd.transpose() << std::endl;
-        //}
-        // store the results
-        this->tcache->u[idx]      = this->u;
-        this->tcache->cf[idx]     = this->cf;
-        this->tcache->kk[idx]     = this->kk;
-        this->tcache->uk[idx]     = this->uk;
-        this->tcache->um[idx]     = this->um;
-        this->tcache->Rtd[idx]    = this->rtd;
-        this->tcache->Rtu[idx]    = this->rtu;
-        this->tcache->zh0i[idx]    = std::imag(this->zh[0]);
-        this->tcache->lambda[idx] = lambda;
-        this->tcache->rams[idx]   = rams;
-
-        }
-
-        return;
-    }
-*/
-
     template<EMMODE Mode, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
     void KernelEM1DReflSpec<Mode, Isource, Irecv>::ComputeReflectionCoeffs(const Real& lambda) {
         static bool called = false;
