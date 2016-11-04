@@ -15,15 +15,14 @@
 #define  KERNELEM1DREFLSPEC_INC
 
 #include "DipoleSource.h"
-#include "LayeredEarthEM.h"
-
 #include "kernelem1dreflbase.h"
+#include "LayeredEarthEM.h"
 
 namespace Lemma {
 
     // forward declaration for friend
-    template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
-    class KernelEM1DSpec;
+    //template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
+    //class KernelEM1DSpec;
 
     // ===================================================================
     //  Class:  KernelEM1DReflSpec
@@ -45,9 +44,9 @@ namespace Lemma {
 
         public:
 
-            // what do these template parameters do -TI
-            template<EMMODE Mode2, int Ikernel2, DIPOLE_LOCATION Isource2, DIPOLE_LOCATION Irecv2>
-            friend class KernelEM1DSpec;
+            //template<EMMODE Mode2, int Ikernel2, DIPOLE_LOCATION Isource2, DIPOLE_LOCATION Irecv2>
+            //friend class KernelEM1DSpec;
+
             friend class KernelEM1DManager;
 
             // ====================  LIFECYCLE     =======================

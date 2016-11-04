@@ -24,8 +24,8 @@ namespace Lemma {
     enum DIPOLE_LOCATION { INAIR, INGROUND };
 
     // forward declaration for friend
-    //template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
-    //class KernelEM1DSpec;
+    template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
+    class KernelEM1DSpec;
 
 
     // ===================================================================
@@ -38,9 +38,9 @@ namespace Lemma {
     // ===================================================================
     class KernelEM1DReflBase : public LemmaObject {
 
-        //template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
+        template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
         friend class KernelEM1DSpec;
-        //friend class KernelEM1DManager;
+        friend class KernelEM1DManager;
         //friend class DipoleSource;
 
         public:

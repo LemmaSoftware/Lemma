@@ -4,7 +4,12 @@ set (FEM1DSOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/LayeredEarthEM.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/FieldPoints.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/WireAntenna.cpp
-#	${CMAKE_CURRENT_SOURCE_DIR}/DipoleSource.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/KernelEM1DManager.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/DipoleSource.cpp
+	
+	${CMAKE_CURRENT_SOURCE_DIR}/KernelEM1DReflSpec.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/KernelEM1DSpec.cpp
+
 	#${CMAKE_CURRENT_SOURCE_DIR}/UngroundedElectricDipole.cpp
 	PARENT_SCOPE
 )

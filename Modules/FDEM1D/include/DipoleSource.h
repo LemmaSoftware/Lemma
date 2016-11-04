@@ -14,10 +14,8 @@
 #ifndef __DIPOLESOURCE_H
 #define __DIPOLESOURCE_H
 
+#include "LemmaObject.h"
 #include "LayeredEarthEM.h"
-#include "FieldPoints.h"
-
-//#include "emearth1d.h"
 
 #ifdef LEMMAUSEVTK
 #include "vtkActor.h"
@@ -33,6 +31,7 @@ namespace Lemma {
 
     // Forward declarations
     class KernelEM1DManager;
+    class FieldPoints;
     class HankelTransform;
 
     // ==========================================================================
@@ -41,7 +40,7 @@ namespace Lemma {
     /// \details  More complex sources are constructed from a superposition of
     ///           dipoles.
     // ==========================================================================
-    class DipoleSource : public LemmaObject {
+    class DipoleSource : public std::enable_shared_from_this<DipoleSource>,  LemmaObject {
 
         // ====================    FRIENDS     ======================
 

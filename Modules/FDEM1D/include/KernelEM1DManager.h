@@ -36,6 +36,7 @@ namespace Lemma {
 
         struct ctor_key {};
 
+        /** Recursively streams information about this class */
         friend std::ostream &operator<<(std::ostream &stream, const KernelEM1DManager &ob);
 
         public:
@@ -43,7 +44,7 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /** Default protected constructor. */
-            KernelEM1DManager (const std::string& name);
+            KernelEM1DManager ( const ctor_key& );
 
             /** Default protected constructor. */
             ~KernelEM1DManager ();

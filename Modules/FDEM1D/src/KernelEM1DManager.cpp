@@ -11,89 +11,52 @@
   @version  $Id: kernelem1dmanager.cpp 193 2014-11-10 23:51:41Z tirons $
  **/
 
-#include "kernelem1dmanager.h"
-
+#include "KernelEM1DManager.h"
 
 namespace Lemma {
 
-    std::ostream &operator<<(std::ostream &stream,
-                const KernelEM1DManager &ob) {
-        stream << *(LemmaObject*)(&ob);
+    std::ostream &operator<<(std::ostream &stream, const KernelEM1DManager &ob) {
+        stream << ob.Serialize() << "\n---\n";
         return stream;
     }
 
 
     // ====================  LIFECYCLE     =======================
 
-    KernelEM1DManager::KernelEM1DManager(const std::string& name) :
-                    LemmaObject(name), TEReflBase(NULL), TMReflBase(NULL), Earth(NULL), Dipole(NULL) {
+    KernelEM1DManager::KernelEM1DManager( const ctor_key& ) : LemmaObject( ), TEReflBase(nullptr),
+        TMReflBase(nullptr), Earth(nullptr), Dipole(nullptr) {
     }
 
     KernelEM1DManager::~KernelEM1DManager() {
 
-        if (this->NumberOfReferences != 0)
-            throw DeleteObjectWithReferences(this);
-
-//         if (Earth != NULL) {
-//             Earth->DetachFrom(this);
-//         }
-//
-//         if (Dipole != NULL) {
-//             Dipole->DetachFrom(this);
-//         }
-
-        for (unsigned int ik=0; ik<KernelVec.size(); ++ik) {
-            KernelVec[ik]->Delete();
-        }
-
-        if (TEReflBase != NULL) TEReflBase->Delete();
-        if (TMReflBase != NULL) TMReflBase->Delete();
-
     }
 
-    KernelEM1DManager* KernelEM1DManager::New() {
-        KernelEM1DManager* Obj = new KernelEM1DManager("KernelEM1DManager");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<KernelEM1DManager> KernelEM1DManager::NewSP() {
+        return std::make_shared<KernelEM1DManager>( ctor_key() );
     }
 
-    void KernelEM1DManager::Delete() {
-        this->DetachFrom(this);
-    }
-
-    void KernelEM1DManager::Release() {
-        delete this;
-    }
 
     // ====================  ACCESS        =======================
 
     // A race condition can develop with these. It's OK to not attach, since this is an internal class, and
     // we know what is going on.
-    void KernelEM1DManager::SetEarth(LayeredEarthEM* Earthin) {
-        //if (Earth != NULL) {
-        //    Earth->DetachFrom(this);
-        //}
-        //Earthin->AttachTo(this);
+    void KernelEM1DManager::SetEarth( std::shared_ptr<LayeredEarthEM> Earthin) {
         Earth = Earthin;
     }
 
-    void KernelEM1DManager::SetDipoleSource(DipoleSource* DipoleIn, const int& ifreqin,
+    void KernelEM1DManager::SetDipoleSource( std::shared_ptr<DipoleSource> DipoleIn, const int& ifreqin,
             const Real& rx_zin) {
-        //if (Dipole != NULL) {
-        //    Dipole->DetachFrom(this);
-        //}
-        //DipoleIn->AttachTo(this);
         Dipole = DipoleIn;
 
         ifreq = ifreqin;
         rx_z = rx_zin;
     }
 
-    KernelEm1DBase* KernelEM1DManager::GetKernel(const unsigned int& ik) {
+    std::shared_ptr<KernelEm1DBase> KernelEM1DManager::GetKernel(const unsigned int& ik) {
         return KernelVec[ik];
     }
 
-    DipoleSource* KernelEM1DManager::GetDipole( ) {
+    std::shared_ptr<DipoleSource> KernelEM1DManager::GetDipole( ) {
         return Dipole;
     }
 
@@ -101,12 +64,12 @@ namespace Lemma {
 
     void KernelEM1DManager::ComputeReflectionCoeffs(const Real& lambda, const int& idx, const Real& rho0) {
 
-        if (TEReflBase != NULL) {
+        if (TEReflBase != nullptr) {
             TEReflBase->ComputeReflectionCoeffs(lambda);
             TEReflBase->PreComputePotentialTerms( );
         }
 
-        if (TMReflBase != NULL) {
+        if (TMReflBase != nullptr) {
             TMReflBase->ComputeReflectionCoeffs(lambda);
             TMReflBase->PreComputePotentialTerms( );
         }
@@ -115,11 +78,11 @@ namespace Lemma {
 
     void KernelEM1DManager::ResetSource(const int& ifreq) {
 
-        if (TEReflBase != NULL) {
+        if (TEReflBase != nullptr) {
             TEReflBase->SetUpSource(Dipole, ifreq);
         }
 
-        if (TMReflBase != NULL) {
+        if (TMReflBase != nullptr) {
             TMReflBase->SetUpSource(Dipole, ifreq);
 
         }

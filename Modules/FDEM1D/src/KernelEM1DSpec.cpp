@@ -11,7 +11,7 @@
   @version  $Id: kernelem1dspec.cpp 87 2013-09-05 22:44:05Z tirons $
  **/
 
-#include "kernelem1dspec.h"
+#include "KernelEM1DSpec.h"
 
 namespace Lemma {
 

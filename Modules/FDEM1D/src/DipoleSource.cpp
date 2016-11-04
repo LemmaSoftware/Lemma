@@ -13,12 +13,12 @@
 
 #include "DipoleSource.h"
 #include "KernelEM1DManager.h"
-#include "FieldPoints.h"
 
 //#include "GroundedElectricDipole.h"
 //#include "UngroundedElectricDipole.h"
 //#include "MagneticDipole.h"
 
+#include "FieldPoints.h"
 #include "hankeltransform.h"
 
 namespace Lemma {

@@ -34,7 +34,7 @@ namespace Lemma {
   *           standard. All Lemma objects should be created as C++-11 Smart pointers, using
   *           the supplied New method. Calls to Delete are no longer necessary or available.
   */
-class LemmaObject : public std::enable_shared_from_this<LemmaObject> {
+class LemmaObject {
 
     /**
      *  Streams class information as YAML::Node
