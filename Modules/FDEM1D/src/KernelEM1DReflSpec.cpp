@@ -8,7 +8,6 @@
   @file
   @author   Trevor Irons
   @date     05/18/2012
-  @version  $Id: kernelem1dreflspec.cpp 169 2014-09-06 22:16:12Z tirons $
  **/
 
 #include "KernelEM1DReflSpec.h"

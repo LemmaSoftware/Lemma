@@ -8,7 +8,6 @@
   @file
   @author   Trevor Irons
   @date     06/26/2012
-  @version  $Id: kernelem1dmanager.cpp 193 2014-11-10 23:51:41Z tirons $
  **/
 
 #include "KernelEM1DManager.h"

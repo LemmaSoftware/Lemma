@@ -1,5 +1,5 @@
 add_subdirectory("src")
-add_library( fdem1d ${FEM1DSOURCE} )  
+add_library( fdem1d ${FDEM1DSOURCE} )  
 target_include_directories( fdem1d PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include" )
 
 set_target_properties(fdem1d PROPERTIES 

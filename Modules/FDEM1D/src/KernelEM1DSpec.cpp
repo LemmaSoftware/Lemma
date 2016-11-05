@@ -8,7 +8,6 @@
   @file
   @author   Trevor Irons
   @date     05/17/2012
-  @version  $Id: kernelem1dspec.cpp 87 2013-09-05 22:44:05Z tirons $
  **/
 
 #include "KernelEM1DSpec.h"

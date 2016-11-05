@@ -9,7 +9,6 @@
 
   @author   Trevor Irons
   @date     05/18/2012
-  @version  $Id: kernelem1dbase.h 193 2014-11-10 23:51:41Z tirons $
  **/
 
 #ifndef  KERNELEM1DBASE_INC

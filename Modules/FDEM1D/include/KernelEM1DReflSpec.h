@@ -8,14 +8,13 @@
   @file
   @author   Trevor Irons
   @date     05/18/2012
-  @version  $Id: kernelem1dreflspec.h 123 2014-02-05 23:47:20Z tirons $
  **/
 
 #ifndef  KERNELEM1DREFLSPEC_INC
 #define  KERNELEM1DREFLSPEC_INC
 
 #include "DipoleSource.h"
-#include "kernelem1dreflbase.h"
+#include "KernelEM1DReflBase.h"
 #include "LayeredEarthEM.h"
 
 namespace Lemma {

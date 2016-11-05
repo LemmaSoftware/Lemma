@@ -14,7 +14,6 @@
 #ifndef __hankeltransform_h
 #define __hankeltransform_h
 
-//#include "kernelem1dbase.h"
 #include "KernelEM1DSpec.h"
 #include "KernelEM1DManager.h"
 

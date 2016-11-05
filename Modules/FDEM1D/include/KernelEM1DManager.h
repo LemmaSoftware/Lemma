@@ -14,9 +14,7 @@
 #ifndef  KERNELEM1DMANAGER_INC
 #define  KERNELEM1DMANAGER_INC
 
-//#include "dipolesource.h"
-//#include "kernelem1dreflbase.h"
-#include "kernelem1dbase.h"
+#include "KernelEM1DBase.h"
 #include "KernelEM1DSpec.h"
 
 namespace Lemma {

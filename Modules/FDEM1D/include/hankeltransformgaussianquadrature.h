@@ -13,7 +13,7 @@
 #define  _HANKELTRANSFORMGAUSSIANQUADRATURE_h_INC
 
 #include "hankeltransform.h"
-#include "kernelem1dbase.h"
+#include "KernelEM1DBase.h"
 
 #ifdef HAVEBOOSTCYLBESSEL
 #include "boost/math/special_functions.hpp"

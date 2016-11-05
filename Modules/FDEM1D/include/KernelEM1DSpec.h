@@ -8,16 +8,15 @@
   @file
   @author   Trevor Irons
   @date     05/16/2012
-  @version  $Id: kernelem1dspec.h 123 2014-02-05 23:47:20Z tirons $
  **/
 
 #ifndef  KERNELEM1DSPEC_INC
 #define  KERNELEM1DSPEC_INC
 
-#include "kernelem1dbase.h"
+#include "KernelEM1DBase.h"
 #include "KernelEM1DReflSpec.h"
 
-#include "kernelem1dreflbase.h"
+#include "KernelEM1DReflBase.h"
 #include "LayeredEarthEM.h"
 #include "DipoleSource.h"
 

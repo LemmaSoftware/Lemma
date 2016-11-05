@@ -15,7 +15,7 @@
 #define __HANKEL2_H
 
 #include "hankeltransform.h"
-#include "kernelem1dbase.h"
+#include "KernelEM1DBase.h"
 #include "KernelEM1DSpec.h"
 #include "CubicSplineInterpolator.h"
 
