@@ -14,8 +14,8 @@
 #ifndef  KERNELEM1DREFLBASE_INC
 #define  KERNELEM1DREFLBASE_INC
 
-#include "KernelEM1DSpec.h"
-//#include "kernelem1dbase.h"
+//#include "KernelEM1DSpec.h"
+#include "kernelem1dbase.h"
 #include "DipoleSource.h"
 #include "LayeredEarthEM.h"
 

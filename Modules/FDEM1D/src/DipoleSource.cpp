@@ -52,6 +52,24 @@ namespace Lemma {
         return std::make_shared<DipoleSource> ( ctor_key() );
     }
 
+    YAML::Node DipoleSource::Serialize() const {
+        YAML::Node node = DipoleSource::Serialize();
+        node.SetTag( GetName() );
+        /*
+        node["LayerConductivity"] = LayerConductivity;
+        node["LayerSusceptibility"] = LayerSusceptibility;
+        node["LayerLowFreqSusceptibility"] = LayerLowFreqSusceptibility;
+        node["LayerHighFreqSusceptibility"] = LayerHighFreqSusceptibility;
+        node["LayerTauSusceptibility"] = LayerTauSusceptibility;
+        node["LayerBreathSusceptibility"] = LayerBreathSusceptibility;
+        node["LayerPermitivity"] = LayerPermitivity;
+        node["LayerLowFreqPermitivity"] = LayerLowFreqPermitivity;
+        node["LayerHighFreqPermitivity"] = LayerHighFreqPermitivity;
+        node["LayerTauPermitivity"] = LayerTauPermitivity;
+        node["LayerBreathPermitivity"] = LayerBreathPermitivity;
+        */
+        return node;
+    }
 
     std::shared_ptr<DipoleSource> DipoleSource::Clone() {
 
