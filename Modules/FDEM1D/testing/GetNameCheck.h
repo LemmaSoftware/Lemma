@@ -39,5 +39,35 @@ class MyTestSuite : public CxxTest::TestSuite
         TS_ASSERT_EQUALS( Obj->GetName(), std::string("FieldPoints") );
     }
 
+    void testDipoleSource( void )
+    {
+        auto Obj = DipoleSource::NewSP();
+        TS_ASSERT_EQUALS( Obj->GetName(), std::string("DipoleSource") );
+    }
+
+    void testWireAntenna( void )
+    {
+        auto Obj = WireAntenna::NewSP();
+        TS_ASSERT_EQUALS( Obj->GetName(), std::string("WireAntenna") );
+    }
+
+//     void testKernelEM1DManager( void )
+//     {
+//         auto Obj = KernelEM1DManager::NewSP();
+//         TS_ASSERT_EQUALS( Obj->GetName(), std::string("KernelEM1DManager") );
+//     }
+//
+//     void testKernelEM1DSpec( void )
+//     {
+//         auto Obj = KernelEM1DSpec::NewSP();
+//         TS_ASSERT_EQUALS( Obj->GetName(), std::string("KernelEM1DSpec") );
+//     }
+//
+//     void testKernelEM1DReflSpec( void )
+//     {
+//         auto Obj = KernelEM1DReflSpec::NewSP();
+//         TS_ASSERT_EQUALS( Obj->GetName(), std::string("KernelEM1DReflSpec") );
+//     }
+
 };
 

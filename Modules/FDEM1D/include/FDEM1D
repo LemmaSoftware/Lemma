@@ -1,5 +1,12 @@
 #include "LayeredEarthEM.h"
 #include "FieldPoints.h"
+#include "WireAntenna.h"
+#include "DipoleSource.h"
+
+// internal
+//#include "KernelEM1DManager.h"
+//#include "KernelEM1DSpec.h"
+//#include "KernelEM1DReflSpec.h"
 
 /* vim: set tabstop=4 expandtab: */
 /* vim: set filetype=cpp: */

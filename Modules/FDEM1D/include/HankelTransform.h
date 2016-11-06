@@ -8,7 +8,6 @@
   @file
   @author   Trevor Irons
   @date     01/28/2010
-  @version  $Id: hankeltransform.h 270 2015-08-24 15:45:41Z tirons $
  **/
 
 #ifndef __hankeltransform_h
@@ -19,12 +18,11 @@
 
 namespace Lemma {
 
-
         class KernelEM1DBase;
 
         // ===================================================================
         //        Class:  HankelTransform
-        /// \brief  Pure abstract class for hankel transforms
+        /// \brief   Abstract class for hankel transforms
         /// \details
         // ===================================================================
         class HankelTransform : public LemmaObject {
@@ -36,10 +34,6 @@ namespace Lemma {
                         const HankelTransform &ob);
 
                 // ====================  LIFECYCLE     =======================
-
-                //static HankelTransform* New();
-
-                //void Delete();
 
                 // ====================  OPERATORS     =======================
 
@@ -60,7 +54,7 @@ namespace Lemma {
 
                 /// Computes related kernels, if applicable, otherwise this is
                 /// just a dummy function.
-                virtual void ComputeRelated(const Real& rho, KernelEm1DBase* Kernel);
+                virtual void ComputeRelated(const Real& rho, std::shared_ptr<KernelEM1DBase> Kernel);
 
                 virtual void ComputeRelated(const Real& rho, std::vector< std::shared_ptr<KernelEM1DBase> > KernelVec);
 
@@ -69,6 +63,10 @@ namespace Lemma {
                 // ====================  ACCESS        =======================
 
                 // ====================  INQUIRY       =======================
+                /** Returns the name of the underlying class, similiar to Python's type */
+                virtual inline std::string GetName() const {
+                    return CName;
+                }
 
                 // ====================  DATA MEMBERS  =======================
 
@@ -77,12 +75,15 @@ namespace Lemma {
                 // ====================  LIFECYCLE     =======================
 
                 /// Default protected constructor.
-                HankelTransform (const std::string &name);
+                HankelTransform ( );
 
                 /// Default protected constructor.
-                ~HankelTransform ();
+                ~HankelTransform ( );
 
             private:
+
+                /** ASCII string representation of the class name */
+                static constexpr auto CName = "HankelTransform";
 
     }; // -----  end of class  HankelTransform  -----
 

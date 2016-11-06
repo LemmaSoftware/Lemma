@@ -17,7 +17,7 @@ syn keyword nspace Lemma YAML Eigen
 
 " Lemma types
 highlight leType ctermfg=Yellow guifg=Yellow
-syn keyword leType HankelTransform KernelEm1D KernelEM1DManager DipoleSource EarthModel LayeredEarth LayeredEarthEM TEMSurvey TEMSurveyLine TEMSurveyLineRecord TEMInductiveReceiver PolygonalWireAntenna TEMTransmitter TEMReceiver Instrument InstrumentTem LemmaObject FieldPoints DCIPElectrode TEMSurveyData TEMSurveyLineData TEMSurveyLineRecordData  ASCIIParser CubicSplineInterpolator RectilinearGrid GridReader RectilinearGridReader RectilinearGridVTKExporter Filter WindowFilter DEMParticle DEMGrain Data DataReader 
+syn keyword leType HankelTransform FHTAnderson801 KernelEM1D KernelEM1DSpec KernelEM1DBase KernelEM1DManager DipoleSource EarthModel LayeredEarth LayeredEarthEM TEMSurvey TEMSurveyLine TEMSurveyLineRecord TEMInductiveReceiver WireAntenna PolygonalWireAntenna TEMTransmitter TEMReceiver Instrument InstrumentTem LemmaObject FieldPoints DCIPElectrode TEMSurveyData TEMSurveyLineData TEMSurveyLineRecordData  ASCIIParser CubicSplineInterpolator RectilinearGrid GridReader RectilinearGridReader RectilinearGridVTKExporter Filter WindowFilter DEMParticle DEMGrain Data DataReader 
 
 " Deprecated Lemma Types
 highlight dleType ctermfg=Blue guifg=Blue 

@@ -11,19 +11,18 @@
   @version  $Id: hankeltransformhankel2.cpp 202 2015-01-06 20:53:21Z tirons $
  **/
 
-#include "hankeltransformhankel2.h"
+#include "FHTAnderson801.h"
 
 namespace Lemma {
 
-	std::ostream &operator<<(std::ostream &stream,
-			const Hankel2 &ob) {
+    std::ostream &operator << (std::ostream &stream, const FHTAnderson801 &ob) {
+        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
+        return stream;
+    }
 
-		stream << *(HankelTransform*)(&ob);
-		return stream;
-	}
-
-    // Initialise static const members
-    const Eigen::Matrix<Real, 2, 801>  Hankel2::FilterWeights =
+    // Initialise static const members, this could be done by preprocessor in
+    // slightly higher precision?
+    const Eigen::Matrix<Real, 2, 801>  FHTAnderson801::FilterWeights =
         ( Eigen::Matrix<Real, 2, 801>()   <<
 					2.103562053838982e-29, -1.264469361608894e-14,
 					4.615731256788567e-14, -2.798703374257668e-14,
@@ -837,62 +836,64 @@ namespace Lemma {
 					// 800
 					7.214920505613761e-28).finished();
 
-    const Real Hankel2::ABSCISSA = 0.7059431685223780;     //
-	const Real Hankel2::ABSE = 1.10517091807564762;        // exp(.1)
-	const Real Hankel2::ABSER = 0.904837418035959573;      // 1/exp(.1)
-    //std::unordered_map<Real, int> Hankel2::RHO0 = {};
+    const Real FHTAnderson801::ABSCISSA = 0.7059431685223780;     //
+	const Real FHTAnderson801::ABSE = 1.10517091807564762;        // exp(.1)
+	const Real FHTAnderson801::ABSER = 0.904837418035959573;      // 1/exp(.1)
 
 	// ====================  LIFECYCLE     ==============================
-	Hankel2::Hankel2(const std::string&name) : HankelTransform(name),
+	FHTAnderson801::FHTAnderson801(const ctor_key& ) : HankelTransform( ),
 			             Lambda(0), NumFun(0),
 						 NumConv(0), NumRel(0),
-						 BesselOrder(-1),  Manager(NULL) {
+						 BesselOrder(-1),  Manager(nullptr) {
 	}
 
-	Hankel2::~Hankel2() {
-		//if (!this->kernelVec.empty()) {
-		//	this->Ckernel->DetachFrom(this);
-		//}
-
-        DeleteSplines();
-
-        if (Manager != NULL) {
-            Manager->DetachFrom(this);
-        }
-
-        if (this->NumberOfReferences != 0)
-            throw DeleteObjectWithReferences( this );
+    FHTAnderson801::FHTAnderson801( const YAML::Node& node, const ctor_key& ) : HankelTransform( ) {
+        Lambda = node["Lambda"].as<Real>();
+        NumFun = node["NumFun"].as<int>();
+		NumConv = node["NumConv"].as<int>();
+        NumRel = node["NumRel"].as<int>( );
+		BesselOrder = node["BesselOrder"].as<int>( );
+        //Manager = KernelEM1DManager::DeSerialize(node["Manager"]);
 	}
 
-	Hankel2* Hankel2::New() {
-		Hankel2* Obj = new Hankel2("Hankel2");
-        Obj->AttachTo(Obj);
-        return Obj;
+	FHTAnderson801::~FHTAnderson801() {
 	}
 
-	void Hankel2::Delete() {
-        this->DetachFrom(this);
-	}
-
-    void Hankel2::Release() {
-        delete this;
+	std::shared_ptr<FHTAnderson801> FHTAnderson801::NewSP() {
+	    return std::make_shared<FHTAnderson801>( ctor_key() );
     }
 
-    void Hankel2::DeleteSplines() {
-        for (unsigned int ii=0; ii<splineVecReal.size(); ++ii){
-            splineVecReal[ii]->Delete();
-        }
-        splineVecReal.clear();
+    std::unique_ptr<FHTAnderson801> FHTAnderson801::NewUP() {
+	    return std::make_unique<FHTAnderson801>( ctor_key() );
+    }
 
-        for (unsigned int ii=0; ii<splineVecImag.size(); ++ii){
-            splineVecImag[ii]->Delete();
+    std::shared_ptr<FHTAnderson801> FHTAnderson801::DeSerialize( const YAML::Node& node ) {
+        if (node.Tag() != "FHTAnderson801") {
+            throw  DeSerializeTypeMismatch( "FHTAnderson801", node.Tag());
         }
+        return std::make_shared<FHTAnderson801> ( node, ctor_key() );
+    }
+
+    YAML::Node FHTAnderson801::Serialize() const {
+        YAML::Node node = HankelTransform::Serialize();
+        node.SetTag( GetName() );
+        node["Lambda"] = Lambda;
+        node["NumFun"] = NumFun;
+        node["NumConv"] = NumConv;
+        node["NumRel"] = NumRel;
+        node["BesselOrder"] = BesselOrder;
+        node["Manager"] = Manager->Serialize();
+        return node;
+    }
+
+    void FHTAnderson801::DeleteSplines() {
+        splineVecReal.clear();
         splineVecImag.clear();
     }
 
 	// ====================  OPERATIONS    ==============================
 
-    void Hankel2::ComputeRelated(const Real& rho, KernelEm1DBase* Kernel) {
+    void FHTAnderson801::ComputeRelated(const Real& rho, std::shared_ptr<KernelEM1DBase> Kernel) {
         //this->AttachKernel(Kernel);
         this->SetNumConv(1);
         icount = 0;
@@ -903,7 +904,7 @@ namespace Lemma {
 #endif
     }
 
-    void Hankel2::ComputeRelated(const Real& rho,  std::vector< KernelEm1DBase*> KernelVecIn ) {
+    void FHTAnderson801::ComputeRelated(const Real& rho,  std::vector< std::shared_ptr<KernelEM1DBase> > KernelVecIn ) {
         icount = 0;
         this->kernelVec = KernelVecIn;
         this->SetNumConv(1);
@@ -914,12 +915,8 @@ namespace Lemma {
 #endif
     }
 
-    void Hankel2::ComputeRelated(const Real& rho,  KernelEM1DManager* KernelManager) {
+    void FHTAnderson801::ComputeRelated(const Real& rho,  std::shared_ptr<KernelEM1DManager> KernelManager) {
         icount = 0;
-        if (Manager != NULL) {
-            Manager->DetachFrom(this);
-        }
-        KernelManager->AttachTo(this);
         Manager = KernelManager;
         this->kernelVec = KernelManager->GetSTLVector();
         this->SetNumConv(1);
@@ -930,12 +927,8 @@ namespace Lemma {
 #endif
     }
 
-    void Hankel2::ComputeLaggedRelated(const Real& rho, const int& nlag, KernelEM1DManager* KernelManager) {
+    void FHTAnderson801::ComputeLaggedRelated(const Real& rho, const int& nlag, std::shared_ptr<KernelEM1DManager> KernelManager) {
         icount = 0;
-        if (Manager != NULL) {
-            Manager->DetachFrom(this);
-        }
-        KernelManager->AttachTo(this);
         Manager = KernelManager;
         this->kernelVec = KernelManager->GetSTLVector();
         this->SetNumConv(nlag);
@@ -951,25 +944,25 @@ namespace Lemma {
         //std::cout << "Arg\n" << Arg << std::endl;
         //std::cout << "Zans\n" << Zans.col(0) << std::endl;
         for (int ii=0; ii<Zans.cols(); ++ii) {
-            CubicSplineInterpolator *Spline = CubicSplineInterpolator::New();
+            auto Spline = CubicSplineInterpolator::NewSP();
             Spline->SetKnots( Arg, Zans.col(ii).real() );
             splineVecReal.push_back(Spline);
 
-            CubicSplineInterpolator *SplineI = CubicSplineInterpolator::New();
+            auto SplineI = CubicSplineInterpolator::NewSP();
             SplineI->SetKnots( Arg, Zans.col(ii).imag() );
             splineVecImag.push_back(SplineI);
         }
 
     }
 
-    void Hankel2::SetLaggedArg(const Real& rho) {
+    void FHTAnderson801::SetLaggedArg(const Real& rho) {
         for (int i=0; i<Zans.cols(); ++ i) {
             Zans(0, i) = Complex( splineVecReal[i]->Interpolate(rho),
                                   splineVecImag[i]->Interpolate(rho) );
         }
     }
 
-	Complex Hankel2::Zgauss(const int &ikk, const EMMODE &imode,
+	Complex FHTAnderson801::Zgauss(const int &ikk, const EMMODE &imode,
 						const int &itype, const Real &rho,
 						const Real &wavef, KernelEm1DBase *Kernel) {
 
@@ -979,17 +972,17 @@ namespace Lemma {
 
 	}
 
-	void Hankel2::SetNumConv(const int &i) {
+	void FHTAnderson801::SetNumConv(const int &i) {
 		this->NumConv = i;
 	}
 
-	Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic> Hankel2::GetAnswer() {
+	Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic> FHTAnderson801::GetAnswer() {
 		return this->Zans;
 	}
 
 	///////////////////////////////////////////
 	// Computes the transform
-	void Hankel2::Compute(const Real &rho, const int& ntol, const Real &tol) {
+	void FHTAnderson801::Compute(const Real &rho, const int& ntol, const Real &tol) {
 
 		Real y1 = this->ABSCISSA/rho;
 		//this->Key.setZero(801);
@@ -1003,11 +996,11 @@ namespace Lemma {
 		}
 
 		if (this->NumConv<1) {
-			throw std::runtime_error("In Hankel2 NumConv is less than 1.");
+			throw std::runtime_error("In FHTAnderson801 NumConv is less than 1.");
 		}
 
         if (this->kernelVec.empty()) {
-			throw std::runtime_error("In Hankel2 Unset Kernel Calculator");
+			throw std::runtime_error("In FHTAnderson801 Unset Kernel Calculator");
 		}
         #endif
 		//if (rho<=1e-5) {

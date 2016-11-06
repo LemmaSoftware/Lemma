@@ -11,22 +11,28 @@
   @version  $Id: hankeltransformhankel2.h 201 2015-01-03 00:07:47Z tirons $
  **/
 
-#ifndef __HANKEL2_H
-#define __HANKEL2_H
+#ifndef __FHTANDERSON801_H
+#define __FHTANDERSON801_H
 
-#include "hankeltransform.h"
 #include "KernelEM1DBase.h"
 #include "KernelEM1DSpec.h"
 #include "CubicSplineInterpolator.h"
+#include "HankelTransform.h"
 
 namespace Lemma {
 
 // ==========================================================================
-//        Class:  Hankel2
+//        Class:  FHTAnderson801
 /** \brief   Computes the Hankel transform of orders 0 and 1 using lagged
              and related convolutions.
     \details A rewrite of work by Anderson who wrote a FORTRAN program
-             that he released while working at the USGS.
+             that he released while working at the USGS:
+             Anderson, W. L., 1989, A hybrid fast hankel transform algorithm for
+             electromagnetic modeling: Geophysics, 54, 263-266.
+
+             This function does not provide the Hybrid functionality however, merely the
+             digital filter implimentation.
+
              The  transform evaluates an integral of the form:
              \f[ \int_0^\infty K(\lambda) J_I (\lambda r) ~ d \lambda
              \f]
@@ -45,29 +51,49 @@ namespace Lemma {
              \f]
              This can only be done where there is radial symmetry. Hence
              its application to 1D solutions here.
+    \note In previous versions of Lemma, this class was called HankelTransformHankel2,
+        which more closely follows Anderson's procedural routine names, but was non-descriptive
+        regarding where the algorithm is derived from.
  */
 // ==========================================================================
 
-class Hankel2 : public HankelTransform {
+class FHTAnderson801 : public HankelTransform {
 
-    friend std::ostream &operator<<(std::ostream &stream, const Hankel2 &ob);
+    friend std::ostream &operator<<(std::ostream &stream, const FHTAnderson801 &ob);
+
+    struct ctor_key {};
 
     public:
 
         // ====================  LIFECYCLE     ==============================
         /**
-         *  Returns pointer to new Hankel2. Location is
-         *  initialized to (0,0,0) type and polarization are
-         *  initialized  to nonworking values that will throw
-         *  exceptions if used.
+         *  Returns shared_ptr to new FHTAnderson801.
          */
-        static Hankel2 *New();
+        static std::shared_ptr<FHTAnderson801> NewSP();
 
         /**
-         * @copybrief LemmaObject::Delete()
-         * @copydetails LemmaObject::Delete()
+         *  Returns unique_ptr to new FHTAnderson801.
          */
-        void Delete();
+        static std::unique_ptr<FHTAnderson801> NewUP();
+
+        /// Default locked constructor
+        FHTAnderson801( const ctor_key& );
+
+        /** Locked deserializing constructor. */
+		FHTAnderson801 ( const YAML::Node& node, const ctor_key& );
+
+        /// Default destructor
+        ~FHTAnderson801();
+
+        /**
+         *   YAML Serializing method
+         */
+        YAML::Node Serialize() const;
+
+        /**
+         *   Constructs an object from a YAML::Node.
+         */
+        static std::shared_ptr< FHTAnderson801 > DeSerialize(const YAML::Node& node);
 
         // ====================  OPERATORS     ==============================
 
@@ -83,16 +109,16 @@ class Hankel2 : public HankelTransform {
         void Compute(const Real &rho, const int& ntol, const Real &tol);
 
         /// Computes the related
-        void ComputeRelated(const Real &rho, KernelEm1DBase* Kernel);
+        void ComputeRelated(const Real &rho, std::shared_ptr<KernelEM1DBase> Kernel);
 
         /// Computes the related
-        void ComputeRelated(const Real &rho,  std::vector< KernelEm1DBase* > KernelVec);
+        void ComputeRelated(const Real &rho,  std::vector< std::shared_ptr<KernelEM1DBase> > KernelVec);
 
         /// Computes the related
-        void ComputeRelated(const Real &rho,  KernelEM1DManager* Manager);
+        void ComputeRelated(const Real &rho,  std::shared_ptr<KernelEM1DManager> Manager);
 
         /// Computes the related and lagged convolutions
-        void ComputeLaggedRelated(const Real &rho, const int& nlag,  KernelEM1DManager* Manager);
+        void ComputeLaggedRelated(const Real &rho, const int& nlag,  std::shared_ptr<KernelEM1DManager> Manager);
 
         // ====================  ACCESS        ==============================
 
@@ -108,7 +134,6 @@ class Hankel2 : public HankelTransform {
         /// Sets the lagged kernel index so that the proper value is returned
         void SetLaggedArg(const Real& rho);
 
-
         // ====================  INQUIRY       ==============================
 
         /// Calculates Hankel Transform using filtering.
@@ -120,13 +145,20 @@ class Hankel2 : public HankelTransform {
         /// = omega * sqrt( EP*AMU )  amu = 4 pi e-7  ep = 8.85e-12
         Complex Zgauss(const int &ikk, const EMMODE &imode,
                         const int &itype, const Real &rho,
-                        const Real &wavef, KernelEm1DBase *Kernel);
+                        const Real &wavef, std::shared_ptr<KernelEM1DBase> Kernel);
+
+        /** Returns the name of the underlying class, similiar to Python's type */
+        virtual inline std::string GetName() const {
+            return CName;
+        }
 
     protected:
 
+    private:
+
         // ====================  LIFECYCLE     ==============================
 
-        /** A rewrite of Anderson's Pseudo-subroutine. */
+        /** A rewrite of Anderson's "Pseudo-subroutine" computed GOTO madness. */
         inline void StoreRetreive(const int &idx, const int &lag,
                         Complex &Zsum, const int &irel, Complex &C, const Real& rho0) {
 
@@ -148,18 +180,6 @@ class Hankel2 : public HankelTransform {
 		    Zsum += C;
 		    return;
 	    }
-
-        /// Default protected constructor
-        Hankel2(const std::string& name);
-
-        /// Default protected destructor
-        ~Hankel2();
-
-        /**
-         * @copybrief LemmaObject::Release()
-         * @copydetails LemmaObject::Release()
-         */
-        void Release();
 
         // ====================  OPERATIONS    ==============================
 
@@ -194,7 +214,7 @@ class Hankel2 : public HankelTransform {
         //bool cacheResults;
 
         /** Related Kernel Manager */
-        KernelEM1DManager*          Manager;
+        std::shared_ptr<KernelEM1DManager>     Manager;
 
         /// Used as base for filter abscissa generation
         static const Real ABSCISSA;
@@ -209,13 +229,13 @@ class Hankel2 : public HankelTransform {
         int icount;
 
         /// Kernel Calculator
-        std::vector <KernelEm1DBase*> kernelVec;
+        std::vector < std::shared_ptr<KernelEM1DBase> > kernelVec;
 
         /// Spines for lagged convolutions (real part)
-        std::vector <CubicSplineInterpolator*> splineVecReal;
+        std::vector <std::shared_ptr<CubicSplineInterpolator> > splineVecReal;
 
         /// Spines for lagged convolutions (imaginary part)
-        std::vector <CubicSplineInterpolator*> splineVecImag;
+        std::vector < std::shared_ptr<CubicSplineInterpolator> > splineVecImag;
 
         /// Key used internally
         Eigen::Matrix<int, 801, 1> Key;
@@ -239,8 +259,11 @@ class Hankel2 : public HankelTransform {
         /// Holds the arguments for lagged convolutions
         VectorXr Arg;
 
-}; // -----  end of class  HankelTransform  -----
+        /** ASCII string representation of the class name */
+        static constexpr auto CName = "FHTAnderson801";
+
+}; // -----  end of class  FHTAnderson801  -----
 
 }
 
-#endif // __HANKEL2_h
+#endif // __FHTAnderson801_h

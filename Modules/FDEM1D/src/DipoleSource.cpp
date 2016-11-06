@@ -19,7 +19,7 @@
 //#include "MagneticDipole.h"
 
 #include "FieldPoints.h"
-#include "hankeltransform.h"
+#include "HankelTransform.h"
 
 namespace Lemma {
 
