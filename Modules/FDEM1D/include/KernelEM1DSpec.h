@@ -35,7 +35,7 @@ namespace Lemma {
      */
     // ===================================================================
     template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
-    class KernelEM1DSpec : public KernelEm1DBase {
+    class KernelEM1DSpec : public KernelEM1DBase {
 
         struct ctor_key {};
 
@@ -44,7 +44,7 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /// Default locked constructor.
-            explicit KernelEM1DSpec (const ctor_key& ) : KernelEm1DBase( ), ReflCalc(nullptr) {
+            explicit KernelEM1DSpec (const ctor_key& ) : KernelEM1DBase( ), ReflCalc(nullptr) {
             }
 
             /// Default destructor.

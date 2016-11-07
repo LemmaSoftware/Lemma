@@ -115,13 +115,13 @@ namespace Lemma {
             /** Returns pointer to specified kernel indice. Indices are assigned in the same
                 order as they are created by AddKernel.
              */
-            std::shared_ptr<KernelEm1DBase>    GetKernel(const unsigned int& ik);
+            std::shared_ptr<KernelEM1DBase>    GetKernel(const unsigned int& ik);
 
             /** Returns pointer to connected dipole.
              */
             std::shared_ptr<DipoleSource>    GetDipole( );
 
-            inline std::vector< std::shared_ptr<KernelEm1DBase> >  GetSTLVector() {
+            inline std::vector< std::shared_ptr<KernelEM1DBase> >  GetSTLVector() {
                 return KernelVec;
             }
 
@@ -139,7 +139,7 @@ namespace Lemma {
             // ====================  DATA MEMBERS  =========================
 
             /** List of KernelEm1D instances */
-            std::vector< std::shared_ptr<KernelEm1DBase> >  KernelVec;
+            std::vector< std::shared_ptr<KernelEM1DBase> >  KernelVec;
 
             /** Reflection base used for TE mode */
             std::shared_ptr<KernelEM1DReflBase>        TEReflBase;

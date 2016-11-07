@@ -22,14 +22,14 @@ namespace Lemma {
     enum EMMODE {TM, TE, NONE};
 
     // ===================================================================
-    //  Class:  KernelEm1DBase
+    //  Class:  KernelEM1DBase
     /**
       @class
       \brief   Pure virtual base class of KernelEm1D
       \details Defines interface for HankelTransform classes
      */
     // ===================================================================
-    class KernelEm1DBase : public LemmaObject {
+    class KernelEM1DBase : public LemmaObject {
 
         friend class KernelEM1DManager;
 
@@ -38,12 +38,12 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /// Default protected constructor.
-            KernelEm1DBase ( ) : LemmaObject( ) {
+            KernelEM1DBase ( ) : LemmaObject( ) {
 
             }
 
             /// Default protected constructor.
-            ~KernelEm1DBase () {
+            ~KernelEM1DBase () {
             }
 
             // ====================  OPERATORS     =======================
@@ -95,7 +95,7 @@ namespace Lemma {
             /** ASCII string representation of the class name */
             static constexpr auto CName = "KernelEM1DBase";
 
-    }; // -----  end of class  KernelEm1DBase  -----
+    }; // -----  end of class  KernelEM1DBase  -----
 
 } // namespace Lemma
 

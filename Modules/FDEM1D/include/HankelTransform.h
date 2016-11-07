@@ -50,7 +50,7 @@ namespace Lemma {
                 /// = omega * sqrt( EP*AMU )  amu = 4 pi e-7  ep = 8.85e-12
                 virtual Complex Zgauss(const int &ikk, const EMMODE &imode,
                             const int &itype, const Real &rho,
-                            const Real &wavef, std::shared_ptr<KernelEm1DBase> Kernel)=0;
+                            const Real &wavef, std::shared_ptr<KernelEM1DBase> Kernel)=0;
 
                 /// Computes related kernels, if applicable, otherwise this is
                 /// just a dummy function.

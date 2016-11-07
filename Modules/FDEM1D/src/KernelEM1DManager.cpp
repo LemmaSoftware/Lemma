@@ -51,7 +51,7 @@ namespace Lemma {
         rx_z = rx_zin;
     }
 
-    std::shared_ptr<KernelEm1DBase> KernelEM1DManager::GetKernel(const unsigned int& ik) {
+    std::shared_ptr<KernelEM1DBase> KernelEM1DManager::GetKernel(const unsigned int& ik) {
         return KernelVec[ik];
     }
 
