@@ -48,6 +48,8 @@ namespace Lemma {
                 /// rho is argument to integral
                 /// wavef is the propogation constant of free space
                 /// = omega * sqrt( EP*AMU )  amu = 4 pi e-7  ep = 8.85e-12
+                /// @note compare performance of passing Kernel, instead consider
+                ///       passing by reference and using Kernel.get() instead.
                 virtual Complex Zgauss(const int &ikk, const EMMODE &imode,
                             const int &itype, const Real &rho,
                             const Real &wavef, std::shared_ptr<KernelEM1DBase> Kernel)=0;
@@ -76,6 +78,9 @@ namespace Lemma {
 
                 /// Default protected constructor.
                 HankelTransform ( );
+
+                /// Default protected constructor.
+                HankelTransform ( const YAML::Node& node );
 
                 /// Default protected constructor.
                 ~HankelTransform ( );

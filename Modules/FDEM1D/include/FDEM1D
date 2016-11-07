@@ -1,6 +1,10 @@
 #include "LayeredEarthEM.h"
+
 #include "FieldPoints.h"
+
 #include "WireAntenna.h"
+#include "PolygonalWireAntenna.h"
+
 #include "DipoleSource.h"
 
 // internal

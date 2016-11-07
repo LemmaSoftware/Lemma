@@ -51,7 +51,7 @@ namespace Lemma {
 
             /// Makes a deep copy of this antenna with all connections except
             /// the dipole approximation.
-            std::shared_ptr<PolygonalWireAntenna> Clone();
+            std::shared_ptr<WireAntenna> Clone();
 
             /**
              *  Uses YAML to serialize this object.

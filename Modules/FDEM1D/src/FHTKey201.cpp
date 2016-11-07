@@ -10,30 +10,26 @@
 /**
  * @file
  * @date      02/11/2014 03:42:53 PM
- * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2014, XRI Geophysics, LLC
+ * @email     Trevor.Irons@lemmasoftware.org
  * @copyright Copyright (c) 2014, Trevor Irons
  */
 
-#include "FHTKey.h"
+#include "FHTKey201.h"
 
 namespace Lemma {
 
     // ====================  FRIEND METHODS  =====================
 
-    std::ostream &operator<<(std::ostream &stream, const FHTKey &ob) {
-
-        stream << *(HankelTransform*)(&ob);
-
+    std::ostream &operator<<(std::ostream &stream, const FHTKey201 &ob) {
+        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
         return stream;
     }
 
 
     // ====================  STATIC CONST MEMBERS     ============
 
-    const Eigen::Matrix<Real, 201, 3>  FHTKey::WT201 =
+    const Eigen::Matrix<Real, 201, 3>  FHTKey201::WT201 =
         ( Eigen::Matrix<Real, 201, 3>()   <<
         // Base                   J0                      J1
           4.1185887075357082e-06, 1.5020099209519960e-03, 4.7827871332506182e-10
@@ -241,86 +237,92 @@ namespace Lemma {
     // ====================  LIFECYCLE     =======================
 
     //--------------------------------------------------------------------------------------
-    //       Class:  FHTKey
-    //      Method:  FHTKey
-    // Description:  constructor (protected)
+    //       Class:  FHTKey201
+    //      Method:  FHTKey201
+    // Description:  constructor (locked)
     //--------------------------------------------------------------------------------------
-    FHTKey::FHTKey (const std::string& name) : HankelTransform(name) {
+    FHTKey201::FHTKey201 (const ctor_key& ) : HankelTransform( ) {
 
-    }  // -----  end of method FHTKey::FHTKey  (constructor)  -----
+    }  // -----  end of method FHTKey201::FHTKey201  (constructor)  -----
 
+    FHTKey201::FHTKey201( const YAML::Node& node, const ctor_key& ) : HankelTransform(node) {
+
+    }
 
     //--------------------------------------------------------------------------------------
-    //       Class:  FHTKey
-    //      Method:  New()
+    //       Class:  FHTKey201
+    //      Method:  NewSP()
     // Description:  public constructor
     //--------------------------------------------------------------------------------------
-    FHTKey* FHTKey::New() {
-        FHTKey*  Obj = new FHTKey("FHTKey");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<FHTKey201> FHTKey201::NewSP() {
+        return std::make_shared<FHTKey201>( ctor_key() );
     }
 
     //--------------------------------------------------------------------------------------
-    //       Class:  FHTKey
-    //      Method:  ~FHTKey
-    // Description:  destructor (protected)
+    //       Class:  FHTKey201
+    //      Method:  ~FHTKey201
+    // Description:  destructor
     //--------------------------------------------------------------------------------------
-    FHTKey::~FHTKey () {
+    FHTKey201::~FHTKey201 () {
 
-    }  // -----  end of method FHTKey::~FHTKey  (destructor)  -----
+    }  // -----  end of method FHTKey201::~FHTKey201  (destructor)  -----
 
     //--------------------------------------------------------------------------------------
-    //       Class:  FHTKey
-    //      Method:  Delete
-    // Description:  public destructor
+    //       Class:  FHTKey201
+    //      Method:  DeSerialize
+    // Description:  Factory method, converts YAML node into object
     //--------------------------------------------------------------------------------------
-    void FHTKey::Delete() {
-        this->DetachFrom(this);
+    std::shared_ptr<FHTKey201> FHTKey201::DeSerialize( const YAML::Node& node ) {
+        if (node.Tag() != "FHTKey201") {
+            throw  DeSerializeTypeMismatch( "FHTKey201", node.Tag());
+        }
+        return std::make_shared<FHTKey201> ( node, ctor_key() );
     }
 
     //--------------------------------------------------------------------------------------
-    //       Class:  FHTKey
-    //      Method:  Release
-    // Description:  destructor (protected)
+    //       Class:  FHTKey201
+    //      Method:  Serialize
+    // Description:  Converts object into Serialized version
     //--------------------------------------------------------------------------------------
-    void FHTKey::Release() {
-        delete this;
+    YAML::Node FHTKey201::Serialize() const {
+        YAML::Node node = HankelTransform::Serialize();
+        node.SetTag( GetName() );
+        //node["LayerConductivity"] = LayerConductivity;
+        return node;
     }
 
-
     //--------------------------------------------------------------------------------------
-    //       Class:  FHTKey
+    //       Class:  FHTKey201
     //      Method:  Zgauss
     //--------------------------------------------------------------------------------------
-    Complex FHTKey::Zgauss ( const int &ikk, const EMMODE &imode,
+    Complex FHTKey201::Zgauss ( const int &ikk, const EMMODE &imode,
                             const int &itype, const Real &rho,
-                            const Real &wavef, KernelEm1DBase *Kernel ) {
+                            const Real &wavef, std::shared_ptr<KernelEM1DBase> Kernel ) {
  		return Zans(0, Kernel->GetManagerIndex());
-    }		// -----  end of method FHTKey::ComputeRelated  -----
+    }		// -----  end of method FHTKey201::ComputeRelated  -----
 
 
     //--------------------------------------------------------------------------------------
-    //       Class:  FHTKey
+    //       Class:  FHTKey201
     //      Method:  ComputeRelated
     //--------------------------------------------------------------------------------------
-    void FHTKey::ComputeRelated ( const Real& rho, KernelEm1DBase* Kernel ) {
+    void FHTKey201::ComputeRelated ( const Real& rho, std::shared_ptr<KernelEM1DBase> Kernel ) {
         return ;
-    }		// -----  end of method FHTKey::ComputeRelated  -----
+    }		// -----  end of method FHTKey201::ComputeRelated  -----
 
     //--------------------------------------------------------------------------------------
-    //       Class:  FHTKey
+    //       Class:  FHTKey201
     //      Method:  ComputeRelated
     //--------------------------------------------------------------------------------------
-    void FHTKey::ComputeRelated ( const Real& rho, std::vector< KernelEm1DBase* > KernelVec ) {
+    void FHTKey201::ComputeRelated ( const Real& rho, std::vector< std::shared_ptr<KernelEM1DBase> > KernelVec ) {
         return ;
-    }		// -----  end of method FHTKey::ComputeRelated  -----
+    }		// -----  end of method FHTKey201::ComputeRelated  -----
 
     //--------------------------------------------------------------------------------------
-    //       Class:  FHTKey
+    //       Class:  FHTKey201
     //      Method:  ComputeRelated
     //--------------------------------------------------------------------------------------
-    void FHTKey::ComputeRelated ( const Real& rho, KernelEM1DManager* KernelManager ) {
+    void FHTKey201::ComputeRelated ( const Real& rho, std::shared_ptr<KernelEM1DManager> KernelManager ) {
 
         //kernelVec = KernelManager->GetSTLVector();
         int nrel = (int)(KernelManager->GetSTLVector().size());
@@ -354,6 +356,6 @@ namespace Lemma {
         }
 
         return ;
-    }		// -----  end of method FHTKey::ComputeRelated  -----
+    }		// -----  end of method FHTKey201::ComputeRelated  -----
 
 }		// -----  end of Lemma  name  -----

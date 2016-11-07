@@ -15,65 +15,58 @@
 
 namespace Lemma {
 
-#ifdef HAVE_YAMLCPP
     std::ostream &operator << (std::ostream &stream, const PolygonalWireAntenna &ob) {
         stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
         return stream;
     }
-#else
-	std::ostream &operator<<(std::ostream &stream,
-				const PolygonalWireAntenna &ob) {
 
-		stream << *(WireAntenna*)(&ob);
-		//stream << "Current: " << ob.Current << " [A]\n";
-		//stream << "Frequencies: " << ob.Freqs.transpose() << " [Hz]\n";
-		//stream << "Number of points " << ob.NumberOfPoints << "\n";
-		//stream << "Points:\n" << ob.Points.transpose() << "\n";
-		//stream << "Dipoles used to approximate " << ob.Dipoles.size();
-		return stream;
-	}
-#endif
 	// ====================  LIFECYCLE     =======================
 
-	PolygonalWireAntenna::PolygonalWireAntenna(const std::string& name)
-		: WireAntenna(name), minDipoleRatio(.15),
+	PolygonalWireAntenna::PolygonalWireAntenna( const ctor_key& key ) : WireAntenna( WireAntenna::ctor_key() ), minDipoleRatio(.15),
    		minDipoleMoment(1e-6), maxDipoleMoment(1e1), rRepeat(1e10,1e10,1e10) {
 		Points.setZero();
         //rRepeat.setOnes();
 	}
 
-#ifdef HAVE_YAMLCPP
-    PolygonalWireAntenna::PolygonalWireAntenna(const YAML::Node& node)
-		: WireAntenna(node) {
-// minDipoleRatio(.15),
-// minDipoleMoment(1e-4),
-// maxDipoleMoment(1e-0)
+    PolygonalWireAntenna::PolygonalWireAntenna( const YAML::Node& node, const ctor_key& ) : WireAntenna(node, WireAntenna::ctor_key() ) {
         minDipoleRatio   = node["minDipoleRatio"].as<Real>();
         maxDipoleMoment  = node["maxDipoleMoment"].as<Real>();
         minDipoleMoment  = node["minDipoleMoment"].as<Real>();
 	}
-#endif
 
 	PolygonalWireAntenna::~PolygonalWireAntenna() {
-        if (this->NumberOfReferences != 0)
-            throw DeleteObjectWithReferences( this );
-		// Taken care of in parent
-        //for (unsigned int id=0; id<Dipoles.size(); ++id) {
-		//	Dipoles[id]->Delete();
-		//}
-		//Dipoles.clear();
 	}
 
-	PolygonalWireAntenna* PolygonalWireAntenna::New() {
-		PolygonalWireAntenna* Obj = new
-            PolygonalWireAntenna("PolygonalWireAntenna");
-        Obj->AttachTo(Obj);
-        return Obj;
+    //--------------------------------------------------------------------------------------
+    //       Class:  PolygonalWireAntenna
+    //      Method:  Serialize
+    //--------------------------------------------------------------------------------------
+    YAML::Node PolygonalWireAntenna::Serialize (  ) const {
+        YAML::Node node = WireAntenna::Serialize();
+        node.SetTag( this->GetName() );
+        node["minDipoleRatio"]  = minDipoleRatio;
+        node["maxDipoleMoment"] = maxDipoleMoment;
+        node["minDipoleMoment"] = minDipoleMoment;
+        return node;
+    }		// -----  end of method PolygonalWireAntenna::Serialize  -----
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  WireAntenna
+    //      Method:  DeSerialize
+    //--------------------------------------------------------------------------------------
+    std::shared_ptr<PolygonalWireAntenna> PolygonalWireAntenna::DeSerialize ( const YAML::Node& node ) {
+        if (node.Tag() != "PolygonalWireAntenna") {
+            throw  DeSerializeTypeMismatch( "PolygonalWireAntenna", node.Tag());
+        }
+        return std::make_shared<PolygonalWireAntenna> ( node, ctor_key() );
+    }		// -----  end of method WireAntenna::DeSerialize  -----
+
+	std::shared_ptr<PolygonalWireAntenna> PolygonalWireAntenna::NewSP() {
+        return std::make_shared<PolygonalWireAntenna>( ctor_key() );
 	}
 
-	PolygonalWireAntenna* PolygonalWireAntenna::Clone() {
-		PolygonalWireAntenna* copy = PolygonalWireAntenna::New();
-		//copy->AttachTo(copy); // NO! Attached above!
+	std::shared_ptr<WireAntenna> PolygonalWireAntenna::Clone() {
+		auto copy = PolygonalWireAntenna::NewSP();
         copy->minDipoleRatio = this->minDipoleRatio;
 		copy->minDipoleMoment = this->minDipoleMoment;
 		copy->maxDipoleMoment = this->maxDipoleMoment;
@@ -84,14 +77,6 @@ namespace Lemma {
 		copy->Points = this->Points;
 		//copy->Dipoles = this->Dipoles; // no, disaster
 		return copy;
-	}
-
-	void PolygonalWireAntenna::Delete() {
-		this->DetachFrom(this);
-	}
-
-    void PolygonalWireAntenna::Release() {
-		delete this;
 	}
 
     void PolygonalWireAntenna::SetMinDipoleRatio (const Real& ratio) {
@@ -111,9 +96,6 @@ namespace Lemma {
 	void PolygonalWireAntenna::ApproximateWithElectricDipoles(const Vector3r &rp) {
         // Only resplit if necessary. Save a few cycles if repeated
         if ( (rRepeat-rp).norm() > 1e-16 ) {
-		    for (unsigned int id=0; id<Dipoles.size(); ++id) {
-			    Dipoles[id]->Delete();
-		    }
 		    Dipoles.clear();
 
 		    // loop over all segments
@@ -159,11 +141,11 @@ namespace Lemma {
 
 	void PolygonalWireAntenna::PushXYZDipoles(const Vector3r &step,
 				    const Vector3r &cp, const Vector3r &dir,
-					std::vector<DipoleSource*> &xDipoles) {
+					std::vector< std::shared_ptr<DipoleSource> > &xDipoles) {
 
 		Real scale = (Real)(NumberOfTurns)*Current;
 
-        DipoleSource *tx = DipoleSource::New();
+        auto tx = DipoleSource::NewSP();
 		    tx->SetLocation(cp);
 		    tx->SetType(UNGROUNDEDELECTRICDIPOLE);
 			tx->SetPolarisation(dir);
@@ -174,7 +156,7 @@ namespace Lemma {
 
 	void PolygonalWireAntenna::CorrectOverstepXYZDipoles(const Vector3r &step,
 				    const Vector3r &cp,	const Vector3r &dir,
-					std::vector<DipoleSource*> &xDipoles ) {
+					std::vector< std::shared_ptr<DipoleSource> > &xDipoles ) {
 
 		Real scale = (Real)(NumberOfTurns)*Current;
 
@@ -200,7 +182,7 @@ namespace Lemma {
 
 		///////////////////
 		// dipoles for this segment
-		std::vector<DipoleSource*>           xDipoles;
+		std::vector< std::shared_ptr<DipoleSource> >       xDipoles;
 
 		// go towards p1
 		if ( ((c-p1).array().abs() > minDipoleMoment).any() ) {
@@ -317,33 +299,5 @@ namespace Lemma {
 		Dipoles.insert(Dipoles.end(), xDipoles.begin(), xDipoles.end());
 	}
 
-    #ifdef HAVE_YAMLCPP
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  PolygonalWireAntenna
-    //      Method:  Serialize
-    //--------------------------------------------------------------------------------------
-    YAML::Node PolygonalWireAntenna::Serialize (  ) const {
-        YAML::Node node = WireAntenna::Serialize();
-        node.SetTag( this->Name );
-        node["minDipoleRatio"]  = minDipoleRatio;
-        node["maxDipoleMoment"] = maxDipoleMoment;
-        node["minDipoleMoment"] = minDipoleMoment;
-        return node;
-    }		// -----  end of method PolygonalWireAntenna::Serialize  -----
-
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  WireAntenna
-    //      Method:  DeSerialize
-    //--------------------------------------------------------------------------------------
-    PolygonalWireAntenna* PolygonalWireAntenna::DeSerialize ( const YAML::Node& node ) {
-        PolygonalWireAntenna* Object = new PolygonalWireAntenna(node);
-        Object->AttachTo(Object);
-        DESERIALIZECHECK( node, Object )
-        return Object ;
-    }		// -----  end of method WireAntenna::DeSerialize  -----
-
-    #endif
 
 }

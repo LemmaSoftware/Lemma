@@ -23,6 +23,9 @@ namespace Lemma {
 	HankelTransform::HankelTransform( ) : LemmaObject( )	{
 	}
 
+    HankelTransform::HankelTransform( const YAML::Node& node ) : LemmaObject( node )	{
+	}
+
 	HankelTransform::~HankelTransform( ) {
 	}
 
