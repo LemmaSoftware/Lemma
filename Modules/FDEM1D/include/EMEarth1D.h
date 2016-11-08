@@ -93,7 +93,7 @@ namespace Lemma {
 
             /// Calculates the field(s) due to an ungrounded dipole source
             /// Calls FORTRAN library em1d (em1dnew.for)
-#ifdef COMPILE_FORTRAN
+#ifdef KIHALEE_EM1D
             void MakeCalc();
 #endif
 

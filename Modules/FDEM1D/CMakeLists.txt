@@ -11,6 +11,11 @@ set_target_properties(fdem1d PROPERTIES
 # Linking
 target_link_libraries(fdem1d "lemmacore")
 
+if ( KIHA_EM1D )
+	target_link_libraries(fdem1d "kihaem1d")
+	target_link_libraries(fdem1d "gfortran")
+endif()
+
 # Testing
 if (LEMMA_ENABLE_TESTING)
 	add_subdirectory(testing)

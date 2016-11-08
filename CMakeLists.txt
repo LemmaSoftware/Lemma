@@ -162,6 +162,14 @@ endif()
 # Lemma Configuration
 #####################
 
+#####################
+# Look for Ki Ha Lee 
+#####################
+FIND_LIBRARY( KIHA_EM1D kihaem1d ) # PATHS ${/home/tirons/local/lib}  )
+if ( KIHA_EM1D )
+	add_compile_options(-DKIHALEE_EM1D)
+endif()
+
 ####################
 # Add the c++11 flag 
 # TODO add compiler specific instructions

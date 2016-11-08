@@ -7,6 +7,8 @@
 
 #include "DipoleSource.h"
 
+#include "EMEarth1D.h"
+
 // internal
 //#include "KernelEM1DManager.h"
 //#include "KernelEM1DSpec.h"

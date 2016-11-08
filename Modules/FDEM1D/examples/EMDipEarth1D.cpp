@@ -30,17 +30,14 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // ===========================================================================
-#include "emearth1d.h"
-#include "dipolesource.h"
-#include "layeredearthem.h"
-#include "receiverpoints.h"
+#include <FDEM1D>
 
 using namespace Lemma;
 
 int main() {
 
 	// Test with a single dipole
-	DipoleSource *dipole = DipoleSource::New();
+	auto dipole = DipoleSource::NewSP();
 		dipole->SetType(GROUNDEDELECTRICDIPOLE);
 		dipole->SetPolarisation(XPOLARISATION);
 		dipole->SetNumberOfFrequencies(1);
@@ -57,13 +54,13 @@ int main() {
 	VectorXr  thick(1);
 		thick << 10;//, 10, 10;
 
-	LayeredEarthEM *earth = LayeredEarthEM::New();
+	auto earth = LayeredEarthEM::NewSP();
         earth->SetNumberOfLayers(2);
 		earth->SetLayerConductivity(sigma);
 		//earth->SetLayerThickness(thick);
 
 	// Receivers
-	ReceiverPoints *receivers = ReceiverPoints::New();
+	auto receivers = FieldPoints::NewSP();
 		Vector3r loc;
 		//Real ox = -5.1456;
 		//Real oy =  2.2350;
@@ -73,7 +70,7 @@ int main() {
 		Real dz = 2.6;
 		int  nz = 1;
 
-		receivers->SetNumberOfReceivers(nz);
+		receivers->SetNumberOfPoints(nz);
 		int ir = 0;
 		for (int iz=0; iz<nz; ++iz) {
 			loc << ox, oy, depth;
@@ -83,12 +80,12 @@ int main() {
 		}
 	//receivers->SetLocation(1, ox, oy, depth);
 
-	EMEarth1D *EmEarth = EMEarth1D::New();
+    auto EmEarth = EMEarth1D::NewSP();
         //EmEarth->SetHankelTransformMethod(DIGITALFILTERING);
         EmEarth->SetFieldsToCalculate(BOTH); // Fortran needs this
 		EmEarth->AttachDipoleSource(dipole);
 		EmEarth->AttachLayeredEarthEM(earth);
-		EmEarth->AttachReceiverPoints(receivers);
+		EmEarth->AttachFieldPoints(receivers);
 
         //dipole->SetType(ELECTRICDIPOLE);
 //         receivers->SetNumberOfReceivers(1);
@@ -105,37 +102,19 @@ int main() {
 	receivers->ClearFields();
 
     // swap tx rx posigion
+    /*
     receivers->SetLocation(0, dipole->GetLocation());
     dipole->SetLocation(loc);
 	EmEarth->MakeCalc3();
 	std::cout << receivers->GetEfield(0,0) << std::endl;
-
 	receivers->ClearFields();
+    */
+
  #ifdef KIHALEE_EM1D
-// 	//std::cout << "\nFORTRAN\n";
+    std::cout << "\nFORTRAN\n";
  	EmEarth->MakeCalc();
 // 	std::cout << receivers->GetHfield(0,0) << std::endl;
  	std::cout << receivers->GetEfield(0,0) << std::endl;
  #endif
-
-    dipole->Delete();
-    EmEarth->Delete();
-    receivers->Delete();
-    earth->Delete();
-
-// 	try {
-//
-// 	}
-//
-// 	// Catch exceptions
-// 	catch (NullEarth) {
-// 			std::cout << "Earth model not set dummy\n";
-// 	}
-//
-// 	catch (NullReceivers) {
-// 			std::cout << "Receivers not set dummy\n";
-// 	}
-
-	//EmEarth->TestBess();
 
 }
