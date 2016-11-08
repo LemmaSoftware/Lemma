@@ -65,7 +65,7 @@ namespace Lemma {
         return std::make_shared<PolygonalWireAntenna>( ctor_key() );
 	}
 
-	std::shared_ptr<WireAntenna> PolygonalWireAntenna::Clone() {
+	std::shared_ptr<WireAntenna> PolygonalWireAntenna::Clone() const {
 		auto copy = PolygonalWireAntenna::NewSP();
         copy->minDipoleRatio = this->minDipoleRatio;
 		copy->minDipoleMoment = this->minDipoleMoment;
@@ -78,6 +78,21 @@ namespace Lemma {
 		//copy->Dipoles = this->Dipoles; // no, disaster
 		return copy;
 	}
+
+    std::shared_ptr<PolygonalWireAntenna> PolygonalWireAntenna::ClonePA() const {
+		auto copy = PolygonalWireAntenna::NewSP();
+        copy->minDipoleRatio = this->minDipoleRatio;
+		copy->minDipoleMoment = this->minDipoleMoment;
+		copy->maxDipoleMoment = this->maxDipoleMoment;
+		copy->NumberOfPoints = this->NumberOfPoints;
+		copy->Freqs = this->Freqs;
+		copy->Current = this->Current;
+		copy->NumberOfTurns = this->NumberOfTurns;
+		copy->Points = this->Points;
+		//copy->Dipoles = this->Dipoles; // no, disaster
+		return copy;
+	}
+
 
     void PolygonalWireAntenna::SetMinDipoleRatio (const Real& ratio) {
         minDipoleRatio = ratio;

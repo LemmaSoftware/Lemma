@@ -58,7 +58,7 @@ namespace Lemma {
             /**
              * Provides deep copy
              */
-            virtual std::shared_ptr<WireAntenna> Clone();
+            virtual std::shared_ptr<WireAntenna> Clone() const ;
 
             /**
              *  Uses YAML to serialize this object.

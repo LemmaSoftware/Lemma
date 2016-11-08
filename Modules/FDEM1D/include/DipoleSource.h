@@ -99,7 +99,7 @@ namespace Lemma {
                     const int& irec, std::shared_ptr<LayeredEarthEM> Earth );
 
             /** Updates the receiver fields */
-            virtual void UpdateFields(const int& ifreq, std::shared_ptr<HankelTransform> Hankel, const Real& wavef);
+            virtual void UpdateFields(const int& ifreq, HankelTransform* Hankel, const Real& wavef);
 
             // ====================  ACCESS        ======================
 

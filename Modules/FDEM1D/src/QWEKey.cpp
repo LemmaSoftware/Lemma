@@ -19,25 +19,19 @@
 /**
  * @file
  * @date      02/12/2014 10:28:15 AM
- * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2014, XRI Geophysics, LLC
+ * @email     Trevor.Irons@lemmasoftware.org
  * @copyright Copyright (c) 2014, Trevor Irons
  */
 
 #include "QWEKey.h"
-
-//#include <Eigen/Eigenvalues>
 
 namespace Lemma {
 
     // ====================  FRIEND METHODS  =====================
 
     std::ostream &operator<<(std::ostream &stream, const QWEKey &ob) {
-
-        stream << *(HankelTransform*)(&ob);
-
+        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
         return stream;
     }
 
@@ -49,22 +43,28 @@ namespace Lemma {
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
     //
-    QWEKey::QWEKey (const std::string& name) : HankelTransform(name), RelTol(1e-12), AbsTol(1e-32), nQuad(61), nDelay(1),
+    QWEKey::QWEKey (const ctor_key& ) : HankelTransform( ), RelTol(1e-12), AbsTol(1e-32), nQuad(61), nDelay(1),
     //QWEKey::QWEKey (const std::string& name) : HankelTransform(name), RelTol(1e-38), AbsTol(1e-48), nQuad(39), nDelay(5),
         nIntervalsMax(40) {
         BesselWeights( J0 ); // TODO experiment with zero weight (J0, J1) options, should be static one time method
     }  // -----  end of method QWEKey::QWEKey  (constructor)  -----
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  QWEKey
+    //      Method:  QWEKey
+    // Description:  constructor (locked)
+    //--------------------------------------------------------------------------------------
+    QWEKey::QWEKey( const YAML::Node& node, const ctor_key& ) : HankelTransform(node) {
+
+    }
 
     //--------------------------------------------------------------------------------------
     //       Class:  QWEKey
     //      Method:  New()
     // Description:  public constructor
     //--------------------------------------------------------------------------------------
-    QWEKey* QWEKey::New() {
-        QWEKey*  Obj = new QWEKey("QWEKey");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<QWEKey> QWEKey::NewSP() {
+        return std::make_shared<QWEKey>( ctor_key() );
     }
 
     //--------------------------------------------------------------------------------------
@@ -78,20 +78,26 @@ namespace Lemma {
 
     //--------------------------------------------------------------------------------------
     //       Class:  QWEKey
-    //      Method:  Delete
-    // Description:  public destructor
+    //      Method:  DeSerialize
+    // Description:  Factory method, converts YAML node into object
     //--------------------------------------------------------------------------------------
-    void QWEKey::Delete() {
-        this->DetachFrom(this);
+    std::shared_ptr<QWEKey> QWEKey::DeSerialize( const YAML::Node& node ) {
+        if (node.Tag() != "QWEKey") {
+            throw  DeSerializeTypeMismatch( "QWEKey", node.Tag());
+        }
+        return std::make_shared<QWEKey> ( node, ctor_key() );
     }
 
     //--------------------------------------------------------------------------------------
     //       Class:  QWEKey
-    //      Method:  Release
-    // Description:  destructor (protected)
+    //      Method:  Serialize
+    // Description:  Converts object into Serialized version
     //--------------------------------------------------------------------------------------
-    void QWEKey::Release() {
-        delete this;
+    YAML::Node QWEKey::Serialize() const {
+        YAML::Node node = HankelTransform::Serialize();
+        node.SetTag( GetName() );
+        //node["LayerConductivity"] = LayerConductivity;
+        return node;
     }
 
     //--------------------------------------------------------------------------------------
@@ -100,7 +106,7 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     Complex QWEKey::Zgauss ( const int &ikk, const EMMODE &imode,
                             const int &itype, const Real &rho,
-                            const Real &wavef, KernelEm1DBase *Kernel ) {
+                            const Real &wavef, KernelEM1DBase *Kernel ) {
         return Textrap(Kernel->GetManagerIndex(), Tn(Kernel->GetManagerIndex())) ;
     }		// -----  end of method QWEKey::Zgauss  -----
 
@@ -108,7 +114,7 @@ namespace Lemma {
     //       Class:  QWEKey
     //      Method:  ComputeRelated
     //--------------------------------------------------------------------------------------
-    void QWEKey::ComputeRelated ( const Real& rho, KernelEm1DBase* Kernel ) {
+    void QWEKey::ComputeRelated ( const Real& rho, std::shared_ptr<KernelEM1DBase> Kernel ) {
         return ;
     }		// -----  end of method QWEKey::ComputeRelated  -----
 
@@ -116,7 +122,7 @@ namespace Lemma {
     //       Class:  QWEKey
     //      Method:  ComputeRelated
     //--------------------------------------------------------------------------------------
-    void QWEKey::ComputeRelated ( const Real& rho, std::vector< KernelEm1DBase* > KernelVec ) {
+    void QWEKey::ComputeRelated ( const Real& rho, std::vector< std::shared_ptr<KernelEM1DBase> > KernelVec ) {
         return ;
     }		// -----  end of method QWEKey::ComputeRelated  -----
 
@@ -124,7 +130,7 @@ namespace Lemma {
     //       Class:  QWEKey
     //      Method:  ComputeRelated
     //--------------------------------------------------------------------------------------
-    void QWEKey::ComputeRelated ( const Real& rho, KernelEM1DManager* KernelManagerIn ) {
+    void QWEKey::ComputeRelated ( const Real& rho, std::shared_ptr<KernelEM1DManager> KernelManagerIn ) {
         KernelManager = KernelManagerIn;  // OK becauase this is internal and we know what we are doing
 
         Lambda = Bx.array()/rho;
@@ -140,16 +146,14 @@ namespace Lemma {
     //      Method:  GaussQuadWeights
     //--------------------------------------------------------------------------------------
     void QWEKey::GaussQuadWeights(const int& N) {
-        std::cerr<<"QWEKey needs work to remove Boost, etc." << std::endl;
-        // Below works with older Eigen, need to find problem
-//         VectorXr Nv = VectorXr::LinSpaced(N-1, 1, N-1);
-//         VectorXr beta  = 0.5 / (1.-(2.*Nv.array()).pow(-2)).sqrt();
-//         MatrixXr T = MatrixXr::Zero(N,N);
-//         //std::cerr << "Eigen ERROR BELOW, QWEKey.cpp  QWEKey::GaussQuadWeights, COMMENTED OUT ";
-//         T.bottomLeftCorner(N-1, N-1) = beta.asDiagonal();
-//         Eigen::SelfAdjointEigenSolver<MatrixXr> eig( T.selfadjointView< Eigen::Lower >() ); // PROBLEM LINE
-//             GaussAbscissa = eig.eigenvalues();
-//             GaussWeights = 2.*eig.eigenvectors().row(0).array().pow(2);
+        VectorXr Nv = VectorXr::LinSpaced(N-1, 1, N-1);
+        VectorXr beta  = 0.5 / (1.-(2.*Nv.array()).pow(-2)).sqrt();
+        MatrixXr T = MatrixXr::Zero(N,N);
+        //std::cerr << "Eigen ERROR BELOW, QWEKey.cpp  QWEKey::GaussQuadWeights, COMMENTED OUT ";
+        T.bottomLeftCorner(N-1, N-1) = beta.asDiagonal();
+        Eigen::SelfAdjointEigenSolver<MatrixXr> eig( T.selfadjointView< Eigen::Lower >() );
+            GaussAbscissa = eig.eigenvalues();
+            GaussWeights = 2.*eig.eigenvectors().row(0).array().pow(2);
     }
 
     //--------------------------------------------------------------------------------------
@@ -157,7 +161,6 @@ namespace Lemma {
     //      Method:  BesselWeights
     //--------------------------------------------------------------------------------------
     void QWEKey::BesselWeights ( const sZeroType& sType ) {
-    #ifdef HAVEBOOSTSPECIALFUNCTIONS
         GaussQuadWeights(nQuad); // TODO should this be moved out of initializer?
         std::vector<Real> bz;
         xInt = VectorXr(nIntervalsMax+1);
@@ -194,9 +197,6 @@ namespace Lemma {
             if (iw == GaussWeights.size()) iw = 0;
         }
         return ;
-    # else
-        std::cerr  << "QWEKey requires Boost functionalility that is missing\n";
-    #endif
     }		// -----  end of method QWEKey::BesselWeights  -----
 
 

@@ -8,13 +8,10 @@
   @file
   @author   Trevor Irons
   @date     12/02/2009
-  @version  $Id: emearth1d.h 266 2015-04-01 03:24:00Z tirons $
  **/
 
 #ifndef __EMEARTH1D_H
 #define __EMEARTH1D_H
-
-
 
 // forward declare these due to include cycle
 //#include "LayeredEarthEM.h"
@@ -25,11 +22,11 @@
 //#include "KernelEM1DManager.h"
 
 #include "KernelEM1DSpec.h"
-#include "hankeltransformgaussianquadrature.h"
-#include "hankeltransformhankel2.h"
-#include "FHTKey.h"
-#include "FHTKey51.h"
+#include "GQChave.h"
+#include "FHTAnderson801.h"
+#include "FHTKey201.h"
 #include "FHTKey101.h"
+#include "FHTKey51.h"
 #include "QWEKey.h"
 #include "CubicSplineInterpolator.h"
 
@@ -64,7 +61,7 @@ namespace Lemma {
             // ====================  LIFECYCLE     ===========================
 
             /** Default protected constructor. */
-            EMEarth1D ( const ctor_key& );
+            explicit EMEarth1D ( const ctor_key& );
 
             /** Default protected constructor. */
 			EMEarth1D ( const YAML::Node& node, const ctor_key& );
@@ -109,7 +106,7 @@ namespace Lemma {
             // ====================  ACCESS        ===========================
 
             /** Attaches an antennae */
-            void AttachWireAntenna(WireAntenna *antennae);
+            void AttachWireAntenna( std::shared_ptr<WireAntenna> antennae);
 
             /** Attaches a dipole for calculation */
             void AttachDipoleSource( std::shared_ptr<DipoleSource> dipole);
@@ -137,19 +134,16 @@ namespace Lemma {
              *  and CalculateWireAntennaField routines.
              */
             void SolveSingleTxRxPair(const int &irec,
-                    std::shared_ptr<HankelTransform> Hankel,
+                    HankelTransform* Hankel,
                     const Real &wavef, const int &ifreq,
-                    std::shared_ptr<DipoleSource> tDipole);
+                    DipoleSource* tDipole);
 
             /** Used internally, this is the innermost loop of the MakeCalc3,
              *  and CalculateWireAntennaField routines.
              */
-            void SolveLaggedTxRxPair(const int &irec, std::shared_ptr<Hankel2> Hankel,
+            void SolveLaggedTxRxPair(const int &irec, FHTAnderson801* Hankel,
                     const Real &wavef, const int &ifreq,
-                    std::shared_ptr<PolygonalWireAntenna> antenna);
-
-            /** Removes all connections */
-            void DetachAll();
+                    PolygonalWireAntenna* antenna);
 
             // ====================  DATA MEMBERS  ===========================
 

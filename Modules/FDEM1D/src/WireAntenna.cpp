@@ -41,7 +41,7 @@ namespace Lemma {
         return std::make_shared<WireAntenna>( ctor_key() );
     }
 
-    std::shared_ptr<WireAntenna> WireAntenna::Clone() {
+    std::shared_ptr<WireAntenna> WireAntenna::Clone() const {
         auto copy = WireAntenna::NewSP();
 
 		copy->NumberOfPoints = this->NumberOfPoints;

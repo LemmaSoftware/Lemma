@@ -12,20 +12,18 @@
  * @date      02/12/2014 10:20:18 AM
  * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2014, XRI Geophysics, LLC
+ * @email     Trevor.Irons@lemmasoftware.org
  * @copyright Copyright (c) 2014, Trevor Irons
  */
 
 #ifndef  QWEKEY_INC
 #define  QWEKEY_INC
 
-#include	"hankeltransform.h"
-#include    <Eigen/Eigenvalues>
-#ifdef HAVEBOOSTSPECIALFUNCTIONS
+#include "HankelTransform.h"
+
+#include <Eigen/Eigenvalues>
 #include "boost/math/special_functions.hpp"
 #include "boost/math/special_functions/bessel.hpp"
-#endif
 
 namespace Lemma {
 
@@ -47,24 +45,37 @@ namespace Lemma {
      */
     class QWEKey : public HankelTransform {
 
-        friend std::ostream &operator<<(std::ostream &stream,
-                const QWEKey &ob);
+        friend std::ostream &operator<<(std::ostream &stream, const QWEKey &ob);
+
+        struct ctor_key {};
 
         public:
 
         // ====================  LIFECYCLE     =======================
 
-        /**
-         * @copybrief LemmaObject::New()
-         * @copydetails LemmaObject::New()
-         */
-        static QWEKey* New();
+        /** Default locked constructor, use NewSP */
+        QWEKey ( const ctor_key& );
+
+        /** DeSerializing locked constructor, use DeSerialize */
+        QWEKey ( const YAML::Node& node, const ctor_key& );
+
+        /** Default destructor */
+        ~QWEKey ();
 
         /**
-         *  @copybrief   LemmaObject::Delete()
-         *  @copydetails LemmaObject::Delete()
+         *  Factory method for generating objects.
+         *   @return std::shared_ptr< QWEKey >
          */
-        void Delete();
+        static std::shared_ptr<QWEKey> NewSP();
+
+        /** YAML Serializing method
+         */
+        YAML::Node Serialize() const;
+
+        /**
+         *   Constructs an object from a YAML::Node.
+         */
+        static std::shared_ptr< QWEKey > DeSerialize(const YAML::Node& node);
 
         // ====================  OPERATORS     =======================
 
@@ -72,38 +83,30 @@ namespace Lemma {
 
         // ====================  OPERATIONS    =======================
 
-
         Complex Zgauss(const int &ikk, const EMMODE &imode,
                             const int &itype, const Real &rho,
-                            const Real &wavef, KernelEm1DBase *Kernel);
+                            const Real &wavef, KernelEM1DBase* Kernel);
 
         /// Computes related kernels, if applicable, otherwise this is
         /// just a dummy function.
-        void ComputeRelated(const Real& rho, KernelEm1DBase* Kernel);
+        void ComputeRelated(const Real& rho, std::shared_ptr<KernelEM1DBase> Kernel);
 
-        void ComputeRelated(const Real& rho, std::vector< KernelEm1DBase* > KernelVec);
+        void ComputeRelated(const Real& rho, std::vector< std::shared_ptr<KernelEM1DBase> > KernelVec);
 
-        void ComputeRelated(const Real& rho, KernelEM1DManager* KernelManager);
+        void ComputeRelated(const Real& rho, std::shared_ptr<KernelEM1DManager> KernelManager);
 
         // ====================  ACCESS        =======================
 
         // ====================  INQUIRY       =======================
 
+        /** Returns the name of the underlying class, similiar to Python's type */
+        virtual inline std::string GetName() const {
+            return CName;
+        }
+
         protected:
 
         // ====================  LIFECYCLE     =======================
-
-        /** Default protected constructor, use New */
-        QWEKey (const std::string& name);
-
-        /** Default protected destructor, use Delete */
-        ~QWEKey ();
-
-        /**
-         *  @copybrief   LemmaObject::Release()
-         *  @copydetails LemmaObject::Release()
-         */
-        void Release();
 
         /** Calculates Gauss quadrature weights of order N on the interval -1,1
             Algorithm from p 129 in:
@@ -185,12 +188,14 @@ namespace Lemma {
         Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic > Zans;
 
         /** Manager for related kernels to evaluate */
-        KernelEM1DManager* KernelManager;
+        std::shared_ptr<KernelEM1DManager>  KernelManager;
+
+        /** ASCII string representation of the class name */
+        static constexpr auto CName = "QWEKey";
 
     }; // -----  end of class  QWEKey  -----
 
-
-}		// -----  end of Lemma  name  -----
+} // -----  end of Lemma  name  -----
 
 #endif   // ----- #ifndef QWEKEY_INC  -----
 

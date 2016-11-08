@@ -739,7 +739,7 @@ namespace Lemma {
 
     }
 
-    void DipoleSource::UpdateFields( const int& ifreq, std::shared_ptr<HankelTransform> Hankel, const Real& wavef) {
+    void DipoleSource::UpdateFields( const int& ifreq, HankelTransform* Hankel, const Real& wavef) {
 
         Vector3r Pol = Phat;
 
