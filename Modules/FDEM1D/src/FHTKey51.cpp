@@ -24,12 +24,9 @@ namespace Lemma {
     // ====================  FRIEND METHODS  =====================
 
     std::ostream &operator<<(std::ostream &stream, const FHTKey51 &ob) {
-
-        stream << *(HankelTransform*)(&ob);
-
+        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
         return stream;
     }
-
 
     // ====================  STATIC CONST MEMBERS     ============
 
@@ -93,28 +90,34 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     //       Class:  FHTKey51
     //      Method:  FHTKey51
-    // Description:  constructor (protected)
+    // Description:  constructor (locked)
     //--------------------------------------------------------------------------------------
-    FHTKey51::FHTKey51 (const std::string& name) : HankelTransform(name) {
+    FHTKey51::FHTKey51 (const ctor_key& ) : HankelTransform( ) {
 
     }  // -----  end of method FHTKey51::FHTKey51  (constructor)  -----
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  FHTKey51
+    //      Method:  FHTKey51
+    // Description:  constructor (protected)
+    //--------------------------------------------------------------------------------------
+    FHTKey51::FHTKey51( const YAML::Node& node, const ctor_key& ) : HankelTransform(node) {
+
+    }
 
     //--------------------------------------------------------------------------------------
     //       Class:  FHTKey51
     //      Method:  New()
     // Description:  public constructor
     //--------------------------------------------------------------------------------------
-    FHTKey51* FHTKey51::New() {
-        FHTKey51*  Obj = new FHTKey51("FHTKey51");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<FHTKey51> FHTKey51::NewSP() {
+        return std::make_shared< FHTKey51 >( ctor_key() );
     }
 
     //--------------------------------------------------------------------------------------
     //       Class:  FHTKey51
     //      Method:  ~FHTKey51
-    // Description:  destructor (protected)
+    // Description:  destructor
     //--------------------------------------------------------------------------------------
     FHTKey51::~FHTKey51 () {
 
@@ -122,22 +125,27 @@ namespace Lemma {
 
     //--------------------------------------------------------------------------------------
     //       Class:  FHTKey51
-    //      Method:  Delete
-    // Description:  public destructor
+    //      Method:  DeSerialize
+    // Description:  Factory method, converts YAML node into object
     //--------------------------------------------------------------------------------------
-    void FHTKey51::Delete() {
-        this->DetachFrom(this);
+    std::shared_ptr<FHTKey51> FHTKey51::DeSerialize( const YAML::Node& node ) {
+        if (node.Tag() != "FHTKey51") {
+            throw  DeSerializeTypeMismatch( "FHTKey51", node.Tag());
+        }
+        return std::make_shared<FHTKey51> ( node, ctor_key() );
     }
 
     //--------------------------------------------------------------------------------------
     //       Class:  FHTKey51
-    //      Method:  Release
-    // Description:  destructor (protected)
+    //      Method:  Serialize
+    // Description:  Converts object into Serialized version
     //--------------------------------------------------------------------------------------
-    void FHTKey51::Release() {
-        delete this;
+    YAML::Node FHTKey51::Serialize() const {
+        YAML::Node node = HankelTransform::Serialize();
+        node.SetTag( GetName() );
+        //node["LayerConductivity"] = LayerConductivity;
+        return node;
     }
-
 
     //--------------------------------------------------------------------------------------
     //       Class:  FHTKey51
@@ -145,7 +153,7 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     Complex FHTKey51::Zgauss ( const int &ikk, const EMMODE &imode,
                             const int &itype, const Real &rho,
-                            const Real &wavef, KernelEm1DBase *Kernel ) {
+                            const Real &wavef, KernelEM1DBase* Kernel ) {
  		return Zans(0, Kernel->GetManagerIndex());
     }		// -----  end of method FHTKey51::ComputeRelated  -----
 
@@ -154,7 +162,7 @@ namespace Lemma {
     //       Class:  FHTKey51
     //      Method:  ComputeRelated
     //--------------------------------------------------------------------------------------
-    void FHTKey51::ComputeRelated ( const Real& rho, KernelEm1DBase* Kernel ) {
+    void FHTKey51::ComputeRelated ( const Real& rho, std::shared_ptr<KernelEM1DBase> Kernel ) {
         return ;
     }		// -----  end of method FHTKey51::ComputeRelated  -----
 
@@ -162,7 +170,7 @@ namespace Lemma {
     //       Class:  FHTKey51
     //      Method:  ComputeRelated
     //--------------------------------------------------------------------------------------
-    void FHTKey51::ComputeRelated ( const Real& rho, std::vector< KernelEm1DBase* > KernelVec ) {
+    void FHTKey51::ComputeRelated ( const Real& rho, std::vector< std::shared_ptr<KernelEM1DBase> > KernelVec ) {
         return ;
     }		// -----  end of method FHTKey51::ComputeRelated  -----
 
@@ -170,7 +178,7 @@ namespace Lemma {
     //       Class:  FHTKey51
     //      Method:  ComputeRelated
     //--------------------------------------------------------------------------------------
-    void FHTKey51::ComputeRelated ( const Real& rho, KernelEM1DManager* KernelManager ) {
+    void FHTKey51::ComputeRelated ( const Real& rho, std::shared_ptr<KernelEM1DManager> KernelManager ) {
 
         //kernelVec = KernelManager->GetSTLVector();
         int nrel = (int)(KernelManager->GetSTLVector().size());

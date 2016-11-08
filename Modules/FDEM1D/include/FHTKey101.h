@@ -10,10 +10,8 @@
 /**
  * @file
  * @date      02/11/2014 03:33:08 PM
- * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2014, XRI Geophysics, LLC
+ * @email     Trevor.Irons@lemmasoftware.org
  * @copyright Copyright (c) 2014, Trevor Irons
  */
 
@@ -21,7 +19,7 @@
 #ifndef  FHTKEY101_INC
 #define  FHTKEY101_INC
 
-#include "hankeltransform.h"
+#include "HankelTransform.h"
 
 namespace Lemma {
 
@@ -39,24 +37,37 @@ namespace Lemma {
      */
     class FHTKey101 : public HankelTransform {
 
-        friend std::ostream &operator<<(std::ostream &stream,
-                const FHTKey101 &ob);
+        friend std::ostream &operator<<(std::ostream &stream, const FHTKey101 &ob);
+
+        struct ctor_key {};
 
         public:
 
         // ====================  LIFECYCLE     =======================
 
+        /** Default protected constructor, use New */
+        FHTKey101 ( const ctor_key& );
+
+        /** DeSerializing locked constructor, use NewSP */
+        FHTKey101 ( const YAML::Node& node, const ctor_key& );
+
+        /** Default protected destructor, use Delete */
+        ~FHTKey101 ();
+
         /**
          * @copybrief LemmaObject::New()
          * @copydetails LemmaObject::New()
          */
-        static FHTKey101* New();
+        static std::shared_ptr<FHTKey101> NewSP();
+
+        /** YAML Serializing method
+         */
+        YAML::Node Serialize() const;
 
         /**
-         *  @copybrief   LemmaObject::Delete()
-         *  @copydetails LemmaObject::Delete()
+         *   Constructs an object from a YAML::Node.
          */
-        void Delete();
+        static std::shared_ptr< FHTKey101 > DeSerialize(const YAML::Node& node);
 
         // ====================  OPERATORS     =======================
 
@@ -64,35 +75,24 @@ namespace Lemma {
 
         Complex Zgauss(const int &ikk, const EMMODE &imode,
                             const int &itype, const Real &rho,
-                            const Real &wavef, KernelEm1DBase *Kernel);
+                            const Real &wavef, KernelEM1DBase* Kernel);
 
         /// Computes related kernels, if applicable, otherwise this is
         /// just a dummy function.
-        void ComputeRelated(const Real& rho, KernelEm1DBase* Kernel);
+        void ComputeRelated(const Real& rho, std::shared_ptr<KernelEM1DBase> Kernel);
 
-        void ComputeRelated(const Real& rho, std::vector< KernelEm1DBase* > KernelVec);
+        void ComputeRelated(const Real& rho, std::vector< std::shared_ptr<KernelEM1DBase> > KernelVec);
 
-        void ComputeRelated(const Real& rho, KernelEM1DManager* KernelManager);
+        void ComputeRelated(const Real& rho, std::shared_ptr<KernelEM1DManager> KernelManager);
 
         // ====================  ACCESS        =======================
 
         // ====================  INQUIRY       =======================
+        virtual inline std::string GetName() const {
+            return CName;
+        }
 
         protected:
-
-        // ====================  LIFECYCLE     =======================
-
-        /** Default protected constructor, use New */
-        FHTKey101 (const std::string& name);
-
-        /** Default protected destructor, use Delete */
-        ~FHTKey101 ();
-
-        /**
-         *  @copybrief   LemmaObject::Release()
-         *  @copydetails LemmaObject::Release()
-         */
-        void Release();
 
         private:
 
@@ -103,6 +103,9 @@ namespace Lemma {
 
         /// Holds answer, dimensions are NumConv, and NumberRelated.
         Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic> Zans;
+
+        /** ASCII string representation of the class name */
+        static constexpr auto CName = "FHTKey101";
 
     }; // -----  end of class  FHTKey101  -----
 

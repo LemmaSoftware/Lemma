@@ -964,12 +964,11 @@ namespace Lemma {
 
 	Complex FHTAnderson801::Zgauss(const int &ikk, const EMMODE &imode,
 						const int &itype, const Real &rho,
-						const Real &wavef, std::shared_ptr<KernelEM1DBase> Kernel) {
+						const Real &wavef, KernelEM1DBase* Kernel) {
 
         // TODO, right here we want to return the splined solution instead in the
         //       case of lagged convolution!
  		return Zans(0, Kernel->GetManagerIndex()); //Complex(0,0);
-
 	}
 
 	void FHTAnderson801::SetNumConv(const int &i) {

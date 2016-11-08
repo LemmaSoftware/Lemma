@@ -55,6 +55,10 @@ namespace Lemma {
         return KernelVec[ik];
     }
 
+    KernelEM1DBase* KernelEM1DManager::GetRAWKernel(const unsigned int& ik) {
+        return KernelVec[ik].get();
+    }
+
     std::shared_ptr<DipoleSource> KernelEM1DManager::GetDipole( ) {
         return Dipole;
     }

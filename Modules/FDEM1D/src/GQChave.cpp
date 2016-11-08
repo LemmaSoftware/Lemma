@@ -17,19 +17,17 @@
 //          quadrature and continued fraction expansion: Geophysics, 48
 //          1671--1686  doi: 10.1190/1.1441448
 
-#include "hankeltransformgaussianquadrature.h"
+#include "GQChave.h"
 
 namespace Lemma{
 
-    std::ostream &operator<<(std::ostream &stream,
-            const HankelTransformGaussianQuadrature &ob) {
-
-        stream << *(HankelTransform*)(&ob);
+    std::ostream &operator<<(std::ostream &stream, const GQChave &ob) {
+        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
         return stream;
     }
 
     // Initialise static members
-    const VectorXr HankelTransformGaussianQuadrature::WT =
+    const VectorXr GQChave::WT =
         (VectorXr(254) << //  (WT(I),I=1,20)
         0.55555555555555555556e+00,0.88888888888888888889e+00,
         0.26848808986833344073e+00,0.10465622602646726519e+00,
@@ -171,7 +169,7 @@ namespace Lemma{
         0.14055382072649964277e-01,0.14080351962553661325e-01,
         0.14092845069160408355e-01,0.14094407090096179347e-01).finished();
 
-        const VectorXr HankelTransformGaussianQuadrature::WA =
+        const VectorXr GQChave::WA =
         (VectorXr(127) << //  (WT(I),I=1,20)
         //  (WA(I),I=1,20)
         0.77459666924148337704e+00,0.96049126870802028342e+00,
@@ -266,44 +264,55 @@ namespace Lemma{
     const Real J1_X12 = -0.5382308663841630e-15;
 */
 
-    // TODO don't hard code precision like this
-    HankelTransformGaussianQuadrature::HankelTransformGaussianQuadrature(
-                    const std::string &name) : HankelTransform(name) {
+    GQChave::GQChave( const ctor_key& ) : HankelTransform( ) {
         karg.resize(255, 100);
         kern.resize(510, 100);
     }
 
-    /////////////////////////////////////////////////////////////
-    HankelTransformGaussianQuadrature::~HankelTransformGaussianQuadrature() {
-        if (this->NumberOfReferences != 0)
-            throw DeleteObjectWithReferences( this );
-    }
+    GQChave::GQChave( const YAML::Node& node, const ctor_key& ) : HankelTransform(node) {
 
-
-    /////////////////////////////////////////////////////////////
-    HankelTransformGaussianQuadrature*
-            HankelTransformGaussianQuadrature::New() {
-        HankelTransformGaussianQuadrature* Obj = new
-        HankelTransformGaussianQuadrature("HankelTransformGaussianQuadrature");
-        Obj->AttachTo(Obj);
-        return Obj;
     }
 
     /////////////////////////////////////////////////////////////
-    void HankelTransformGaussianQuadrature::Delete() {
-        this->DetachFrom(this);
+    GQChave::~GQChave() {
     }
 
-    void HankelTransformGaussianQuadrature::Release() {
-        delete this;
+    /////////////////////////////////////////////////////////////
+    std::shared_ptr<GQChave> GQChave::NewSP() {
+        return std::make_shared<GQChave>( ctor_key() );
+    }
+
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  GQChave
+    //      Method:  DeSerialize
+    // Description:  Factory method, converts YAML node into object
+    //--------------------------------------------------------------------------------------
+    std::shared_ptr<GQChave> GQChave::DeSerialize( const YAML::Node& node ) {
+        if (node.Tag() != "GQChave") {
+            throw  DeSerializeTypeMismatch( "GQChave", node.Tag());
+        }
+        return std::make_shared<GQChave> ( node, ctor_key() );
+    }
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  GQChave
+    //      Method:  Serialize
+    // Description:  Converts object into Serialized version
+    //--------------------------------------------------------------------------------------
+    YAML::Node GQChave::Serialize() const {
+        YAML::Node node = HankelTransform::Serialize();
+        node.SetTag( GetName() );
+        //node["LayerConductivity"] = LayerConductivity;
+        return node;
     }
 
     /////////////////////////////////////////////////////////////
 
-    Complex HankelTransformGaussianQuadrature::
+    Complex GQChave::
             Zgauss(const int &ikk, const EMMODE &mode,
                     const int &itype, const Real &rho, const Real &wavef,
-                    KernelEm1DBase *Kernel){
+                    KernelEM1DBase* Kernel){
 
         // TI, TODO, change calls to Zgauss to reflect this, go and fix so we
         // dont subract 1 from this everywhere
@@ -336,14 +345,13 @@ namespace Lemma{
         //this->karg.setZero();
         //this->kern.setZero();
 
-        Besautn(Besr, Besi, itype, nl, nu, rho, rerr, aerr, npcs, inew,
-                        wavef, Kernel);
+        Besautn(Besr, Besi, itype, nl, nu, rho, rerr, aerr, npcs, inew, wavef, Kernel);
 
         return Complex(Besr, Besi);
     }
 
     //////////////////////////////////////////////////////////////////
-    void HankelTransformGaussianQuadrature::
+    void GQChave::
         Besautn(Real &besr, Real &besi,
                     const int &besselOrder,
                     const int &lowerGaussLimit,
@@ -354,7 +362,7 @@ namespace Lemma{
                     const int& numPieces,
                     int &inew,
                     const Real &aorb,
-                    KernelEm1DBase *Kernel) {
+                    KernelEM1DBase* Kernel) {
 
         HighestGaussOrder      = 0;
         NumberPartialIntegrals = 0;
@@ -478,12 +486,12 @@ namespace Lemma{
     }
 
     /////////////////////////////////////////////////////////////
-    void HankelTransformGaussianQuadrature::
+    void GQChave::
         Bestrn(Real &BESR, Real &BESI, const int &IORDER,
             const int &NG, const Real &rho,
             const Real &RERR, const Real &AERR, const int &NPCS,
             VectorXi &XSUM, int &NSUM, int &NEW,
-            int &IERR, int &NCNTRL, const Real &AORB, KernelEm1DBase *Kernel) {
+            int &IERR, int &NCNTRL, const Real &AORB, KernelEM1DBase* Kernel) {
 
 
         Xr.setZero();
@@ -726,12 +734,12 @@ namespace Lemma{
 
 
     /////////////////////////////////////////////////////////////
-    void HankelTransformGaussianQuadrature::
+    void GQChave::
             Besqud(const Real &LowerLimit, const Real &UpperLimit,
                     Real &Besr, Real &Besi, const int &npoints,
                     const int &NEW,
                     const int &besselOrder, const Real &rho,
-                    KernelEm1DBase* Kernel) {
+                    KernelEM1DBase* Kernel) {
 
         const int NTERM = 100;
 
@@ -920,7 +928,7 @@ namespace Lemma{
 
 
     /////////////////////////////////////////////////////////////
-    void HankelTransformGaussianQuadrature::
+    void GQChave::
             Padecf(Real &SUMR, Real &SUMI, const int &N) {
 
         if (N < 2) {
@@ -1012,7 +1020,7 @@ namespace Lemma{
     }
 
     /////////////////////////////////////////////////////////////
-    void HankelTransformGaussianQuadrature::CF(Real& RESR, Real &RESI,
+    void GQChave::CF(Real& RESR, Real &RESI,
                     Eigen::Matrix<Real, 100, 1> &CFCOR,
                     Eigen::Matrix<Real, 100, 1> &CFCOI,
                     const int &N) {
@@ -1037,7 +1045,7 @@ namespace Lemma{
     }
 
     /////////////////////////////////////////////////////////////
-    Real HankelTransformGaussianQuadrature::
+    Real GQChave::
         ZeroJ(const int &nzero, const int &besselOrder) {
 
         Real ZT1 = -1.e0/8.e0;
@@ -1069,7 +1077,7 @@ namespace Lemma{
 
     /////////////////////////////////////////////////////////////
     // Dot product allowing non 1 based incrementing
-    Real HankelTransformGaussianQuadrature::_dot(const int&n,
+    Real GQChave::_dot(const int&n,
         const Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic> &X1,
                 const int &inc1,
         const Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic> &X2,
@@ -1100,10 +1108,7 @@ namespace Lemma{
 
     /////////////////////////////////////////////////////////////
     //
-    Real HankelTransformGaussianQuadrature::Jbess(const Real &x, const int &IORDER) {
-
-        #ifdef HAVEBOOSTCYLBESSEL
-
+    Real GQChave::Jbess(const Real &x, const int &IORDER) {
         switch (IORDER) {
             case 0:
                 //return boost::math::detail::bessel_j0(X);
@@ -1114,13 +1119,8 @@ namespace Lemma{
                 return boost::math::cyl_bessel_j(1, x);
                 break;
             default:
-                throw 77;
+                throw std::runtime_error("Non 0 or 1 Bessel argument specified in GQChave");
         }
-        #else
-        std::cerr << "Chave Hankel transform requires boost, which Lemma was bot built with\n";
-        return 0.;
-        #endif
-
     }
 
     //////////////////////////////////////////////////////

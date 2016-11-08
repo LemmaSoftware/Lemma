@@ -145,7 +145,7 @@ class FHTAnderson801 : public HankelTransform {
         /// = omega * sqrt( EP*AMU )  amu = 4 pi e-7  ep = 8.85e-12
         Complex Zgauss(const int &ikk, const EMMODE &imode,
                         const int &itype, const Real &rho,
-                        const Real &wavef, std::shared_ptr<KernelEM1DBase> Kernel);
+                        const Real &wavef, KernelEM1DBase* Kernel);
 
         /** Returns the name of the underlying class, similiar to Python's type */
         virtual inline std::string GetName() const {

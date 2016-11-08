@@ -12,8 +12,7 @@
  * @date      02/11/2014 03:42:53 PM
  * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2014, XRI Geophysics, LLC
+ * @email     Trevor.Irons@lemmasoftware.org
  * @copyright Copyright (c) 2014, Trevor Irons
  */
 
@@ -24,12 +23,9 @@ namespace Lemma {
     // ====================  FRIEND METHODS  =====================
 
     std::ostream &operator<<(std::ostream &stream, const FHTKey101 &ob) {
-
-        stream << *(HankelTransform*)(&ob);
-
+        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
         return stream;
     }
-
 
     // ====================  STATIC CONST MEMBERS     ============
 
@@ -143,22 +139,28 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     //       Class:  FHTKey101
     //      Method:  FHTKey101
-    // Description:  constructor (protected)
+    // Description:  constructor (locked)
     //--------------------------------------------------------------------------------------
-    FHTKey101::FHTKey101 (const std::string& name) : HankelTransform(name) {
+    FHTKey101::FHTKey101 ( const ctor_key& ) : HankelTransform( ) {
 
     }  // -----  end of method FHTKey101::FHTKey101  (constructor)  -----
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  FHTKey101
+    //      Method:  FHTKey101
+    // Description:  constructor (protected)
+    //--------------------------------------------------------------------------------------
+    FHTKey101::FHTKey101( const YAML::Node& node, const ctor_key& ) : HankelTransform(node) {
+
+    }
 
     //--------------------------------------------------------------------------------------
     //       Class:  FHTKey101
     //      Method:  New()
     // Description:  public constructor
     //--------------------------------------------------------------------------------------
-    FHTKey101* FHTKey101::New() {
-        FHTKey101*  Obj = new FHTKey101("FHTKey101");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<FHTKey101> FHTKey101::NewSP() {
+        return std::make_shared< FHTKey101 >( ctor_key() );
     }
 
     //--------------------------------------------------------------------------------------
@@ -172,22 +174,27 @@ namespace Lemma {
 
     //--------------------------------------------------------------------------------------
     //       Class:  FHTKey101
-    //      Method:  Delete
-    // Description:  public destructor
+    //      Method:  DeSerialize
+    // Description:  Factory method, converts YAML node into object
     //--------------------------------------------------------------------------------------
-    void FHTKey101::Delete() {
-        this->DetachFrom(this);
+    std::shared_ptr<FHTKey101> FHTKey101::DeSerialize( const YAML::Node& node ) {
+        if (node.Tag() != "FHTKey101") {
+            throw  DeSerializeTypeMismatch( "FHTKey101", node.Tag());
+        }
+        return std::make_shared<FHTKey101> ( node, ctor_key() );
     }
 
     //--------------------------------------------------------------------------------------
     //       Class:  FHTKey101
-    //      Method:  Release
-    // Description:  destructor (protected)
+    //      Method:  Serialize
+    // Description:  Converts object into Serialized version
     //--------------------------------------------------------------------------------------
-    void FHTKey101::Release() {
-        delete this;
+    YAML::Node FHTKey101::Serialize() const {
+        YAML::Node node = HankelTransform::Serialize();
+        node.SetTag( GetName() );
+        //node["LayerConductivity"] = LayerConductivity;
+        return node;
     }
-
 
     //--------------------------------------------------------------------------------------
     //       Class:  FHTKey101
@@ -195,7 +202,7 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     Complex FHTKey101::Zgauss ( const int &ikk, const EMMODE &imode,
                             const int &itype, const Real &rho,
-                            const Real &wavef, KernelEm1DBase *Kernel ) {
+                            const Real &wavef, KernelEM1DBase* Kernel ) {
  		return Zans(0, Kernel->GetManagerIndex());
     }		// -----  end of method FHTKey101::ComputeRelated  -----
 
@@ -204,7 +211,7 @@ namespace Lemma {
     //       Class:  FHTKey101
     //      Method:  ComputeRelated
     //--------------------------------------------------------------------------------------
-    void FHTKey101::ComputeRelated ( const Real& rho, KernelEm1DBase* Kernel ) {
+    void FHTKey101::ComputeRelated ( const Real& rho, std::shared_ptr<KernelEM1DBase> Kernel ) {
         return ;
     }		// -----  end of method FHTKey101::ComputeRelated  -----
 
@@ -212,7 +219,7 @@ namespace Lemma {
     //       Class:  FHTKey101
     //      Method:  ComputeRelated
     //--------------------------------------------------------------------------------------
-    void FHTKey101::ComputeRelated ( const Real& rho, std::vector< KernelEm1DBase* > KernelVec ) {
+    void FHTKey101::ComputeRelated ( const Real& rho, std::vector< std::shared_ptr<KernelEM1DBase> > KernelVec ) {
         return ;
     }		// -----  end of method FHTKey101::ComputeRelated  -----
 
@@ -220,7 +227,7 @@ namespace Lemma {
     //       Class:  FHTKey101
     //      Method:  ComputeRelated
     //--------------------------------------------------------------------------------------
-    void FHTKey101::ComputeRelated ( const Real& rho, KernelEM1DManager* KernelManager ) {
+    void FHTKey101::ComputeRelated ( const Real& rho, std::shared_ptr<KernelEM1DManager> KernelManager ) {
 
         //kernelVec = KernelManager->GetSTLVector();
         int nrel = (int)(KernelManager->GetSTLVector().size());
@@ -241,7 +248,6 @@ namespace Lemma {
                 // Zwork* needed due to sign convention of filter weights
  			    Zwork(ir, ir2) = std::conj(KernelManager->GetSTLVector()[ir2]->RelBesselArg(lambda(ir)));
             }
-
         }
 
         // We diverge slightly from Key here, each kernel is evaluated seperately, whereby instead

@@ -752,8 +752,8 @@ namespace Lemma {
                 if (std::abs(Pol[2]) > 0) { // z dipole
                     switch(FieldsToCalculate) {
                         case E:
-                            f(10) = Hankel->Zgauss(10, TM, 1, rho, wavef, KernelManager->GetKernel(ik[10])) / KernelManager->GetKernel(ik[10])->GetYm();
-                            f(11) = Hankel->Zgauss(11, TM, 0, rho, wavef, KernelManager->GetKernel(ik[11])) / KernelManager->GetKernel(ik[11])->GetYm();
+                            f(10) = Hankel->Zgauss(10, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[10])) / KernelManager->GetRAWKernel(ik[10])->GetYm();
+                            f(11) = Hankel->Zgauss(11, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[11])) / KernelManager->GetRAWKernel(ik[11])->GetYm();
                             std::cout.precision(12);
                             this->Receivers->AppendEfield(ifreq, irec,
                                 -Pol[2]*QPI*cp*f(10)*Moment,
@@ -762,7 +762,7 @@ namespace Lemma {
                             break;
 
                         case H:
-                            f(12) = Hankel->Zgauss(12, TM, 1, rho, wavef, KernelManager->GetKernel(ik[12]));
+                            f(12) = Hankel->Zgauss(12, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[12]));
                             this->Receivers->AppendHfield(ifreq, irec,
                                 -Pol[2]*QPI*sp*f(12)*Moment,
                                  Pol[2]*QPI*cp*f(12)*Moment,
@@ -770,14 +770,14 @@ namespace Lemma {
                             break;
 
                         case BOTH:
-                            f(10) = Hankel->Zgauss(10, TM, 1, rho, wavef, KernelManager->GetKernel(ik[10])) / KernelManager->GetKernel(ik[10])->GetYm();
-                            f(11) = Hankel->Zgauss(11, TM, 0, rho, wavef, KernelManager->GetKernel(ik[11])) / KernelManager->GetKernel(ik[11])->GetYm();
+                            f(10) = Hankel->Zgauss(10, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[10])) / KernelManager->GetRAWKernel(ik[10])->GetYm();
+                            f(11) = Hankel->Zgauss(11, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[11])) / KernelManager->GetRAWKernel(ik[11])->GetYm();
                             this->Receivers->AppendEfield(ifreq, irec,
                                     -Pol[2]*QPI*cp*f(10)*Moment,
                                     -Pol[2]*QPI*sp*f(10)*Moment,
                                      Pol[2]*QPI*f(11)*Moment   );
 
-                            f(12) = Hankel->Zgauss(12, TM, 1, rho, wavef, KernelManager->GetKernel(ik[12]));
+                            f(12) = Hankel->Zgauss(12, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[12]));
                             this->Receivers->AppendHfield(ifreq, irec,
                                     -Pol[2]*QPI*sp*f(12)*Moment,
                                      Pol[2]*QPI*cp*f(12)*Moment,
@@ -787,11 +787,11 @@ namespace Lemma {
                 if (std::abs(Pol[1]) > 0 || std::abs(Pol[0]) > 0) { // y dipole
                     switch(FieldsToCalculate) {
                         case E:
-                            f(2) = Hankel->Zgauss(2, TE, 0, rho, wavef, KernelManager->GetKernel(ik[2])) * KernelManager->GetKernel(ik[2])->GetZs();
-                            f(3) = Hankel->Zgauss(3, TE, 1, rho, wavef, KernelManager->GetKernel(ik[3])) * KernelManager->GetKernel(ik[3])->GetZs();
-                            f(0) = Hankel->Zgauss(0, TM, 0, rho, wavef, KernelManager->GetKernel(ik[0])) / KernelManager->GetKernel(ik[0])->GetYm();
-                            f(1) = Hankel->Zgauss(1, TM, 1, rho, wavef, KernelManager->GetKernel(ik[1])) / KernelManager->GetKernel(ik[1])->GetYm();
-                            f(4) = Hankel->Zgauss(4, TM, 1, rho, wavef, KernelManager->GetKernel(ik[4])) / KernelManager->GetKernel(ik[4])->GetYm();
+                            f(2) = Hankel->Zgauss(2, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[2])) * KernelManager->GetRAWKernel(ik[2])->GetZs();
+                            f(3) = Hankel->Zgauss(3, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[3])) * KernelManager->GetRAWKernel(ik[3])->GetZs();
+                            f(0) = Hankel->Zgauss(0, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[0])) / KernelManager->GetRAWKernel(ik[0])->GetYm();
+                            f(1) = Hankel->Zgauss(1, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[1])) / KernelManager->GetRAWKernel(ik[1])->GetYm();
+                            f(4) = Hankel->Zgauss(4, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[4])) / KernelManager->GetRAWKernel(ik[4])->GetYm();
                             if (std::abs(Pol[1]) > 0) {
                                 this->Receivers->AppendEfield(ifreq, irec,
                                     Pol[1]*QPI*scp*((f(0)-(Real)(2.)*f(1)/rho)+(f(2)-(Real)(2.)*f(3)/rho))*Moment,
@@ -806,11 +806,11 @@ namespace Lemma {
                             }
                             break;
                         case H:
-                            f(5) = Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetKernel(ik[5]));
-                            f(6) = Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetKernel(ik[6]));
-                            f(7) = Hankel->Zgauss(7, TE, 0, rho, wavef, KernelManager->GetKernel(ik[7]))*KernelManager->GetKernel(ik[7])->GetZs()/KernelManager->GetKernel(ik[7])->GetZm();
-                            f(8) = Hankel->Zgauss(8, TE, 1, rho, wavef, KernelManager->GetKernel(ik[8]))*KernelManager->GetKernel(ik[8])->GetZs()/KernelManager->GetKernel(ik[8])->GetZm();
-                            f(9) = Hankel->Zgauss(9, TE, 1, rho, wavef, KernelManager->GetKernel(ik[9]))*KernelManager->GetKernel(ik[9])->GetZs()/KernelManager->GetKernel(ik[9])->GetZm();
+                            f(5) = Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[5]));
+                            f(6) = Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[6]));
+                            f(7) = Hankel->Zgauss(7, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[7]))*KernelManager->GetRAWKernel(ik[7])->GetZs()/KernelManager->GetRAWKernel(ik[7])->GetZm();
+                            f(8) = Hankel->Zgauss(8, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[8]))*KernelManager->GetRAWKernel(ik[8])->GetZs()/KernelManager->GetRAWKernel(ik[8])->GetZm();
+                            f(9) = Hankel->Zgauss(9, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[9]))*KernelManager->GetRAWKernel(ik[9])->GetZs()/KernelManager->GetRAWKernel(ik[9])->GetZm();
                             if (std::abs(Pol[1]) > 0) {
                                 this->Receivers->AppendHfield(ifreq, irec,
                                         Pol[1]*QPI*(sps*f(5)+c2p*f(6)/rho-cps*f(7)+c2p*f(8)/rho)*Moment,
@@ -825,16 +825,16 @@ namespace Lemma {
                             }
                             break;
                         case BOTH:
-                            f(0) = Hankel->Zgauss(0, TM, 0, rho, wavef, KernelManager->GetKernel(ik[0])) / KernelManager->GetKernel(ik[0])->GetYm();
-                            f(1) = Hankel->Zgauss(1, TM, 1, rho, wavef, KernelManager->GetKernel(ik[1])) / KernelManager->GetKernel(ik[1])->GetYm();
-                            f(4) = Hankel->Zgauss(4, TM, 1, rho, wavef, KernelManager->GetKernel(ik[4])) / KernelManager->GetKernel(ik[4])->GetYm();
-                            f(2) = Hankel->Zgauss(2, TE, 0, rho, wavef, KernelManager->GetKernel(ik[2])) * KernelManager->GetKernel(ik[2])->GetZs();
-                            f(3) = Hankel->Zgauss(3, TE, 1, rho, wavef, KernelManager->GetKernel(ik[3])) * KernelManager->GetKernel(ik[3])->GetZs();
-                            f(5) = Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetKernel(ik[5]));
-                            f(6) = Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetKernel(ik[6]));
-                            f(7) = Hankel->Zgauss(7, TE, 0, rho, wavef, KernelManager->GetKernel(ik[7]))*KernelManager->GetKernel(ik[7])->GetZs()/KernelManager->GetKernel(ik[7])->GetZm();
-                            f(8) = Hankel->Zgauss(8, TE, 1, rho, wavef, KernelManager->GetKernel(ik[8]))*KernelManager->GetKernel(ik[8])->GetZs()/KernelManager->GetKernel(ik[8])->GetZm();
-                            f(9) = Hankel->Zgauss(9, TE, 1, rho, wavef, KernelManager->GetKernel(ik[9]))*KernelManager->GetKernel(ik[9])->GetZs()/KernelManager->GetKernel(ik[9])->GetZm();
+                            f(0) = Hankel->Zgauss(0, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[0])) / KernelManager->GetRAWKernel(ik[0])->GetYm();
+                            f(1) = Hankel->Zgauss(1, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[1])) / KernelManager->GetRAWKernel(ik[1])->GetYm();
+                            f(4) = Hankel->Zgauss(4, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[4])) / KernelManager->GetRAWKernel(ik[4])->GetYm();
+                            f(2) = Hankel->Zgauss(2, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[2])) * KernelManager->GetRAWKernel(ik[2])->GetZs();
+                            f(3) = Hankel->Zgauss(3, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[3])) * KernelManager->GetRAWKernel(ik[3])->GetZs();
+                            f(5) = Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[5]));
+                            f(6) = Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[6]));
+                            f(7) = Hankel->Zgauss(7, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[7]))*KernelManager->GetRAWKernel(ik[7])->GetZs()/KernelManager->GetRAWKernel(ik[7])->GetZm();
+                            f(8) = Hankel->Zgauss(8, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[8]))*KernelManager->GetRAWKernel(ik[8])->GetZs()/KernelManager->GetRAWKernel(ik[8])->GetZm();
+                            f(9) = Hankel->Zgauss(9, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[9]))*KernelManager->GetRAWKernel(ik[9])->GetZs()/KernelManager->GetRAWKernel(ik[9])->GetZm();
 
                             if (std::abs(Pol[1]) > 0) {
                                 this->Receivers->AppendEfield(ifreq, irec,
@@ -872,7 +872,7 @@ namespace Lemma {
                     switch(FieldsToCalculate) {
                         case E:
                             f(10) = 0;
-                            f(11) = Hankel->Zgauss(11, TM, 0, rho, wavef, KernelManager->GetKernel(ik[11])) / KernelManager->GetKernel(ik[11])->GetYm();
+                            f(11) = Hankel->Zgauss(11, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[11])) / KernelManager->GetRAWKernel(ik[11])->GetYm();
 
                             this->Receivers->AppendEfield(ifreq, irec,
                                 -Pol[2]*QPI*cp*f(10)*Moment,
@@ -881,7 +881,7 @@ namespace Lemma {
                             break;
 
                         case H:
-                            f(12) = Hankel->Zgauss(12, TM, 1, rho, wavef, KernelManager->GetKernel(ik[12]));
+                            f(12) = Hankel->Zgauss(12, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[12]));
                             this->Receivers->AppendHfield(ifreq, irec,
                                 -Pol[2]*QPI*sp*f(12)*Moment,
                                  Pol[2]*QPI*cp*f(12)*Moment,
@@ -890,13 +890,13 @@ namespace Lemma {
 
                         case BOTH:
                             f(10) = 0;
-                            f(11) = Hankel->Zgauss(11, TM, 0, rho, wavef, KernelManager->GetKernel(ik[11])) / KernelManager->GetKernel(ik[11])->GetYm();
+                            f(11) = Hankel->Zgauss(11, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[11])) / KernelManager->GetRAWKernel(ik[11])->GetYm();
                             this->Receivers->AppendEfield(ifreq, irec,
                                     -Pol[2]*QPI*cp*f(10)*Moment,
                                     -Pol[2]*QPI*sp*f(10)*Moment,
                                      Pol[2]*QPI*f(11)*Moment   );
 
-                            f(12) = Hankel->Zgauss(12, TM, 1, rho, wavef, KernelManager->GetKernel(ik[12]));
+                            f(12) = Hankel->Zgauss(12, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[12]));
                             this->Receivers->AppendHfield(ifreq, irec,
                                     -Pol[2]*QPI*sp*f(12)*Moment,
                                      Pol[2]*QPI*cp*f(12)*Moment,
@@ -908,8 +908,8 @@ namespace Lemma {
                         case E:
                             f(0) = 0;
                             f(1) = 0;
-                            f(2) = Hankel->Zgauss(2, TE, 0, rho, wavef, KernelManager->GetKernel(ik[2])) * KernelManager->GetKernel(ik[2])->GetZs();
-                            f(3) = Hankel->Zgauss(3, TE, 1, rho, wavef, KernelManager->GetKernel(ik[3])) * KernelManager->GetKernel(ik[3])->GetZs();
+                            f(2) = Hankel->Zgauss(2, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[2])) * KernelManager->GetRAWKernel(ik[2])->GetZs();
+                            f(3) = Hankel->Zgauss(3, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[3])) * KernelManager->GetRAWKernel(ik[3])->GetZs();
                             f(4) = 0;
                             if (std::abs(Pol[1]) > 0) {
                                 this->Receivers->AppendEfield(ifreq, irec,
@@ -925,11 +925,11 @@ namespace Lemma {
                             }
                             break;
                         case H:
-                            f(5) = Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetKernel(ik[5]));
-                            f(6) = Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetKernel(ik[6]));
-                            f(7) = Hankel->Zgauss(7, TE, 0, rho, wavef, KernelManager->GetKernel(ik[7]))*KernelManager->GetKernel(ik[7])->GetZs()/KernelManager->GetKernel(ik[7])->GetZm();
-                            f(8) = Hankel->Zgauss(8, TE, 1, rho, wavef, KernelManager->GetKernel(ik[8]))*KernelManager->GetKernel(ik[8])->GetZs()/KernelManager->GetKernel(ik[8])->GetZm();
-                            f(9) = Hankel->Zgauss(9, TE, 1, rho, wavef, KernelManager->GetKernel(ik[9]))*KernelManager->GetKernel(ik[9])->GetZs()/KernelManager->GetKernel(ik[9])->GetZm();
+                            f(5) = Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[5]));
+                            f(6) = Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[6]));
+                            f(7) = Hankel->Zgauss(7, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[7]))*KernelManager->GetRAWKernel(ik[7])->GetZs()/KernelManager->GetRAWKernel(ik[7])->GetZm();
+                            f(8) = Hankel->Zgauss(8, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[8]))*KernelManager->GetRAWKernel(ik[8])->GetZs()/KernelManager->GetRAWKernel(ik[8])->GetZm();
+                            f(9) = Hankel->Zgauss(9, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[9]))*KernelManager->GetRAWKernel(ik[9])->GetZs()/KernelManager->GetRAWKernel(ik[9])->GetZm();
                             if (std::abs(Pol[1]) > 0) {
                                 this->Receivers->AppendHfield(ifreq, irec,
                                         Pol[1]*QPI*(sps*f(5)+c2p*f(6)/rho-cps*f(7)+c2p*f(8)/rho)*Moment,
@@ -950,13 +950,13 @@ namespace Lemma {
                             f(0) = 0;
                             f(1) = 0;
                             f(4) = 0;
-                            f(2) = Hankel->Zgauss(2, TE, 0, rho, wavef, KernelManager->GetKernel(ik[2])) * KernelManager->GetKernel(0)->GetZs();
-                            f(3) = Hankel->Zgauss(3, TE, 1, rho, wavef, KernelManager->GetKernel(ik[3])) * KernelManager->GetKernel(1)->GetZs();
-                            f(5) = Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetKernel(ik[5]));
-                            f(6) = Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetKernel(ik[6]));
-                            f(7) = Hankel->Zgauss(7, TE, 0, rho, wavef, KernelManager->GetKernel(ik[7]))*KernelManager->GetKernel(ik[7])->GetZs()/KernelManager->GetKernel(ik[7])->GetZm();
-                            f(8) = Hankel->Zgauss(8, TE, 1, rho, wavef, KernelManager->GetKernel(ik[8]))*KernelManager->GetKernel(ik[8])->GetZs()/KernelManager->GetKernel(ik[8])->GetZm();
-                            f(9) = Hankel->Zgauss(9, TE, 1, rho, wavef, KernelManager->GetKernel(ik[9]))*KernelManager->GetKernel(ik[9])->GetZs()/KernelManager->GetKernel(ik[9])->GetZm();
+                            f(2) = Hankel->Zgauss(2, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[2])) * KernelManager->GetRAWKernel(0)->GetZs();
+                            f(3) = Hankel->Zgauss(3, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[3])) * KernelManager->GetRAWKernel(1)->GetZs();
+                            f(5) = Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[5]));
+                            f(6) = Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[6]));
+                            f(7) = Hankel->Zgauss(7, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[7]))*KernelManager->GetRAWKernel(ik[7])->GetZs()/KernelManager->GetRAWKernel(ik[7])->GetZm();
+                            f(8) = Hankel->Zgauss(8, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[8]))*KernelManager->GetRAWKernel(ik[8])->GetZs()/KernelManager->GetRAWKernel(ik[8])->GetZm();
+                            f(9) = Hankel->Zgauss(9, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[9]))*KernelManager->GetRAWKernel(ik[9])->GetZs()/KernelManager->GetRAWKernel(ik[9])->GetZm();
 
                             if (std::abs(Pol[1]) > 0) {
                                 this->Receivers->AppendEfield(ifreq, irec,
@@ -995,15 +995,15 @@ namespace Lemma {
                 if (std::abs(Pol[2]) > 0) { // z dipole
                     switch(FieldsToCalculate) {
                         case E:
-                            f(12)=Hankel->Zgauss(12, TE, 1, rho, wavef, KernelManager->GetKernel(ik[12]))*KernelManager->GetKernel(ik[12])->GetZs();
+                            f(12)=Hankel->Zgauss(12, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[12]))*KernelManager->GetRAWKernel(ik[12])->GetZs();
                             this->Receivers->AppendEfield(ifreq, irec,
                                  Pol[2]*Moment*QPI*sp*f(12),
                                 -Pol[2]*Moment*QPI*cp*f(12),
                                  0);
                             break;
                         case H:
-                            f(10)=Hankel->Zgauss(10, TE, 1, rho, wavef, KernelManager->GetKernel(ik[10]))*KernelManager->GetKernel(ik[10])->GetZs()/KernelManager->GetKernel(ik[10])->GetZm();
-                            f(11)=Hankel->Zgauss(11, TE, 0, rho, wavef, KernelManager->GetKernel(ik[11]))*KernelManager->GetKernel(ik[11])->GetZs()/KernelManager->GetKernel(ik[11])->GetZm();
+                            f(10)=Hankel->Zgauss(10, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[10]))*KernelManager->GetRAWKernel(ik[10])->GetZs()/KernelManager->GetRAWKernel(ik[10])->GetZm();
+                            f(11)=Hankel->Zgauss(11, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[11]))*KernelManager->GetRAWKernel(ik[11])->GetZs()/KernelManager->GetRAWKernel(ik[11])->GetZm();
                             this->Receivers->AppendHfield(ifreq, irec,
                                 -Pol[2]*Moment*QPI*cp*f(10),
                                 -Pol[2]*Moment*QPI*sp*f(10),
@@ -1011,9 +1011,9 @@ namespace Lemma {
                             break;
 
                         case BOTH:
-                            f(12)=Hankel->Zgauss(12, TE, 1, rho, wavef, KernelManager->GetKernel(ik[12]))*KernelManager->GetKernel(ik[12])->GetZs();
-                            f(10)=Hankel->Zgauss(10, TE, 1, rho, wavef, KernelManager->GetKernel(ik[10]))*KernelManager->GetKernel(ik[10])->GetZs()/KernelManager->GetKernel(ik[10])->GetZm();
-                            f(11)=Hankel->Zgauss(11, TE, 0, rho, wavef, KernelManager->GetKernel(ik[11]))*KernelManager->GetKernel(ik[11])->GetZs()/KernelManager->GetKernel(ik[11])->GetZm();
+                            f(12)=Hankel->Zgauss(12, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[12]))*KernelManager->GetRAWKernel(ik[12])->GetZs();
+                            f(10)=Hankel->Zgauss(10, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[10]))*KernelManager->GetRAWKernel(ik[10])->GetZs()/KernelManager->GetRAWKernel(ik[10])->GetZm();
+                            f(11)=Hankel->Zgauss(11, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[11]))*KernelManager->GetRAWKernel(ik[11])->GetZs()/KernelManager->GetRAWKernel(ik[11])->GetZm();
 
                             this->Receivers->AppendEfield(ifreq, irec,
                                  Pol[2]*Moment*QPI*sp*f(12),
@@ -1033,11 +1033,11 @@ namespace Lemma {
 
                         case E:
 
-                            f(5) = Hankel->Zgauss(5, TE, 0, rho, wavef, KernelManager->GetKernel(ik[5]))*KernelManager->GetKernel(ik[5])->GetZs();
-                            f(6) = Hankel->Zgauss(6, TE, 1, rho, wavef, KernelManager->GetKernel(ik[6]))*KernelManager->GetKernel(ik[6])->GetZs();
-                            f(7) = Hankel->Zgauss(7, TM, 0, rho, wavef, KernelManager->GetKernel(ik[7]))*KernelManager->GetKernel(ik[7])->GetKs()/KernelManager->GetKernel(ik[7])->GetYm();
-                            f(8) = Hankel->Zgauss(8, TM, 1, rho, wavef, KernelManager->GetKernel(ik[8]))*KernelManager->GetKernel(ik[8])->GetKs()/KernelManager->GetKernel(ik[8])->GetYm();
-                            f(9) = Hankel->Zgauss(9, TM, 1, rho, wavef, KernelManager->GetKernel(ik[9]))*KernelManager->GetKernel(ik[9])->GetKs()/KernelManager->GetKernel(ik[9])->GetYm();
+                            f(5) = Hankel->Zgauss(5, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[5]))*KernelManager->GetRAWKernel(ik[5])->GetZs();
+                            f(6) = Hankel->Zgauss(6, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[6]))*KernelManager->GetRAWKernel(ik[6])->GetZs();
+                            f(7) = Hankel->Zgauss(7, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[7]))*KernelManager->GetRAWKernel(ik[7])->GetKs()/KernelManager->GetRAWKernel(ik[7])->GetYm();
+                            f(8) = Hankel->Zgauss(8, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[8]))*KernelManager->GetRAWKernel(ik[8])->GetKs()/KernelManager->GetRAWKernel(ik[8])->GetYm();
+                            f(9) = Hankel->Zgauss(9, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[9]))*KernelManager->GetRAWKernel(ik[9])->GetKs()/KernelManager->GetRAWKernel(ik[9])->GetYm();
 
                             if (std::abs(Pol[0]) > 0) {
                                 this->Receivers->AppendEfield(ifreq, irec,
@@ -1054,11 +1054,11 @@ namespace Lemma {
                             break;
 
                         case H:
-                            f(0) = Hankel->Zgauss(0, TE, 0, rho, wavef, KernelManager->GetKernel(ik[0]))*KernelManager->GetKernel(ik[0])->GetZs()/KernelManager->GetKernel(ik[0])->GetZm();
-                            f(1) = Hankel->Zgauss(1, TE, 1, rho, wavef, KernelManager->GetKernel(ik[1]))*KernelManager->GetKernel(ik[1])->GetZs()/KernelManager->GetKernel(ik[1])->GetZm();
-                            f(4) = Hankel->Zgauss(4, TE, 1, rho, wavef, KernelManager->GetKernel(ik[4]))*KernelManager->GetKernel(ik[4])->GetZs()/KernelManager->GetKernel(ik[4])->GetZm();
-                            f(2) = Hankel->Zgauss(2, TM, 0, rho, wavef, KernelManager->GetKernel(ik[2]))*KernelManager->GetKernel(ik[2])->GetKs();
-                            f(3) = Hankel->Zgauss(3, TM, 1, rho, wavef, KernelManager->GetKernel(ik[3]))*KernelManager->GetKernel(ik[3])->GetKs();
+                            f(0) = Hankel->Zgauss(0, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[0]))*KernelManager->GetRAWKernel(ik[0])->GetZs()/KernelManager->GetRAWKernel(ik[0])->GetZm();
+                            f(1) = Hankel->Zgauss(1, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[1]))*KernelManager->GetRAWKernel(ik[1])->GetZs()/KernelManager->GetRAWKernel(ik[1])->GetZm();
+                            f(4) = Hankel->Zgauss(4, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[4]))*KernelManager->GetRAWKernel(ik[4])->GetZs()/KernelManager->GetRAWKernel(ik[4])->GetZm();
+                            f(2) = Hankel->Zgauss(2, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[2]))*KernelManager->GetRAWKernel(ik[2])->GetKs();
+                            f(3) = Hankel->Zgauss(3, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[3]))*KernelManager->GetRAWKernel(ik[3])->GetKs();
 
                             if (std::abs(Pol[0]) > 0) {
                                 this->Receivers->AppendHfield(ifreq, irec,
@@ -1075,16 +1075,16 @@ namespace Lemma {
                             break;
 
                         case BOTH:
-                            f(5) = Hankel->Zgauss(5, TE, 0, rho, wavef, KernelManager->GetKernel(ik[5]))*KernelManager->GetKernel(ik[5])->GetZs();
-                            f(6) = Hankel->Zgauss(6, TE, 1, rho, wavef, KernelManager->GetKernel(ik[6]))*KernelManager->GetKernel(ik[6])->GetZs();
-                            f(7) = Hankel->Zgauss(7, TM, 0, rho, wavef, KernelManager->GetKernel(ik[7]))*KernelManager->GetKernel(ik[7])->GetKs()/KernelManager->GetKernel(ik[7])->GetYm();
-                            f(8) = Hankel->Zgauss(8, TM, 1, rho, wavef, KernelManager->GetKernel(ik[8]))*KernelManager->GetKernel(ik[8])->GetKs()/KernelManager->GetKernel(ik[8])->GetYm();
-                            f(9) = Hankel->Zgauss(9, TM, 1, rho, wavef, KernelManager->GetKernel(ik[9]))*KernelManager->GetKernel(ik[9])->GetKs()/KernelManager->GetKernel(ik[9])->GetYm();
-                            f(0) = Hankel->Zgauss(0, TE, 0, rho, wavef, KernelManager->GetKernel(ik[0]))*KernelManager->GetKernel(ik[0])->GetZs()/KernelManager->GetKernel(ik[0])->GetZm();
-                            f(1) = Hankel->Zgauss(1, TE, 1, rho, wavef, KernelManager->GetKernel(ik[1]))*KernelManager->GetKernel(ik[1])->GetZs()/KernelManager->GetKernel(ik[1])->GetZm();
-                            f(4) = Hankel->Zgauss(4, TE, 1, rho, wavef, KernelManager->GetKernel(ik[4]))*KernelManager->GetKernel(ik[4])->GetZs()/KernelManager->GetKernel(ik[4])->GetZm();
-                            f(2) = Hankel->Zgauss(2, TM, 0, rho, wavef, KernelManager->GetKernel(ik[2]))*KernelManager->GetKernel(ik[2])->GetKs();
-                            f(3) = Hankel->Zgauss(3, TM, 1, rho, wavef, KernelManager->GetKernel(ik[3]))*KernelManager->GetKernel(ik[3])->GetKs();
+                            f(5) = Hankel->Zgauss(5, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[5]))*KernelManager->GetRAWKernel(ik[5])->GetZs();
+                            f(6) = Hankel->Zgauss(6, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[6]))*KernelManager->GetRAWKernel(ik[6])->GetZs();
+                            f(7) = Hankel->Zgauss(7, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[7]))*KernelManager->GetRAWKernel(ik[7])->GetKs()/KernelManager->GetRAWKernel(ik[7])->GetYm();
+                            f(8) = Hankel->Zgauss(8, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[8]))*KernelManager->GetRAWKernel(ik[8])->GetKs()/KernelManager->GetRAWKernel(ik[8])->GetYm();
+                            f(9) = Hankel->Zgauss(9, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[9]))*KernelManager->GetRAWKernel(ik[9])->GetKs()/KernelManager->GetRAWKernel(ik[9])->GetYm();
+                            f(0) = Hankel->Zgauss(0, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[0]))*KernelManager->GetRAWKernel(ik[0])->GetZs()/KernelManager->GetRAWKernel(ik[0])->GetZm();
+                            f(1) = Hankel->Zgauss(1, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[1]))*KernelManager->GetRAWKernel(ik[1])->GetZs()/KernelManager->GetRAWKernel(ik[1])->GetZm();
+                            f(4) = Hankel->Zgauss(4, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[4]))*KernelManager->GetRAWKernel(ik[4])->GetZs()/KernelManager->GetRAWKernel(ik[4])->GetZm();
+                            f(2) = Hankel->Zgauss(2, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[2]))*KernelManager->GetRAWKernel(ik[2])->GetKs();
+                            f(3) = Hankel->Zgauss(3, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[3]))*KernelManager->GetRAWKernel(ik[3])->GetKs();
 
                             if (std::abs(Pol[0]) > 0) {
                                 this->Receivers->AppendEfield(ifreq, irec,

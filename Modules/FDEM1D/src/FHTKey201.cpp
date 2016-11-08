@@ -26,7 +26,6 @@ namespace Lemma {
         return stream;
     }
 
-
     // ====================  STATIC CONST MEMBERS     ============
 
     const Eigen::Matrix<Real, 201, 3>  FHTKey201::WT201 =
@@ -245,6 +244,11 @@ namespace Lemma {
 
     }  // -----  end of method FHTKey201::FHTKey201  (constructor)  -----
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  FHTKey201
+    //      Method:  FHTKey201
+    // Description:  constructor (locked)
+    //--------------------------------------------------------------------------------------
     FHTKey201::FHTKey201( const YAML::Node& node, const ctor_key& ) : HankelTransform(node) {
 
     }
@@ -297,7 +301,7 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     Complex FHTKey201::Zgauss ( const int &ikk, const EMMODE &imode,
                             const int &itype, const Real &rho,
-                            const Real &wavef, std::shared_ptr<KernelEM1DBase> Kernel ) {
+                            const Real &wavef, KernelEM1DBase* Kernel ) {
  		return Zans(0, Kernel->GetManagerIndex());
     }		// -----  end of method FHTKey201::ComputeRelated  -----
 

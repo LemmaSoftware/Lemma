@@ -12,45 +12,57 @@
 #ifndef  _HANKELTRANSFORMGAUSSIANQUADRATURE_h_INC
 #define  _HANKELTRANSFORMGAUSSIANQUADRATURE_h_INC
 
-#include "hankeltransform.h"
+#include "HankelTransform.h"
 #include "KernelEM1DBase.h"
-
-#ifdef HAVEBOOSTCYLBESSEL
+//#include <cmath>
 #include "boost/math/special_functions.hpp"
-#endif
+
 
 namespace Lemma {
 
 
 	// =======================================================================
-	//        Class:  HankelTransformGaussianQuadrature
+	//        Class:  GQChave
 	/// \brief  Calculates hankel transform using gaussian quadrature.
 	/// \details  Accurate but slow, this is a port of Alan Chave's public domain
     /// fortran code
 	// =======================================================================
-	class HankelTransformGaussianQuadrature : public HankelTransform {
+	class GQChave : public HankelTransform {
 
-		friend std::ostream &operator<<(std::ostream &stream,
-				const HankelTransformGaussianQuadrature &ob);
+		friend std::ostream &operator<<(std::ostream &stream, const GQChave &ob);
+
+        struct ctor_key{};
 
 		public:
 
 			// ====================  LIFECYCLE     ===========================
 
+			/// Default locked constructor.
+			GQChave ( const ctor_key& );
+
+            /** DeSerializing locked constructor, use DeSerialize */
+            GQChave ( const YAML::Node& node, const ctor_key& );
+
+            /// Default destructor
+			~GQChave ();
+
             /**
-             *  Returns pointer to new HankelTransformGaussianQuadrature.
+             *  Returns shared_ptr to new GQChave.
              *  Location is
              *  initialized to (0,0,0) type and polarization are
              *  initialized  to nonworking values that will throw
              *  exceptions if used.
              */
-			static HankelTransformGaussianQuadrature* New();
+			static std::shared_ptr<GQChave> NewSP();
+
+            /** YAML Serializing method
+             */
+            YAML::Node Serialize() const;
 
             /**
-             * @copybrief LemmaObject::Delete()
-             * @copydetails LemmaObject::Delete()
+             *   Constructs an object from a YAML::Node.
              */
-            void Delete();
+            static std::shared_ptr< GQChave > DeSerialize(const YAML::Node& node);
 
 			// ====================  OPERATORS     ===========================
 
@@ -66,29 +78,20 @@ namespace Lemma {
             //template <EMMODE T>
 			Complex Zgauss(const int &ikk, const EMMODE &imode,
 							const int &itype, const Real &rho,
-							const Real &wavef, KernelEm1DBase *Kernel);
+							const Real &wavef, KernelEM1DBase* Kernel);
 
 			// ====================  ACCESS        ============================
 
 			// ====================  INQUIRY       ============================
 
+            /** Returns the name of the underlying class, similiar to Python's type */
+            virtual inline std::string GetName() const {
+                return CName;
+            }
+
 			// ====================  DATA MEMBERS  ============================
 
 		protected:
-
-			// ====================  LIFECYCLE     ============================
-
-			/// Default protected constructor.
-			HankelTransformGaussianQuadrature (const std::string &name);
-
-            /// Default protected constructor.
-			~HankelTransformGaussianQuadrature ();
-
-            /**
-             * @copybrief LemmaObject::Release()
-             * @copydetails LemmaObject::Release()
-             */
-            void Release();
 
 			// ====================  OPERATIONS    ============================
 
@@ -99,7 +102,7 @@ namespace Lemma {
 			///         for large arguments, it uses continued fraction also
 			/// It is recommended to use nl = 1 to 6, nu =7
 			/// PERFORMS AUTOMATIC CALCULATION OF BESSEL TRANSFORM TO SPECIFIED
-			/// RELATIVportisheadE AND ABSOLUTE ERROR
+			/// RELATIVE AND ABSOLUTE ERROR
 			///
 			/// ARGUMENT LIST:
 			///
@@ -133,7 +136,7 @@ namespace Lemma {
 							const int &nl, const int &nu, const Real &rho,
 							const Real &rerr, const Real &aerr,
 							const int &npcs, int &inew, const Real &aorb,
-							KernelEm1DBase *Kernel);
+							KernelEM1DBase* Kernel);
 
 			/// COMPUTES BESSEL TRANSFORM OF SPECIFIED ORDER DEFINED AS
 			/// INTEGRAL(FUNCT(X)*J-SUB-ORDER(X*R)*DX) FROM X=0 TO INFINITY
@@ -189,7 +192,7 @@ namespace Lemma {
  					const Real &RERR, const Real &AERR, const int &npcs,
  					VectorXi &XSUM, int &NSUM, int &NEW,
  					int &IERR, int &NCNTRL, const Real &AORB,
-					KernelEm1DBase *Kernel);
+					KernelEM1DBase* Kernel);
 
 			/// CALCULATES THE INTEGRAL OF F(X)*J-SUB-N(X*R) OVER THE
 			/// INTERVAL A TO B AT A SPECIFIED GAUSS ORDER THE RESULT IS
@@ -221,7 +224,7 @@ namespace Lemma {
             //template <EMMODE T>
 			void Besqud(const Real &A, const Real &B, Real &BESR, Real &BESI,
 							const int &NG, const int &NEW, const int &iorder,
-							const Real &R, KernelEm1DBase *Kernel);
+							const Real &R, KernelEM1DBase* Kernel);
 
 			/// COMPUTES SUM(S(I)),I=1,...N BY COMPUTATION OF PADE APPROXIMANT
 			/// USING CONTINUED FRACTION EXPANSION.  FUNCTION IS DESIGNED TO BE
@@ -329,7 +332,10 @@ namespace Lemma {
 
 		private:
 
-	}; // -----  end of class  HankelTransformGaussianQuadrature  -----
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "FHTKey51";
+
+	}; // -----  end of class  GQChave  -----
 
     //////////////////////////////////////////////////////////////
     // Exception Classes

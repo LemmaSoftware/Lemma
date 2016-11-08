@@ -117,6 +117,11 @@ namespace Lemma {
              */
             std::shared_ptr<KernelEM1DBase>    GetKernel(const unsigned int& ik);
 
+            /** Returns RAW pointer to specified kernel indice. Indices are assigned in the same
+                order as they are created by AddKernel.
+             */
+            KernelEM1DBase*                    GetRAWKernel(const unsigned int& ik);
+
             /** Returns pointer to connected dipole.
              */
             std::shared_ptr<DipoleSource>    GetDipole( );

@@ -52,7 +52,7 @@ namespace Lemma {
                 ///       passing by reference and using Kernel.get() instead.
                 virtual Complex Zgauss(const int &ikk, const EMMODE &imode,
                             const int &itype, const Real &rho,
-                            const Real &wavef, std::shared_ptr<KernelEM1DBase> Kernel)=0;
+                            const Real &wavef, KernelEM1DBase* Kernel)=0;
 
                 /// Computes related kernels, if applicable, otherwise this is
                 /// just a dummy function.

@@ -66,7 +66,7 @@ namespace Lemma {
 
             virtual void SetMode(const EMMODE& mode)=0;
 
-            int GetManagerIndex() {
+            int GetManagerIndex() const {
                 return this->managerIdx;
             }
 

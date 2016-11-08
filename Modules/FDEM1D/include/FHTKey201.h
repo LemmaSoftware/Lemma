@@ -48,15 +48,15 @@ namespace Lemma {
         /** Default locked constructor, use NewSP */
         FHTKey201 ( const ctor_key& );
 
-        /** DeSerializing locked constructor, use NewSP */
+        /** DeSerializing locked constructor, use DeSerialize */
         FHTKey201 ( const YAML::Node& node, const ctor_key& );
 
-        /** Default protected destructor, use Delete */
+        /** Default destructor */
         ~FHTKey201 ();
 
         /**
-         * @copybrief LemmaObject::New()
-         * @copydetails LemmaObject::New()
+         *  Factory method for generating objects.
+         *   @return std::shared_ptr< FHTKey201 >
          */
         static std::shared_ptr<FHTKey201> NewSP();
 
@@ -75,7 +75,7 @@ namespace Lemma {
 
         Complex Zgauss(const int &ikk, const EMMODE &imode,
                             const int &itype, const Real &rho,
-                            const Real &wavef, std::shared_ptr<KernelEM1DBase> Kernel);
+                            const Real &wavef, KernelEM1DBase* Kernel);
 
         /// Computes related kernels, if applicable, otherwise this is
         /// just a dummy function.
