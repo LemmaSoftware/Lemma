@@ -3,7 +3,7 @@ add_library( lemmacore ${SOURCE} )
 target_include_directories( lemmacore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include" )
 
 set_target_properties(lemmacore PROPERTIES 
-	VERSION  "${LEMMA_VERSION}"
+	VERSION  "${LEMMA_VERSION_NOQUOTES}"
 	SOVERSION "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}"
 	PROJECT_LABEL "LemmaCore ${LABEL_SUFFIX}"
 )
@@ -31,7 +31,9 @@ if (LEMMA_ENABLE_TESTING)
 endif()
 
 # Install
-install ( TARGETS lemmacore DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )
+install (  TARGETS lemmacore DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )
+install ( FILES include/LemmaCore  DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma/ ) 
+install ( DIRECTORY include/       DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma/  FILES_MATCHING PATTERN "*.h" )
 
 # Examples
 if (LEMMA_BUILD_EXAMPLES)

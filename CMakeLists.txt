@@ -200,11 +200,13 @@ set(LEMMA_VERSION_MAJOR "0")
 set(LEMMA_VERSION_MINOR "1")
 set(LEMMA_VERSION_PATCH "1")
 set(LEMMA_VERSION "\"${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}\"")
+set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}")
 
 configure_file (
 	"${PROJECT_SOURCE_DIR}/config/LemmaConfig.h.in"
 	"${PROJECT_BINARY_DIR}/include/LemmaConfig.h"
 )
+install ( FILES  ${PROJECT_BINARY_DIR}/include/LemmaConfig.h   DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma/ )
 
 include_directories("${PROJECT_BINARY_DIR}/include")
 include_directories ("${CMAKE_INSTALL_PREFIX}/include/")

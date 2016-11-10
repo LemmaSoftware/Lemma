@@ -32,5 +32,5 @@ int main() {
     std::cout << *wire << std::endl;
 
     auto wire2 = wire->Clone();
-    std::cout << *wire2 << std::endl;
+    std::cout << "copy\n" << *wire2 << std::endl;
 }
