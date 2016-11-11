@@ -43,7 +43,7 @@ namespace Lemma {
         Earth = Earthin;
     }
 
-    void KernelEM1DManager::SetDipoleSource( std::shared_ptr<DipoleSource> DipoleIn, const int& ifreqin,
+    void KernelEM1DManager::SetDipoleSource( DipoleSource* DipoleIn, const int& ifreqin,
             const Real& rx_zin) {
         Dipole = DipoleIn;
 
@@ -59,7 +59,7 @@ namespace Lemma {
         return KernelVec[ik].get();
     }
 
-    std::shared_ptr<DipoleSource> KernelEM1DManager::GetDipole( ) {
+    DipoleSource* KernelEM1DManager::GetDipole( ) {
         return Dipole;
     }
 

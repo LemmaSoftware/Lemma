@@ -138,6 +138,11 @@ namespace Lemma {
                     const Real &wavef, const int &ifreq,
                     DipoleSource* tDipole);
 
+//             void SolveSingleTxRxPair(const int &irec,
+//                     std::shared_ptr<HankelTransform> Hankel,
+//                     const Real &wavef, const int &ifreq,
+//                     std::shared_ptr<DipoleSource> tDipole);
+
             /** Used internally, this is the innermost loop of the MakeCalc3,
              *  and CalculateWireAntennaField routines.
              */

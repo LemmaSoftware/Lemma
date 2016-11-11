@@ -250,7 +250,7 @@ namespace Lemma {
             Real                         c2p;
             Real                         kernelFreq;
 
-            FIELDCALCULATIONS            FieldsToCalculate;
+            FIELDCALCULATIONS            FieldsToCalculate = BOTH;
 
             VectorXcr                    f;
             VectorXi                     ik;

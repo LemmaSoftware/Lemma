@@ -737,13 +737,20 @@ namespace Lemma {
     void EMEarth1D::SolveSingleTxRxPair (const int &irec, HankelTransform *Hankel, const Real &wavef, const int &ifreq,
                    DipoleSource *tDipole) {
         ++icalcinner;
-
         Real rho = (Receivers->GetLocation(irec).head<2>() - tDipole->GetLocation().head<2>()).norm();
-
         tDipole->SetKernels(ifreq, FieldsToCalculate, Receivers, irec, Earth);
         Hankel->ComputeRelated( rho, tDipole->GetKernelManager() );
         tDipole->UpdateFields( ifreq,  Hankel, wavef );
     }
+
+//     void EMEarth1D::SolveSingleTxRxPair (const int &irec, std::shared_ptr<HankelTransform> Hankel, const Real &wavef, const int &ifreq,
+//                    std::shared_ptr<DipoleSource> tDipole) {
+//         ++icalcinner;
+//         Real rho = (Receivers->GetLocation(irec).head<2>() - tDipole->GetLocation().head<2>()).norm();
+//         tDipole->SetKernels(ifreq, FieldsToCalculate, Receivers, irec, Earth);
+//         //Hankel->ComputeRelated( rho, tDipole->GetKernelManager() );
+//         //tDipole->UpdateFields( ifreq,  Hankel, wavef );
+//     }
 
     void EMEarth1D::SolveLaggedTxRxPair(const int &irec, FHTAnderson801* Hankel,
                     const Real &wavef, const int &ifreq, PolygonalWireAntenna* antenna) {
@@ -813,7 +820,6 @@ namespace Lemma {
         #pragma omp parallel
         #endif
         { // OpenMP Parallel Block
-
             #ifdef LEMMAUSEOMP
             int tid = omp_get_thread_num();
             int nthreads = omp_get_num_threads();
@@ -821,9 +827,7 @@ namespace Lemma {
             int tid=0;
             int nthreads=1;
             #endif
-
             auto tDipole = Dipole->Clone();
-
             std::shared_ptr<HankelTransform> Hankel;
             switch (HankelType) {
                 case ANDERSON801:
@@ -848,7 +852,6 @@ namespace Lemma {
                     std::cerr << "Hankel transform cannot be created\n";
                     exit(EXIT_FAILURE);
             }
-
             if ( tDipole->GetNumberOfFrequencies() < Receivers->GetNumberOfPoints() ) {
                 for (int ifreq=0; ifreq<tDipole->GetNumberOfFrequencies(); ++ifreq) {
                     // Propogation constant in free space being input to Hankel

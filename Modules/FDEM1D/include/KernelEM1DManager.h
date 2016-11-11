@@ -110,7 +110,7 @@ namespace Lemma {
             void SetEarth( std::shared_ptr<LayeredEarthEM>   Earth);
 
             /** Sets the source of the kernels */
-            void SetDipoleSource( std::shared_ptr<DipoleSource> Dipole, const int& ifreq, const Real& rx_zin);
+            void SetDipoleSource( DipoleSource* Dipole, const int& ifreq, const Real& rx_zin);
 
             /** Returns pointer to specified kernel indice. Indices are assigned in the same
                 order as they are created by AddKernel.
@@ -124,7 +124,7 @@ namespace Lemma {
 
             /** Returns pointer to connected dipole.
              */
-            std::shared_ptr<DipoleSource>    GetDipole( );
+            DipoleSource*                      GetDipole( );
 
             inline std::vector< std::shared_ptr<KernelEM1DBase> >  GetSTLVector() {
                 return KernelVec;
@@ -156,7 +156,7 @@ namespace Lemma {
             std::shared_ptr<LayeredEarthEM>            Earth;
 
             /** EM dipole souce */
-            std::shared_ptr<DipoleSource>              Dipole;
+            DipoleSource*                              Dipole;
 
             /** Frequency index for the sources */
             int                                        ifreq;

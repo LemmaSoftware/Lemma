@@ -35,6 +35,7 @@ namespace Lemma {
 
     DipoleSource::DipoleSource( const ctor_key& ) : LemmaObject( ),
                     Type(NOSOURCETYPE),
+                    irec(-1),
                     Phase(0),
                     Moment(1),
                     KernelManager(nullptr),
@@ -220,15 +221,12 @@ namespace Lemma {
         if (Receivers != ReceiversIn) {
             Receivers = ReceiversIn;
         }
-
         if (Earth != EarthIn) {
             Earth = EarthIn;
         }
-
         if (irecin != irec) {
             irec = irecin;
         }
-
         if (FieldsToCalculate != Fields) {
             FieldsToCalculate = Fields;
         }
@@ -252,8 +250,10 @@ namespace Lemma {
 
         KernelManager = KernelEM1DManager::NewSP();
             KernelManager->SetEarth(Earth);
-            KernelManager->SetDipoleSource(shared_from_this(), ifreq, Receivers->GetLocation(irec)[2]);
-        kernelFreq = Freqs(ifreq); // this is never used
+            // alternative is to use weak_ptr here, this is deep and internal, and we are safe.
+            KernelManager->SetDipoleSource( shared_from_this().get() , ifreq, Receivers->GetLocation(irec)[2]);
+            kernelFreq = Freqs(ifreq); // this is never used
+
         ReSetKernels( ifreq, Fields, Receivers, irec, Earth );
 
         return;

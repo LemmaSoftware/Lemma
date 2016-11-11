@@ -85,7 +85,7 @@ namespace Lemma {
 
             }
 
-            void SetUpSource( std::shared_ptr<DipoleSource> Dipole, const int &ifreq ) {
+            void SetUpSource( DipoleSource* Dipole, const int &ifreq ) {
 
                 zh(0) = Complex(0, Dipole->GetAngularFrequency(ifreq)*MU0);
                 yh(0) = Complex(0, Dipole->GetAngularFrequency(ifreq)*EPSILON0);
