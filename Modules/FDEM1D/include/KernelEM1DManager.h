@@ -147,10 +147,10 @@ namespace Lemma {
             std::vector< std::shared_ptr<KernelEM1DBase> >  KernelVec;
 
             /** Reflection base used for TE mode */
-            std::shared_ptr<KernelEM1DReflBase>        TEReflBase;
+            std::shared_ptr<KernelEM1DReflBase>        TEReflBase = nullptr;
 
             /** Reflection base used for TM mode */
-            std::shared_ptr<KernelEM1DReflBase>        TMReflBase;
+            std::shared_ptr<KernelEM1DReflBase>        TMReflBase = nullptr;
 
             /** EmEarth Class */
             std::shared_ptr<LayeredEarthEM>            Earth;
@@ -175,8 +175,7 @@ namespace Lemma {
     int KernelEM1DManager::AddKernel( ) {
 
         auto NewKern = KernelEM1DSpec<Mode, Ikernel, Isource, Irecv>::NewSP();
-        KernelVec.push_back( NewKern );
-        NewKern->managerIdx = KernelVec.size()-1;
+        NewKern->managerIdx = KernelVec.size();
         switch (Mode) {
             case TE:
                 if (TEReflBase == nullptr) {
@@ -197,6 +196,7 @@ namespace Lemma {
                 NewKern->SetReflBase(TMReflBase);
                 break;
         }
+        KernelVec.push_back( std::move(NewKern) );
         return static_cast<int>(KernelVec.size()-1);
      }
 

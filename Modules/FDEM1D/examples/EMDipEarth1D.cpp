@@ -99,7 +99,7 @@ int main() {
 	//std::cout << receivers->GetEfield(0) << std::endl;
 	//std::cout << receivers->GetHfield(1) << std::endl;
 	//std::cout << receivers->GetEfield(1) << std::endl;
-	receivers->ClearFields();
+	//receivers->ClearFields();
 
     // swap tx rx posigion
     /*
@@ -110,7 +110,7 @@ int main() {
 	receivers->ClearFields();
     */
 
- #ifdef KIHALEE_EM1D
+ #ifdef NOKIHALEE_EM1D
     std::cout << "\nFORTRAN\n";
  	EmEarth->MakeCalc();
 // 	std::cout << receivers->GetHfield(0,0) << std::endl;

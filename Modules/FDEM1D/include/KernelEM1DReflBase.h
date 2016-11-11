@@ -211,7 +211,7 @@ namespace Lemma {
 			EMMODE mode;
 
             /// Pointer to layered earth
-            std::shared_ptr<LayeredEarthEM> Earth;
+            std::shared_ptr<LayeredEarthEM> Earth = nullptr;
 
 			Complex       uk;
 			Complex       um;
