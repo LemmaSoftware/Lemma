@@ -65,11 +65,11 @@ $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 == cpp.accessor-implementation ==
-//--------------------------------------------------------------------------------------
-//       Class:  |?CLASSNAME|
-//      Method:  get_|?ATTRIBUTE|
-//--------------------------------------------------------------------------------------
-inline <CURSOR>int |CLASSNAME|::get_|ATTRIBUTE| (  ) {
+/**
+ *  Class:  |?CLASSNAME|
+ *  Method:  Get|?ATTRIBUTE|
+ */
+inline <CURSOR>int |CLASSNAME|::Get|ATTRIBUTE| (  ) {
 	return |ATTRIBUTE|;
 }		// -----  end of method |CLASSNAME|::get_|ATTRIBUTE|  -----
 
@@ -77,7 +77,7 @@ inline <CURSOR>int |CLASSNAME|::get_|ATTRIBUTE| (  ) {
 //       Class:  |CLASSNAME|
 //      Method:  set_|ATTRIBUTE|
 //--------------------------------------------------------------------------------------
-inline void |CLASSNAME|::set_|ATTRIBUTE| ( int value ) {
+inline void |CLASSNAME|::Set|ATTRIBUTE| ( int value ) {
 	|ATTRIBUTE|	= value;
 	return ;
 }		// -----  end of method |CLASSNAME|::set_|ATTRIBUTE|  -----
@@ -122,17 +122,20 @@ $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 namespace Lemma {
 
 /**
-   \brief  <CURSOR>
-   \details
+ * \ingroup |?MODULE|
+ * \brief  <CURSOR>
+ * \details
  */
 class |?CLASSNAME:c| : public |BASECLASS:c| {
 
 	friend std::ostream &operator<<(std::ostream &stream, const |CLASSNAME| &ob);
 
-    /*
-     *  This key is used to lock the constructor.
-     */
-    struct ctor_key {};
+    protected:
+        /*
+         *  This key is used to lock the constructor. It is protected so that inhereted
+         *  classes also have the key to contruct their base class.
+         */
+        struct ctor_key {};
 
 	public:
 
@@ -156,13 +159,13 @@ class |?CLASSNAME:c| : public |BASECLASS:c| {
          *       in c++-17, this curiosity may be resolved.
          * @see |CLASSNAME|::DeSerialize
          */
-        |CLASSNAME| (const YAML::Node& node);
+        |CLASSNAME| ( const YAML::Node& node, const ctor_key& );
 
         /**
          * Default destructor.
          * @note This method should never be called due to the mandated
          *       use of smart pointers. It is necessary to keep the method
-         *       public in order to allow for the use of the more efficeint
+         *       public in order to allow for the use of the more efficient
          *       make_shared constructor.
          */
         virtual ~|CLASSNAME| ();
@@ -193,10 +196,20 @@ class |?CLASSNAME:c| : public |BASECLASS:c| {
         // ====================  ACCESS        =======================
 
         // ====================  INQUIRY       =======================
+        /**
+         *  Returns the name of the underlying class, similiar to Python's type
+         *  @return string of class name
+         */
+        virtual inline std::string GetName() const {
+            return CName;
+        }
 
     protected:
 
         // ====================  LIFECYCLE     =======================
+
+        /** Copy is disabled */
+        |CLASSNAME|( const CLASSNAME& ) = delete;
 
     	// ====================  DATA MEMBERS  =========================
 
@@ -263,7 +276,7 @@ namespace Lemma {
 // ====================  FRIEND METHODS  =====================
 
 std::ostream &operator << (std::ostream &stream, const |CLASSNAME| &ob) {
-    stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+    stream << ob.Serialize()  << "\n---\n"; // End of doc ---
     return stream;
 }
 
@@ -272,18 +285,18 @@ std::ostream &operator << (std::ostream &stream, const |CLASSNAME| &ob) {
 //--------------------------------------------------------------------------------------
 //       Class:  |CLASSNAME|
 //      Method:  |CLASSNAME|
-// Description:  constructor (protected)
+// Description:  constructor (locked)
 //--------------------------------------------------------------------------------------
-|CLASSNAME|::|CLASSNAME| (const std::string& name) : |?BASECLASS|(name) {
+|CLASSNAME|::|CLASSNAME| (const ctor_key&) : |?BASECLASS|( ) {
 
 }  // -----  end of method |CLASSNAME|::|CLASSNAME|  (constructor)  -----
 
 //--------------------------------------------------------------------------------------
 //       Class:  |CLASSNAME|
 //      Method:  |CLASSNAME|
-// Description:  DeSerializing constructor (protected)
+// Description:  DeSerializing constructor (locked)
 //--------------------------------------------------------------------------------------
-|CLASSNAME|::|CLASSNAME| (const YAML::Node& node) : |BASECLASS|(node) {
+|CLASSNAME|::|CLASSNAME| (const YAML::Node& node, const ctor_key&) : |BASECLASS|(node) {
 
 }  // -----  end of method |CLASSNAME|::|CLASSNAME|  (constructor)  -----
 
@@ -293,8 +306,7 @@ std::ostream &operator << (std::ostream &stream, const |CLASSNAME| &ob) {
 // Description:  public constructor returing a shared_ptr
 //--------------------------------------------------------------------------------------
 std::shared_ptr< |CLASSNAME| >  |CLASSNAME|::NewSP() {
-    std::shared_ptr< |CLASSNAME| > sp(new  |CLASSNAME|("|CLASSNAME|"), LemmaObjectDeleter() );
-    return sp;
+    return std::make_shared< |CLASSNAME| >( ctor_key() );
 }
 
 //--------------------------------------------------------------------------------------
@@ -325,8 +337,7 @@ std::shared_ptr<|CLASSNAME|> |CLASSNAME|::DeSerialize ( const YAML::Node& node  
     if (node.Tag() !=  "|CLASSNAME|" ) {
         throw  DeSerializeTypeMismatch( "|CLASSNAME|", node.Tag());
     }
-    std::shared_ptr< |CLASSNAME| > Object(new |CLASSNAME|(node), LemmaObjectDeleter() );
-    return Object ;
+    return std::make_shared< |CLASSNAME| > ( node, ctor_key() );
 }		// -----  end of method |CLASSNAME|::DeSerialize  -----
 
 } // ----  end of namespace Lemma  ----
