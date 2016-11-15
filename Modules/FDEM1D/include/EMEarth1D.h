@@ -124,6 +124,10 @@ namespace Lemma {
              */
             void SetHankelTransformMethod(const HANKELTRANSFORMTYPE &type);
 
+            inline FieldPoints* GetFieldPoints() {
+                return this->Receivers.get();
+            }
+
             // ====================  INQUIRY       ===========================
 
         protected:
