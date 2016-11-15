@@ -36,6 +36,8 @@
 
 namespace Lemma {
 
+    enum TXRXMODE { TX, RX, TXRX, NOMODE };
+
     class WireAntenna;
     class PolygonalWireAntenna;
     class FieldPoints;
@@ -131,7 +133,29 @@ namespace Lemma {
                 return this->Receivers.get();
             }
 
+            /**
+             *  Sets the Mode enum tag.
+             */
+            void SetTxRxMode( const TXRXMODE& ModeSet ) {
+                this->Mode = ModeSet;
+            }
+
             // ====================  INQUIRY       ===========================
+
+            /**
+             *  Returns the name of the underlying class, similiar to Python's type
+             *  @return string of class name
+             */
+            virtual inline std::string GetName() const {
+                return CName;
+            }
+
+            /**
+             *  Returns the Mode enum tag.
+             */
+            inline TXRXMODE GetTxRxMode() const {
+                return Mode;
+            }
 
         protected:
 
@@ -186,6 +210,15 @@ namespace Lemma {
             /** Counter for number of caclulations made
              */
             int icalc;
+
+            /**
+             * Convenience tag that can be used for marking whether these
+             *  fields are part of a transmit or receive array.
+             */
+            TXRXMODE       Mode = NOMODE;
+
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "EMEarth1D";
 
     }; // -----  end of class  EMEarth1D  -----
 
