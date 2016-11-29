@@ -18,7 +18,7 @@ namespace Lemma {
 	// ====================    FRIENDS     ======================
 
     std::ostream &operator << (std::ostream &stream, const LayeredEarth &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        stream << ob.Serialize()  << "\n---\n"; // End of doc
         return stream;
     }
 
@@ -27,8 +27,6 @@ namespace Lemma {
 	LayeredEarth::LayeredEarth( ) : EarthModel( ),
 		NumberOfLayers(0), 	NumberOfInterfaces(0) {
 	}
-
-
 
 	LayeredEarth::~LayeredEarth() {
 	}

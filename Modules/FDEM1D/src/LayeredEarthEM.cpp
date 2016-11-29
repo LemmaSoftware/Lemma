@@ -57,8 +57,6 @@ namespace Lemma {
         return std::make_shared<LayeredEarthEM> ( node, ctor_key() );
     }
 
-
-
     YAML::Node LayeredEarthEM::Serialize() const {
         YAML::Node node = LayeredEarth::Serialize();
         node.SetTag( GetName() );

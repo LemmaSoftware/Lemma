@@ -171,6 +171,11 @@ if ( KIHA_EM1D )
 endif()
 
 ####################
+# Magic rpath flag
+####################
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+####################
 # Add the c++11 flag 
 # TODO add compiler specific instructions
 include(CheckCXXCompilerFlag)
