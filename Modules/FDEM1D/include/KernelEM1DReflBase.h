@@ -142,6 +142,10 @@ namespace Lemma {
 
             // ====================  INQUIRY       =======================
 
+            virtual std::string GetName() const {
+                return CName;
+            }
+
         protected:
 
             // ====================  LIFECYCLE     =======================
@@ -236,6 +240,8 @@ namespace Lemma {
 			VectorXcr    rtd;
 
         private:
+
+            static constexpr auto CName = "KernelEM1DReflBase";
 
     }; // -----  end of class  KernelEM1DReflBase  -----
 

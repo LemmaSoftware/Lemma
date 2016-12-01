@@ -70,6 +70,10 @@ namespace Lemma {
 
             // ====================  INQUIRY       =======================
 
+            virtual std::string GetName() {
+                return CName;
+            } 
+
         protected:
         private:
 
@@ -101,6 +105,8 @@ namespace Lemma {
             //void SetTCache(const Real& rho0);
 
             // ====================  DATA MEMBERS  =========================
+
+            static constexpr auto CName = "KernelEM1DSpec";
 
     }; // -----  end of class  KernelEM1DReflSpec  -----
 

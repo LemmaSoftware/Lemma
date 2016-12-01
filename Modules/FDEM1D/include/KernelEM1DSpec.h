@@ -132,9 +132,7 @@ namespace Lemma {
             }
 
             /** Returns the name of the underlying class, similiar to Python's type */
-            virtual inline std::string GetName() const {
-                return CName;
-            }
+            virtual std::string GetName() const; 
 
         protected:
 
@@ -216,6 +214,11 @@ namespace Lemma {
                -1.e0,  1.e0,
                 1.e0, -1.e0,
                -1.e0, -1.e0 ).finished();
+            
+    template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
+    std::string KernelEM1DSpec<Mode, Ikernel, Isource, Irecv>::GetName() const {
+        return CName;
+    }
 
     ///////////////////////////////////////////////
     // Declarations of specialisations for private fuctions

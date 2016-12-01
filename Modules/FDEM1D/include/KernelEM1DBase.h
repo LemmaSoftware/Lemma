@@ -83,6 +83,8 @@ namespace Lemma {
 
             virtual Complex GetKs()=0;
 
+            virtual std::string GetName() const = 0;
+
         protected:
 
             // ====================  DATA MEMBERS  =========================
