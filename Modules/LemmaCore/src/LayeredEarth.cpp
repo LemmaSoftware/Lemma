@@ -51,6 +51,15 @@ namespace Lemma {
 
 	// ====================  ACCESS        ===================================
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  LayeredEarth
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string LayeredEarth::GetName (  ) const {
+        return CName;
+    }		// -----  end of method LayeredEarth::get_GetName  -----
+
 	void LayeredEarth::SetLayerThickness(const VectorXr &thick) {
 		if (thick.size() != this->NumberOfLayers - 2)
 			throw EarthModelParametersDoNotMatchNumberOfLayers( );

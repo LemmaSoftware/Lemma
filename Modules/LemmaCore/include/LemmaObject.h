@@ -83,9 +83,7 @@ class LemmaObject {
             Was chosen over typeid due to name mangling among various compilers, and the need for consistency
             in Serialized objects.
          */
-        virtual inline std::string GetName() const {
-            return this->CName;
-        }
+        virtual std::string GetName() const;
 
     protected:
 

@@ -81,6 +81,14 @@ namespace Lemma {
         return std::make_shared< RectilinearGrid > ( node, ctor_key() );
     }
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  RectilinearGrid
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string RectilinearGrid::GetName (  ) const {
+        return CName;
+    }		// -----  end of method RectilinearGrid::get_GetName  -----
 
     // ====================  OPERATIONS    =======================
 

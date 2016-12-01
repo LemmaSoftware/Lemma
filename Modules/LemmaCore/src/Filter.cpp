@@ -52,4 +52,14 @@ namespace Lemma {
         // FILL IN CLASS SPECIFICS HERE
         return node;
     }		// -----  end of method Filter::Serialize  -----
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  Filter
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string Filter::GetName (  ) const {
+        return CName;
+    }		// -----  end of method Filter::get_GetName  -----
+
 }		// -----  end of Lemma  name  -----

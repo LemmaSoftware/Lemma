@@ -70,6 +70,15 @@ RectilinearGridVTKExporter::~RectilinearGridVTKExporter () {
 
 //--------------------------------------------------------------------------------------
 //       Class:  RectilinearGridVTKExporter
+//      Method:  GetName
+// Description:  Class identifier
+//--------------------------------------------------------------------------------------
+inline std::string RectilinearGridVTKExporter::GetName (  ) const {
+    return CName;
+}		// -----  end of method RectilinearGridVTKExporter::GetName  -----
+
+//--------------------------------------------------------------------------------------
+//       Class:  RectilinearGridVTKExporter
 //      Method:  SetGrid
 //--------------------------------------------------------------------------------------
 void RectilinearGridVTKExporter::SetGrid ( std::shared_ptr<RectilinearGrid> GridIn ) {

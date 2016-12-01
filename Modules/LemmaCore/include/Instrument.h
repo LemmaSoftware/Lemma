@@ -49,9 +49,7 @@ namespace Lemma {
 			// ====================  INQUIRY       ===========================
 
             /** Returns the name of the underlying class, similiar to Python's type */
-            virtual inline std::string GetName() const {
-                return this->CName;
-            }
+            virtual std::string GetName() const = 0;
 
 			// ====================  DATA MEMBERS  ===========================
 

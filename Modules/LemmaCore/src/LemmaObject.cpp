@@ -40,6 +40,10 @@ namespace Lemma {
 
     // ====================  INQUIRY       ==============================
 
+    inline std::string LemmaObject::GetName() const {
+        return CName;
+    }
+
     // ====================  ACCESS        ==============================
 
     // ====================  ACCESS        ==============================

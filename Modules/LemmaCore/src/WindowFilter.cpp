@@ -97,6 +97,15 @@ namespace Lemma {
         return std::make_shared<WindowFilter>( node, ctor_key() );
     }
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  WindowFilter
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string WindowFilter::GetName (  ) const {
+        return CName;
+    }		// -----  end of method WindowFilter::GetName  -----
+
     // ====================  OPERATIONS    =======================
 
     void WindowFilter::SetWindowType(const WINDOWTYPE &type) {

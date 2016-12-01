@@ -38,4 +38,13 @@ namespace Lemma {
         return node;
     }
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  Grid
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string Grid::GetName (  ) const {
+        return CName;
+    }		// -----  end of method Grid::get_GetName  -----
+
 }

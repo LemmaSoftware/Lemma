@@ -14,6 +14,5 @@ set (SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/LayeredEarth.cpp			   # ABC, no key
 	${CMAKE_CURRENT_SOURCE_DIR}/Data.cpp                       # ABC, no key
 	${CMAKE_CURRENT_SOURCE_DIR}/DataReader.cpp                 # ABC, no key
-	${CMAKE_CURRENT_SOURCE_DIR}/Instrument.cpp                 # ABC, no key
 	PARENT_SCOPE
 )

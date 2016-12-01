@@ -92,9 +92,7 @@ namespace Lemma {
             Real GetMagneticFieldMagnitudeInGauss( );
 
             /** Returns the name of the underlying class, similiar to Python's type */
-            virtual inline std::string GetName() const {
-                return this->CName;
-            }
+            virtual inline std::string GetName() const;
 
         protected:
 

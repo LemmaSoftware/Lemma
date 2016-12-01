@@ -84,6 +84,15 @@ namespace Lemma {
 
     //--------------------------------------------------------------------------------------
     //       Class:  ASCIIParser
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string ASCIIParser::GetName (  ) const {
+        return CName;
+    }		// -----  end of method ASCIIParser::GetName  -----
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  ASCIIParser
     //      Method:  ASCIIParser
     // Description:  DeSerializing constructor (protected)
     //--------------------------------------------------------------------------------------

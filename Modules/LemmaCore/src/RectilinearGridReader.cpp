@@ -73,7 +73,7 @@ namespace Lemma {
         //node["CommentString"] = CommentString;
         //node["BufferSize"] = BufferSize;
         return node;
-    }		// -----  end of method ASCIIParser::Serialize  -----
+    }		// -----  end of method GridReader::Serialize  -----
 
     //--------------------------------------------------------------------------------------
     //       Class:  RectilinearGridReader
@@ -84,7 +84,16 @@ namespace Lemma {
             throw  DeSerializeTypeMismatch( "RectilinearGridReader", node.Tag());
         }
         return std::make_shared< RectilinearGridReader >( node, ctor_key() ); //, ctor_key() );
-    }		// -----  end of method ASCIIParser::DeSerialize  -----
+    }		// -----  end of method GridReader::DeSerialize  -----
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  RectilinearGridReader
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string RectilinearGridReader::GetName (  ) const {
+        return CName;
+    }		// -----  end of method RectilinearGridReader::get_GetName  -----
 
     //--------------------------------------------------------------------------------------
     //       Class:  RectilinearGridReader

@@ -48,7 +48,17 @@ namespace Lemma {
 	}
 
  	// ====================  ACCESS        ===================================
-	void EarthModel::SetMagneticFieldComponents(const Vector3r &bfield,
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  EarthModel
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string EarthModel::GetName (  ) const {
+        return CName;
+    }		// -----  end of method EarthModel::get_GetName  -----
+
+    void EarthModel::SetMagneticFieldComponents(const Vector3r &bfield,
 					const MAGUNITS &unit) {
 
  		this->BField = bfield;
