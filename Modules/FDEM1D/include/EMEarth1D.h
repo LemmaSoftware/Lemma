@@ -146,9 +146,7 @@ namespace Lemma {
              *  Returns the name of the underlying class, similiar to Python's type
              *  @return string of class name
              */
-            virtual inline std::string GetName() const {
-                return CName;
-            }
+            virtual std::string GetName() const;
 
             /**
              *  Returns the Mode enum tag.

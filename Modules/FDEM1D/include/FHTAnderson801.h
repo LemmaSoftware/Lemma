@@ -148,9 +148,7 @@ class FHTAnderson801 : public HankelTransform {
                         const Real &wavef, KernelEM1DBase* Kernel);
 
         /** Returns the name of the underlying class, similiar to Python's type */
-        virtual inline std::string GetName() const {
-            return CName;
-        }
+        virtual inline std::string GetName() const;
 
     protected:
 

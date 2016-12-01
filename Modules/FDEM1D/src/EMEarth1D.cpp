@@ -98,6 +98,15 @@ namespace Lemma {
         return node;
     }
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  EMEarth1D
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string EMEarth1D::GetName (  ) const {
+        return CName;
+    }		// -----  end of method EMEarth1D::GetName  -----
+
     // ====================  ACCESS        ===================================
     void EMEarth1D::AttachDipoleSource( std::shared_ptr<DipoleSource> dipoleptr) {
         Dipole = dipoleptr;

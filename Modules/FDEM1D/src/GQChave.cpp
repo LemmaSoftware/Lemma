@@ -309,6 +309,15 @@ namespace Lemma{
 
     /////////////////////////////////////////////////////////////
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  GQChave
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string GQChave::GetName (  ) const {
+        return CName;
+    }		// -----  end of method GQChave::GetName  -----
+
     Complex GQChave::
             Zgauss(const int &ikk, const EMMODE &mode,
                     const int &itype, const Real &rho, const Real &wavef,

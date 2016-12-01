@@ -891,6 +891,15 @@ namespace Lemma {
         splineVecImag.clear();
     }
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  FHTAnderson801
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string FHTAnderson801::GetName (  ) const {
+        return CName;
+    }		// -----  end of method FHTAnderson801::GetName  -----
+
 	// ====================  OPERATIONS    ==============================
 
     void FHTAnderson801::ComputeRelated(const Real& rho, std::shared_ptr<KernelEM1DBase> Kernel) {

@@ -79,6 +79,15 @@ namespace Lemma {
         return std::make_shared<FieldPoints> ( node, ctor_key() );
     }		// -----  end of method FieldPoints::DeSerialize  -----
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  FieldPoints
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string FieldPoints::GetName (  ) const {
+        return CName;
+    }		// -----  end of method FieldPoints::GetName  -----
+
     // ====================  ACCESS        ===================================
 
     void FieldPoints::SetNumberOfPoints(const int &nrec) {

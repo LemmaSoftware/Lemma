@@ -198,6 +198,15 @@ namespace Lemma {
 
     //--------------------------------------------------------------------------------------
     //       Class:  FHTKey101
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string FHTKey101::GetName (  ) const {
+        return CName;
+    }		// -----  end of method FHTKey101::GetName  -----
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  FHTKey101
     //      Method:  Zgauss
     //--------------------------------------------------------------------------------------
     Complex FHTKey101::Zgauss ( const int &ikk, const EMMODE &imode,

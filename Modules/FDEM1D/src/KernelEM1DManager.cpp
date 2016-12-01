@@ -19,7 +19,6 @@ namespace Lemma {
         return stream;
     }
 
-
     // ====================  LIFECYCLE     =======================
 
     KernelEM1DManager::KernelEM1DManager( const ctor_key& ) : LemmaObject( ), TEReflBase(nullptr),
@@ -36,6 +35,15 @@ namespace Lemma {
 
 
     // ====================  ACCESS        =======================
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  KernelEM1DManager
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string KernelEM1DManager::GetName (  ) const {
+        return CName;
+    }		// -----  end of method KernelEM1DManager::GetName  -----
 
     // A race condition can develop with these. It's OK to not attach, since this is an internal class, and
     // we know what is going on.

@@ -211,9 +211,7 @@ namespace Lemma {
             #endif
 
             /** Returns the name of the underlying class, similiar to Python's type */
-            virtual inline std::string GetName() const {
-                return CName;
-            }
+            virtual std::string GetName() const ;
 
         private:
 

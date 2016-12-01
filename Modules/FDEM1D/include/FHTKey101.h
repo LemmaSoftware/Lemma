@@ -88,9 +88,7 @@ namespace Lemma {
         // ====================  ACCESS        =======================
 
         // ====================  INQUIRY       =======================
-        virtual inline std::string GetName() const {
-            return CName;
-        }
+        virtual std::string GetName() const;
 
         protected:
 

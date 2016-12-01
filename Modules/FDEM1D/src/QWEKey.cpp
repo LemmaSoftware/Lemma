@@ -102,6 +102,15 @@ namespace Lemma {
 
     //--------------------------------------------------------------------------------------
     //       Class:  QWEKey
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string QWEKey::GetName (  ) const {
+        return CName;
+    }		// -----  end of method QWEKey::GetName  -----
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  QWEKey
     //      Method:  Zgauss
     //--------------------------------------------------------------------------------------
     Complex QWEKey::Zgauss ( const int &ikk, const EMMODE &imode,

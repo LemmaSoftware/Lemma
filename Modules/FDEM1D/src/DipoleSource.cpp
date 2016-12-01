@@ -107,6 +107,15 @@ namespace Lemma {
         return Obj;
     }
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  DipoleSource
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string DipoleSource::GetName (  ) const {
+        return CName;
+    }		// -----  end of method DipoleSource::GetName  -----
+
     // ====================  ACCESS        ======================
     void DipoleSource::SetLocation(const Vector3r &posin) {
         this->Location = posin;

@@ -80,6 +80,14 @@ namespace Lemma {
         return std::make_shared<WireAntenna> ( node, ctor_key() );
     }		// -----  end of method WireAntenna::DeSerialize  -----
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  WireAntenna
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string WireAntenna::GetName (  ) const {
+        return CName;
+    }		// -----  end of method WireAntenna::GetName  -----
 
     // ====================  ACCESS        =======================
 

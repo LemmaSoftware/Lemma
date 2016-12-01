@@ -93,6 +93,14 @@ namespace Lemma {
 		return copy;
 	}
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  PolygonalWireAntenna
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string PolygonalWireAntenna::GetName (  ) const {
+        return CName;
+    }		// -----  end of method PolygonalWireAntenna::GetName  -----
 
     void PolygonalWireAntenna::SetMinDipoleRatio (const Real& ratio) {
         minDipoleRatio = ratio;

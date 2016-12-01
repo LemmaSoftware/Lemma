@@ -74,6 +74,15 @@ namespace Lemma {
         return node;
     }
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  LayeredEarthEM
+    //      Method:  GetName
+    // Description:  Class identifier
+    //--------------------------------------------------------------------------------------
+    inline std::string LayeredEarthEM::GetName (  ) const {
+        return CName;
+    }		// -----  end of method LayeredEarthEM::GetName  -----
+
     // ====================  OPERATIONS    ===================================
     void LayeredEarthEM::EvaluateColeColeModel(const Real& omega) {
 
