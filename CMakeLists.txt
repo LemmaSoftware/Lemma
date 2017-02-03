@@ -18,10 +18,6 @@ if(NOT HAVEGIT)
   message(FATAL_ERROR "Lemma requires that git is installed and in the path of your machine")
 endif(NOT HAVEGIT)
 
-FIND_PROGRAM(HAVEHG hg
-  PATHS /usr/bin/ /bin ENV PATH NO_DEFAULT_PATH
-)
-
 option(BUILD_SHARED_LIBS OFF)
 if(BUILD_SHARED_LIBS)
 	set(LABEL_SUFFIX "shared")
@@ -29,9 +25,12 @@ else()
 	set(LABEL_SUFFIX "static")
 endif()
 
-if (NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "Release")
-endif()
+if(NOT CMAKE_BUILD_TYPE)
+   set(CMAKE_BUILD_TYPE "Release" CACHE STRING
+       "Choose the type of build, options are: Debug Release
+        RelWithDebInfo MinSizeRel."
+       FORCE)
+endif(NOT CMAKE_BUILD_TYPE)
 
 ###################
 # External Projects
@@ -44,29 +43,33 @@ include(ExternalProject)
 #	# do nothing
 #	include_directories(EIGEN3_INCLUDE_DIR)
 #else() 
+
+FIND_PROGRAM( HAVEHG hg
+  PATHS /usr/bin/ /bin ENV PATH NO_DEFAULT_PATH
+)
 if (HAVEHG)
 	ExternalProject_Add(EIGEN
 	HG_REPOSITORY  "https://bitbucket.org/eigen/eigen/"
 	UPDATE_COMMAND ""
-	HG_TAG "default"
+	HG_TAG "3.3.2" #"default"
    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 )
-ELSE() 
-# Stable Eigen
-ExternalProject_Add(EIGEN
-   	URL "http://bitbucket.org/eigen/eigen/get/default.tar.gz" # tip from repo
+ELSE()
+	# Use Stable Eigen instead
+	ExternalProject_Add(EIGEN
+	#URL "http://bitbucket.org/eigen/eigen/get/default.tar.gz" # tip from repo
+    URL "http://bitbucket.org/eigen/eigen/get/3.3.2.tar.gz"
    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
-)
+	)	
 ENDIF()
 include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3")
-#endif()
 
 # Yaml-cpp, this library is used extensively for serialisation of classes (class persistence) 
 ExternalProject_Add(YAML-CPP
 	GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
-	GIT_TAG  "master"
+	GIT_TAG   "master" #"release-0.5.3" #"master"
 	UPDATE_COMMAND ""
 	PATCH_COMMAND ""
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
@@ -177,7 +180,7 @@ option (LEMMA_USE_BOOST "Boost is required by gaussian quadrature classes" OFF)
 if (LEMMA_USE_BOOST)
 	find_package(Boost
   		1.58.0                         # Minimum or EXACT version e.g. 1.36.0
-  		COMPONENTS math                # Boost libraries by their canonical name
+#  		COMPONENTS math                # Boost libraries by their canonical name
 	)  
 	if(Boost_FOUND)
   		include_directories(${Boost_INCLUDE_DIRS})
