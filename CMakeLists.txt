@@ -36,14 +36,9 @@ endif(NOT CMAKE_BUILD_TYPE)
 # External Projects
 ###################
 include(ExternalProject)
+##########################################################################################
 # Eigen, this header-library is used extensively for linear algebra, matrices, and arrays
 # Mercurial (hg) repo pull, Would it be better to just download latest stable?
-#find_package(Eigen3 REQUIRED)
-#if (EIGEN3_FOUND)
-#	# do nothing
-#	include_directories(EIGEN3_INCLUDE_DIR)
-#else() 
-
 FIND_PROGRAM( HAVEHG hg
   PATHS /usr/bin/ /bin ENV PATH NO_DEFAULT_PATH
 )
@@ -66,6 +61,7 @@ ELSE()
 ENDIF()
 include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3")
 
+#############################################################################################
 # Yaml-cpp, this library is used extensively for serialisation of classes (class persistence) 
 ExternalProject_Add(YAML-CPP
 	GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
