@@ -169,6 +169,8 @@ namespace Lemma {
     //       Class:  QWEKey
     //      Method:  BesselWeights
     //--------------------------------------------------------------------------------------
+
+#ifdef HAVE_BOOST_SPECIAL_FUNCTIONS
     void QWEKey::BesselWeights ( const sZeroType& sType ) {
         GaussQuadWeights(nQuad); // TODO should this be moved out of initializer?
         std::vector<Real> bz;
@@ -207,7 +209,11 @@ namespace Lemma {
         }
         return ;
     }		// -----  end of method QWEKey::BesselWeights  -----
-
+#else
+    void QWEKey::BesselWeights ( const sZeroType& sType ) {
+        std::cerr <<  "QWEKey requires boost special functions";
+    }
+#endif
 
     //--------------------------------------------------------------------------------------
     //       Class:  QWEKey

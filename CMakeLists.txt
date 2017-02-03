@@ -171,6 +171,24 @@ if ( KIHA_EM1D )
 endif()
 
 ####################
+# Look for Boost
+####################
+option (LEMMA_USE_BOOST "Boost is required by gaussian quadrature classes" OFF)
+if (LEMMA_USE_BOOST)
+	find_package(Boost
+  		1.58.0                         # Minimum or EXACT version e.g. 1.36.0
+  		COMPONENTS math                # Boost libraries by their canonical name
+	)  
+	if(Boost_FOUND)
+  		include_directories(${Boost_INCLUDE_DIRS})
+	endif()
+	find_path( HAVE_BOOST_SPECIAL_FUNCTIONS "boost/math/special_functions.hpp" ) 
+	if(HAVE_BOOST_SPECIAL_FUNCTIONS)
+		add_compile_options(-DHAVE_BOOST_SPECIAL_FUNCTIONS)
+	endif()
+endif()
+
+####################
 # Magic rpath flag
 ####################
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)

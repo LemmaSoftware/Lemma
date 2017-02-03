@@ -22,8 +22,11 @@
 #include "HankelTransform.h"
 
 #include <Eigen/Eigenvalues>
+
+#ifdef HAVE_BOOST_SPECIAL_FUNCTIONS
 #include "boost/math/special_functions.hpp"
 #include "boost/math/special_functions/bessel.hpp"
+#endif
 
 namespace Lemma {
 

@@ -14,9 +14,10 @@
 
 #include "HankelTransform.h"
 #include "KernelEM1DBase.h"
-//#include <cmath>
-#include "boost/math/special_functions.hpp"
 
+#ifdef HAVE_BOOST_SPECIAL_FUNCTIONS
+#include "boost/math/special_functions.hpp"
+#endif
 
 namespace Lemma {
 

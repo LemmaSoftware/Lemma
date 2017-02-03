@@ -1117,6 +1117,7 @@ namespace Lemma{
 
     /////////////////////////////////////////////////////////////
     //
+#ifdef HAVE_BOOST_SPECIAL_FUNCTIONS
     Real GQChave::Jbess(const Real &x, const int &IORDER) {
         switch (IORDER) {
             case 0:
@@ -1131,7 +1132,11 @@ namespace Lemma{
                 throw std::runtime_error("Non 0 or 1 Bessel argument specified in GQChave");
         }
     }
-
+#else
+    Real GQChave::Jbess(const Real &x, const int &IORDER) {
+        std::cerr << "GQChave requires boost special functions module";
+    }
+#endif
     //////////////////////////////////////////////////////
     // Exception classes
 
