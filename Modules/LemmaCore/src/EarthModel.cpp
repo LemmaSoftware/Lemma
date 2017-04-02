@@ -79,7 +79,7 @@ namespace Lemma {
 		BMag = bfield.norm(  );
 	    BInc = std::acos (bfield.dot(Vector3r(0,0,1)) / BMag) ;
 	    BDec = std::acos (bfield.dot(Vector3r(1,0,0)) / BMag) ;
-		BFieldUnit = BField.array() / BMag;
+		BFieldUnit = BField / BField.norm();
  	}
 
 	void EarthModel::SetMagneticFieldIncDecMag(const Real &inc,
@@ -104,7 +104,7 @@ namespace Lemma {
 		BField(0) = BMag * cos(BInc*(PI/180.)) * cos(BDec*(PI/180.));
 		BField(1) = BMag * cos(BInc*(PI/180.)) * sin(BDec*(PI/180.));
 		BField(2) = BMag * sin(BInc*(PI/180.))  ;
-		BFieldUnit = BField.array() / BMag;
+		BFieldUnit = BField / BField.norm();
 	}
 
 	// ====================  INQUIRY       =======================
@@ -118,7 +118,7 @@ namespace Lemma {
 	}
 
 	Vector3r EarthModel::GetMagneticFieldUnitVector() {
-		return this->BFieldUnit;
+		return BField/BField.norm();
 	}
 
 	Real  EarthModel::GetMagneticFieldMagnitude() {
