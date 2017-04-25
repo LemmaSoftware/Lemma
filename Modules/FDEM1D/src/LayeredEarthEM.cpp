@@ -26,21 +26,41 @@ namespace Lemma {
     }
 
     LayeredEarthEM::LayeredEarthEM( const YAML::Node& node, const ctor_key& ) : LayeredEarth(node) {
-
-        LayerConductivity = node["LayerConductivity"].as<VectorXcr>();
-
-        LayerSusceptibility = node["LayerSusceptibility"].as<VectorXcr>();
-        LayerLowFreqSusceptibility = node["LayerLowFreqSusceptibility"].as<VectorXr>();
-        LayerHighFreqSusceptibility = node["LayerHighFreqSusceptibility"].as<VectorXr>();
-        LayerTauSusceptibility = node["LayerTauSusceptibility"].as<VectorXr>();
-        LayerBreathSusceptibility = node["LayerBreathSusceptibility"].as<VectorXr>();
-
-        LayerPermitivity = node["LayerPermitivity"].as<VectorXcr>();
-        LayerLowFreqPermitivity = node["LayerLowFreqPermitivity"].as<VectorXr>();
-        LayerHighFreqPermitivity = node["LayerHighFreqPermitivity"].as<VectorXr>();
-        LayerTauPermitivity = node["LayerTauPermitivity"].as<VectorXr>();
-        LayerBreathPermitivity = node["LayerBreathPermitivity"].as<VectorXr>();
-
+        SetNumberOfLayers(NumberOfLayers);
+        LayerThickness = node["LayerThickness"].as<VectorXr>();
+        if (node["LayerConductivity"]) {
+            LayerConductivity = node["LayerConductivity"].as<VectorXcr>();
+        }
+        if (node["LayerSusceptibility"]) {
+            LayerSusceptibility = node["LayerSusceptibility"].as<VectorXcr>();
+        }
+        if (node["LayerLowFreqSusceptibility"]) {
+            LayerLowFreqSusceptibility = node["LayerLowFreqSusceptibility"].as<VectorXr>();
+        }
+        if (node["LayerHighFreqSusceptibility"]) {
+            LayerHighFreqSusceptibility = node["LayerHighFreqSusceptibility"].as<VectorXr>();
+        }
+        if (node["LayerTauSusceptibility"]) {
+            LayerTauSusceptibility = node["LayerTauSusceptibility"].as<VectorXr>();
+        }
+        if (node["LayerBreathSusceptibility"]) {
+            LayerBreathSusceptibility = node["LayerBreathSusceptibility"].as<VectorXr>();
+        }
+        if (node["LayerPermitivity"]) {
+            LayerPermitivity = node["LayerPermitivity"].as<VectorXcr>();
+        }
+        if (node["LayerLowFreqPermitivity "]) {
+            LayerLowFreqPermitivity = node["LayerLowFreqPermitivity"].as<VectorXr>();
+        }
+        if (node["LayerHighFreqPermitivity "]) {
+            LayerHighFreqPermitivity = node["LayerHighFreqPermitivity"].as<VectorXr>();
+        }
+        if (node["LayerTauPermitivity"]) {
+            LayerTauPermitivity = node["LayerTauPermitivity"].as<VectorXr>();
+        }
+        if (node["LayerBreathPermitivity"]) {
+            LayerBreathPermitivity = node["LayerBreathPermitivity"].as<VectorXr>();
+        }
     }
 
     LayeredEarthEM::~LayeredEarthEM() {
