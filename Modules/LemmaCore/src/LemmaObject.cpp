@@ -15,11 +15,12 @@
 
 namespace Lemma {
 
-    YAML::Emitter& operator << (YAML::Emitter& out, const LemmaObject& ob) {
-        out << YAML::BeginMap;
-        out << YAML::Key <<"Class Name"    << YAML::Value << ob.GetName();
-        return out;
-    }
+//     YAML::Emitter& operator << (YAML::Emitter& out, const LemmaObject& ob) {
+//         out << YAML::Flow;
+//         out << YAML::BeginMap;
+//         out << YAML::Key <<"Class Name"    << YAML::Value << ob.GetName();
+//         return out;
+//     }
 
     // ====================  LIFECYCLE     ==============================
 

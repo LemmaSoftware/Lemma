@@ -13,6 +13,7 @@
  * @version   $Id$
  * @author    Trevor Irons (ti)
  * @email     Trevor.Irons@xri-geo.com
+ * @copyright Copyright (c) 2017, University of Utah
  * @copyright Copyright (c) 2014, XRI Geophysics, LLC
  * @copyright Copyright (c) 2014, Trevor Irons
  */
@@ -292,24 +293,27 @@ struct convert<Lemma::MatrixXr> {
     node["cols"] = rhs.cols();
     for (int ir=0; ir<rhs.rows(); ++ir) {
         for (int ic=0; ic<rhs.cols(); ++ic) {
-            node["data"].push_back( rhs(ir,ic) );
+            node[ir][ic] = rhs(ir,ic);
         }
+        node[ir].SetStyle(YAML::EmitterStyle::Flow);
     }
+    //node.SetStyle(YAML::EmitterStyle::Block);
     node.SetTag( "MatrixXr" );
     return node;
   }
 
-//   static bool decode(const Node& node, Lemma::Vector3r& rhs) {
-//     if( node.Tag() != "Vector3r" ) {
-//         return false;
-//     }
-//     int ir=0;
-//     for(YAML::const_iterator it=node[0].begin(); it!=node[0].end(); ++it) {
-//         rhs(ir) = it->as<Lemma::Real>();
-//         ++ir;
-//     }
-//     return true;
-//   }
+  static bool decode(const Node& node, Lemma::MatrixXr& rhs) {
+    if( node.Tag() != "MatrixXr" ) {
+        return false;
+    }
+    rhs.resize( node["rows"].as<int>(), node["cols"].as<int>() );
+    int ir=0;
+    for(YAML::const_iterator it=node[0].begin(); it!=node[0].end(); ++it) {
+        rhs(ir) = it->as<Lemma::Real>();
+        ++ir;
+    }
+    return true;
+  }
 
 };
 

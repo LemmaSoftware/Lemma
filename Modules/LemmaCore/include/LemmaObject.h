@@ -39,7 +39,7 @@ class LemmaObject {
     /**
      *  Streams class information as YAML::Node
      */
-    friend YAML::Emitter& operator << (YAML::Emitter& out, const LemmaObject &ob) ;
+    //friend YAML::Emitter& operator << (YAML::Emitter& out, const LemmaObject &ob) ;
 
     friend class LemmaObjectDeleter;
 
@@ -64,6 +64,7 @@ class LemmaObject {
         virtual YAML::Node Serialize() const {
             std::cout.precision( 20 );
             YAML::Node node = YAML::Node();
+            //node.SetStyle(YAML::EmitterStyle::Flow);
             node.SetTag( GetName() );
             std::time_t now = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
             std::string ser_time =  std::string( std::ctime(&now) );
