@@ -28,6 +28,7 @@ namespace Lemma {
 	class LayeredEarth : public EarthModel {
 
         friend class LayeredEarthEM;
+        friend class LayeredEarthMR;
 
 		public:
 

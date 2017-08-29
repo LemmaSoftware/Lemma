@@ -284,6 +284,35 @@ struct convert<Lemma::Vector3r> {
   }
 };
 
+template<>
+struct convert<Lemma::MatrixXr> {
+  static Node encode(const Lemma::MatrixXr& rhs) {
+    Node node;
+    node["rows"] = rhs.rows();
+    node["cols"] = rhs.cols();
+    for (int ir=0; ir<rhs.rows(); ++ir) {
+        for (int ic=0; ic<rhs.cols(); ++ic) {
+            node["data"].push_back( rhs(ir,ic) );
+        }
+    }
+    node.SetTag( "MatrixXr" );
+    return node;
+  }
+
+//   static bool decode(const Node& node, Lemma::Vector3r& rhs) {
+//     if( node.Tag() != "Vector3r" ) {
+//         return false;
+//     }
+//     int ir=0;
+//     for(YAML::const_iterator it=node[0].begin(); it!=node[0].end(); ++it) {
+//         rhs(ir) = it->as<Lemma::Real>();
+//         ++ir;
+//     }
+//     return true;
+//   }
+
+};
+
 }
 
 #endif   // ----- #ifndef HELPER_INC  -----
