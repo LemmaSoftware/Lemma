@@ -209,7 +209,7 @@ class |?CLASSNAME:c| : public |BASECLASS:c| {
         // ====================  LIFECYCLE     =======================
 
         /** Copy is disabled */
-        |CLASSNAME|( const CLASSNAME& ) = delete;
+        |CLASSNAME|( const |CLASSNAME|& ) = delete;
 
     	// ====================  DATA MEMBERS  =========================
 
