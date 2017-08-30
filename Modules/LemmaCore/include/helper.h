@@ -306,11 +306,15 @@ struct convert<Lemma::MatrixXr> {
     if( node.Tag() != "MatrixXr" ) {
         return false;
     }
-    rhs.resize( node["rows"].as<int>(), node["cols"].as<int>() );
-    int ir=0;
-    for(YAML::const_iterator it=node[0].begin(); it!=node[0].end(); ++it) {
-        rhs(ir) = it->as<Lemma::Real>();
-        ++ir;
+    int nc = node["cols"].as<int>();
+    int nr = node["rows"].as<int>();
+    rhs.resize(nr, nc);
+    for (int ir=0; ir<nr; ++ir) {
+        int ic=0;
+        for(YAML::const_iterator it=node[ir].begin(); it!=node[ir].end(); ++it) {
+            rhs(ir,ic) = it->as<Lemma::Real>();
+            ++ic;
+        }
     }
     return true;
   }
