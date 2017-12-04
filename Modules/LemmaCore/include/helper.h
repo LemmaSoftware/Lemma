@@ -266,7 +266,7 @@ struct convert<Lemma::Vector3r> {
   static Node encode(const Lemma::Vector3r& rhs) {
     Node node;
     for (int ic=0; ic<rhs.size(); ++ic) {
-        node[0].push_back( rhs(ic) );
+        node["data"].push_back( rhs(ic) );
     }
     node.SetTag( "Vector3r" );
     return node;
@@ -277,7 +277,7 @@ struct convert<Lemma::Vector3r> {
         return false;
     }
     int ir=0;
-    for(YAML::const_iterator it=node[0].begin(); it!=node[0].end(); ++it) {
+    for(YAML::const_iterator it=node["data"].begin(); it!=node["data"].end(); ++it) {
         rhs(ir) = it->as<Lemma::Real>();
         ++ir;
     }
