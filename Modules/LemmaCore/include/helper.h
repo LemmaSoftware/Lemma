@@ -321,6 +321,42 @@ struct convert<Lemma::MatrixXr> {
 
 };
 
+template<>
+struct convert<Lemma::MatrixXcr> {
+  static Node encode(const Lemma::MatrixXcr& rhs) {
+    Node node;
+    node["rows"] = rhs.rows();
+    node["cols"] = rhs.cols();
+    for (int ir=0; ir<rhs.rows(); ++ir) {
+        for (int ic=0; ic<rhs.cols(); ++ic) {
+            node["data"][ir][ic] = rhs(ir,ic);
+        }
+        node["data"][ir].SetStyle(YAML::EmitterStyle::Flow);
+    }
+    //node.SetStyle(YAML::EmitterStyle::Block);
+    node.SetTag( "MatrixXcr" );
+    return node;
+  }
+
+  static bool decode(const Node& node, Lemma::MatrixXcr& rhs) {
+    if( node.Tag() != "MatrixXcr" ) {
+        return false;
+    }
+    int nc = node["cols"].as<int>();
+    int nr = node["rows"].as<int>();
+    rhs.resize(nr, nc);
+    for (int ir=0; ir<nr; ++ir) {
+        int ic=0;
+        for(YAML::const_iterator it=node["data"][ir].begin(); it!=node["data"][ir].end(); ++it) {
+            rhs(ir,ic) = it->as<Lemma::Complex>();
+            ++ic;
+        }
+    }
+    return true;
+  }
+
+};
+
 }
 
 #endif   // ----- #ifndef HELPER_INC  -----
