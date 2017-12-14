@@ -30,7 +30,6 @@ namespace Lemma {
     }
 
     LemmaObject::LemmaObject(const YAML::Node &node) {
-
     }
 
     // Destructor

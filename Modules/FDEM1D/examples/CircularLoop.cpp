@@ -35,7 +35,6 @@ int main(int argc, char** argv) {
     Real cy = atof(argv[3]);
     int nt = atoi(argv[4]);
     int np = atoi(argv[5]);
-    std::cout << rad << std::endl;
 
     auto wire = PolygonalWireAntenna::NewSP();
         wire->SetNumberOfPoints(np);
