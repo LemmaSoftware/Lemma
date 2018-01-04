@@ -803,13 +803,13 @@ HTML_FILE_EXTENSION    = .html
 # each generated HTML page. If it is left blank doxygen will generate a
 # standard header.
 
-HTML_HEADER            =
+#HTML_HEADER            = #Documentation/header.html
 
 # The HTML_FOOTER tag can be used to specify a personal HTML footer for
 # each generated HTML page. If it is left blank doxygen will generate a
 # standard footer.
 
-HTML_FOOTER            =
+#HTML_FOOTER            = Documentation/footer.html 
 
 # If the HTML_TIMESTAMP tag is set to YES then the generated HTML
 # documentation will contain the timesstamp.
@@ -1025,7 +1025,7 @@ ECLIPSE_DOC_ID         = org.doxygen.Project
 # top of each HTML page. The value NO (the default) enables the index and
 # the value YES disables it.
 
-DISABLE_INDEX          = NO
+DISABLE_INDEX          = YES
 
 # This tag can be used to set the number of enum values (range [1..20])
 # that doxygen will group on one line in the generated HTML documentation.
@@ -1040,7 +1040,7 @@ ENUM_VALUES_PER_LINE   = 4
 # JavaScript, DHTML, CSS and frames is required (i.e. any modern browser).
 # Windows users are probably better off using the HTML help feature.
 
-GENERATE_TREEVIEW      = NONE
+GENERATE_TREEVIEW      = YES
 
 # By enabling USE_INLINE_TREES, doxygen will generate the Groups, Directories,
 # and Class Hierarchy pages using a tree view instead of an ordered list.

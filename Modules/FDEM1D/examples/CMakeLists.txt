@@ -18,4 +18,5 @@ INSTALL_TARGETS( "/share/FEM1D/"
 	FieldPoints
 	PolygonalWireAntenna
 	EMDipEarth1D
+    CircularLoop
 )
