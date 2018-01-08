@@ -12,9 +12,8 @@
  * @date      09/27/2013 01:44:36 PM
  * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2013, XRI Geophysics, LLC
- * @copyright Copyright (c) 2013, Trevor Irons
+ * @email     Trevor.Irons@lemmasoftware.org
+ * @copyright Copyright (c) 2013, 2018 Trevor Irons
  */
 
 #ifndef  LAYEREDEARTHEMREADER_INC
@@ -22,7 +21,7 @@
 
 #include "LemmaObject.h"
 #include "ASCIIParser.h"
-#include "layeredearthem.h"
+#include "LayeredEarthEM.h"
 
 namespace Lemma {
 
@@ -32,8 +31,13 @@ namespace Lemma {
      */
     class LayeredEarthEMReader : public LemmaObject {
 
+		friend std::ostream &operator<<(std::ostream &stream,
+			const LayeredEarthEMReader &ob);
+
         friend std::ostream &operator<<(std::ostream &stream,
                 const LayeredEarthEMReader &ob);
+
+        struct ctor_key{};
 
         public:
 

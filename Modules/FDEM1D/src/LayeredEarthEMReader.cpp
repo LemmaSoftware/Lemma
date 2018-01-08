@@ -12,9 +12,8 @@
  * @date      09/27/2013 01:44:46 PM
  * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2013, XRI Geophysics, LLC
- * @copyright Copyright (c) 2013, Trevor Irons
+ * @email     Trevor.Irons@lemmasoftware.org
+ * @copyright Copyright (c) 2013-2018 Trevor Irons
  */
 
 #include "LayeredEarthEMReader.h"
