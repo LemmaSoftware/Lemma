@@ -22,7 +22,7 @@ namespace Lemma {
 
     // ====================  LIFECYCLE     ===================================
 
-    LayeredEarthEM::LayeredEarthEM( const ctor_key& ) : LayeredEarth() {
+    LayeredEarthEM::LayeredEarthEM( const ctor_key& key ) : LayeredEarth( LayeredEarth::ctor_key() ) {
     }
 
     LayeredEarthEM::LayeredEarthEM( const YAML::Node& node, const ctor_key& ) : LayeredEarth(node) {

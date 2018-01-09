@@ -2,6 +2,7 @@ set (FDEM1DSOURCE
 	${FDEM1DSOURCE}
 
 	${CMAKE_CURRENT_SOURCE_DIR}/LayeredEarthEM.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/LayeredEarthEMReader.cpp
 	
 	${CMAKE_CURRENT_SOURCE_DIR}/FieldPoints.cpp
 	

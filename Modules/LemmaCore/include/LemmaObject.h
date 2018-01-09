@@ -41,9 +41,11 @@ class LemmaObject {
      */
     //friend YAML::Emitter& operator << (YAML::Emitter& out, const LemmaObject &ob) ;
 
-    friend class LemmaObjectDeleter;
+    protected:
+        struct ctor_key{};
 
     public:
+
         // Needed because many derived classes have Eigen vectors as members,
         // causing alignment issues when vectorisation is enabled.
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -95,11 +97,12 @@ class LemmaObject {
         /** Protected default constructor. This is an abstract class and
          *  cannot be instantiated.
          */
-        LemmaObject ( );
+        LemmaObject ( const ctor_key& );
 
         /** Protected DeSerializing constructor */
-        LemmaObject (const YAML::Node& node);
+        LemmaObject ( const YAML::Node& node, const ctor_key& );
 
+        /** Disable copying Lemma Object */
         LemmaObject( const LemmaObject& ) = delete;
 
         /** Protected default destructor. This is an abstract class and
@@ -116,12 +119,6 @@ class LemmaObject {
         static constexpr auto CName = "LemmaObject";
 
 }; // -----  end of class  LemmaObject  -----
-
-class LemmaObjectDeleter
-{
-    public:
-        void operator()(LemmaObject* p) { delete p; }
-};
 
     /////////////////////////////////////////////////////////////////
     // Error Classes

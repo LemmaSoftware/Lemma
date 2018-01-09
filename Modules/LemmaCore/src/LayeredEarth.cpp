@@ -24,7 +24,7 @@ namespace Lemma {
 
 	// ====================  LIFECYCLE     ===================================
 
-	LayeredEarth::LayeredEarth( ) : EarthModel( ),
+	LayeredEarth::LayeredEarth( const ctor_key& key ) : EarthModel( ),
 		NumberOfLayers(0), 	NumberOfInterfaces(0) {
 	}
 

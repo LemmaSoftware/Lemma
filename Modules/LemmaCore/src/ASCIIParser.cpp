@@ -35,7 +35,7 @@ namespace Lemma {
     //      Method:  ASCIIParser
     // Description:  constructor (locked)
     //--------------------------------------------------------------------------------------
-    ASCIIParser::ASCIIParser ( const ctor_key& ) : LemmaObject( ), input(),
+    ASCIIParser::ASCIIParser ( const ctor_key& key ) : LemmaObject( key ), input(),
             CommentString("//"), BufferSize(255) {
 
     }  // -----  end of method ASCIIParser::ASCIIParser  (constructor)  -----
@@ -96,7 +96,7 @@ namespace Lemma {
     //      Method:  ASCIIParser
     // Description:  DeSerializing constructor (protected)
     //--------------------------------------------------------------------------------------
-    ASCIIParser::ASCIIParser (const YAML::Node& node, const ctor_key&  key) : LemmaObject(node) {
+    ASCIIParser::ASCIIParser (const YAML::Node& node, const ctor_key&  key) : LemmaObject(node, key) {
         this->CommentString = node["CommentString"].as<std::string>();
         this->BufferSize = node["BufferSize"].as<int>();
     }  // -----  end of method ASCIIParser::ASCIIParser  (constructor)  -----

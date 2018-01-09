@@ -26,16 +26,13 @@
 namespace Lemma {
 
     /**
-      \brief
-      \details
+      \brief Reads ASCII representation of LayeredEarth, similiar to UBC format.
+      \details Largely superceded by YAML serialisation, this class remains for legacy purposes.
      */
     class LayeredEarthEMReader : public LemmaObject {
 
 		friend std::ostream &operator<<(std::ostream &stream,
 			const LayeredEarthEMReader &ob);
-
-        friend std::ostream &operator<<(std::ostream &stream,
-                const LayeredEarthEMReader &ob);
 
         struct ctor_key{};
 
@@ -44,16 +41,28 @@ namespace Lemma {
         // ====================  LIFECYCLE     =======================
 
         /**
-         * @copybrief LemmaObject::New()
-         * @copydetails LemmaObject::New()
+         * @copybrief LemmaObject::NewSP()
+         * @copydetails LemmaObject::NewSP()
          */
-        static LayeredEarthEMReader* New();
+        static std::shared_ptr<LayeredEarthEMReader> NewSP();
+
+        /** Default locked constructor, use New */
+        explicit LayeredEarthEMReader ( const ctor_key& );
+
+        /** Locked deserializing constructor. */
+			LayeredEarthEMReader ( const YAML::Node& node, const ctor_key& );
+
+        /** Default destructor */
+        virtual ~LayeredEarthEMReader ();
+
+        /** YAML Serializing method
+         */
+        YAML::Node Serialize() const;
 
         /**
-         *  @copybrief   LemmaObject::Delete()
-         *  @copydetails LemmaObject::Delete()
+         *   Constructs an object from a YAML::Node.
          */
-        void Delete();
+        static std::shared_ptr< LayeredEarthEMReader > DeSerialize(const YAML::Node& node);
 
         // ====================  OPERATORS     =======================
 
@@ -79,27 +88,23 @@ namespace Lemma {
 
         // ====================  INQUIRY       =======================
 
+        /** Returns the name of the underlying class, similiar to Python's type */
+        virtual std::string GetName() const {
+            return this->CName;
+        }
+
         protected:
 
         // ====================  LIFECYCLE     =======================
-
-        /** Default protected constructor, use New */
-        LayeredEarthEMReader (const std::string& name);
-
-        /** Default protected destructor, use Delete */
-        ~LayeredEarthEMReader ();
-
-        /**
-         *  @copybrief   LemmaObject::Release()
-         *  @copydetails LemmaObject::Release()
-         */
-        void Release();
 
         private:
 
         // ====================  DATA MEMBERS  =========================
 
         LayeredEarthEM*         LayEarth;
+
+        /** ASCII string representation of the class name */
+        static constexpr auto CName = "LayeredEarthEMReader";
 
     }; // -----  end of class  LayeredEarthEMReader  -----
 

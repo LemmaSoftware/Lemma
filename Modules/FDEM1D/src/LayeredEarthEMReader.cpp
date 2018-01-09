@@ -22,12 +22,11 @@ namespace Lemma {
 
     // ====================  FRIEND METHODS  =====================
 
-    std::ostream &operator<<(std::ostream &stream, const LayeredEarthEMReader &ob) {
-
-        stream << *(LemmaObject*)(&ob);
-
+    std::ostream &operator << (std::ostream &stream, const LayeredEarthEMReader &ob) {
+        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
         return stream;
     }
+
 
     // ====================  LIFECYCLE     =======================
 
@@ -36,8 +35,8 @@ namespace Lemma {
     //      Method:  LayeredEarthEMReader
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    LayeredEarthEMReader::LayeredEarthEMReader (const std::string& name) : LemmaObject(name),
-        LayEarth(NULL) {
+    LayeredEarthEMReader::LayeredEarthEMReader ( const ctor_key& key ) : LemmaObject(),
+        LayEarth(nullptr) {
 
     }  // -----  end of method LayeredEarthEMReader::LayeredEarthEMReader  (constructor)  -----
 
