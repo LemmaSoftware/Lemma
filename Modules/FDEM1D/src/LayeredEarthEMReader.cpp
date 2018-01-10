@@ -35,7 +35,7 @@ namespace Lemma {
     //      Method:  LayeredEarthEMReader
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    LayeredEarthEMReader::LayeredEarthEMReader ( const ctor_key& key ) : LemmaObject(),
+    LayeredEarthEMReader::LayeredEarthEMReader ( const ctor_key& key ) : LemmaObject( key ),
         LayEarth(nullptr) {
 
     }  // -----  end of method LayeredEarthEMReader::LayeredEarthEMReader  (constructor)  -----
@@ -46,10 +46,8 @@ namespace Lemma {
     //      Method:  New()
     // Description:  public constructor
     //--------------------------------------------------------------------------------------
-    LayeredEarthEMReader* LayeredEarthEMReader::New() {
-        LayeredEarthEMReader*  Obj = new LayeredEarthEMReader("LayeredEarthEMReader");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<LayeredEarthEMReader> LayeredEarthEMReader::NewSP() {
+        return std::make_shared<LayeredEarthEMReader>( ctor_key() );
     }
 
     //--------------------------------------------------------------------------------------
@@ -58,33 +56,13 @@ namespace Lemma {
     // Description:  destructor (protected)
     //--------------------------------------------------------------------------------------
     LayeredEarthEMReader::~LayeredEarthEMReader () {
-        if (LayEarth) LayEarth->Delete();
     }  // -----  end of method LayeredEarthEMReader::~LayeredEarthEMReader  (destructor)  -----
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  LayeredEarthEMReader
-    //      Method:  Delete
-    // Description:  public destructor
-    //--------------------------------------------------------------------------------------
-    void LayeredEarthEMReader::Delete() {
-        this->DetachFrom(this);
-    }
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  LayeredEarthEMReader
-    //      Method:  Release
-    // Description:  destructor (protected)
-    //--------------------------------------------------------------------------------------
-    void LayeredEarthEMReader::Release() {
-        delete this;
-    }
-
 
     //--------------------------------------------------------------------------------------
     //       Class:  LayeredEarthEMReader
     //      Method:  GetLayeredEarth
     //--------------------------------------------------------------------------------------
-    LayeredEarthEM* LayeredEarthEMReader::GetLayeredEarth (  ) {
+    std::shared_ptr<LayeredEarthEM> LayeredEarthEMReader::GetLayeredEarth (  ) {
         return LayEarth;
     }		// -----  end of method LayeredEarthEMReader::GetLayeredEarth  -----
 
@@ -94,9 +72,9 @@ namespace Lemma {
     //      Method:  ReadASCIIInputFile
     //--------------------------------------------------------------------------------------
     void LayeredEarthEMReader::ReadASCIIInputFile ( const std::string& name ) {
-        if (LayEarth) LayEarth->Delete();
-        ASCIIParser* Parser = ASCIIParser::New();
-        LayEarth = LayeredEarthEM::New();
+
+        auto Parser = ASCIIParser::NewSP();
+        LayEarth = LayeredEarthEM::NewSP();
 
         Parser->SetCommentString("//");
         Parser->Open(name);
@@ -114,7 +92,6 @@ namespace Lemma {
         sigma(nlay) = 1./Parser->ReadReals(1)[0];
         LayEarth->SetLayerConductivity(sigma);
         if (thick.size() > 0) LayEarth->SetLayerThickness(thick);
-        Parser->Delete();
         return ;
     }		// -----  end of method LayeredEarthEMReader::ReadASCIIInputFile  -----
 

@@ -34,8 +34,6 @@ namespace Lemma {
 		friend std::ostream &operator<<(std::ostream &stream,
 			const LayeredEarthEMReader &ob);
 
-        struct ctor_key{};
-
         public:
 
         // ====================  LIFECYCLE     =======================
@@ -55,14 +53,14 @@ namespace Lemma {
         /** Default destructor */
         virtual ~LayeredEarthEMReader ();
 
-        /** YAML Serializing method
+        /* YAML Serializing method
          */
-        YAML::Node Serialize() const;
+        //YAML::Node Serialize() const;
 
-        /**
+        /*
          *   Constructs an object from a YAML::Node.
          */
-        static std::shared_ptr< LayeredEarthEMReader > DeSerialize(const YAML::Node& node);
+        //static std::shared_ptr< LayeredEarthEMReader > DeSerialize(const YAML::Node& node);
 
         // ====================  OPERATORS     =======================
 
@@ -84,7 +82,7 @@ namespace Lemma {
 
         /** @return the pointer address of the LayeredEarthEM
          */
-        LayeredEarthEM* GetLayeredEarth();
+        std::shared_ptr<LayeredEarthEM> GetLayeredEarth();
 
         // ====================  INQUIRY       =======================
 
@@ -101,7 +99,7 @@ namespace Lemma {
 
         // ====================  DATA MEMBERS  =========================
 
-        LayeredEarthEM*         LayEarth;
+        std::shared_ptr<LayeredEarthEM>         LayEarth;
 
         /** ASCII string representation of the class name */
         static constexpr auto CName = "LayeredEarthEMReader";

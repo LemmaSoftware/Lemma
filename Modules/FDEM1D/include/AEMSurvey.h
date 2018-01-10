@@ -21,7 +21,7 @@
 #define  AEMSURVEY_INC
 
 #include "LemmaObject.h"
-#include "dipolesource.h"
+#include "DipoleSource.h"
 
 namespace Lemma {
 
