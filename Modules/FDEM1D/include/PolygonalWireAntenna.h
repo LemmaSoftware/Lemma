@@ -29,8 +29,6 @@ namespace Lemma {
 
         friend std::ostream &operator<<(std::ostream &stream, const PolygonalWireAntenna &ob);
 
-        struct ctor_key {};
-
         public:
 
             // ====================  LIFECYCLE     =======================

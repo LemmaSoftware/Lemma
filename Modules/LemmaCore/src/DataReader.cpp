@@ -16,15 +16,15 @@
 namespace Lemma {
 
     std::ostream &operator << (std::ostream &stream, const DataReader &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
-	DataReader::DataReader( ) : LemmaObject( ) {
+	DataReader::DataReader( const ctor_key& key ) : LemmaObject( key ) {
 
 	}
 
-    DataReader::DataReader( const YAML::Node& node ) : LemmaObject( node ) {
+    DataReader::DataReader( const YAML::Node& node, const ctor_key& key ) : LemmaObject( node, key ) {
 
 	}
 

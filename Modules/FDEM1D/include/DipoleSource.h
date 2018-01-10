@@ -46,8 +46,6 @@ namespace Lemma {
 
         friend std::ostream &operator<<(std::ostream &stream, const DipoleSource &ob);
 
-        struct ctor_key{};
-
         public:
 
             // ====================  LIFECYCLE     ======================

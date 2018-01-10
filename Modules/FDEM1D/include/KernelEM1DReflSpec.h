@@ -38,9 +38,6 @@ namespace Lemma {
     template<EMMODE Mode, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
     class KernelEM1DReflSpec : public KernelEM1DReflBase {
 
-        // TODO can we use the manager's key instead to lock for that?
-        struct ctor_key{};
-
         public:
 
             //template<EMMODE Mode2, int Ikernel2, DIPOLE_LOCATION Isource2, DIPOLE_LOCATION Irecv2>
@@ -51,7 +48,7 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /// Default locked constructor.
-            explicit KernelEM1DReflSpec ( const ctor_key& ) : KernelEM1DReflBase( ) {
+            explicit KernelEM1DReflSpec ( const ctor_key& key ) : KernelEM1DReflBase( key ) {
             }
 
             /// Default protected constructor.
@@ -72,7 +69,7 @@ namespace Lemma {
 
             virtual std::string GetName() {
                 return CName;
-            } 
+            }
 
         protected:
         private:

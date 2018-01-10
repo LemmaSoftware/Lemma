@@ -39,8 +39,6 @@ namespace Lemma {
 
         friend std::ostream &operator<<(std::ostream &stream, const FHTKey101 &ob);
 
-        struct ctor_key {};
-
         public:
 
         // ====================  LIFECYCLE     =======================

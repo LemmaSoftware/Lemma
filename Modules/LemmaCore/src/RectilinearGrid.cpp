@@ -22,11 +22,11 @@ namespace Lemma {
 
     // ====================  LIFECYCLE     =======================
 
-    RectilinearGrid::RectilinearGrid( const ctor_key& ) : Grid( ), nx(0), ny(0), nz(0) {
+    RectilinearGrid::RectilinearGrid( const ctor_key& key ) : Grid( key ), nx(0), ny(0), nz(0) {
 
     }
 
-    RectilinearGrid::RectilinearGrid( const YAML::Node& node, const ctor_key& ) : Grid(node) {
+    RectilinearGrid::RectilinearGrid( const YAML::Node& node, const ctor_key& key ) : Grid(node, key) {
 
         nx = node["nx"].as<int>( );
         ny = node["ny"].as<int>( );

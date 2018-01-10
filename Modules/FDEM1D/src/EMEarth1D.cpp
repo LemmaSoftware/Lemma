@@ -22,7 +22,7 @@
 namespace Lemma {
 
     std::ostream &operator << (std::ostream &stream, const EMEarth1D &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
@@ -70,7 +70,7 @@ namespace Lemma {
     // ====================  LIFECYCLE     ===================================
 
     // TODO init large arrays here.
-    EMEarth1D::EMEarth1D( const ctor_key& ) : LemmaObject( ),
+    EMEarth1D::EMEarth1D( const ctor_key& key ) : LemmaObject( key ),
             Dipole(nullptr), Earth(nullptr), Receivers(nullptr), Antenna(nullptr),
             FieldsToCalculate(BOTH), HankelType(ANDERSON801), icalcinner(0), icalc(0)
         //#ifdef HAVEBOOSTPROGRESS

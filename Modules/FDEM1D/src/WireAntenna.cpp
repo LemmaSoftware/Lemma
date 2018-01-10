@@ -16,17 +16,17 @@
 namespace Lemma {
 
     std::ostream &operator << (std::ostream &stream, const WireAntenna &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
     // ====================  LIFECYCLE     =======================
 
-    WireAntenna::WireAntenna( const ctor_key& ) : LemmaObject( ),
+    WireAntenna::WireAntenna( const ctor_key& key ) : LemmaObject( key ),
         NumberOfPoints(0), Current(1), NumberOfTurns(1) {
     }
 
-    WireAntenna::WireAntenna( const YAML::Node& node, const ctor_key& ) : LemmaObject( node ) {
+    WireAntenna::WireAntenna( const YAML::Node& node, const ctor_key& key ) : LemmaObject( node, key ) {
         Points =  node["Points"].as<Vector3Xr>();
         Freqs = node["Freqs"].as<VectorXr>();
         NumberOfPoints = node["NumberOfPoints"].as<int>();

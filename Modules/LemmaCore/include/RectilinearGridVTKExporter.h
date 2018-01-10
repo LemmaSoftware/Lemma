@@ -45,7 +45,7 @@ class RectilinearGridVTKExporter : public LemmaObject {
     friend std::ostream &operator<<(std::ostream &stream,
             const RectilinearGridVTKExporter &ob);
 
-    struct ctor_key {};
+    //struct ctor_key {};
 
     public:
 

@@ -54,8 +54,6 @@ namespace Lemma {
 		friend std::ostream &operator<<(std::ostream &stream,
 			const EMEarth1D &ob);
 
-        struct ctor_key{};
-
         public:
 
             //friend class KernelEm1D;

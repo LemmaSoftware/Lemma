@@ -56,10 +56,10 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /// Default protected constructor.
-            Filter ( );
+            Filter ( const ctor_key&  );
 
             /// Default protected constructor.
-            Filter ( const YAML::Node& node );
+            Filter ( const YAML::Node& node, const ctor_key& );
 
             /// Default protected constructor.
             virtual ~Filter ();

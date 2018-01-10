@@ -99,10 +99,10 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /// Default protected constructor.
-            EarthModel ( );
+            EarthModel ( const ctor_key& );
 
             /** Deserialize constructor */
-            EarthModel (const YAML::Node& node);
+            EarthModel (const YAML::Node& node, const ctor_key&);
 
             /// Default protected constructor.
             ~EarthModel ();

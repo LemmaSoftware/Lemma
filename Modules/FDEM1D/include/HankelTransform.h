@@ -75,10 +75,10 @@ namespace Lemma {
                 // ====================  LIFECYCLE     =======================
 
                 /// Default protected constructor.
-                HankelTransform ( );
+                HankelTransform ( const ctor_key& );
 
                 /// Default protected constructor.
-                HankelTransform ( const YAML::Node& node );
+                HankelTransform ( const YAML::Node& node, const ctor_key& );
 
                 /// Default protected constructor.
                 ~HankelTransform ( );

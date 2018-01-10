@@ -16,14 +16,14 @@
 namespace Lemma {
 
     std::ostream &operator << (std::ostream &stream, const HankelTransform &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
-	HankelTransform::HankelTransform( ) : LemmaObject( )	{
+	HankelTransform::HankelTransform( const ctor_key& key ) : LemmaObject( key )	{
 	}
 
-    HankelTransform::HankelTransform( const YAML::Node& node ) : LemmaObject( node )	{
+    HankelTransform::HankelTransform( const YAML::Node& node, const ctor_key& key  ) : LemmaObject( node, key )	{
 	}
 
 	HankelTransform::~HankelTransform( ) {

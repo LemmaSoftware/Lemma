@@ -16,7 +16,7 @@
 namespace Lemma {
 
     std::ostream &operator << (std::ostream &stream, const FHTAnderson801 &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
@@ -841,13 +841,13 @@ namespace Lemma {
 	const Real FHTAnderson801::ABSER = 0.904837418035959573;      // 1/exp(.1)
 
 	// ====================  LIFECYCLE     ==============================
-	FHTAnderson801::FHTAnderson801(const ctor_key& ) : HankelTransform( ),
+	FHTAnderson801::FHTAnderson801(const ctor_key& key ) : HankelTransform( key ),
 			             Lambda(0), NumFun(0),
 						 NumConv(0), NumRel(0),
 						 BesselOrder(-1),  Manager(nullptr) {
 	}
 
-    FHTAnderson801::FHTAnderson801( const YAML::Node& node, const ctor_key& ) : HankelTransform( ) {
+    FHTAnderson801::FHTAnderson801( const YAML::Node& node, const ctor_key& key ) : HankelTransform( key ) {
         Lambda = node["Lambda"].as<Real>();
         NumFun = node["NumFun"].as<int>();
 		NumConv = node["NumConv"].as<int>();

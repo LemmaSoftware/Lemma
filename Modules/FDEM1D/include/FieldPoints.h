@@ -56,13 +56,9 @@ namespace Lemma {
          */
         friend std::ostream &operator<<(std::ostream &stream, const FieldPoints &ob);
 
-        struct ctor_key {};
-
         public:
 
             // ====================    FRIENDS     ===========================
-
-
 
             // ====================  LIFECYCLE     ===========================
 

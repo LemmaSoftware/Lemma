@@ -53,10 +53,10 @@ class Grid : public LemmaObject {
         // ====================  LIFECYCLE     ===================================
 
         /** Protected DeDerializing constructor, use factory DeSerialize  method on non abstract classes*/
-        Grid (const YAML::Node& node);
+        Grid (const YAML::Node& node, const ctor_key& );
 
         /// Default protected constructor.
-        Grid ( );
+        Grid ( const ctor_key& );
 
         /// Default protected constructor.
         virtual ~Grid ( );

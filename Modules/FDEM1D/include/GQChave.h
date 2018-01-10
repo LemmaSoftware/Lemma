@@ -31,9 +31,6 @@ namespace Lemma {
 	class GQChave : public HankelTransform {
 
 		friend std::ostream &operator<<(std::ostream &stream, const GQChave &ob);
-
-        struct ctor_key{};
-
 		public:
 
 			// ====================  LIFECYCLE     ===========================

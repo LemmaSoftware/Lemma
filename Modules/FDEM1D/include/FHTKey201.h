@@ -38,12 +38,9 @@ namespace Lemma {
     class FHTKey201 : public HankelTransform {
 
         friend std::ostream &operator<<(std::ostream &stream, const FHTKey201 &ob);
-
-        struct ctor_key {};
+        // ====================  LIFECYCLE     =======================
 
         public:
-
-        // ====================  LIFECYCLE     =======================
 
         /** Default locked constructor, use NewSP */
         FHTKey201 ( const ctor_key& );

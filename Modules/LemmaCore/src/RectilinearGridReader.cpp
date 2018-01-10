@@ -33,7 +33,7 @@ namespace Lemma {
     //      Method:  RectilinearGridReader
     // Description:  constructor (locked)
     //--------------------------------------------------------------------------------------
-    RectilinearGridReader::RectilinearGridReader ( const ctor_key& ) : GridReader( ),
+    RectilinearGridReader::RectilinearGridReader ( const ctor_key& key ) : GridReader( key ),
         rGrid( nullptr ), Parser( nullptr ) {
 
     }  // -----  end of method RectilinearGridReader::RectilinearGridReader  (constructor)  -----
@@ -43,7 +43,7 @@ namespace Lemma {
     //      Method:  RectilinearGridReader
     // Description:  DeSerializing constructor (protected)
     //--------------------------------------------------------------------------------------
-    RectilinearGridReader::RectilinearGridReader (const YAML::Node& node, const ctor_key&  key) : GridReader(node) {
+    RectilinearGridReader::RectilinearGridReader (const YAML::Node& node, const ctor_key&  key) : GridReader(node, key) {
     }  // -----  end of method RectilinearGridReader::RectilinearGridReader  (constructor)  -----
 
     //--------------------------------------------------------------------------------------

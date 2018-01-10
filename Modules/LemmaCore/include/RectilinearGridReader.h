@@ -39,7 +39,7 @@ namespace Lemma {
         /*
          *  This key is used to lock the constructors
          */
-        struct ctor_key {};
+        //struct ctor_key {};
 
         public:
 

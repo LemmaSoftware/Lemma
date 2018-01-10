@@ -30,8 +30,6 @@ namespace Lemma {
         friend class LayeredEarthEM;
         friend class LayeredEarthMR;
 
-        struct ctor_key{};
-
 		public:
 
 			// ====================    FRIENDS     ===========================
@@ -107,7 +105,7 @@ namespace Lemma {
 			LayeredEarth ( const ctor_key& );
 
             /** Default protected constructor. */
-			LayeredEarth (const YAML::Node& node);
+			LayeredEarth (const YAML::Node& node, const ctor_key& key);
 
 			/** Default protected constructor. */
 			~LayeredEarth ();

@@ -30,7 +30,7 @@ namespace Lemma {
 
         friend std::ostream &operator<<(std::ostream &stream, const WindowFilter& ob);
 
-        struct ctor_key {};
+        //struct ctor_key {};
 
         public:
 

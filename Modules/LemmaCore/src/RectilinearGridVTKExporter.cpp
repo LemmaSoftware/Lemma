@@ -36,7 +36,7 @@ std::ostream &operator << (std::ostream &stream, const RectilinearGridVTKExporte
 //      Method:  RectilinearGridVTKExporter
 // Description:  constructor (protected)
 //--------------------------------------------------------------------------------------
-RectilinearGridVTKExporter::RectilinearGridVTKExporter ( const ctor_key& ) : LemmaObject( ), Grid(nullptr), VTKGrid(nullptr) {
+RectilinearGridVTKExporter::RectilinearGridVTKExporter ( const ctor_key& key ) : LemmaObject( key ), Grid(nullptr), VTKGrid(nullptr) {
 
 }  // -----  end of method RectilinearGridVTKExporter::RectilinearGridVTKExporter  (constructor)  -----
 
@@ -45,7 +45,7 @@ RectilinearGridVTKExporter::RectilinearGridVTKExporter ( const ctor_key& ) : Lem
 //      Method:  RectilinearGridVTKExporter
 // Description:  DeSerializing constructor (protected)
 //--------------------------------------------------------------------------------------
-RectilinearGridVTKExporter::RectilinearGridVTKExporter (const YAML::Node& node, const ctor_key&  key) : LemmaObject(node) {
+RectilinearGridVTKExporter::RectilinearGridVTKExporter (const YAML::Node& node, const ctor_key&  key) : LemmaObject(node, key) {
     if (node["Grid"]) {
         this->Grid = RectilinearGrid::DeSerialize( node["Grid"] );
     }

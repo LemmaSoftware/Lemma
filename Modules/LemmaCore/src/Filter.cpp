@@ -25,7 +25,7 @@ namespace Lemma {
     //      Method:  Filter
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    Filter::Filter( ) : LemmaObject( ) { }
+    Filter::Filter( const ctor_key& key ) : LemmaObject( key ) { }
 
     //--------------------------------------------------------------------------------------
     //       Class:  Filter
@@ -39,7 +39,7 @@ namespace Lemma {
     //      Method:  Filter
     // Description:  DeSerializing constructor (protected)
     //--------------------------------------------------------------------------------------
-    Filter::Filter ( const YAML::Node& node ) : LemmaObject(node) {
+    Filter::Filter ( const YAML::Node& node, const ctor_key& key ) : LemmaObject(node, key) {
     }
 
     //--------------------------------------------------------------------------------------

@@ -43,7 +43,7 @@ namespace Lemma {
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
     //
-    QWEKey::QWEKey (const ctor_key& ) : HankelTransform( ), RelTol(1e-12), AbsTol(1e-32), nQuad(61), nDelay(1),
+    QWEKey::QWEKey (const ctor_key& key) : HankelTransform( key ), RelTol(1e-12), AbsTol(1e-32), nQuad(61), nDelay(1),
     //QWEKey::QWEKey (const std::string& name) : HankelTransform(name), RelTol(1e-38), AbsTol(1e-48), nQuad(39), nDelay(5),
         nIntervalsMax(40) {
         BesselWeights( J0 ); // TODO experiment with zero weight (J0, J1) options, should be static one time method
@@ -54,7 +54,7 @@ namespace Lemma {
     //      Method:  QWEKey
     // Description:  constructor (locked)
     //--------------------------------------------------------------------------------------
-    QWEKey::QWEKey( const YAML::Node& node, const ctor_key& ) : HankelTransform(node) {
+    QWEKey::QWEKey( const YAML::Node& node, const ctor_key& key ) : HankelTransform(node, key) {
 
     }
 

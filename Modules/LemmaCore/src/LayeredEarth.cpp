@@ -18,20 +18,20 @@ namespace Lemma {
 	// ====================    FRIENDS     ======================
 
     std::ostream &operator << (std::ostream &stream, const LayeredEarth &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
 	// ====================  LIFECYCLE     ===================================
 
-	LayeredEarth::LayeredEarth( const ctor_key& key ) : EarthModel( ),
+	LayeredEarth::LayeredEarth( const ctor_key& key ) : EarthModel( key ),
 		NumberOfLayers(0), 	NumberOfInterfaces(0) {
 	}
 
 	LayeredEarth::~LayeredEarth() {
 	}
 
-    LayeredEarth::LayeredEarth(const YAML::Node& node) : EarthModel(node) {
+    LayeredEarth::LayeredEarth(const YAML::Node& node, const ctor_key& key) : EarthModel(node, key) {
         NumberOfLayers = node["NumberOfLayers"].as<int>();
         NumberOfInterfaces = node["NumberOfInterfaces"].as<int>();
         LayerThickness = node["LayerThickness"].as<VectorXr>();

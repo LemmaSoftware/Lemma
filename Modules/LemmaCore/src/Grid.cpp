@@ -22,10 +22,10 @@ namespace Lemma {
 
     // ====================  LIFECYCLE     ===================================
 
-	Grid::Grid( ) : LemmaObject( ) {
+	Grid::Grid( const ctor_key& key ) : LemmaObject( key ) {
 	}
 
-    Grid::Grid( const YAML::Node& node ) : LemmaObject(node) {
+    Grid::Grid( const YAML::Node& node, const ctor_key& key ) : LemmaObject(node, key) {
 
     }
 

@@ -37,14 +37,12 @@ namespace Lemma {
     template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
     class KernelEM1DSpec : public KernelEM1DBase {
 
-        struct ctor_key {};
-
         public:
 
             // ====================  LIFECYCLE     =======================
 
             /// Default locked constructor.
-            explicit KernelEM1DSpec (const ctor_key& ) : KernelEM1DBase( ), ReflCalc(nullptr) {
+            explicit KernelEM1DSpec (const ctor_key& key ) : KernelEM1DBase( key ), ReflCalc(nullptr) {
             }
 
             /// Default destructor.
@@ -59,7 +57,7 @@ namespace Lemma {
             }
 
             static std::shared_ptr<KernelEM1DSpec> NewSP(LayeredEarthEM* Earth, std::shared_ptr<DipoleSource> Dipole,
-                                                                                        const int& ifreq, const Real& rz) {
+                                                         const int& ifreq, const Real& rz) {
                 auto Obj = std::make_shared< KernelEM1DSpec > ( ctor_key() );
 
                 // under this scenario KernelEM1DSpec manages its own Refl Base

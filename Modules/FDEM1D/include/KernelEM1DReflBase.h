@@ -151,7 +151,7 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /// Default protected constructor.
-            KernelEM1DReflBase ( ) : LemmaObject( )
+            KernelEM1DReflBase ( const ctor_key& key ) : LemmaObject( key )
             {
             }
 

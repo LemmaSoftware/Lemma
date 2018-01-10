@@ -22,7 +22,7 @@
 namespace Lemma{
 
     std::ostream &operator<<(std::ostream &stream, const GQChave &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
@@ -264,12 +264,12 @@ namespace Lemma{
     const Real J1_X12 = -0.5382308663841630e-15;
 */
 
-    GQChave::GQChave( const ctor_key& ) : HankelTransform( ) {
+    GQChave::GQChave( const ctor_key& key ) : HankelTransform( key ) {
         karg.resize(255, 100);
         kern.resize(510, 100);
     }
 
-    GQChave::GQChave( const YAML::Node& node, const ctor_key& ) : HankelTransform(node) {
+    GQChave::GQChave( const YAML::Node& node, const ctor_key& key ) : HankelTransform(node, key) {
 
     }
 

@@ -50,8 +50,6 @@ namespace Lemma {
 
         friend std::ostream &operator<<(std::ostream &stream, const QWEKey &ob);
 
-        struct ctor_key {};
-
         public:
 
         // ====================  LIFECYCLE     =======================

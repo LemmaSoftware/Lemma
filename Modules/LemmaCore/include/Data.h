@@ -70,10 +70,10 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /** Default protected constructor. */
-            Data (  );
+            Data ( const ctor_key& key  );
 
             /** Deserializing contructor */
-            Data ( const YAML::Node& node );
+            Data ( const YAML::Node& node, const ctor_key& key );
 
             /** Default protected constructor. */
             ~Data ( );

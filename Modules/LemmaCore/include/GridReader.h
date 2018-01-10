@@ -60,11 +60,11 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /** Default protected constructor, use New */
-            GridReader ( ) : LemmaObject( ) {
+            GridReader ( const ctor_key& key ) : LemmaObject( key ) {
             }
 
             /** Default protected constructor, use New */
-            GridReader ( const YAML::Node& node ) : LemmaObject( node ) {
+            GridReader ( const YAML::Node& node, const ctor_key& key ) : LemmaObject( node, key ) {
             }
 
             /** Default protected constructor, use Delete */

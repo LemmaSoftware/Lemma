@@ -53,10 +53,10 @@ class DataReader : public LemmaObject {
         // ====================  LIFECYCLE     =======================
 
         /// Default protected constructor.
-        DataReader ( );
+        DataReader ( const ctor_key& key );
 
         /// Default protected constructor.
-        DataReader ( const YAML::Node& node );
+        DataReader ( const YAML::Node& node, const ctor_key& key );
 
         /// Default protected constructor.
         ~DataReader ( );

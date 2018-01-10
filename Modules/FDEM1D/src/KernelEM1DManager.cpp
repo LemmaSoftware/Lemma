@@ -15,13 +15,13 @@
 namespace Lemma {
 
     std::ostream &operator<<(std::ostream &stream, const KernelEM1DManager &ob) {
-        stream << ob.Serialize() << "\n---\n";
+        stream << ob.Serialize() << "\n";
         return stream;
     }
 
     // ====================  LIFECYCLE     =======================
 
-    KernelEM1DManager::KernelEM1DManager( const ctor_key& ) : LemmaObject( ), TEReflBase(nullptr),
+    KernelEM1DManager::KernelEM1DManager( const ctor_key& key ) : LemmaObject( key ), TEReflBase(nullptr),
         TMReflBase(nullptr), Earth(nullptr), Dipole(nullptr) {
     }
 

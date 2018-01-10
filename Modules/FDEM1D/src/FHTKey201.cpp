@@ -22,7 +22,7 @@ namespace Lemma {
     // ====================  FRIEND METHODS  =====================
 
     std::ostream &operator<<(std::ostream &stream, const FHTKey201 &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
@@ -240,7 +240,7 @@ namespace Lemma {
     //      Method:  FHTKey201
     // Description:  constructor (locked)
     //--------------------------------------------------------------------------------------
-    FHTKey201::FHTKey201 (const ctor_key& ) : HankelTransform( ) {
+    FHTKey201::FHTKey201 (const ctor_key& key ) : HankelTransform( key ) {
 
     }  // -----  end of method FHTKey201::FHTKey201  (constructor)  -----
 
@@ -249,7 +249,7 @@ namespace Lemma {
     //      Method:  FHTKey201
     // Description:  constructor (locked)
     //--------------------------------------------------------------------------------------
-    FHTKey201::FHTKey201( const YAML::Node& node, const ctor_key& ) : HankelTransform(node) {
+    FHTKey201::FHTKey201( const YAML::Node& node, const ctor_key& key) : HankelTransform(node, key) {
 
     }
 

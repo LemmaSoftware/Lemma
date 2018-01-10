@@ -16,19 +16,20 @@
 namespace Lemma {
 
     std::ostream &operator << (std::ostream &stream, const PolygonalWireAntenna &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
 	// ====================  LIFECYCLE     =======================
 
-	PolygonalWireAntenna::PolygonalWireAntenna( const ctor_key& key ) : WireAntenna( WireAntenna::ctor_key() ), minDipoleRatio(.15),
+	PolygonalWireAntenna::PolygonalWireAntenna( const ctor_key& key ) :
+            WireAntenna( key ), minDipoleRatio(.15),
    		minDipoleMoment(1e-6), maxDipoleMoment(1e1), rRepeat(1e10,1e10,1e10) {
 		Points.setZero();
         //rRepeat.setOnes();
 	}
 
-    PolygonalWireAntenna::PolygonalWireAntenna( const YAML::Node& node, const ctor_key& ) : WireAntenna(node, WireAntenna::ctor_key() ) {
+    PolygonalWireAntenna::PolygonalWireAntenna( const YAML::Node& node, const ctor_key& key) : WireAntenna(node, key ) {
         minDipoleRatio   = node["minDipoleRatio"].as<Real>();
         maxDipoleMoment  = node["maxDipoleMoment"].as<Real>();
         minDipoleMoment  = node["minDipoleMoment"].as<Real>();

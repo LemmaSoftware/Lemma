@@ -12,9 +12,8 @@
  * @date      09/25/2013 08:20:14 AM
  * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2013, XRI Geophysics, LLC
- * @copyright Copyright (c) 2013, Trevor Irons
+ * @email     Trevor.Irons@lemmasoftware.org
+ * @copyright Copyright (c) 2013,2018 Trevor Irons
  */
 
 #ifndef  CUBICSPLINEINTERPOLATOR_INC
@@ -62,7 +61,7 @@ class CubicSplineInterpolator : public LemmaObject {
     friend std::ostream &operator<<(std::ostream &stream,
             const CubicSplineInterpolator& ob);
 
-    struct ctor_key {};
+    //struct ctor_key {};
 
     public:
 

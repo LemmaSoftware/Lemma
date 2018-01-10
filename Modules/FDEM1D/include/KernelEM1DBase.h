@@ -38,7 +38,7 @@ namespace Lemma {
             // ====================  LIFECYCLE     =======================
 
             /// Default protected constructor.
-            KernelEM1DBase ( ) : LemmaObject( ) {
+            KernelEM1DBase ( const ctor_key& key ) : LemmaObject( key ) {
 
             }
 

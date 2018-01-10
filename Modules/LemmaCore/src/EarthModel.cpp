@@ -16,17 +16,17 @@
 namespace Lemma {
 
     std::ostream &operator << (std::ostream &stream, const EarthModel &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
 	// ====================  LIFECYCLE     =======================
 
-	EarthModel::EarthModel() : LemmaObject( ),
+	EarthModel::EarthModel( const ctor_key& key ) : LemmaObject( key ),
         BField(0,0,0), BFieldUnit(0,0,0), BInc(0), BDec(0), BMag(0) {
 	}
 
-    EarthModel::EarthModel(const YAML::Node& node) : LemmaObject(node) {
+    EarthModel::EarthModel(const YAML::Node& node, const ctor_key& key) : LemmaObject(node, key) {
         BInc = node["BInc"].as<double>();
         BDec = node["BDec"].as<double>();
         BMag = node["BMag"].as<double>();

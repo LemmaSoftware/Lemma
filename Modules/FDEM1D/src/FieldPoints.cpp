@@ -18,13 +18,13 @@ namespace Lemma {
     // ====================    FRIENDS     ======================
 
     std::ostream &operator << (std::ostream &stream, const FieldPoints &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
     // ====================  LIFECYCLE     ===================================
 
-    FieldPoints::FieldPoints( const ctor_key& ) : LemmaObject( ),
+    FieldPoints::FieldPoints( const ctor_key& key ) : LemmaObject( key ),
         NumberOfPoints(0), NumberOfBinsE(0), NumberOfBinsH(0) {
     }
 
@@ -33,7 +33,7 @@ namespace Lemma {
     //      Method:  FieldPoints
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    FieldPoints::FieldPoints (const YAML::Node& node, const ctor_key&) : LemmaObject(node) {
+    FieldPoints::FieldPoints (const YAML::Node& node, const ctor_key& key) : LemmaObject(node, key) {
         //DeSerialize
         NumberOfPoints = node["NumberOfPoints"].as<int>();
         NumberOfBinsE = node["NumberOfBinsE"].as<int>();

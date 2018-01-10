@@ -26,14 +26,14 @@ namespace Lemma {
 
     // ====================    FRIENDS     ======================
     std::ostream &operator<<(std::ostream &stream, const DipoleSource &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
 
     // ====================  LIFECYCLE     ======================
 
-    DipoleSource::DipoleSource( const ctor_key& ) : LemmaObject( ),
+    DipoleSource::DipoleSource( const ctor_key& key ) : LemmaObject( key ),
                     Type(NOSOURCETYPE),
                     irec(-1),
                     Phase(0),

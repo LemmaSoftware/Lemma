@@ -12,8 +12,8 @@
  * @date      02/07/2014 12:50:52 PM
  * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2014, Trevor Irons
+ * @email     Trevor.Irons@lemmasoftware.org
+ * @copyright Copyright (c) 2014,2018 Trevor Irons
  */
 
 #include "CubicSplineInterpolator.h"
@@ -40,7 +40,7 @@ namespace Lemma {
     //      Method:  CubicSplineInterpolator
     // Description:  constructor (locked with ctor_key)
     //--------------------------------------------------------------------------------------
-    CubicSplineInterpolator::CubicSplineInterpolator ( const ctor_key& ) : LemmaObject( ) {
+    CubicSplineInterpolator::CubicSplineInterpolator ( const ctor_key& key ) : LemmaObject( key ) {
 
     }  // -----  end of method CubicSplineInterpolator::CubicSplineInterpolator  (constructor)  -----
 
@@ -49,7 +49,7 @@ namespace Lemma {
     //      Method:  CubicSplineInterpolator
     // Description:  DeSerializing constructor (locked with ctor_key)
     //--------------------------------------------------------------------------------------
-    CubicSplineInterpolator::CubicSplineInterpolator (const YAML::Node& node, const ctor_key& ) : LemmaObject(node) {
+    CubicSplineInterpolator::CubicSplineInterpolator (const YAML::Node& node, const ctor_key& key ) : LemmaObject(node, key) {
     }  // -----  end of method CubicSplineInterpolator::CubicSplineInterpolator  (constructor)  -----
 
     //--------------------------------------------------------------------------------------

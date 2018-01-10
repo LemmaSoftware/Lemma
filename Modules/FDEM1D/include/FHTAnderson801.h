@@ -61,8 +61,6 @@ class FHTAnderson801 : public HankelTransform {
 
     friend std::ostream &operator<<(std::ostream &stream, const FHTAnderson801 &ob);
 
-    struct ctor_key {};
-
     public:
 
         // ====================  LIFECYCLE     ==============================

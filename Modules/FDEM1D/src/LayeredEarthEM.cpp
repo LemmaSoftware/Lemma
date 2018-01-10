@@ -16,16 +16,16 @@
 namespace Lemma {
 
     std::ostream &operator << (std::ostream &stream, const LayeredEarthEM &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc ---
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
     // ====================  LIFECYCLE     ===================================
 
-    LayeredEarthEM::LayeredEarthEM( const ctor_key& key ) : LayeredEarth( LayeredEarth::ctor_key() ) {
+    LayeredEarthEM::LayeredEarthEM( const ctor_key& key ) : LayeredEarth( key ) {
     }
 
-    LayeredEarthEM::LayeredEarthEM( const YAML::Node& node, const ctor_key& ) : LayeredEarth(node) {
+    LayeredEarthEM::LayeredEarthEM( const YAML::Node& node, const ctor_key& key ) : LayeredEarth(node, key) {
         SetNumberOfLayers(NumberOfLayers);
         LayerThickness = node["LayerThickness"].as<VectorXr>();
         if (node["LayerConductivity"]) {

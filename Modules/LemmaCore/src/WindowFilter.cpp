@@ -18,7 +18,7 @@ namespace Lemma {
     // ====================  FRIEND METHODS  =====================
 
     std::ostream &operator << (std::ostream &stream, const WindowFilter &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
@@ -29,7 +29,7 @@ namespace Lemma {
     //      Method:  WindowFilter
     // Description:  constructor (locked with ctor_key)
     //--------------------------------------------------------------------------------------
-    WindowFilter::WindowFilter( const ctor_key& ) : Filter( ),
+    WindowFilter::WindowFilter( const ctor_key& key ) : Filter( key ),
         Width(0), SamplingRate(0), Bandwidth(0), Coefficients(), Type(RECTANGULAR)
     {
     }   // -----  end of method WindowFilter::WindowFilter  (constructor)  -----
@@ -39,7 +39,7 @@ namespace Lemma {
     //      Method:  WindowFilter
     // Description:  DeSerializing constructor (locked with ctor_key)
     //--------------------------------------------------------------------------------------
-    WindowFilter::WindowFilter( const YAML::Node& node, const ctor_key& ) : Filter( node ),
+    WindowFilter::WindowFilter( const YAML::Node& node, const ctor_key& key) : Filter( node, key ),
         Width(0), SamplingRate(0), Bandwidth(0), Coefficients(), Type(RECTANGULAR)
     {
         Width = node["Width"].as<int>( );

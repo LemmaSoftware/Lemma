@@ -32,8 +32,6 @@ namespace Lemma {
     // ===================================================================
     class KernelEM1DManager : public LemmaObject {
 
-        struct ctor_key {};
-
         /** Recursively streams information about this class */
         friend std::ostream &operator<<(std::ostream &stream, const KernelEM1DManager &ob);
 
