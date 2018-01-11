@@ -109,7 +109,7 @@ namespace Lemma {
              * Accessor method for the underlying RectilinearGrid class constructed
              * from the input file.
              */
-            std::shared_ptr<Grid> GetGrid();
+            virtual std::shared_ptr<Grid> GetGrid() const ;
 
             // ====================  INQUIRY       =======================
 

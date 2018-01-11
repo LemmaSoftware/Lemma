@@ -141,8 +141,9 @@ namespace Lemma {
     //       Class:  RectilinearGridReader
     //      Method:  GetGrid
     //--------------------------------------------------------------------------------------
-    std::shared_ptr<Grid> RectilinearGridReader::GetGrid (  ) {
+    std::shared_ptr<Grid> RectilinearGridReader::GetGrid (  ) const {
         return std::static_pointer_cast<Grid> (rGrid);
+        //return rGrid;
     }		// -----  end of method RectilinearGridReader::GetGrid  -----
 
 

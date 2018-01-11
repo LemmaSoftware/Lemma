@@ -46,7 +46,7 @@ namespace Lemma {
 
             virtual void ReadASCIIGridFile( const std::string& name )=0;
 
-            virtual std::shared_ptr< Grid > GetGrid( )=0;
+            virtual std::shared_ptr< Grid > GetGrid( ) const =0;
 
             // ====================  ACCESS        =======================
 
