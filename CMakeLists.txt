@@ -79,6 +79,7 @@ find_package(CxxTest)
 if (CXXTEST_FOUND)
 	# Do nothing
 else()
+	message( STATUS "CxxTest will be built and installed along with Lemma, override if desired in GUI."  )
 	ExternalProject_Add(CxxTest
 		GIT_REPOSITORY "https://github.com/CxxTest/cxxtest.git"
 		GIT_TAG "master"
@@ -91,8 +92,10 @@ else()
     	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
 			-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
 	)
-	set (CXXTEST_INCLUDE_DIR  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/")
-	set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen" )
+	# The values "CACHE PATH "" FORCE" makes the GUI show the values of the local CxxTest, but this can cause issues 
+	# with users wanting to specify their own path, its not recommended  
+	set (CXXTEST_INCLUDE_DIR  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/") # CACHE  PATH "" FORCE )
+	set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen") # CACHE PATH "" FORCE )
 	find_package(CxxTest REQUIRED)
 endif()
 

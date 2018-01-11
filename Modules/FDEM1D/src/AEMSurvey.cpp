@@ -12,9 +12,10 @@
  * @date      09/24/2013 04:09:04 PM
  * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
+ * @email     Trevor.Irons@lemmasoftware.org
  * @copyright Copyright (c) 2013, XRI Geophysics, LLC
  * @copyright Copyright (c) 2013, Trevor Irons
+ * @copyright Copyright (c) 2018, Trevor Irons
  */
 
 #include "AEMSurvey.h"
@@ -24,9 +25,7 @@ namespace Lemma {
 // ====================  FRIEND METHODS  =====================
 
 std::ostream &operator<<(std::ostream &stream, const AEMSurvey &ob) {
-
-    stream << *(LemmaObject*)(&ob);
-
+    stream << ob.Serialize() << "\n";
     return stream;
 }
 
@@ -37,20 +36,18 @@ std::ostream &operator<<(std::ostream &stream, const AEMSurvey &ob) {
 //      Method:  AEMSurvey
 // Description:  constructor (protected)
 //--------------------------------------------------------------------------------------
-AEMSurvey::AEMSurvey (const std::string& name) : LemmaObject(name) {
+AEMSurvey::AEMSurvey (const ctor_key& key) : LemmaObject(key) {
 
 }  // -----  end of method AEMSurvey::AEMSurvey  (constructor)  -----
 
 
 //--------------------------------------------------------------------------------------
 //       Class:  AEMSurvey
-//      Method:  New()
+//      Method:  NewSP()
 // Description:  public constructor
 //--------------------------------------------------------------------------------------
-AEMSurvey* AEMSurvey::New() {
-    AEMSurvey*  Obj = new AEMSurvey("AEMSurvey");
-    Obj->AttachTo(Obj);
-    return Obj;
+std::shared_ptr<AEMSurvey> AEMSurvey::NewSP() {
+    return std::make_shared<AEMSurvey>(ctor_key());
 }
 
 //--------------------------------------------------------------------------------------
@@ -60,33 +57,13 @@ AEMSurvey* AEMSurvey::New() {
 //--------------------------------------------------------------------------------------
 AEMSurvey::~AEMSurvey () {
 
-    for (unsigned int isc=0; isc<Sources.size(); ++isc) Sources[isc]->Delete();
-
 }  // -----  end of method AEMSurvey::~AEMSurvey  (destructor)  -----
-
-//--------------------------------------------------------------------------------------
-//       Class:  AEMSurvey
-//      Method:  Delete
-// Description:  public destructor
-//--------------------------------------------------------------------------------------
-void AEMSurvey::Delete() {
-    this->DetachFrom(this);
-}
-
-//--------------------------------------------------------------------------------------
-//       Class:  AEMSurvey
-//      Method:  Release
-// Description:  destructor (protected)
-//--------------------------------------------------------------------------------------
-void AEMSurvey::Release() {
-    delete this;
-}
 
 //--------------------------------------------------------------------------------------
 //       Class:  AEMSurvey
 //      Method:  GetSource
 //--------------------------------------------------------------------------------------
-DipoleSource* AEMSurvey::GetSource ( const int& isource ) {
+std::shared_ptr<DipoleSource> AEMSurvey::GetSource ( const int& isource ) {
     return Sources[isource] ;
 }		// -----  end of method AEMSurvey::GetSource  -----
 

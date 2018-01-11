@@ -10,7 +10,8 @@
 
 #include "EMEarth1D.h"
 
-//#include "AEMSurvey.h"
+#include "AEMSurvey.h"
+#include "AEMSurveyReader.h"
 
 // internal
 //#include "KernelEM1DManager.h"

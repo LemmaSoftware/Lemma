@@ -33,10 +33,28 @@ class MyTestSuite : public CxxTest::TestSuite
         TS_ASSERT_EQUALS( Obj->GetName(), std::string("LayeredEarthEM") );
     }
 
+    void testLayeredEarthEMReader( void )
+    {
+        auto Obj = LayeredEarthEMReader::NewSP();
+        TS_ASSERT_EQUALS( Obj->GetName(), std::string("LayeredEarthEMReader") );
+    }
+
     void testFieldPoints( void )
     {
         auto Obj = FieldPoints::NewSP();
         TS_ASSERT_EQUALS( Obj->GetName(), std::string("FieldPoints") );
+    }
+
+    void testWireAntenna( void )
+    {
+        auto Obj = WireAntenna::NewSP();
+        TS_ASSERT_EQUALS( Obj->GetName(), std::string("WireAntenna") );
+    }
+
+    void testPolygonalWireAntenna( void )
+    {
+        auto Obj = PolygonalWireAntenna::NewSP();
+        TS_ASSERT_EQUALS( Obj->GetName(), std::string("PolygonalWireAntenna") );
     }
 
     void testDipoleSource( void )
@@ -45,10 +63,22 @@ class MyTestSuite : public CxxTest::TestSuite
         TS_ASSERT_EQUALS( Obj->GetName(), std::string("DipoleSource") );
     }
 
-    void testWireAntenna( void )
+    void testEMEarth1D( void )
     {
-        auto Obj = WireAntenna::NewSP();
-        TS_ASSERT_EQUALS( Obj->GetName(), std::string("WireAntenna") );
+        auto Obj = EMEarth1D::NewSP();
+        TS_ASSERT_EQUALS( Obj->GetName(), std::string("EMEarth1D") );
+    }
+
+    void testAEMSurvey( void )
+    {
+        auto Obj = AEMSurvey::NewSP();
+        TS_ASSERT_EQUALS( Obj->GetName(), std::string("AEMSurvey") );
+    }
+
+    void testAEMSurveyReader( void )
+    {
+        auto Obj = AEMSurveyReader::NewSP();
+        TS_ASSERT_EQUALS( Obj->GetName(), std::string("AEMSurveyReader") );
     }
 
 //     void testKernelEM1DManager( void )

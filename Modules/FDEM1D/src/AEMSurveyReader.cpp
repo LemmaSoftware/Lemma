@@ -24,9 +24,7 @@ namespace Lemma {
     // ====================  FRIEND METHODS  =====================
 
     std::ostream &operator<<(std::ostream &stream, const AEMSurveyReader &ob) {
-
-        stream << *(LemmaObject*)(&ob);
-
+        stream << ob.Serialize() << "\n";
         return stream;
     }
 
@@ -37,8 +35,7 @@ namespace Lemma {
     //      Method:  AEMSurveyReader
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    AEMSurveyReader::AEMSurveyReader (const std::string& name) :
-        LemmaObject(name), Survey(NULL) {
+    AEMSurveyReader::AEMSurveyReader (const ctor_key& key) : LemmaObject(key), Survey(nullptr) {
 
     }  // -----  end of method AEMSurveyReader::AEMSurveyReader  (constructor)  -----
 
@@ -48,10 +45,8 @@ namespace Lemma {
     //      Method:  New()
     // Description:  public constructor
     //--------------------------------------------------------------------------------------
-    AEMSurveyReader* AEMSurveyReader::New() {
-        AEMSurveyReader*  Obj = new AEMSurveyReader("AEMSurveyReader");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<AEMSurveyReader> AEMSurveyReader::NewSP() {
+        return std::make_shared<AEMSurveyReader>(ctor_key());
     }
 
     //--------------------------------------------------------------------------------------
@@ -60,33 +55,13 @@ namespace Lemma {
     // Description:  destructor (protected)
     //--------------------------------------------------------------------------------------
     AEMSurveyReader::~AEMSurveyReader () {
-        if (Survey) Survey->Delete();
     }  // -----  end of method AEMSurveyReader::~AEMSurveyReader  (destructor)  -----
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  AEMSurveyReader
-    //      Method:  Delete
-    // Description:  public destructor
-    //--------------------------------------------------------------------------------------
-    void AEMSurveyReader::Delete() {
-        this->DetachFrom(this);
-    }
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  AEMSurveyReader
-    //      Method:  Release
-    // Description:  destructor (protected)
-    //--------------------------------------------------------------------------------------
-    void AEMSurveyReader::Release() {
-        delete this;
-    }
-
 
     //--------------------------------------------------------------------------------------
     //       Class:  AEMSurveyReader
     //      Method:  GetSurvey
     //--------------------------------------------------------------------------------------
-    AEMSurvey* AEMSurveyReader::GetSurvey (  ) {
+    std::shared_ptr<AEMSurvey> AEMSurveyReader::GetSurvey (  ) {
         return Survey;
     }		// -----  end of method AEMSurveyReader::GetSurvey  -----
 
@@ -97,9 +72,8 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     void AEMSurveyReader::ReadASCIIAEMFile (  const std::string& fname ) {
 
-        if (Survey) Survey->Delete();
-        Survey = AEMSurvey::New();
-        ASCIIParser* Parser = ASCIIParser::New();
+        Survey = AEMSurvey::NewSP();
+        auto Parser = ASCIIParser::NewSP();
         Parser->SetCommentString("//");
         Parser->Open(fname);
 
@@ -136,7 +110,7 @@ namespace Lemma {
             //std::vector<int> ivals = Parser->ReadInts(1);   // number of frequencies
             int nf = Parser->ReadInts(1)[0];   // number of frequencies
             for (int isc=0; isc<nf; ++isc) {
-                Survey->Sources.push_back(DipoleSource::New());
+                Survey->Sources.push_back(DipoleSource::NewSP());
                 int cnt = Survey->Sources.size() - 1; //
                 // and now set it
                 Survey->Sources[cnt]->SetNumberOfFrequencies(1);
@@ -159,9 +133,6 @@ namespace Lemma {
             }
             Parser->JumpToLocation(bp);
         }
-
-        Parser->Delete();
-
         return ;
     }		// -----  end of method AEMSurveyReader::ReadASCIIAEMFile  -----
 

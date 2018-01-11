@@ -12,7 +12,7 @@
  * @date      09/24/2013 04:29:27 PM
  * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
+ * @email     Trevor.Irons@lemmasoftware.org
  * @copyright Copyright (c) 2013, XRI Geophysics, LLC
  * @copyright Copyright (c) 2013, Trevor Irons
  */
@@ -39,17 +39,17 @@ namespace Lemma {
 
         // ====================  LIFECYCLE     =======================
 
-        /*c
-         * @copybrief LemmaObject::New()
-         * @copydetails LemmaObject::New()
-         */
-        static AEMSurveyReader* New();
-
         /**
-         *  @copybrief   LemmaObject::Delete()
-         *  @copydetails LemmaObject::Delete()
+         * @copybrief LemmaObject::NewSP()
+         * @copydetails LemmaObject::NewSP()
          */
-        void Delete();
+        static std::shared_ptr<AEMSurveyReader> NewSP();
+
+        /** Default protected constructor, use New */
+        AEMSurveyReader (const ctor_key&);
+
+        /** Default protected destructor, use Delete */
+        ~AEMSurveyReader ();
 
         // ====================  OPERATORS     =======================
 
@@ -103,31 +103,25 @@ MD        // Source 5 type
         /**
          * @return the AEMSurvey based on the file read
          */
-        AEMSurvey* GetSurvey();
+        std::shared_ptr<AEMSurvey> GetSurvey();
 
         // ====================  INQUIRY       =======================
+        /** Returns the name of the underlying class, similiar to Python's type */
+        virtual std::string GetName() const {
+            return this->CName;
+        }
 
         protected:
 
         // ====================  LIFECYCLE     =======================
 
-        /** Default protected constructor, use New */
-        AEMSurveyReader (const std::string& name);
-
-        /** Default protected destructor, use Delete */
-        ~AEMSurveyReader ();
-
-        /**
-         *  @copybrief   LemmaObject::Release()
-         *  @copydetails LemmaObject::Release()
-         */
-        void Release();
-
         private:
 
         // ====================  DATA MEMBERS  =========================
 
-        AEMSurvey*  Survey;
+        std::shared_ptr<AEMSurvey>  Survey;
+
+        static constexpr auto CName = "AEMSurveyReader";
 
     }; // -----  end of class  AEMSurveyReader  -----
 

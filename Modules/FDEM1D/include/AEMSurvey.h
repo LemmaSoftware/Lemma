@@ -12,9 +12,9 @@
  * @date      09/24/2013 04:06:42 PM
  * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
+ * @email     Trevor.Irons@lemmasoftware.org
  * @copyright Copyright (c) 2013, XRI Geophysics, LLC
- * @copyright Copyright (c) 2013, Trevor Irons
+ * @copyright Copyright (c) 2013,2018 Trevor Irons
  */
 
 #ifndef  AEMSURVEY_INC
@@ -48,13 +48,13 @@ class AEMSurvey : public LemmaObject {
      * @copybrief LemmaObject::New()
      * @copydetails LemmaObject::New()
      */
-    static AEMSurvey* New();
+    static std::shared_ptr<AEMSurvey> NewSP();
 
-    /**
-     *  @copybrief   LemmaObject::Delete()
-     *  @copydetails LemmaObject::Delete()
-     */
-    void Delete();
+    /** Default protected constructor, use New */
+    AEMSurvey (const ctor_key&);
+
+    /** Default protected destructor, use Delete */
+    ~AEMSurvey ();
 
     // ====================  OPERATORS     =======================
 
@@ -66,7 +66,7 @@ class AEMSurvey : public LemmaObject {
      *  general loops int the new future.
      *  @param[in] isource is the source fiducial to return
      */
-    DipoleSource* GetSource(const int& isource);
+    std::shared_ptr<DipoleSource> GetSource(const int& isource);
 
     /** @return the total number of sources
      */
@@ -79,30 +79,24 @@ class AEMSurvey : public LemmaObject {
 
     // ====================  INQUIRY       =======================
 
+    /** Returns the name of the underlying class, similiar to Python's type */
+    virtual std::string GetName() const {
+        return this->CName;
+    }
+
     protected:
 
     // ====================  LIFECYCLE     =======================
-
-    /** Default protected constructor, use New */
-    AEMSurvey (const std::string& name);
-
-    /** Default protected destructor, use Delete */
-    ~AEMSurvey ();
-
-    /**
-     *  @copybrief   LemmaObject::Release()
-     *  @copydetails LemmaObject::Release()
-     */
-    void Release();
 
     private:
 
     // ====================  DATA MEMBERS  =========================
 
-    std::vector<DipoleSource*>  Sources;
+    std::vector< std::shared_ptr<DipoleSource> >  Sources;
 
     VectorXr Freqs;
 
+    static constexpr auto CName = "AEMSurvey";
 
 }; // -----  end of class  AEMSurvey  -----
 
