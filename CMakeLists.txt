@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
 # Mac OSX RPATH is weird 
 # enable @rpath in the install name for any shared library being built
@@ -160,14 +160,14 @@ if ( LEMMA_VTK7_SUPPORT )
 	#include_directories ("${PROJECT_SOURCE_DIR}/Matplot_vtk")
 endif()
 
-#####################
-# Lemma Configuration
-#####################
+#######################
+# Lemma Configuration #
+#######################
 
-#####################
-# Look for Ki Ha Lee 
-#####################
-FIND_LIBRARY( KIHA_EM1D kihaem1d ) # PATHS ${/home/tirons/local/lib}  )
+#############################
+# Look for Ki Ha Lee (EM1D) #
+#############################
+FIND_LIBRARY( KIHA_EM1D kihaem1d ) 
 if ( KIHA_EM1D )
 	add_compile_options(-DKIHALEE_EM1D)
 endif()
@@ -197,21 +197,22 @@ SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 ####################
 # Add the c++11 flag 
+# This has been moved to TARGET PROPERTY as each library is built
 # TODO add compiler specific instructions
-include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG(-std=c++14 COMPILER_SUPPORTS_CXX14)
-CHECK_CXX_COMPILER_FLAG(-std=c++11 COMPILER_SUPPORTS_CXX11)
-CHECK_CXX_COMPILER_FLAG(-std=c++0x COMPILER_SUPPORTS_CXX0X)
+#include(CheckCXXCompilerFlag)
+#CHECK_CXX_COMPILER_FLAG(-std=c++14 COMPILER_SUPPORTS_CXX14)
+#CHECK_CXX_COMPILER_FLAG(-std=c++11 COMPILER_SUPPORTS_CXX11)
+#CHECK_CXX_COMPILER_FLAG(-std=c++0x COMPILER_SUPPORTS_CXX0X)
 # TODO update this for MSVC and cross compatibility 
-if(COMPILER_SUPPORTS_CXX14)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-elseif(COMPILER_SUPPORTS_CXX11)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-elseif(COMPILER_SUPPORTS_CXX0X)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-else()
-	message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 or C++14 support. Please use a different C++ compiler.")
-endif()
+#if(COMPILER_SUPPORTS_CXX14)
+#	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+#elseif(COMPILER_SUPPORTS_CXX11)
+#	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+#elseif(COMPILER_SUPPORTS_CXX0X)
+#	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+#else()
+#	message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 or C++14 support. Please use a different C++ compiler.")
+#endif()
 
 option( LEMMA_BUILD_EXAMPLES "Compile example Lemma applications" OFF )
 

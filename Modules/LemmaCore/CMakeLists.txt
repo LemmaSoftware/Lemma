@@ -6,6 +6,8 @@ set_target_properties(lemmacore PROPERTIES
 	VERSION  "${LEMMA_VERSION_NOQUOTES}"
 	SOVERSION "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}"
 	PROJECT_LABEL "LemmaCore ${LABEL_SUFFIX}"
+    CXX_STANDARD 14
+    CXX_STANDARD_REQUIRED ON
 )
 
 # External project dependencies 
