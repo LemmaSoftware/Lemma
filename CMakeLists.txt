@@ -81,9 +81,7 @@ else()
         	       -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} /
     	           -DYAML_CPP_BUILD_TESTS=OFF 
 	)	
-	#find_package(yaml-cpp REQUIRED)
 endif()
-
 #add_compile_options(-DHAVE_YAMLCPP) 
 
 # CxxTest 
@@ -166,6 +164,36 @@ if ( LEMMA_VTK7_SUPPORT )
 			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkInteractionStyle 
 			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
 	set(volumeRenderer volumerenderer.cxx)
+
+	if (VTK_FOUND)
+		message(STATUS "VTK 7 was found! ") 
+	else()
+		ExternalProject_Add(VTK
+  		GIT_REPOSITORY "${git_protocol}://vtk.org/VTK.git"
+  		GIT_TAG "${VTK_TAG}"
+  		SOURCE_DIR VTK
+  		BINARY_DIR VTK-build
+  		CMAKE_GENERATOR ${gen}
+  		CMAKE_ARGS
+	    -DBUILD_SHARED_LIBS:BOOL=ON
+	    -DBUILD_EXAMPLES:BOOL=OFF
+	    -DBUILD_TESTING:BOOL=OFF
+	    -DVTK_Group_Web:BOOL=ON
+	    -DModule_vtkImagingMath:BOOL=ON
+	    -DVTK_WRAP_PYTHON:BOOL=ON
+	    -DExternalData_OBJECT_STORES:STRING=${ExternalData_OBJECT_STORES}
+	    "-DPYTHON_EXECUTABLE:FILEPATH=${PYTHON_EXECUTABLE}"
+	    -DVTK_USE_SYSTEM_ZLIB:BOOL=ON
+	    "-DZLIB_ROOT:PATH=${ZLIB_ROOT}"
+	    "-DZLIB_INCLUDE_DIR:PATH=${ZLIB_INCLUDE_DIR}"
+	    "-DZLIB_LIBRARY:FILEPATH=${ZLIB_LIBRARY}"
+	  	INSTALL_COMMAND ""
+	  	LOG_DOWNLOAD 0
+	  	LOG_UPDATE 0
+	  	DEPENDS zlib
+		)
+	endif()
+
 	include(${VTK_USE_FILE}) 
 	add_compile_options(-DLEMMAUSEVTK) 
 	# Compile Matplot_vtk if VTK is present
