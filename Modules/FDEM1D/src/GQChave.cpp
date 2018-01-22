@@ -1135,6 +1135,7 @@ namespace Lemma{
 #else
     Real GQChave::Jbess(const Real &x, const int &IORDER) {
         std::cerr << "GQChave requires boost special functions module";
+        return 0;
     }
 #endif
     //////////////////////////////////////////////////////
