@@ -63,22 +63,34 @@ include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3")
 
 #############################################################################################
 # Yaml-cpp, this library is used extensively for serialisation of classes (class persistence) 
-ExternalProject_Add(YAML-CPP
-	GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
-	GIT_TAG   "master" #"release-0.5.3" #"master"
-	UPDATE_COMMAND ""
-	PATCH_COMMAND ""
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
-               -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} /
-               -DYAML_CPP_BUILD_TESTS=OFF 
-)
+find_package(yaml-cpp)
+if (yaml-cpp_FOUND)
+    message( STATUS "YAML-CPP FOUND ${yaml-cpp_FOUND}" )
+	message( STATUS "YAMLCPP_FOUND ${YAMLCPP_FOUND}" )
+    message( STATUS "YAML-CPP LIBNAME ${yaml-cpp_LIBNAME}" )
+    message( STATUS "YAML-CPP LIBRARY ${yaml-cpp_LIBRARY}" )
+else()
+    message( STATUS "YAML-CPP WAS NOT FOUND" )
+	ExternalProject_Add(YAML_CPP
+		GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
+		GIT_TAG   "master" #"release-0.5.3" #"master"
+		UPDATE_COMMAND ""
+		PATCH_COMMAND ""
+    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
+    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
+        	       -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} /
+    	           -DYAML_CPP_BUILD_TESTS=OFF 
+	)	
+	#find_package(yaml-cpp REQUIRED)
+endif()
+
 #add_compile_options(-DHAVE_YAMLCPP) 
 
 # CxxTest 
 find_package(CxxTest) 
 if (CXXTEST_FOUND)
 	# Do nothing
+    message( STATUS "CXXTEST FOUND" )
 else()
 	message( STATUS "CxxTest will be built and installed along with Lemma, override if desired in GUI."  )
 	ExternalProject_Add(CxxTest

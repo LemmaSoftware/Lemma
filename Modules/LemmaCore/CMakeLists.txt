@@ -11,7 +11,8 @@ set_target_properties(lemmacore PROPERTIES
 )
 
 # External project dependencies 
-add_dependencies(lemmacore YAML-CPP)
+#add_dependencies(lemmacore YAML_CPP)
+
 if (LEMMA_TINYXML_SUPPORT)
 	add_dependencies(lemmacore TINYXML2)
 endif()
@@ -25,7 +26,11 @@ if ( LEMMA_VTK6_SUPPORT OR LEMMA_VTK7_SUPPORT )
 #	target_link_libraries(lemmacore "matplot")
 endif()
 
-target_link_libraries(lemmacore "yaml-cpp")
+if (WIN32)
+	target_link_libraries(lemmacore "yaml-cppmdd") 
+else()
+	target_link_libraries(lemmacore "yaml-cpp") 
+endif()
 
 # Testing
 if (LEMMA_ENABLE_TESTING)
