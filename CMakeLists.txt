@@ -70,13 +70,10 @@ ExternalProject_Add(YAML-CPP
 	PATCH_COMMAND ""
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
- 	       -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} /
-	       -DYAML_CPP_BUILD_TESTS=OFF 
-	       #-D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING /  
-	       #-DCXX_STANDARD=11 /
-	       #-DCXX_STANDARD_REQUIRED=ON 
+               -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} /
+               -DYAML_CPP_BUILD_TESTS=OFF 
 )
-add_compile_options(-DHAVE_YAMLCPP) 
+#add_compile_options(-DHAVE_YAMLCPP) 
 
 # CxxTest 
 find_package(CxxTest) 
@@ -198,25 +195,6 @@ endif()
 # Magic rpath flag
 ####################
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-
-####################
-# Add the c++11 flag 
-# This has been moved to TARGET PROPERTY as each library is built
-# TODO add compiler specific instructions
-#include(CheckCXXCompilerFlag)
-#CHECK_CXX_COMPILER_FLAG(-std=c++14 COMPILER_SUPPORTS_CXX14)
-#CHECK_CXX_COMPILER_FLAG(-std=c++11 COMPILER_SUPPORTS_CXX11)
-#CHECK_CXX_COMPILER_FLAG(-std=c++0x COMPILER_SUPPORTS_CXX0X)
-# TODO update this for MSVC and cross compatibility 
-#if(COMPILER_SUPPORTS_CXX14)
-#	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-#elseif(COMPILER_SUPPORTS_CXX11)
-#	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-#elseif(COMPILER_SUPPORTS_CXX0X)
-#	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-#else()
-#	message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 or C++14 support. Please use a different C++ compiler.")
-#endif()
 
 option( LEMMA_BUILD_EXAMPLES "Compile example Lemma applications" OFF )
 
