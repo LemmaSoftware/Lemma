@@ -21,18 +21,19 @@ if (LEMMA_MATIO_SUPPORT)
 endif()
 
 # Linking
-if ( LEMMA_VTK6_SUPPORT OR LEMMA_VTK7_SUPPORT ) 
+if ( LEMMA_VTK6_SUPPORT OR LEMMA_VTK7_SUPPORT OR LEMMA_VTK8_SUPPORT ) 
 	target_link_libraries(lemmacore ${VTK_LIBRARIES})
 #	target_link_libraries(lemmacore "matplot")
 endif()
 
 # find_package(yaml-cpp) does not seem to properly define library names...
 # a better solution than this is welcome 
-if (WIN32)
-	target_link_libraries(lemmacore "libyaml-cppmdd") 
-else()
-	target_link_libraries(lemmacore "yaml-cpp") 
-endif()
+target_link_libraries(lemmacore ${YAML_CPP_LIBRARIES}) 
+#if (WIN32)
+#	target_link_libraries(lemmacore "libyaml-cppmdd") 
+#else()
+#	target_link_libraries(lemmacore "yaml-cpp") 
+#endif()
 
 # Testing
 if (LEMMA_ENABLE_TESTING)

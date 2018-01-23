@@ -66,8 +66,7 @@ include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3")
 find_package(yaml-cpp)
 if (yaml-cpp_FOUND)
     message( STATUS "YAML-CPP FOUND ${yaml-cpp_FOUND}" )
-	message( STATUS "YAMLCPP_FOUND ${YAMLCPP_FOUND}" )
-    message( STATUS "YAML-CPP LIBNAME ${yaml-cpp_LIBNAME}" )
+    message( STATUS "YAML-CPP LIBRARIES ${YAML_CPP_LIBRARIES}" )
     message( STATUS "YAML-CPP LIBRARY ${yaml-cpp_LIBRARY}" )
 else()
     message( STATUS "YAML-CPP WAS NOT FOUND" )
@@ -100,8 +99,9 @@ else()
 		BUILD_COMMAND ""
 		INSTALL_COMMAND ""
     	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest
-    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
-			-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} /
+                   -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
+                   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
 	)
 	# The values "CACHE PATH "" FORCE" makes the GUI show the values of the local CxxTest, but this can cause issues 
 	# with users wanting to specify their own path, its not recommended  
@@ -164,31 +164,56 @@ if ( LEMMA_VTK7_SUPPORT )
 			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkInteractionStyle 
 			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
 	set(volumeRenderer volumerenderer.cxx)
-
 	if (VTK_FOUND)
 		message(STATUS "VTK 7 was found! ") 
 	        include(${VTK_USE_FILE}) 
 	else()
 		ExternalProject_Add(VTK
   		GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
-    	        PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/vtk7
+		GIT_TAG  "v7.1.1"
+    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/vtk7
   		CMAKE_ARGS
    	        -DBUILD_SHARED_LIBS:BOOL=ON
 	        -DBUILD_EXAMPLES:BOOL=OFF
 	        -DBUILD_TESTING:BOOL=OFF
-		-DVTK_Group_Web:BOOL=OFF
+		    -DVTK_Group_Web:BOOL=OFF
 	        -DModule_vtkImagingMath:BOOL=ON
-	  	INSTALL_COMMAND ""
-	  	LOG_DOWNLOAD 0
-	  	LOG_UPDATE 0
+	  	    LOG_DOWNLOAD 0
+	  	    LOG_UPDATE 0
 		)
 	endif()
+endif()
 
-
+option (LEMMA_VTK8_SUPPORT "VTK library for visualisation and grids" OFF)
+if ( LEMMA_VTK8_SUPPORT ) 
+	#find_package(VTK 7 REQUIRED NO_MODULE)
+	find_package(VTK 8.0 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
+			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkInteractionStyle 
+			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
+	if (VTK_FOUND)
+		message(STATUS "VTK 8 was found! ") 
+		set(volumeRenderer volumerenderer.cxx)
+	    include(${VTK_USE_FILE}) 
+	else()
+		message( STATUS "External build of VTK 8 has been added, this may take some time to build." )
+		ExternalProject_Add(VTK8
+  		GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
+		GIT_TAG  "v8.1.0"
+    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/vtk8
+  		CMAKE_ARGS 
+    	    -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
+            -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
+            -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} /
+   	        -DBUILD_SHARED_LIBS:BOOL=ON /
+	        -DBUILD_EXAMPLES:BOOL=OFF /
+	        -DBUILD_TESTING:BOOL=OFF /
+		    -DVTK_Group_Web:BOOL=OFF /
+	        -DModule_vtkImagingMath:BOOL=ON /
+	  	    LOG_DOWNLOAD 0 /
+	  	    LOG_UPDATE 0
+		)
+	endif()
 	add_compile_options(-DLEMMAUSEVTK) 
-	# Compile Matplot_vtk if VTK is present
-	#add_subdirectory(Matplot_vtk)	
-	#include_directories ("${PROJECT_SOURCE_DIR}/Matplot_vtk")
 endif()
 
 #######################
