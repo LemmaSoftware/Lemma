@@ -111,7 +111,7 @@ else()
 endif()
 
 # tinyxml2, this library is used for XML IO 
-option( LEMMA_TINYXML_SUPPORT  "MATIO library support for MATLAB .mat files" OFF)
+option( LEMMA_TINYXML_SUPPORT  "TinyXML library support for .xml files" OFF)
 if ( LEMMA_TINYXML_SUPPORT )
 	ExternalProject_Add(TINYXML2
 		GIT_REPOSITORY "https://github.com/leethomason/tinyxml2.git"
@@ -167,34 +167,24 @@ if ( LEMMA_VTK7_SUPPORT )
 
 	if (VTK_FOUND)
 		message(STATUS "VTK 7 was found! ") 
+	        include(${VTK_USE_FILE}) 
 	else()
 		ExternalProject_Add(VTK
-  		GIT_REPOSITORY "${git_protocol}://vtk.org/VTK.git"
-  		GIT_TAG "${VTK_TAG}"
-  		SOURCE_DIR VTK
-  		BINARY_DIR VTK-build
-  		CMAKE_GENERATOR ${gen}
+  		GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
+    	        PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/vtk7
   		CMAKE_ARGS
-	    -DBUILD_SHARED_LIBS:BOOL=ON
-	    -DBUILD_EXAMPLES:BOOL=OFF
-	    -DBUILD_TESTING:BOOL=OFF
-	    -DVTK_Group_Web:BOOL=ON
-	    -DModule_vtkImagingMath:BOOL=ON
-	    -DVTK_WRAP_PYTHON:BOOL=ON
-	    -DExternalData_OBJECT_STORES:STRING=${ExternalData_OBJECT_STORES}
-	    "-DPYTHON_EXECUTABLE:FILEPATH=${PYTHON_EXECUTABLE}"
-	    -DVTK_USE_SYSTEM_ZLIB:BOOL=ON
-	    "-DZLIB_ROOT:PATH=${ZLIB_ROOT}"
-	    "-DZLIB_INCLUDE_DIR:PATH=${ZLIB_INCLUDE_DIR}"
-	    "-DZLIB_LIBRARY:FILEPATH=${ZLIB_LIBRARY}"
+   	        -DBUILD_SHARED_LIBS:BOOL=ON
+	        -DBUILD_EXAMPLES:BOOL=OFF
+	        -DBUILD_TESTING:BOOL=OFF
+		-DVTK_Group_Web:BOOL=OFF
+	        -DModule_vtkImagingMath:BOOL=ON
 	  	INSTALL_COMMAND ""
 	  	LOG_DOWNLOAD 0
 	  	LOG_UPDATE 0
-	  	DEPENDS zlib
 		)
 	endif()
 
-	include(${VTK_USE_FILE}) 
+
 	add_compile_options(-DLEMMAUSEVTK) 
 	# Compile Matplot_vtk if VTK is present
 	#add_subdirectory(Matplot_vtk)	
