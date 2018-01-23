@@ -13,6 +13,8 @@
  **/
 
 // Convenience include all of LemmaCore
+# pragma once
+
 #ifndef  LEMMAINCLUDE_INC
 #define  LEMMAINCLUDE_INC
 #include "ASCIIParser.h"

@@ -167,6 +167,9 @@ if ( LEMMA_VTK7_SUPPORT )
 	if (VTK_FOUND)
 		message(STATUS "VTK 7 was found! ") 
 	        include(${VTK_USE_FILE}) 
+		#add_compile_options(-DLEMMAUSEVTK)
+		#target_compile_definitions( lemmacore PRIVATE LEMMAUSEVTK=1 )
+		add_definitions(-DLEMMAUSEVTK) 
 	else()
 		ExternalProject_Add(VTK
   		GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
@@ -213,7 +216,7 @@ if ( LEMMA_VTK8_SUPPORT )
 	  	    LOG_UPDATE 0
 		)
 	endif()
-	add_compile_options(-DLEMMAUSEVTK) 
+	add_definitions(-DLEMMAUSEVTK) 
 endif()
 
 #######################
@@ -225,7 +228,7 @@ endif()
 #############################
 FIND_LIBRARY( KIHA_EM1D kihaem1d ) 
 if ( KIHA_EM1D )
-	add_compile_options(-DKIHALEE_EM1D)
+	add_definitions(-DKIHALEE_EM1D) 
 endif()
 
 ####################
