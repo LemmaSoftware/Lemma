@@ -24,7 +24,8 @@ namespace Lemma {
 
 
     // ===================================================================
-    /**      Class:  WireAntenna
+    /**
+      * \ingroup FDEM1D
       * \brief   Class representing a wire antennae.
       * \details This is an abstract class.
 	  */

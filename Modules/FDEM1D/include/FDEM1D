@@ -3,6 +3,8 @@
 
 #include "FieldPoints.h"
 
+#include "CircularLoop.h"
+
 #include "WireAntenna.h"
 #include "PolygonalWireAntenna.h"
 

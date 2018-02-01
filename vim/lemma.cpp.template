@@ -287,7 +287,7 @@ std::ostream &operator << (std::ostream &stream, const |CLASSNAME| &ob) {
 //      Method:  |CLASSNAME|
 // Description:  constructor (locked)
 //--------------------------------------------------------------------------------------
-|CLASSNAME|::|CLASSNAME| (const ctor_key&) : |?BASECLASS|( ) {
+|CLASSNAME|::|CLASSNAME| (const ctor_key&) : |?BASECLASS|( |BASECLASS|::ctor_key()  ) {
 
 }  // -----  end of method |CLASSNAME|::|CLASSNAME|  (constructor)  -----
 
@@ -296,7 +296,7 @@ std::ostream &operator << (std::ostream &stream, const |CLASSNAME| &ob) {
 //      Method:  |CLASSNAME|
 // Description:  DeSerializing constructor (locked)
 //--------------------------------------------------------------------------------------
-|CLASSNAME|::|CLASSNAME| (const YAML::Node& node, const ctor_key&) : |BASECLASS|(node) {
+|CLASSNAME|::|CLASSNAME| (const YAML::Node& node, const ctor_key&) : |BASECLASS|(node, |BASECLASS|::ctor_key()) {
 
 }  // -----  end of method |CLASSNAME|::|CLASSNAME|  (constructor)  -----
 

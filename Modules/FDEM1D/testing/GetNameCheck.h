@@ -51,6 +51,12 @@ class MyTestSuite : public CxxTest::TestSuite
         TS_ASSERT_EQUALS( Obj->GetName(), std::string("WireAntenna") );
     }
 
+    void testCircularLoop( void )
+    {
+        auto Obj = CircularLoop::NewSP();
+        TS_ASSERT_EQUALS( Obj->GetName(), std::string("CircularLoop") );
+    }
+
     void testPolygonalWireAntenna( void )
     {
         auto Obj = PolygonalWireAntenna::NewSP();
