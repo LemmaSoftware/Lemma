@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
+set(LEMMA_VERSION_MAJOR "0")
+set(LEMMA_VERSION_MINOR "2")
+set(LEMMA_VERSION_PATCH "1")
+set(LEMMA_VERSION "\"${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}\"")
+set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}")
+
 # Mac OSX RPATH is weird 
 # enable @rpath in the install name for any shared library being built
 # note: it is planned that a future version of CMake will enable this by default
@@ -10,7 +16,9 @@ set(CMAKE_MACOSX_RPATH 1)
 
 project (Lemma CXX)
 
-# required external programs (for runtime of nix, not buildtime)
+##############################
+# required external programs # for downloading packages
+##############################
 FIND_PROGRAM(HAVEGIT git
   PATHS /usr/bin/ /bin ENV PATH NO_DEFAULT_PATH
 )
@@ -38,32 +46,19 @@ endif(NOT CMAKE_BUILD_TYPE)
 include(ExternalProject)
 ##########################################################################################
 # Eigen, this header-library is used extensively for linear algebra, matrices, and arrays
-# Mercurial (hg) repo pull, Would it be better to just download latest stable?
-FIND_PROGRAM( HAVEHG hg
-  PATHS /usr/bin/ /bin ENV PATH NO_DEFAULT_PATH
-)
-if (HAVEHG)
-	ExternalProject_Add(EIGEN
-	HG_REPOSITORY  "https://bitbucket.org/eigen/eigen/"
+# Eigen now has an official mirror on GitHub, so Mercurial is no longer a requirement! 
+ExternalProject_Add(EIGEN
+	GIT_REPOSITORY "https://github.com/eigenteam/eigen-git-mirror.git"
 	UPDATE_COMMAND ""
-	HG_TAG "3.3.2" #"default"
+	GIT_TAG "3.3.3" #"default"
    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 )
-ELSE()
-	# Use Stable Eigen instead
-	ExternalProject_Add(EIGEN
-	#URL "http://bitbucket.org/eigen/eigen/get/default.tar.gz" # tip from repo
-    URL "http://bitbucket.org/eigen/eigen/get/3.3.2.tar.gz"
-   	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
-   	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
-	)	
-ENDIF()
 include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3")
 
 #############################################################################################
 # Yaml-cpp, this library is used extensively for serialisation of classes (class persistence) 
-find_package(yaml-cpp)
+#find_package(yaml-cpp)
 if (yaml-cpp_FOUND)
     message( STATUS "YAML-CPP FOUND ${yaml-cpp_FOUND}" )
     message( STATUS "YAML-CPP LIBRARIES ${YAML_CPP_LIBRARIES}" )
@@ -72,16 +67,17 @@ else()
     message( STATUS "YAML-CPP WAS NOT FOUND" )
 	ExternalProject_Add(YAML_CPP
 		GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
-		GIT_TAG   "master" #"release-0.5.3" #"master"
+		GIT_TAG   "yaml-cpp-0.6.1" # "master" 
 		UPDATE_COMMAND ""
 		PATCH_COMMAND ""
     	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
-    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
-        	       -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} /
-    	           -DYAML_CPP_BUILD_TESTS=OFF 
+    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
+                   -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} 
+                   -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} 
+    	           -DYAML_CPP_BUILD_TESTS=OFF
 	)	
+	find_package(yaml-cpp)
 endif()
-#add_compile_options(-DHAVE_YAMLCPP) 
 
 # CxxTest 
 find_package(CxxTest) 
@@ -189,7 +185,6 @@ endif()
 
 option (LEMMA_VTK8_SUPPORT "VTK library for visualisation and grids" OFF)
 if ( LEMMA_VTK8_SUPPORT ) 
-	#find_package(VTK 7 REQUIRED NO_MODULE)
 	find_package(VTK 8.0 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
 			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkInteractionStyle 
 			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
@@ -267,12 +262,6 @@ if (LEMMA_USE_OPENMP)
 	message (FATAL ERROR "OpenMP cannot be found, but was specified!")
     endif()
 endif()
-
-set(LEMMA_VERSION_MAJOR "0")
-set(LEMMA_VERSION_MINOR "2")
-set(LEMMA_VERSION_PATCH "0")
-set(LEMMA_VERSION "\"${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}\"")
-set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}")
 
 configure_file (
 	"${PROJECT_SOURCE_DIR}/config/LemmaConfig.h.in"

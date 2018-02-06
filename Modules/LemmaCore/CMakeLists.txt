@@ -11,7 +11,7 @@ set_target_properties(lemmacore PROPERTIES
 )
 
 # External project dependencies 
-#add_dependencies(lemmacore YAML_CPP)
+add_dependencies(lemmacore YAML_CPP)
 
 if (LEMMA_TINYXML_SUPPORT)
 	add_dependencies(lemmacore TINYXML2)
@@ -23,6 +23,7 @@ endif()
 # Linking
 if ( LEMMA_VTK6_SUPPORT OR LEMMA_VTK7_SUPPORT OR LEMMA_VTK8_SUPPORT ) 
 	target_link_libraries(lemmacore ${VTK_LIBRARIES})
+#	target_link_libraries(lemmacore "yaml-cpp")
 #	target_link_libraries(lemmacore "matplot")
 endif()
 
