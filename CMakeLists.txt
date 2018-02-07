@@ -43,22 +43,31 @@ endif(NOT CMAKE_BUILD_TYPE)
 ###################
 # External Projects
 ###################
-include(ExternalProject)
+
 ##########################################################################################
 # Eigen, this header-library is used extensively for linear algebra, matrices, and arrays
 # Eigen now has an official mirror on GitHub, so Mercurial is no longer a requirement! 
-ExternalProject_Add(EIGEN
-	GIT_REPOSITORY "https://github.com/eigenteam/eigen-git-mirror.git"
-	UPDATE_COMMAND ""
-	GIT_TAG "3.3.3" #"default"
-   	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
-   	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
-)
-include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3")
+#ExternalProject_Add(EIGEN
+#	GIT_REPOSITORY "https://github.com/eigenteam/eigen-git-mirror.git"
+#	UPDATE_COMMAND ""
+#	GIT_TAG "3.3.3" #"default"
+#   	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
+#   	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+#)
+#include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3")
+
+
+####################
+# Build SubModules #
+####################
+include(ExternalProject)
+
+
+
 
 #############################################################################################
 # Yaml-cpp, this library is used extensively for serialisation of classes (class persistence) 
-#find_package(yaml-cpp)
+find_package(yaml-cpp)
 if (yaml-cpp_FOUND)
     message( STATUS "YAML-CPP FOUND ${yaml-cpp_FOUND}" )
     message( STATUS "YAML-CPP LIBRARIES ${YAML_CPP_LIBRARIES}" )
@@ -76,7 +85,7 @@ else()
                    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} 
     	           -DYAML_CPP_BUILD_TESTS=OFF
 	)	
-	find_package(yaml-cpp)
+#	find_package(yaml-cpp)
 endif()
 
 # CxxTest 

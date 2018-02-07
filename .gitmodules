@@ -1,3 +1,9 @@
 [submodule "external/eigen"]
 	path = external/eigen
 	url = https://github.com/eigenteam/eigen-git-mirror.git
+[submodule "external/yaml-cpp"]
+	path = external/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "external/CxxTest"]
+	path = external/CxxTest
+	url = https://github.com/CxxTest/cxxtest.git
