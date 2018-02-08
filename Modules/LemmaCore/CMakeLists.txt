@@ -11,7 +11,7 @@ set_target_properties(lemmacore PROPERTIES
 )
 
 # External project dependencies 
-add_dependencies(lemmacore YAML_CPP)
+#add_dependencies(lemmacore YAML_CPP)
 
 if (LEMMA_TINYXML_SUPPORT)
 	add_dependencies(lemmacore TINYXML2)
@@ -29,7 +29,7 @@ endif()
 
 # find_package(yaml-cpp) does not seem to properly define library names...
 # a better solution than this is welcome 
-target_link_libraries(lemmacore ${YAML_CPP_LIBRARIES}) 
+#target_link_libraries(lemmacore ${YAML_CPP_LIBRARIES}) 
 #if (WIN32)
 #	target_link_libraries(lemmacore "libyaml-cppmdd") 
 #else()

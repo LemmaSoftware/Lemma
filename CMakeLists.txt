@@ -1,10 +1,66 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
-set(LEMMA_VERSION_MAJOR "0")
-set(LEMMA_VERSION_MINOR "2")
-set(LEMMA_VERSION_PATCH "1")
-set(LEMMA_VERSION "\"${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}\"")
-set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}")
+####################################################################################################
+# Lemma versioning, set Major, minor, and patch here                                               #
+set(LEMMA_VERSION_MAJOR "0")                                                                       #
+set(LEMMA_VERSION_MINOR "2")                                                                       #
+set(LEMMA_VERSION_PATCH "1")                                                                       #
+set(LEMMA_VERSION "\"${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}\"")      #
+set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}") #
+####################################################################################################
+
+########################################
+#  ##################################  #
+#  # Pre-Build checks/ dependencies #  #
+#  ##################################  #
+########################################
+
+## Options--what do you want to do
+
+option ( BUILD_SHARED_LIBS         "Shared or static libraries"  OFF ) 
+option ( LEMMA_ENABLE_TESTING      "Turn on unit testing" OFF )
+option ( LEMMA_BUILD_EXAMPLES      "Compile example Lemma applications" OFF )
+option ( LEMMA_USE_OPENMP          "Use OpenMP in Lemma" OFF )
+option ( LEMMA_BUILD_DOCUMENTATION "Build Doxygen man pages" OFF )
+
+## Hard Dependencies
+find_package (Eigen3 3.3  NO_MODULE QUIET)   # Matrix/Vector & Math
+find_package (yaml-cpp 0.6 QUIET)           # Serialisation of classes 
+
+if (LEMMA_BUILD_DOCUMENTATION)
+    find_package(Doxygen REQUIRED)
+endif()
+
+## Optional Dependencies
+if (LEMMA_ENABLE_TESTING)
+    find_package (CxxTest QUIET)                # Unit testin 
+endif()
+
+#######################################################################
+# CXXTEST Framework
+if(CXXTEST_FOUND)
+	if (LEMMA_ENABLE_TESTING)
+    	#include_directories(${CXXTEST_INCLUDE_DIR}) # Add this in testing CMakeLists.txt instead, cleaner
+    	enable_testing()
+	endif()
+endif()
+
+## Optional Dependencies
+if ( NOT Eigen3_FOUND OR 
+     NOT yaml-cpp_FOUND OR 
+     (LEMMA_ENABLE_TESTING AND NOT CxxTest_FOUND) )
+    message ( STATUS "Missing hard dependencies have been found, these will be downloaded any compiled." )
+    message ( STATUS "This necessitates a two step build." )
+    message ( STATUS "Build these packages first...THEN RERUN CMAKE!" )
+    project (SUPERBUILD NONE)
+  	# execute the superbuild (this script will be invoked again without the
+  	# USE_SUPERBUILD option this time)
+  	include (CMake/SuperBuild.cmake)
+  	return()                      # stop processing this file further
+else()
+	#project (Blah)                # <-- YOUR PROJECT NAME HERE
+	message( STATUS "Everything was found, happy Lemma-ing" )
+endif()
 
 # Mac OSX RPATH is weird 
 # enable @rpath in the install name for any shared library being built
@@ -26,7 +82,7 @@ if(NOT HAVEGIT)
   message(FATAL_ERROR "Lemma requires that git is installed and in the path of your machine")
 endif(NOT HAVEGIT)
 
-option(BUILD_SHARED_LIBS OFF)
+
 if(BUILD_SHARED_LIBS)
 	set(LABEL_SUFFIX "shared")
 else()
@@ -43,100 +99,6 @@ endif(NOT CMAKE_BUILD_TYPE)
 ###################
 # External Projects
 ###################
-include(ExternalProject)
-##########################################################################################
-# Eigen, this header-library is used extensively for linear algebra, matrices, and arrays
-# Eigen now has an official mirror on GitHub, so Mercurial is no longer a requirement! 
-ExternalProject_Add(EIGEN
-	GIT_REPOSITORY "https://github.com/eigenteam/eigen-git-mirror.git"
-	UPDATE_COMMAND ""
-	GIT_TAG "3.3.3" #"default"
-   	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
-   	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
-)
-include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3")
-
-#############################################################################################
-# Yaml-cpp, this library is used extensively for serialisation of classes (class persistence) 
-#find_package(yaml-cpp)
-if (yaml-cpp_FOUND)
-    message( STATUS "YAML-CPP FOUND ${yaml-cpp_FOUND}" )
-    message( STATUS "YAML-CPP LIBRARIES ${YAML_CPP_LIBRARIES}" )
-    message( STATUS "YAML-CPP LIBRARY ${yaml-cpp_LIBRARY}" )
-else()
-    message( STATUS "YAML-CPP WAS NOT FOUND" )
-	ExternalProject_Add(YAML_CPP
-		GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
-		GIT_TAG   "yaml-cpp-0.6.1" # "master" 
-		UPDATE_COMMAND ""
-		PATCH_COMMAND ""
-    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
-    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
-                   -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} 
-                   -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} 
-    	           -DYAML_CPP_BUILD_TESTS=OFF
-	)	
-	find_package(yaml-cpp)
-endif()
-
-# CxxTest 
-find_package(CxxTest) 
-if (CXXTEST_FOUND)
-	# Do nothing
-    message( STATUS "CXXTEST FOUND" )
-else()
-	message( STATUS "CxxTest will be built and installed along with Lemma, override if desired in GUI."  )
-	ExternalProject_Add(CxxTest
-		GIT_REPOSITORY "https://github.com/CxxTest/cxxtest.git"
-		GIT_TAG "master"
-		UPDATE_COMMAND ""
-		PATCH_COMMAND ""
-		CONFIGURE_COMMAND ""
-		BUILD_COMMAND ""
-		INSTALL_COMMAND ""
-    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest
-    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} /
-                   -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
-                   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-	)
-	# The values "CACHE PATH "" FORCE" makes the GUI show the values of the local CxxTest, but this can cause issues 
-	# with users wanting to specify their own path, its not recommended  
-	set (CXXTEST_INCLUDE_DIR  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/") # CACHE  PATH "" FORCE )
-	set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen") # CACHE PATH "" FORCE )
-	find_package(CxxTest REQUIRED)
-endif()
-
-# tinyxml2, this library is used for XML IO 
-option( LEMMA_TINYXML_SUPPORT  "TinyXML library support for .xml files" OFF)
-if ( LEMMA_TINYXML_SUPPORT )
-	ExternalProject_Add(TINYXML2
-		GIT_REPOSITORY "https://github.com/leethomason/tinyxml2.git"
-		GIT_TAG  "master"
-		UPDATE_COMMAND ""
-		PATCH_COMMAND ""
-    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/tinyxml2
-    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
-			-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-	)
-	add_compile_options(-DTINYXMLSUPPORT) 
-endif()
-
-option( LEMMA_MATIO_SUPPORT  "MATIO library support for MATLAB .mat files" OFF)
-if ( LEMMA_MATIO_SUPPORT )
-	add_compile_options(-DHAVE_MATIO) 
-	# matio, this library is used for MATLAB file IO
-	ExternalProject_ADD(MATIO
-		GIT_REPOSITORY  "git://git.code.sf.net/p/matio/matio"
-		GIT_TAG  "master"
-		UPDATE_COMMAND ""
-		PATCH_COMMAND ""
-    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/matio
-    	#CONFIGURE_COMMAND ${CMAKE_CURRENT_BINARY_DIR}/external/matio/src/MATIO/autogen.sh && configure
-    	CONFIGURE_COMMAND ./autogen.sh && ./configure --prefix=${CMAKE_INSTALL_PREFIX}
-		BUILD_IN_SOURCE 1 
-    	BUILD_COMMAND ${MAKE}
-	)
-endif()
 
 # We don't build VTK, it is too heavy.
 option (LEMMA_VTK6_SUPPORT "VTK library for visualisation and grids" OFF)
@@ -249,9 +211,6 @@ endif()
 ####################
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-option( LEMMA_BUILD_EXAMPLES "Compile example Lemma applications" OFF )
-
-option( LEMMA_USE_OPENMP  "Use OpenMP in Lemma" OFF)
 if (LEMMA_USE_OPENMP)
     find_package(OpenMP)
     if (OPENMP_FOUND)
@@ -273,15 +232,7 @@ include_directories("${PROJECT_BINARY_DIR}/include")
 include_directories ("${CMAKE_INSTALL_PREFIX}/include/")
 link_directories ("${CMAKE_INSTALL_PREFIX}/lib/")
 
-#######################################################################
-# CXXTEST Framework
-if(CXXTEST_FOUND)
-	option (LEMMA_ENABLE_TESTING  "Turn on unit testing" ON)
-	if (LEMMA_ENABLE_TESTING)
-    	#include_directories(${CXXTEST_INCLUDE_DIR}) # Add this in testing CMakeLists.txt instead, cleaner
-    	enable_testing()
-	endif()
-endif()
+
 
 ########################################################################
 # Build Modules
@@ -292,9 +243,7 @@ add_subdirectory (Modules)
 # ALL make documentation build by default if possible
 find_package(Doxygen)
 	if(DOXYGEN_FOUND)
-	option( LEMMA_BUILD_DOCUMENTATION  "Build Doxygen man pages" OFF )
 	if (LEMMA_BUILD_DOCUMENTATION)
-
 # Custom header and footer option, enable in Doxygen 
 #	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Documentation/header.html
 #        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Documentation/header.html
@@ -302,7 +251,6 @@ find_package(Doxygen)
 #	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Documentation/footer.html
 #        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Documentation/footer.html
 #	)
-
 	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Documentation/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Documentation/Doxyfile @ONLY)
 		add_custom_target(doc
 			ALL
@@ -310,7 +258,7 @@ find_package(Doxygen)
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 			COMMENT "Generating API documentation with Doxygen" VERBATIM
 		)
-
 	endif (LEMMA_BUILD_DOCUMENTATION)
 	endif(DOXYGEN_FOUND)
 
+# vim: set tabstop=4 shiftwidth=4 expandtab: 
