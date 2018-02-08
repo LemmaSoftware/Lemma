@@ -29,9 +29,10 @@
 
 add_executable( CubicSplineInterpolator  CubicSplineInterpolator.cpp )
 target_link_libraries(CubicSplineInterpolator "lemmacore")
+set_property(TARGET CubicSplineInterpolator PROPERTY CXX_STANDARD 14)
 
 add_executable( filter  filter.cpp )
 target_link_libraries(filter "lemmacore")
-
+set_property(TARGET filter PROPERTY CXX_STANDARD 14)
 
 
