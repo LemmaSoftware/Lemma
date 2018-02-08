@@ -26,8 +26,11 @@ namespace Lemma {
     //  Class:  KernelEM1DManager
     /**
       @class
-      \brief
-      \details
+      \ingroup FDEM1D
+      \brief   Keeps track of Kernels for EM1D
+      \details This class keeps track of the various types of kernel terms
+               which can be shared between permutations of sources. Care is
+               taken to avoid duplicate calculations
      */
     // ===================================================================
     class KernelEM1DManager : public LemmaObject {

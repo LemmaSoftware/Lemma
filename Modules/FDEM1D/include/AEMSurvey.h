@@ -26,6 +26,7 @@
 namespace Lemma {
 
 /**
+  \ingroup FDEM1D
   \brief   Contains pertinant information about an AEM survey
   \details All important details about an AEM survey are stored here, but
            nothing about the underlying earth model.

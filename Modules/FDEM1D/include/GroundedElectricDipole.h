@@ -26,6 +26,7 @@
 namespace Lemma {
 
     /**
+      \ingroup FDEM1D
       \brief   Grounded electric dipole
       \details Used to model an idealised grounded electrid dipole of arbitrary
                polarisation.

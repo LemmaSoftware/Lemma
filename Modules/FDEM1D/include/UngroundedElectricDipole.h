@@ -26,7 +26,8 @@
 namespace Lemma {
 
     /**
-      \brief  Ungrounded electric dipole
+      \ingroup FDEM1D
+      \brief   Ungrounded electric dipole
       \details Used to model an idealised ungrounded electric dipole. Used primarily in integrating
                 around current sources.
      */

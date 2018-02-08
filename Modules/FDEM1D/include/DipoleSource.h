@@ -36,6 +36,7 @@ namespace Lemma {
 
     // ==========================================================================
     //        Class:  DipoleSource
+    /// \ingroup  FDEM1D
     /// \brief    Dipole sources form the backbone of Lemma.
     /// \details  More complex sources are constructed from a superposition of
     ///           dipoles.

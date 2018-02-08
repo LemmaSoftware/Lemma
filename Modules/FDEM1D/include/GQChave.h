@@ -24,7 +24,8 @@ namespace Lemma {
 
 	// =======================================================================
 	//        Class:  GQChave
-	/// \brief  Calculates hankel transform using gaussian quadrature.
+    /// \ingroup  FDEM1D
+	/// \brief    Calculates hankel transform using gaussian quadrature.
 	/// \details  Accurate but slow, this is a port of Alan Chave's public domain
     /// fortran code
 	// =======================================================================

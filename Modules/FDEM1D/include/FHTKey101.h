@@ -24,8 +24,9 @@
 namespace Lemma {
 
     /**
+      \ingroup FDEM1D
       \brief   Impliments the fast Hankel transform as outlines by Key 2011
-      \details This filter uses 51, 101, or 201 filter points and supports both lagged and related
+      \details This filter uses 101 filter points and supports both lagged and related
                 kernel arguments. This algorithm is a port of code carrying the following copyright and
                 restriction:
                 %------------------------------------------------------------------%

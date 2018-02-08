@@ -20,6 +20,9 @@ if (LEMMA_MATIO_SUPPORT)
 	add_dependencies(lemmacore MATIO)
 endif()
 
+target_link_libraries (lemmacore Eigen3::Eigen)
+target_link_libraries (lemmacore ${YAML_CPP_LIBRARIES}) 
+
 # Linking
 if ( LEMMA_VTK6_SUPPORT OR LEMMA_VTK7_SUPPORT OR LEMMA_VTK8_SUPPORT ) 
 	target_link_libraries(lemmacore ${VTK_LIBRARIES})
@@ -29,7 +32,7 @@ endif()
 
 # find_package(yaml-cpp) does not seem to properly define library names...
 # a better solution than this is welcome 
-#target_link_libraries(lemmacore ${YAML_CPP_LIBRARIES}) 
+
 #if (WIN32)
 #	target_link_libraries(lemmacore "libyaml-cppmdd") 
 #else()

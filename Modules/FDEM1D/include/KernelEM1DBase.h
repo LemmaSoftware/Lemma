@@ -25,6 +25,7 @@ namespace Lemma {
     //  Class:  KernelEM1DBase
     /**
       @class
+      \ingroup FDEM1D
       \brief   Pure virtual base class of KernelEm1D
       \details Defines interface for HankelTransform classes
      */

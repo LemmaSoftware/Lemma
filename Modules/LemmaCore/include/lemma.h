@@ -11,19 +11,18 @@
   @version  $Id: lemma.h 203 2015-01-09 21:19:04Z tirons $
  **/
 
+//  \image html lemma.png
 /** \mainpage Lemma is an ElectroMagnetics Modelling API
-    \image html lemma.png
 
     \authors Trevor Irons and M. Andrew Kass and others
 
-    Lemma is a recursive acronym that stands for <B>L</B>emma is an
-    <B>E</B>lectro<B>M</B>agnetics <B>M</B>odelling <B>A</B>PI.
-    Lemma is a cross-platform library delivering an expressive API that
-    can be used to easily create versatile programs.
-    We are building a powerful, flexible, expresive framework that allows
-    for the straightforward creation of geophysical EM applications.
-    Lemma is not itself a program, instead it is a collection of building
-    blocks to make applications. We chose this name because:
+    Originally Lemma was intended as a recursive acronym standing for
+    <B>L</B>emma is an <B>E</B>lectro<B>M</B>agnetics <B>M</B>odelling <B>A</B>PI.
+    As the breadth of the project has expanded, the name has remained
+    appropriate in a more liteal sense. Lemma is a flexible cross-platform
+    library delivering an expressive API that can be used to easily create
+    versatile programs. Lemma is not itself a program, instead it is a
+    collection of building blocks to make applications. We retain this name because:
 
     - In mathematics a Lemma is a proven proposition which is used as a
     stepping stone to a larger result rather than as a statement in-and-of
@@ -35,7 +34,7 @@
     We feel that this is a partucularily approprate name, as Lemma's
     API can be leveraged create powerful applications such as forward
     modelling and inverting frequency and time-domain
-    surveys of arbitrary survey design, SNMR surveys, CSAMT and more.
+    surveys of arbitrary survey design, sNMR surveys, CSAMT and more.
 
     \section Motivation
     Why another Geophysical EM project? For starters, there
@@ -126,7 +125,7 @@
 
     The 1D EM solver was derived (but updated heavily) from a Fortran
     programme written by Ki Ha Lee in 1984. We have communicated with Ki Ha,
-    and he assured us that this code is in the public domian.
+    and he assured us that this code is in the public domain.
 
     A Gaussian quadrature hankel transform originally written by Alan Chave was
     ported to C++. This code is in the public domain, and the source code was

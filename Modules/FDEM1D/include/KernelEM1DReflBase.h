@@ -30,6 +30,7 @@ namespace Lemma {
     //  Class:  KernelEM1DReflBase
     /**
       @class
+      \ingroup FDEM1D
       \brief   Abstract class defining EM1DRefl class.
       \details Derived classes are template specialized for optimal performance.
      */

@@ -46,7 +46,8 @@ namespace Lemma {
 
     // =======================================================================
     //        Class:  EmEarth1D
-    /// \brief  Implimentation of 1D EM solution.
+    /// \ingroup  FDEM1D
+    /// \brief    Implimentation of 1D EM solution.
     /// \details  We've done a lot of different things.
     // =======================================================================
     class EMEarth1D : public LemmaObject {

@@ -28,6 +28,7 @@ namespace Lemma {
     //  Class:  KernelEM1DSpec
     /**
       @class
+      \ingroup FDEM1D
       \brief   Optimized version of KernelEm1D
       \details Through use of template specialisations, this KernelEm1D
                class delivers much better performance.

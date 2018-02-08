@@ -38,12 +38,13 @@ namespace Lemma {
     // =======================================================================
     //        Class:  FieldPoints
     /**
-     *  \brief  Points in the subsurface where 1D EM calculations are made
+     *  \ingroup FEM1D
+     *  \brief   Points in the subsurface where 1D EM calculations are made
      *  \details These are the points where Hankel transform calculations are
      *           made.
-     *  \note In previous versions of Lemma, this class was called ReceiverPoints,
-     *        the functionality remains roughly the same, but the name is more
-     *        appropriate.
+     *  \note    In previous versions of Lemma, this class was called ReceiverPoints,
+     *           the functionality remains roughly the same, but the name is more
+     *           appropriate.
      */
     // =======================================================================
     class FieldPoints : public LemmaObject {

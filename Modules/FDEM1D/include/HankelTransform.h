@@ -22,6 +22,7 @@ namespace Lemma {
 
         // ===================================================================
         //        Class:  HankelTransform
+        /// \ingroup FDEM1D
         /// \brief   Abstract class for hankel transforms
         /// \details
         // ===================================================================

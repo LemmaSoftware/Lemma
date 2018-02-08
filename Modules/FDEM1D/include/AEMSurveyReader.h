@@ -27,6 +27,7 @@
 namespace Lemma {
 
     /**
+      \ingroup FDEM1D
       \brief   Reads an ASCII description of an AEM survey
       \details The file format is described as follows.
      */

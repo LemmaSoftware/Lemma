@@ -17,15 +17,17 @@ set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMM
 
 ## Options--what do you want to do
 
-option ( BUILD_SHARED_LIBS         "Shared or static libraries"  OFF ) 
-option ( LEMMA_ENABLE_TESTING      "Turn on unit testing" OFF )
-option ( LEMMA_BUILD_EXAMPLES      "Compile example Lemma applications" OFF )
-option ( LEMMA_USE_OPENMP          "Use OpenMP in Lemma" OFF )
-option ( LEMMA_BUILD_DOCUMENTATION "Build Doxygen man pages" OFF )
+option ( BUILD_SHARED_LIBS          "Shared or static libraries"  OFF ) 
+option ( LEMMA_ENABLE_TESTING       "Turn on unit testing" OFF )
+option ( LEMMA_BUILD_EXAMPLES       "Compile example Lemma applications" OFF )
+option ( LEMMA_USE_OPENMP           "Use OpenMP in Lemma" OFF )
+option ( LEMMA_BUILD_DOCUMENTATION  "Build Doxygen man pages" OFF )
 
 ## Hard Dependencies
 find_package (Eigen3 3.3  NO_MODULE QUIET)   # Matrix/Vector & Math
-find_package (yaml-cpp 0.6 QUIET)           # Serialisation of classes 
+find_package (yaml-cpp 0.6 QUIET)            # Serialisation of classes 
+
+INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
 
 if (LEMMA_BUILD_DOCUMENTATION)
     find_package(Doxygen REQUIRED)

@@ -20,6 +20,7 @@ namespace Lemma {
 
     // ===================================================================
     //        Class:  PolygonalWireAntenna
+    /// \ingroup FDEM1D
     /// \brief   Class representing polygonal wire antennae.
     /// \details For EM calculations, dipoles representing this loop are
     ///    created dynamically, depending on receiver location.

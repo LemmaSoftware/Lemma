@@ -36,7 +36,8 @@ namespace Lemma {
     enum sZeroType{J0, J1, NPI};
 
     /**
-      \brief  Port of Key's quadrature with extrapolation Hankel transform algorithm.
+      \ingroup FDEM1D
+      \brief   Port of Key's quadrature with extrapolation Hankel transform algorithm.
       \details Details of the algorithm can be found in Key2011. This code is a port
                of the published algorithm, which contains the following notice:
         %------------------------------------------------------------------%

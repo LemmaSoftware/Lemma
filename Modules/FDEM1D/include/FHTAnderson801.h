@@ -23,7 +23,8 @@ namespace Lemma {
 
 // ==========================================================================
 //        Class:  FHTAnderson801
-/** \brief   Computes the Hankel transform of orders 0 and 1 using lagged
+/** \ingroup FDEM1D
+    \brief   Computes the Hankel transform of orders 0 and 1 using lagged
              and related convolutions.
     \details A rewrite of work by Anderson who wrote a FORTRAN program
              that he released while working at the USGS:

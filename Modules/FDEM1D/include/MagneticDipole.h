@@ -26,6 +26,7 @@ namespace Lemma {
 
 /**
   @class
+  \ingroup FDEM1D
   \brief   Magnetic Dipole
   \details Used to model an idealised magnetic dipole of arbitrary
            polarisation.

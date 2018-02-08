@@ -26,6 +26,7 @@
 namespace Lemma {
 
     /**
+      \ingroup FDEM1D
       \brief Reads ASCII representation of LayeredEarth, similiar to UBC format.
       \details Largely superceded by YAML serialisation, this class remains for legacy purposes.
      */
