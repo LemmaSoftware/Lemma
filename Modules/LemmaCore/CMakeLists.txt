@@ -21,6 +21,7 @@ if (LEMMA_MATIO_SUPPORT)
 endif()
 
 target_link_libraries (lemmacore Eigen3::Eigen)
+#target_link_libraries (lemmacore CxxTest)
 target_link_libraries (lemmacore ${YAML_CPP_LIBRARIES}) 
 
 # Linking

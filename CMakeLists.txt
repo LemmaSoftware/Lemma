@@ -35,7 +35,10 @@ endif()
 
 ## Optional Dependencies
 if (LEMMA_ENABLE_TESTING)
-    find_package (CxxTest QUIET)                # Unit testin 
+    message (STATUS "LEMMA_ENABLE_TESTING is set" )
+    #find_package (CxxTest QUIET)            # Unit testing 
+    find_package (CxxTest)            # Unit testing 
+    message (STATUS "CXXTEST_FOUND ${CxxTest_FOUND}" )
 endif()
 
 #######################################################################
@@ -61,6 +64,7 @@ if ( NOT Eigen3_FOUND OR
   	return()                      # stop processing this file further
 else()
 	#project (Blah)                # <-- YOUR PROJECT NAME HERE
+	message( STATUS "CXX test Dir${CXXTEST_DIR}" )
 	message( STATUS "Everything was found, happy Lemma-ing" )
 endif()
 
