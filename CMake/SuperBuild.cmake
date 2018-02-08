@@ -10,8 +10,9 @@ else()
 	    GIT_TAG "3.3.3" #"default"
    	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
    	    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
-        #CONFIGURE_COMMAND ""
-        #BUILD_COMMAND ""
+		#CONFIGURE_COMMAND ""
+		#BUILD_COMMAND     ""
+		#INSTALL_COMMAND     ""
     )
     
     # Are these necessary?
@@ -53,27 +54,32 @@ if (LEMMA_ENABLE_TESTING)
     if (CXXTEST_FOUND)
         message( STATUS "CxxTest was found" )
     else()
-	    message( STATUS "CxxTest WAS NOT FOUND") 
+	    message( STATUS "CxxTest WAS NOT FOUND")
+        ## CxxTest has no installation per se, it uses python  
 	    ExternalProject_Add(CxxTest
 		    GIT_REPOSITORY "https://github.com/CxxTest/cxxtest.git"
 		    GIT_TAG "master"
 		    UPDATE_COMMAND ""
 		    PATCH_COMMAND ""
-		    CONFIGURE_COMMAND ""
-		    BUILD_COMMAND ""
-		    INSTALL_COMMAND ""
     	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest
-    	    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} /
-                       -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
-                       -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+    	    #CMAKE_ARGS -DCXXTEST_INCLUDE_DIR="${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/" 
+            #           -DCXXTEST_PYTHON_TESTGEN_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen"
+            #-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} /
+            #           -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
+            #           -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+		    CONFIGURE_COMMAND ""
+		    BUILD_COMMAND     ""
+		    INSTALL_COMMAND   ""
+	    #set (CXXTEST_INCLUDE_DIR  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/" CACHE PATH) #  PATH "" FORCE )
+	    #set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen" CACHE PATH) # PATH "" FORCE )
 	    )
         #enable_testing()
 	    # The values "CACHE PATH "" FORCE" makes the GUI show the values of the local CxxTest, but this can cause issues 
 	    # with users wanting to specify their own path. However, the SuperBuild needs this, in theory you are only here 
-        # because a usable CXXTEST was not already found on the machine, so likely this is sane to do  
-	    set (CXXTEST_INCLUDE_DIR  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/" CACHE  PATH "" FORCE )
-	    set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen" CACHE PATH "" FORCE )
-	    find_package(CxxTest REQUIRED)
+        # because a usable CXXTEST was not already found on the machine, so likely this is sane to do 
+	    #set (CXXTEST_INCLUDE_DIR  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/"  CACHE PATH "" FORCE )
+	    #set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen" CACHE PATH "" FORCE )
+	    #find_package(CxxTest REQUIRED)
     endif()
 endif()
 

@@ -36,7 +36,17 @@ endif()
 ## Optional Dependencies
 if (LEMMA_ENABLE_TESTING)
     message (STATUS "LEMMA_ENABLE_TESTING is set" )
-    #find_package (CxxTest QUIET)            # Unit testing 
+    #find_package (CxxTest QUIET)            # Unit testing
+    if (EXISTS  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/cxxtest")
+	    set (CXXTEST_INCLUDE_DIR  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/" CACHE PATH "" FORCE)
+    else()
+	    set (CXXTEST_INCLUDE_DIR  "CXXTEST_INCLUDE_DIR-NOTFOUND" CACHE PATH "" FORCE)
+    endif()
+    if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen")
+	    set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen" CACHE PATH "" FORCE) 
+    else()
+	    set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "CXXTEST_PYTHON_TESTGEN_EXECUTABLE-NOTFOUND" CACHE PATH "" FORCE) 
+    endif ()
     find_package (CxxTest)            # Unit testing 
     message (STATUS "CXXTEST_FOUND ${CxxTest_FOUND}" )
 endif()
@@ -61,6 +71,9 @@ if ( NOT Eigen3_FOUND OR
   	# execute the superbuild (this script will be invoked again without the
   	# USE_SUPERBUILD option this time)
   	include (CMake/SuperBuild.cmake)
+
+    #add_dependencies(SUPERBUILD CxxTest) 
+
   	return()                      # stop processing this file further
 else()
 	#project (Blah)                # <-- YOUR PROJECT NAME HERE
