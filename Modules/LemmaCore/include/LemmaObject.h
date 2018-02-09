@@ -20,6 +20,10 @@
 #include <chrono>
 #include <memory>
 
+#include <iostream>
+#include <iomanip>
+#include <codecvt>
+
 namespace Lemma {
 
 /**
@@ -68,10 +72,23 @@ class LemmaObject {
             YAML::Node node = YAML::Node();
             //node.SetStyle(YAML::EmitterStyle::Flow);
             node.SetTag( GetName() );
+
+            // ctime throws warning with MSVC and may not look right in certain locales
+            //std::time_t now = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
+            //std::string ser_time =  std::string( std::ctime(&now) );
+            //ser_time.pop_back();
+            //node["Serialized"] = ser_time;
+
+            // Alternative formulation
             std::time_t now = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
-            std::string ser_time =  std::string( std::ctime(&now) );
-            ser_time.pop_back();
-            node["Serialized"] = ser_time;
+            std::stringstream out;
+            // use locale format
+            //out.imbue(std::locale("")); // use whatever is on the system
+            //out << std::put_time(std::localtime(& now), L"%c") ; // locale on system
+            // ISO-8601 format;
+            out << std::put_time(std::localtime(& now), "%F %T %z");
+            node["Serialized"] = out.str();
+
             node["Lemma_VERSION"] = LEMMA_VERSION;
             return node;
         };
