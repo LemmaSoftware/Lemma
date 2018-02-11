@@ -1,10 +1,16 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
+# Bug in CMake on Linux, but Linux, Mac, and Win all support shared libraries, no harm in this, 
+# but remove when warning no longer shows.
+# Related to calling find_package before a project is created... 
+# https://cmake.org/Bug/view.php?id=15999 
+SET_PROPERTY(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
+
 ####################################################################################################
 # Lemma versioning, set Major, minor, and patch here                                               #
 set(LEMMA_VERSION_MAJOR "0")                                                                       #
 set(LEMMA_VERSION_MINOR "2")                                                                       #
-set(LEMMA_VERSION_PATCH "1")                                                                       #
+set(LEMMA_VERSION_PATCH "2")                                                                       #
 set(LEMMA_VERSION "\"${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}\"")      #
 set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}") #
 ####################################################################################################
@@ -23,9 +29,14 @@ option ( LEMMA_BUILD_EXAMPLES       "Compile example Lemma applications" OFF )
 option ( LEMMA_USE_OPENMP           "Use OpenMP in Lemma" OFF )
 option ( LEMMA_BUILD_DOCUMENTATION  "Build Doxygen man pages" OFF )
 
+option (LEMMA_VTK6_SUPPORT "VTK 6.x library for visualisation and grids" OFF)
+option (LEMMA_VTK7_SUPPORT "VTK 7.x library for visualisation and grids" OFF)
+option (LEMMA_VTK8_SUPPORT "VTK 8.x library for visualisation and grids" OFF)
+
 ## Hard Dependencies
-find_package (Eigen3 3.3  NO_MODULE QUIET)   # Matrix/Vector & Math
-find_package (yaml-cpp 0.6 QUIET)            # Serialisation of classes 
+#set(Eigen3_DIR  ${CMAKE_INSTALL_PREFIX} )
+find_package (Eigen3 3.3 QUIET)     # Matrix/Vector & Math
+find_package (yaml-cpp 0.6 QUIET )  # Serialisation of classes 
 
 INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
 
@@ -35,20 +46,17 @@ endif()
 
 ## Optional Dependencies
 if (LEMMA_ENABLE_TESTING)
-    message (STATUS "LEMMA_ENABLE_TESTING is set" )
-    #find_package (CxxTest QUIET)            # Unit testing
-    if (EXISTS  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/cxxtest")
-	    set (CXXTEST_INCLUDE_DIR  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/" CACHE PATH "" FORCE)
+    if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/README")
+	    set (CXXTEST_INCLUDE_DIR  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/"  CACHE PATH "" FORCE )
     else()
-	    set (CXXTEST_INCLUDE_DIR  "CXXTEST_INCLUDE_DIR-NOTFOUND" CACHE PATH "" FORCE)
+	    set (CXXTEST_INCLUDE_DIR  "CXXTEST_INCLUDE_DIR-NOTFOUND"  CACHE PATH "" FORCE )
     endif()
-    if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen")
-	    set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen" CACHE PATH "" FORCE) 
+    if (EXISTS  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen")
+	    set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen" CACHE PATH "" FORCE )
     else()
-	    set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "CXXTEST_PYTHON_TESTGEN_EXECUTABLE-NOTFOUND" CACHE PATH "" FORCE) 
-    endif ()
-    find_package (CxxTest)            # Unit testing 
-    message (STATUS "CXXTEST_FOUND ${CxxTest_FOUND}" )
+	    set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "CXXTEST_PYTHON_TESTGEN_EXECUTABLE-NOTFOUND" CACHE PATH "" FORCE )
+    endif()
+    find_package (CxxTest QUIET)   # Unit testing 
 endif()
 
 #######################################################################
@@ -71,13 +79,9 @@ if ( NOT Eigen3_FOUND OR
   	# execute the superbuild (this script will be invoked again without the
   	# USE_SUPERBUILD option this time)
   	include (CMake/SuperBuild.cmake)
-
-    #add_dependencies(SUPERBUILD CxxTest) 
-
   	return()                      # stop processing this file further
 else()
 	#project (Blah)                # <-- YOUR PROJECT NAME HERE
-	message( STATUS "CXX test Dir${CXXTEST_DIR}" )
 	message( STATUS "Everything was found, happy Lemma-ing" )
 endif()
 
@@ -90,6 +94,13 @@ endif()
 set(CMAKE_MACOSX_RPATH 1)
 
 project (Lemma CXX)
+
+# Disallow in-source build
+if ("${Lemma_SOURCE_DIR}"  STREQUAL "${Lemma_BINARY_DIR}")
+  message(FATAL_ERROR
+    "Lemma requires an out of source Build. "
+    "Please create a separate binary directory and run CMake there.")
+endif()
 
 ##############################
 # required external programs # for downloading packages
@@ -120,7 +131,7 @@ endif(NOT CMAKE_BUILD_TYPE)
 ###################
 
 # We don't build VTK, it is too heavy.
-option (LEMMA_VTK6_SUPPORT "VTK library for visualisation and grids" OFF)
+
 if ( LEMMA_VTK6_SUPPORT ) 
 	#find_package(VTK 6 REQUIRED NO_MODULE)
 	find_package(VTK 6.0 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
@@ -134,7 +145,7 @@ if ( LEMMA_VTK6_SUPPORT )
 	#include_directories ("${PROJECT_SOURCE_DIR}/Matplot_vtk")
 endif()
 
-option (LEMMA_VTK7_SUPPORT "VTK library for visualisation and grids" OFF)
+
 if ( LEMMA_VTK7_SUPPORT ) 
 	#find_package(VTK 7 REQUIRED NO_MODULE)
 	find_package(VTK 7.0 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
@@ -164,7 +175,7 @@ if ( LEMMA_VTK7_SUPPORT )
 	endif()
 endif()
 
-option (LEMMA_VTK8_SUPPORT "VTK library for visualisation and grids" OFF)
+
 if ( LEMMA_VTK8_SUPPORT ) 
 	find_package(VTK 8.0 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
 			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkInteractionStyle 
@@ -231,14 +242,10 @@ endif()
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 if (LEMMA_USE_OPENMP)
-    find_package(OpenMP)
-    if (OPENMP_FOUND)
-        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-        set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
-    else()
-	message (FATAL ERROR "OpenMP cannot be found, but was specified!")
-    endif()
+    find_package(OpenMP REQUIRED)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
 
 configure_file (

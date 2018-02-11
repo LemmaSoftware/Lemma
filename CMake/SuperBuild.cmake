@@ -1,6 +1,6 @@
 include(ExternalProject)
 
-if (eigen3_FOUND)
+if (Eigen3_FOUND)
     message( STATUS "Eigen was found ${eigen_DIR}" )
 else()
     message( STATUS "Eigen WAS NOT FOUND ${eigen_DIR}" )
@@ -14,7 +14,11 @@ else()
 		#BUILD_COMMAND     ""
 		#INSTALL_COMMAND     ""
     )
-    
+
+    message("Source dir of myExtProj = ${SOURCE_DIR}")   
+    ExternalProject_Get_property(EIGEN SOURCE_DIR)
+    message("Source dir of myExtProj = ${SOURCE_DIR}")   
+ 
     # Are these necessary?
     #include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3/")
     #set (Eigen3_DIR  "${CMAKE_INSTALL_PREFIX}/include/eigen3" CACHE  PATH "" FORCE )
@@ -39,13 +43,14 @@ else()
 		GIT_TAG   "yaml-cpp-0.6.1" # "master" 
 		UPDATE_COMMAND ""
 		PATCH_COMMAND ""
-		INSTALL_COMMAND ""
     	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
     	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
                    -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} 
-                   -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} 
     	           -DYAML_CPP_BUILD_TESTS=OFF
+                   -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} 
+		#INSTALL_COMMAND ""
 	)	
+
     # is this necessary?
 	#include_directories ("${CMAKE_INSTALL_PREFIX}/include/yaml-cpp")
 endif()
@@ -77,8 +82,7 @@ if (LEMMA_ENABLE_TESTING)
 	    # The values "CACHE PATH "" FORCE" makes the GUI show the values of the local CxxTest, but this can cause issues 
 	    # with users wanting to specify their own path. However, the SuperBuild needs this, in theory you are only here 
         # because a usable CXXTEST was not already found on the machine, so likely this is sane to do 
-	    #set (CXXTEST_INCLUDE_DIR  "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/"  CACHE PATH "" FORCE )
-	    #set (CXXTEST_PYTHON_TESTGEN_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/external/CxxTest/src/CxxTest/bin/cxxtestgen" CACHE PATH "" FORCE )
+
 	    #find_package(CxxTest REQUIRED)
     endif()
 endif()
@@ -114,5 +118,13 @@ if ( LEMMA_MATIO_SUPPORT )
     	BUILD_COMMAND ${MAKE}
 	)
 endif()
+
+#ExternalProject_Add (Lemma_SB
+#  DEPENDS ${DEPENDENCIES}
+#  SOURCE_DIR ${PROJECT_SOURCE_DIR}
+#  CMAKE_ARGS -DUSE_SUPERBUILD=OFF ${EXTRA_CMAKE_ARGS}
+#  INSTALL_COMMAND ""
+#  BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/blah)
+
 
 # vim: set tabstop=4 shiftwidth=4 expandtab: 
