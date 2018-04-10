@@ -33,10 +33,25 @@ option (LEMMA_VTK6_SUPPORT "VTK 6.x library for visualisation and grids" OFF)
 option (LEMMA_VTK7_SUPPORT "VTK 7.x library for visualisation and grids" OFF)
 option (LEMMA_VTK8_SUPPORT "VTK 8.x library for visualisation and grids" OFF)
 
-## Hard Dependencies
-#set(Eigen3_DIR  ${CMAKE_INSTALL_PREFIX} )
-find_package (Eigen3 3.3 QUIET)     # Matrix/Vector & Math
-find_package (yaml-cpp 0.6 QUIET )  # Serialisation of classes 
+#option (CMAKE_CROSSCOMPILING "Target different arch than you are on" OFF)
+
+##########################################################################################
+## Only look for packages where we build them...this makes finding VTK a problem though! #
+########################################################################################## 
+if (CMAKE_CROSSCOMPILING)
+    message ( STATUS "Cross-compiling! Only searching in install directory for components." )
+    SET( CMAKE_FIND_ROOT_PATH ONLY ${CMAKE_INSTALL_PREFIX})
+    SET( CMAKE_FIND_ROOT_PATH_MODE_LIBRARY  ONLY ) 
+    SET( CMAKE_FIND_ROOT_PATH_MODE_INCLUDE  ONLY ) 
+    SET( CMAKE_FIND_ROOT_PATH_MODE_PACKAGE  ONLY )
+    UNSET( Eigen3_DIR CACHE ) 
+    UNSET( yaml-cpp_DIR CACHE ) 
+    find_package (Eigen3 3.3 )# QUIET)     # Matrix/Vector & Math
+    find_package (yaml-cpp 0.6 ) #QUIET )  # Serialisation of classes 
+endif()
+
+find_package (Eigen3 3.3 )# QUIET)     # Matrix/Vector & Math
+find_package (yaml-cpp 0.6 ) #QUIET )  # Serialisation of classes 
 
 INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
 
@@ -242,10 +257,17 @@ endif()
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 if (LEMMA_USE_OPENMP)
-    find_package(OpenMP REQUIRED)
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+    if (CMAKE_CROSSCOMPILING)
+        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
+        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
+        set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fopenmp")
+        # 
+    else()
+        find_package(OpenMP REQUIRED)
+        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+        set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+    endif()
 endif()
 
 configure_file (
