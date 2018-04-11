@@ -24,11 +24,11 @@ set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMM
 ## Options--what do you want to do
 
 option ( BUILD_SHARED_LIBS      "Shared or static libraries"  OFF )
-option ( CMAKE_BUILD_TYPE       "Debug Release"  RELEASE )
-#   set(CMAKE_BUILD_TYPE "Release" CACHE STRING
-#       "Choose the type of build, options are: Debug Release
-#        RelWithDebInfo MinSizeRel."
-#       FORCE)
+#option ( CMAKE_BUILD_TYPE       "Debug Release"  "Release" )
+set(CMAKE_BUILD_TYPE "Release" CACHE STRING
+       "Choose the type of build, options are: Debug Release
+        RelWithDebInfo MinSizeRel."
+       FORCE)
  
 option ( LEMMA_ENABLE_TESTING       "Turn on unit testing" OFF )
 option ( LEMMA_BUILD_EXAMPLES       "Compile example Lemma applications" OFF )
