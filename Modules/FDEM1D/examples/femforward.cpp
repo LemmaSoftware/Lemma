@@ -1,21 +1,21 @@
 // ===========================================================================
-// 
+//
 //       Filename:  utfemforward.cpp
-// 
-//    Description:  
-// 
+//
+//    Description:
+//
 //        Version:  0.0
 //        Created:  01/15/2013 12:11:34 PM
 //       Revision:  none
-//       Compiler:  Tested with g++ 
-// 
+//       Compiler:  Tested with g++
+//
 //         Author:  M. Andy Kass (MAK)
 //
 //   Organisation:  Broken Spoke Development, LLC
-//                  
+//
 //
 //          Email:  mkass@numericalgeo.com
-// 
+//
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
@@ -71,14 +71,14 @@ int main() {
 	DataFEM* modelledData = DataFEM::New();
 
 	// Create instrument object
-	InstrumentFem* theinstrument = InstrumentFem::New();	
+	InstrumentFem* theinstrument = InstrumentFem::New();
 
 	// Set up EMEarthModel
 	Earth->SetNumberOfLayers(5);
 	Earth->SetLayerConductivity((VectorXcr(5) << 0.,1.e-4,1.e-2,
 		1.e-4,1.e-6).finished());
 	Earth->SetLayerThickness((VectorXr(3) << 20.,5.,50.).finished());
-	
+
 	// Set up transmitter
 	Real momtemp;
 	momtemp = 1;
@@ -111,7 +111,7 @@ int main() {
 
 	// See what comes back...
 	std::cout << Receivers->GetHfield(0,0)(2) << std::endl;
-	
+
 	// Need to convert H field to ppm
 
 
@@ -171,10 +171,10 @@ int main() {
 //	for (int ii=0;ii<nObs;ii++) {
 //		for (int jj=0;jj<nFreqs;jj++) {
 //			Trans->SetMoment(inpdata->GetTxMom().coeff(jj));
-//			
+//
 //		}
 //	}
-	
+
 	//This is a bunch of testing stuff
 	//theinstrument->AlignWithData(inpdata);
 	//theinstrument->MakeCalculation();
