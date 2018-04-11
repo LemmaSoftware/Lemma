@@ -18,10 +18,15 @@ add_executable( EMDipEarth1D EMDipEarth1D.cpp  )
 target_link_libraries(  EMDipEarth1D  "lemmacore" "fdem1d")
 set_property(TARGET EMDipEarth1D PROPERTY CXX_STANDARD 14)
 
+add_executable( Hantenna Hantenna.cpp  )
+target_link_libraries(  Hantenna  "lemmacore" "fdem1d")
+set_property(TARGET Hantenna PROPERTY CXX_STANDARD 14)
+
 INSTALL_TARGETS( "/share/FEM1D/"
 	LayeredEarthEM 
 	FieldPoints
 	PolygonalWireAntenna
 	EMDipEarth1D
     CircularLoop
+	Hantenna
 )

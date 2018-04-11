@@ -30,7 +30,7 @@
 #include "QWEKey.h"
 #include "CubicSplineInterpolator.h"
 
-#ifdef HAVEBOOSTPROGRESS
+#ifdef HAVE_BOOST_PROGRESS
 #include "boost/progress.hpp"
 #endif
 

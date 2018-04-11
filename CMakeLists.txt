@@ -24,11 +24,10 @@ set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMM
 ## Options--what do you want to do
 
 option ( BUILD_SHARED_LIBS      "Shared or static libraries"  OFF )
-#option ( CMAKE_BUILD_TYPE       "Debug Release"  "Release" )
-set(CMAKE_BUILD_TYPE "Release" CACHE STRING
-       "Choose the type of build, options are: Debug Release
-        RelWithDebInfo MinSizeRel."
-       FORCE)
+set(CMAKE_BUILD_TYPE "Release" STRING
+       "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel."
+       FORCE cache)
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release RelWithDebInfo MinSizeRel )
  
 option ( LEMMA_ENABLE_TESTING       "Turn on unit testing" OFF )
 option ( LEMMA_BUILD_EXAMPLES       "Compile example Lemma applications" OFF )
@@ -253,7 +252,11 @@ if (LEMMA_USE_BOOST)
 	endif()
 	find_path( HAVE_BOOST_SPECIAL_FUNCTIONS "boost/math/special_functions.hpp" ) 
 	if(HAVE_BOOST_SPECIAL_FUNCTIONS)
-		add_compile_options(-DHAVE_BOOST_SPECIAL_FUNCTIONS)
+		add_definitions(-DHAVE_BOOST_SPECIAL_FUNCTIONS)
+	endif()
+	find_path( HAVE_BOOST_PROGRESS "boost/progress.hpp" ) 
+	if(HAVE_BOOST_PROGRESS)
+		add_definitions(-DHAVE_BOOST_PROGRESS)
 	endif()
 endif()
 
@@ -267,12 +270,13 @@ if (LEMMA_USE_OPENMP)
         set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
         set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
         set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fopenmp")
-        # 
+        add_definitions(-DLEMMAUSEOMP)
     else()
         find_package(OpenMP REQUIRED)
         set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
         set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
         set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+        add_definitions(-DLEMMAUSEOMP)
     endif()
 endif()
 

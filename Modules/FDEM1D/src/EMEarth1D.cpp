@@ -73,7 +73,7 @@ namespace Lemma {
     EMEarth1D::EMEarth1D( const ctor_key& key ) : LemmaObject( key ),
             Dipole(nullptr), Earth(nullptr), Receivers(nullptr), Antenna(nullptr),
             FieldsToCalculate(BOTH), HankelType(ANDERSON801), icalcinner(0), icalc(0)
-        //#ifdef HAVEBOOSTPROGRESS
+        //#ifdef HAVE_BOOST_PROGRESS
         //    , disp(0)
         //#endif
         {
@@ -191,7 +191,7 @@ namespace Lemma {
 
     void EMEarth1D::CalculateWireAntennaFields(bool progressbar) {
 
-        #ifdef HAVEBOOSTPROGRESS
+        #ifdef HAVE_BOOST_PROGRESS
         boost::progress_display *disp;
         #endif
 
@@ -263,7 +263,7 @@ namespace Lemma {
 
                 //std::cout << "freq parallel #1" << std::endl;
                 //** Progress display bar for long calculations */
-                #ifdef HAVEBOOSTPROGRESS
+                #ifdef HAVE_BOOST_PROGRESS
                 if (progressbar) {
                     disp = new boost::progress_display( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
                 }
@@ -327,7 +327,7 @@ namespace Lemma {
                         //std::cout << "Normal Path\n";
                         //std::cout << Receivers->GetHfield(0, irec) << std::endl;
                         //if (irec == 1) exit(0);
-                        #ifdef HAVEBOOSTPROGRESS
+                        #ifdef HAVE_BOOST_PROGRESS
                         if (progressbar) ++(*disp);
                         #endif
                     } // receiver loop
@@ -381,7 +381,7 @@ namespace Lemma {
                             } // frequency loop
                         } // OMP_PARALLEL BLOCK
                     } // mask loop
-                    #ifdef HAVEBOOSTPROGRESS
+                    #ifdef HAVE_BOOST_PROGRESS
                     //if (Receivers->GetNumberOfPoints() > 100) {
                     //    ++ disp;
                     //}
@@ -449,7 +449,7 @@ namespace Lemma {
                             } // frequency loop
                         } // OMP_PARALLEL BLOCK
                     } // mask loop
-                    #ifdef HAVEBOOSTPROGRESS
+                    #ifdef HAVE_BOOST_PROGRESS
                     //if (Receivers->GetNumberOfPoints() > 100) {
                     //    ++ disp;
                     //}
@@ -471,7 +471,7 @@ namespace Lemma {
             this->Dipole = nullptr;
         }
 
-        #ifdef HAVEBOOSTPROGRESS
+        #ifdef HAVE_BOOST_PROGRESS
         if (progressbar) {
             delete disp;
         }
