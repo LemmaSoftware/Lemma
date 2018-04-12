@@ -56,8 +56,8 @@ if (CMAKE_CROSSCOMPILING)
     UNSET( yaml-cpp_DIR CACHE ) 
     UNSET( Eigen3_FOUND CACHE ) 
     UNSET( yaml-cpp_FOUND CACHE ) 
-    find_package (yaml-cpp 0.6 PATHS ${CMAKE_INSTALL_PREFIX} REQUIRED ) #QUIET )  # Serialisation of classes 
-    find_package (Eigen3 3.3 PATHS ${CMAKE_INSTALL_PREFIX} REQUIRED )   # QUIET)     # Matrix/Vector & Math
+    find_package (yaml-cpp 0.6 PATHS ${CMAKE_INSTALL_PREFIX} ) #QUIET )  # Serialisation of classes 
+    find_package (Eigen3 3.3 PATHS ${CMAKE_INSTALL_PREFIX}  )   # QUIET)     # Matrix/Vector & Math
 endif()
 
 find_package (Eigen3 3.3 QUIET)     # Matrix/Vector & Math
