@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 
     std::cout <<
     "\n"
-    << "Hantenna \n\n
+    << "Hantenna \n\n"
     << "Hantenna is a programme for computing the H field from polygonal wire\n"
     << "loop sources \n\n"
     << "Hantenna was built using Lemma (Lemma is an Electromagnetics Modelling API)\n"

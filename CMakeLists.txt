@@ -55,8 +55,8 @@ if (CMAKE_CROSSCOMPILING)
     find_package (yaml-cpp 0.6 ) #QUIET )  # Serialisation of classes 
 endif()
 
-find_package (Eigen3 3.3 )# QUIET)     # Matrix/Vector & Math
-find_package (yaml-cpp 0.6 ) #QUIET )  # Serialisation of classes 
+find_package (Eigen3 3.3 QUIET)     # Matrix/Vector & Math
+find_package (yaml-cpp 0.6 QUIET )  # Serialisation of classes 
 
 INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
 
