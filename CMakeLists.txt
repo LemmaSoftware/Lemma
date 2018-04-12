@@ -45,14 +45,20 @@ option (LEMMA_VTK8_SUPPORT "VTK 8.x library for visualisation and grids" OFF)
 ########################################################################################## 
 if (CMAKE_CROSSCOMPILING)
     message ( STATUS "Cross-compiling! Only searching in install directory for components." )
+    # Kind of hack-ish, CMake doesn't always find this. It's buried in Cross compilation, so, 
+    # hopefully anyone doing this can problem solve. 
+    SET( CMAKE_PREFIX_PATH ${CMAKE_INSTALL_PREFIX}/CMake ${CMAKE_INSTALL_PREFIX}/share/eigen3 )
+    #SET( CMAKE_MODULE_PATH ${CMAKE_INSTALL_PREFIX} )
     SET( CMAKE_FIND_ROOT_PATH ONLY ${CMAKE_INSTALL_PREFIX})
     SET( CMAKE_FIND_ROOT_PATH_MODE_LIBRARY  ONLY ) 
     SET( CMAKE_FIND_ROOT_PATH_MODE_INCLUDE  ONLY ) 
     SET( CMAKE_FIND_ROOT_PATH_MODE_PACKAGE  ONLY )
     UNSET( Eigen3_DIR CACHE ) 
     UNSET( yaml-cpp_DIR CACHE ) 
-    find_package (Eigen3 3.3 )# QUIET)     # Matrix/Vector & Math
-    find_package (yaml-cpp 0.6 ) #QUIET )  # Serialisation of classes 
+    UNSET( Eigen3_FOUND CACHE ) 
+    UNSET( yaml-cpp_FOUND CACHE ) 
+    find_package (yaml-cpp 0.6 PATHS ${CMAKE_INSTALL_PREFIX} REQUIRED ) #QUIET )  # Serialisation of classes 
+    find_package (Eigen3 3.3 PATHS ${CMAKE_INSTALL_PREFIX} REQUIRED )   # QUIET)     # Matrix/Vector & Math
 endif()
 
 find_package (Eigen3 3.3 QUIET)     # Matrix/Vector & Math
