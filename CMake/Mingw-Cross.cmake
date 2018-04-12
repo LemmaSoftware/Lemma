@@ -37,4 +37,4 @@ set( CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "" )
 #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 #Static Libs
 #Set Linker flags
-set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
