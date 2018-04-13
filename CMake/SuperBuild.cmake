@@ -15,9 +15,9 @@ else()
 		#INSTALL_COMMAND     ""
     )
 
-    message("Source dir of myExtProj = ${SOURCE_DIR}")   
-    ExternalProject_Get_property(EIGEN SOURCE_DIR)
-    message("Source dir of myExtProj = ${SOURCE_DIR}")   
+    #message("Source dir of myExtProj = ${SOURCE_DIR}")   
+    #ExternalProject_Get_property(EIGEN SOURCE_DIR)
+    #message("Source dir of myExtProj = ${SOURCE_DIR}")   
  
     # Are these necessary?
     #include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3/")

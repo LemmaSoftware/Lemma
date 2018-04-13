@@ -27,6 +27,26 @@
 #include "FDEM1D"
 #include "timer.h"
 
+#if defined(__clang__)
+	/* Clang/LLVM. ---------------------------------------------- */
+    const char* compiler = "clang";
+#elif defined(__ICC) || defined(__INTEL_COMPILER)
+	/* Intel ICC/ICPC. ------------------------------------------ */
+    const char* compiler = "icpc";
+
+#elif defined(__GNUC__) || defined(__GNUG__)
+	/* GNU GCC/G++. --------------------------------------------- */
+    const char* compiler = "gcc (GCC) "  __VERSION__;
+
+#elif defined(_MSC_VER)
+	/* Microsoft Visual Studio. --------------------------------- */
+    const char* compiler = "msvc " _MSC_FULL_VER;
+
+#elif defined(__PGI)
+	/* Portland Group PGCC/PGCPP. ------------------------------- */
+    const char* compiler = "pgc";
+#endif
+
 using namespace Lemma;
 
 std::vector<Real>  readinpfile(const std::string& fname);
@@ -35,24 +55,20 @@ std::vector<std::string>  readinpfile2(const std::string& fname);
 
 int main(int argc, char** argv) {
 
-    std::cout <<
-    "\n"
-    << "Hantenna \n\n"
-    << "Hantenna is a programme for computing the H field from polygonal wire\n"
-    << "loop sources \n\n"
-    << "Hantenna was built using Lemma (Lemma is an Electromagnetics Modelling API)\n"
-    << "Lemma is Free and Open Source Software (FOSS) and is released under\n"
-    << "the MPL, it is covered by the following copyrights:\n"
-    << "Copyright (C) 2009, 2010, 2011, 2012, 218      Trevor P. Irons\n"
-    << "Copyright (C) 2011, 2012                       M. Andy Kass\n\n"
+const char *buildString = __DATE__ ", " __TIME__;
+    std::cout
+    << "===========================================================================\n"
+    << "Lemma " << LEMMA_VERSION << "\n"
+    << "[" << compiler << " " <<  buildString << "]\n"
+    << "This program is part of Lemma, a geophysical modelling and inversion API. \n"
+    << "     This Source Code Form is subject to the terms of the Mozilla Public\n"
+    << "     License, v. 2.0. If a copy of the MPL was not distributed with this\n"
+    << "     file, You can obtain one at http://mozilla.org/MPL/2.0/. \n"
+    << "Copyright (C) 2018 Lemma Software \n"
     << "More information may be found at: https://lemmasoftware.org\n"
-    << "                                     info@lemmasoftware.org\n\n"
-    << "=====================================================================\n"
-    << "This programme is part of Lemma, a geophysical modelling and inversion API \n"
-    << "This Source Code Form is subject to the terms of the Mozilla Public\n"
-    << "License, v. 2.0. If a copy of the MPL was not distributed with this\n"
-    << "file, You can obtain one at http://mozilla.org/MPL/2.0/. \n"
-    << "=====================================================================\n\n\n";
+    << "                                     info@lemmasoftware.org\n"
+    << "===========================================================================\n\n"
+    << "Hantenna calculates the harmonic H field from polygonal wire loop sources\n";
 
     if (argc < 5) {
         std::cout << "usage: hantenna.exe  trans.inp cond.inp points.inp config.inp \n";
