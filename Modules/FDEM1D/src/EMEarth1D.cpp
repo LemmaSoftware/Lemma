@@ -229,15 +229,10 @@ namespace Lemma {
         }
 
         if (Antenna->GetName() == std::string("PolygonalWireAntenna") || Antenna->GetName() == std::string("TEMTransmitter") ) {
-
             icalc += 1;
-
             // Check to see if they are all on a plane? If so we can do this fast
-            /* TODO FIX THIS ISSUES */
             if (Antenna->IsHorizontallyPlanar() && HankelType == ANDERSON801) {
-                //std::cout << "Lag baby lag" << std::endl;
                 for (int ifreq=0; ifreq<Antenna->GetNumberOfFrequencies();++ifreq) {
-                    //std::cout << "Num Recs" <<  Receivers->GetNumberOfPoints() << std::endl;
                     Real wavef = 2.*PI* Antenna->GetFrequency(ifreq);
                     #ifdef LEMMAUSEOMP
                     #pragma omp parallel
@@ -248,12 +243,10 @@ namespace Lemma {
                     #pragma omp for schedule(static, 1)
                     #endif
                     for (int irec=0; irec<Receivers->GetNumberOfPoints(); ++irec) {
-                    //for (int irec=0; irec<2; ++irec) { // TODO FIXME BELO
                         auto AntCopy = static_cast<PolygonalWireAntenna*>(Antenna.get())->ClonePA();
                         SolveLaggedTxRxPair(irec, Hankel.get(), wavef, ifreq, AntCopy.get());
-                        //exit(0);
                     }
-                    //Receivers->ClearFields(); // FIXME DEBUG TODO
+                    //Receivers->ClearFields();
                     #ifdef LEMMAUSEOMP
                     }
                     #endif
