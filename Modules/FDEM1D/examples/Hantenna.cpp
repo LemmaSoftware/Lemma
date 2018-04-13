@@ -36,11 +36,12 @@
 
 #elif defined(__GNUC__) || defined(__GNUG__)
 	/* GNU GCC/G++. --------------------------------------------- */
-    const char* compiler = "gcc (GCC) "  __VERSION__;
-
+    const char* compiler = "gcc (GCC) ";//  __VERSION__;
+    const char* ver = __VERSION__;
 #elif defined(_MSC_VER)
 	/* Microsoft Visual Studio. --------------------------------- */
-    const char* compiler = "msvc " _MSC_FULL_VER;
+    const char* compiler = "msvc ";
+    const int ver = _MSC_FULL_VER;
 
 #elif defined(__PGI)
 	/* Portland Group PGCC/PGCPP. ------------------------------- */
@@ -59,7 +60,7 @@ const char *buildString = __DATE__ ", " __TIME__;
     std::cout
     << "===========================================================================\n"
     << "Lemma " << LEMMA_VERSION << "\n"
-    << "[" << compiler << " " <<  buildString << "]\n"
+    << "[" << compiler << " " << ver << " " <<  buildString << "]\n"
     << "This program is part of Lemma, a geophysical modelling and inversion API. \n"
     << "     This Source Code Form is subject to the terms of the Mozilla Public\n"
     << "     License, v. 2.0. If a copy of the MPL was not distributed with this\n"
@@ -151,9 +152,9 @@ const char *buildString = __DATE__ ", " __TIME__;
     auto earth = LayeredEarthEM::NewSP();
     VectorXcr sigma;
     VectorXr  thick;
- 	earth->SetNumberOfLayers(CondMod[0]+1);
- 	sigma.resize(CondMod[0]+1); sigma(0) = 0; // airlayer
-    thick.resize(CondMod[0]-1);
+ 	earth->SetNumberOfLayers(static_cast<int>(CondMod[0])+1);
+ 	sigma.resize(static_cast<int>(CondMod[0])+1); sigma(0) = 0; // airlayer
+    thick.resize(static_cast<int>(CondMod[0])-1);
     int ilay=1;
     for ( ; ilay/2<CondMod[0]-1; ilay+=2) {
         sigma(ilay/2+1) =  1./CondMod[ilay];

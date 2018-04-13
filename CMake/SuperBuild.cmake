@@ -37,7 +37,8 @@ if (yaml-cpp_FOUND)
     #message( STATUS "YAML-CPP LIBRARIES ${YAML_CPP_LIBRARIES}" )
     #message( STATUS "YAML-CPP LIBRARY ${yaml-cpp_LIBRARY}" )
 else()
-    message( STATUS "YAML-CPP WAS NOT FOUND" )
+    message( STATUS "YAML-CPP WAS NOT FOUND, BUILDING" )
+    message( STATUS "CMAKE BUILD TYPE ${CMAKE_BUILD_TYPE}" )
 	ExternalProject_Add(YAML_CPP
 		GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
 		GIT_TAG   "yaml-cpp-0.6.1" # "master" 
