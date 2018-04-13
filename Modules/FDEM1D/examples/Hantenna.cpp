@@ -170,7 +170,6 @@ const char *buildString = __DATE__ ", " __TIME__;
 		EmEarth->AttachFieldPoints(receivers);
 		EmEarth->SetFieldsToCalculate(H);
         EmEarth->SetHankelTransformMethod(string2Enum<HANKELTRANSFORMTYPE>(config[0]));
-        EmEarth->SetHankelTransformMethod(FHTKEY201);
 
     ///////////////////////////////////////////////
 	// Keep track of time
