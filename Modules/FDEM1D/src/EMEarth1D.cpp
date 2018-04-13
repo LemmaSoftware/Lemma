@@ -232,6 +232,11 @@ namespace Lemma {
             icalc += 1;
             // Check to see if they are all on a plane? If so we can do this fast
             if (Antenna->IsHorizontallyPlanar() && HankelType == ANDERSON801) {
+                #ifdef HAVE_BOOST_PROGRESS
+                if (progressbar) {
+                    disp = new boost::progress_display( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
+                }
+                #endif
                 for (int ifreq=0; ifreq<Antenna->GetNumberOfFrequencies();++ifreq) {
                     Real wavef = 2.*PI* Antenna->GetFrequency(ifreq);
                     #ifdef LEMMAUSEOMP
@@ -245,8 +250,11 @@ namespace Lemma {
                     for (int irec=0; irec<Receivers->GetNumberOfPoints(); ++irec) {
                         auto AntCopy = static_cast<PolygonalWireAntenna*>(Antenna.get())->ClonePA();
                         SolveLaggedTxRxPair(irec, Hankel.get(), wavef, ifreq, AntCopy.get());
+                        #ifdef HAVE_BOOST_PROGRESS
+                        if (progressbar) ++(*disp);
+                        #endif
                     }
-                    //Receivers->ClearFields();
+                    #pragma omp barrier
                     #ifdef LEMMAUSEOMP
                     }
                     #endif
