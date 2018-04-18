@@ -69,6 +69,14 @@ namespace Lemma {
                 /** Returns the name of the underlying class, similiar to Python's type */
                 virtual inline std::string GetName() const = 0 ;
 
+
+                virtual Real GetABSER() { return 0; }
+
+                virtual void ComputeLaggedRelated( const Real& rhomax, const int& nlag, std::shared_ptr<KernelEM1DManager> Manager ) {
+                }
+
+                virtual void SetLaggedArg( const Real& rho ) {}
+
                 // ====================  DATA MEMBERS  =======================
 
             protected:

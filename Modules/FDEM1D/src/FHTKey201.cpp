@@ -376,7 +376,6 @@ namespace Lemma {
     //      Method:  ComputeLaggedRelated
     //--------------------------------------------------------------------------------------
     void FHTKey201::ComputeLaggedRelated ( const Real& rho, const int& nlag, std::shared_ptr<KernelEM1DManager> KernelManager ) {
-
         int nrel = (int)(KernelManager->GetSTLVector().size());
         Eigen::Matrix<Complex, 201, Eigen::Dynamic > Zwork;
         Zans= Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic>::Zero(nlag, nrel);
@@ -384,6 +383,12 @@ namespace Lemma {
         VectorXr lambda = WT201.col(0).array()/rho;
         int NumFun = 0;
         int idx = 0;
+
+        VectorXr Arg(nlag);
+        Arg(nlag-1) = rho;
+        for (int ilag=nlag-2; ilag>=0; --ilag) {
+            Arg(ilag) = Arg(ilag+1) * GetABSER();
+        }
 
         // Get Kernel values
         for (int ir=0; ir<lambda.size(); ++ir) {
@@ -402,8 +407,30 @@ namespace Lemma {
         // in the interests of making them as generic and reusable as possible. This approach requires slightly
         // more multiplies, but the same number of kernel evaluations, which is the expensive part.
         // Inner product and scale
-        for (int ir2=0; ir2<nrel; ++ir2) {
-            Zans(0, ir2) = Zwork.col(ir2).dot(WT201.col(KernelManager->GetSTLVector()[ir2]->GetBesselOrder() + 1))/rho;
+
+        for (int ilag=0; ilag<nlag; ++ilag) {
+            for (int ir2=0; ir2<nrel; ++ir2) {
+                //Zans(ilag, ir2) = Zwork.col(ir2).dot(WT201.col(KernelManager->GetSTLVector()[ir2]->GetBesselOrder() + 1))/rho;
+                Zans(ilag, ir2) = Zwork.col(ir2).dot(WT201.col(KernelManager->GetSTLVector()[ir2]->GetBesselOrder() + 1))/Arg(ilag);
+            }
+        }
+
+        // make sure vectors are empty
+        splineVecReal.clear();
+        splineVecImag.clear();
+
+        // Now do cubic spline
+        // TODO Check that knots are set in right order, Eigen has reverse()
+        //std::cout << "Arg\n" << Arg << std::endl;
+        //std::cout << "Zans\n" << Zans.col(0) << std::endl;
+        for (int ii=0; ii<Zans.cols(); ++ii) {
+            auto Spline = CubicSplineInterpolator::NewSP();
+            Spline->SetKnots( Arg, Zans.col(ii).real() );
+            splineVecReal.push_back(Spline);
+
+            auto SplineI = CubicSplineInterpolator::NewSP();
+            SplineI->SetKnots( Arg, Zans.col(ii).imag() );
+            splineVecImag.push_back(SplineI);
         }
 
         return ;
@@ -415,7 +442,7 @@ namespace Lemma {
     //      Method:  GetABSER
     //--------------------------------------------------------------------------------------
     Real FHTKey201::GetABSER (  ) {
-        return WT201(1,0)/WT201(0,0);
+        return WT201(0,0)/WT201(1,0);
     }		// -----  end of method FHTKey201::GetABSER  -----
 
 
@@ -430,6 +457,5 @@ namespace Lemma {
         }
         return ;
     }		// -----  end of method FHTKey201::SetLaggedArg  -----
-
 
 }		// -----  end of Lemma  name  -----

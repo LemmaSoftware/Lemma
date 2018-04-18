@@ -22,6 +22,9 @@
 //#include "KernelEM1DManager.h"
 
 #include "KernelEM1DSpec.h"
+
+#include "HankelTransformFactory.h"
+
 #include "GQChave.h"
 #include "FHTAnderson801.h"
 #include "FHTKey201.h"
@@ -174,7 +177,7 @@ namespace Lemma {
             /** Used internally, this is the innermost loop of the MakeCalc3,
              *  and CalculateWireAntennaField routines.
              */
-            void SolveLaggedTxRxPair(const int &irec, FHTAnderson801* Hankel,
+            void SolveLaggedTxRxPair(const int &irec, HankelTransform* Hankel,
                     const Real &wavef, const int &ifreq,
                     PolygonalWireAntenna* antenna);
 

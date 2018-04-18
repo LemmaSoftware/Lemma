@@ -231,7 +231,7 @@ namespace Lemma {
         if (Antenna->GetName() == std::string("PolygonalWireAntenna") || Antenna->GetName() == std::string("TEMTransmitter") ) {
             icalc += 1;
             // Check to see if they are all on a plane? If so we can do this fast
-            if (Antenna->IsHorizontallyPlanar() && 1==2 && ( HankelType == ANDERSON801 || HankelType== FHTKEY201  )) {
+            if (Antenna->IsHorizontallyPlanar() && ( HankelType == ANDERSON801 || HankelType== FHTKEY201  )) {
                 #ifdef HAVE_BOOST_PROGRESS
                 if (progressbar) {
                     disp = new boost::progress_display( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
@@ -243,12 +243,7 @@ namespace Lemma {
                     #pragma omp parallel
                     {
                     #endif
-                    //if (HankelType == ANDERSON801) {
-                        auto Hankel = FHTAnderson801::NewSP();
-                    //}
-                    //else if(HankelType == FHTKEY201) {
-                    //    auto Hankel = FHTKey201::NewSP();
-                    //}
+                    auto Hankel = HankelTransformFactory::NewSP( HankelType );
                     #ifdef LEMMAUSEOMP
                     #pragma omp for schedule(static, 1)
                     #endif
@@ -767,7 +762,7 @@ namespace Lemma {
 //         //tDipole->UpdateFields( ifreq,  Hankel, wavef );
 //     }
 
-    void EMEarth1D::SolveLaggedTxRxPair(const int &irec, FHTAnderson801* Hankel,
+    void EMEarth1D::SolveLaggedTxRxPair(const int &irec, HankelTransform* Hankel,
                     const Real &wavef, const int &ifreq, PolygonalWireAntenna* antenna) {
 
         antenna->ApproximateWithElectricDipoles(Receivers->GetLocation(irec));
@@ -781,7 +776,6 @@ namespace Lemma {
             rhomin = std::min(rhomin, rho);
             rhomax = std::max(rhomax, rho);
         }
-        //std::cout << "rhomin\t" << rhomin << "\trhomax" << rhomax << std::endl;
 
         // Determine number of lagged convolutions to do
         // TODO, can Hankel2 adjust the lagg spacing safely?
@@ -811,7 +805,6 @@ namespace Lemma {
             Real rho = (Receivers->GetLocation(irec).head<2>() - tDipole->GetLocation().head<2>()).norm();
             //std::cout << " in Lagged " <<  rho << "\t" << rhomin << "\t" << rhomax << std::endl;
             Hankel->SetLaggedArg( rho );
-            //std::cout << "out Lagged" << std::endl;
             tDipole->UpdateFields( ifreq,  Hankel, wavef );
         }
         //std::cout << "Spline\n";
