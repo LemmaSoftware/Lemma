@@ -371,4 +371,65 @@ namespace Lemma {
         return ;
     }		// -----  end of method FHTKey201::ComputeRelated  -----
 
+    //--------------------------------------------------------------------------------------
+    //       Class:  FHTKey201
+    //      Method:  ComputeLaggedRelated
+    //--------------------------------------------------------------------------------------
+    void FHTKey201::ComputeLaggedRelated ( const Real& rho, const int& nlag, std::shared_ptr<KernelEM1DManager> KernelManager ) {
+
+        int nrel = (int)(KernelManager->GetSTLVector().size());
+        Eigen::Matrix<Complex, 201, Eigen::Dynamic > Zwork;
+        Zans= Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic>::Zero(nlag, nrel);
+        Zwork.resize(201, nrel);
+        VectorXr lambda = WT201.col(0).array()/rho;
+        int NumFun = 0;
+        int idx = 0;
+
+        // Get Kernel values
+        for (int ir=0; ir<lambda.size(); ++ir) {
+            // irelated loop
+            ++NumFun;
+            KernelManager->ComputeReflectionCoeffs(lambda(ir), idx, rho);
+            for (int ir2=0; ir2<nrel; ++ir2) {
+                // Zwork* needed due to sign convention of filter weights
+ 			    Zwork(ir, ir2) = std::conj(KernelManager->GetSTLVector()[ir2]->RelBesselArg(lambda(ir)));
+            }
+
+        }
+
+        // We diverge slightly from Key here, each kernel is evaluated seperately, whereby instead
+        // they prefer to sum them. The reason is that all those terms have been removed from the kernels
+        // in the interests of making them as generic and reusable as possible. This approach requires slightly
+        // more multiplies, but the same number of kernel evaluations, which is the expensive part.
+        // Inner product and scale
+        for (int ir2=0; ir2<nrel; ++ir2) {
+            Zans(0, ir2) = Zwork.col(ir2).dot(WT201.col(KernelManager->GetSTLVector()[ir2]->GetBesselOrder() + 1))/rho;
+        }
+
+        return ;
+    }		// -----  end of method FHTKey201::ComputeLaggedRelated  -----
+
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  FHTKey201
+    //      Method:  GetABSER
+    //--------------------------------------------------------------------------------------
+    Real FHTKey201::GetABSER (  ) {
+        return WT201(1,0)/WT201(0,0);
+    }		// -----  end of method FHTKey201::GetABSER  -----
+
+
+    //--------------------------------------------------------------------------------------
+    //       Class:  FHTKey201
+    //      Method:  SetLaggedArg
+    //--------------------------------------------------------------------------------------
+    void FHTKey201::SetLaggedArg ( const Real& rho  ) {
+        for (int i=0; i<Zans.cols(); ++ i) {
+            Zans(0, i) = Complex( splineVecReal[i]->Interpolate(rho),
+                                  splineVecImag[i]->Interpolate(rho) );
+        }
+        return ;
+    }		// -----  end of method FHTKey201::SetLaggedArg  -----
+
+
 }		// -----  end of Lemma  name  -----

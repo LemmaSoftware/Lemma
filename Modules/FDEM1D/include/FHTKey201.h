@@ -20,6 +20,7 @@
 #define  FHTKEY201_INC
 
 #include "HankelTransform.h"
+#include "CubicSplineInterpolator.h"
 
 namespace Lemma {
 
@@ -27,8 +28,8 @@ namespace Lemma {
       \ingroup FDEM1D
       \brief   Impliments the fast Hankel transform as outlines by Key 2011
       \details This filter uses 51, 101, or 201 filter points and supports both lagged and related
-                kernel arguments. This algorithm is a port of code carrying the following copyright and
-                restriction:
+                kernel arguments. This algorithm is a port of code carrying the following copyright
+                and restriction:
                 %------------------------------------------------------------------%
                 % Copyright (c) 2012 by the Society of Exploration Geophysicists.  %
                 % For more information, go to http://software.seg.org/2012/0003 .  %
@@ -83,9 +84,15 @@ namespace Lemma {
 
         void ComputeRelated(const Real& rho, std::shared_ptr<KernelEM1DManager> KernelManager);
 
+        void ComputeLaggedRelated(const Real& rho, const int& nlag, std::shared_ptr<KernelEM1DManager> KernelManager);
+
         // ====================  ACCESS        =======================
 
         // ====================  INQUIRY       =======================
+
+        Real GetABSER();
+
+        void SetLaggedArg(const Real& rho);
 
         /** Returns the name of the underlying class, similiar to Python's type */
         virtual std::string GetName() const;
@@ -100,6 +107,12 @@ namespace Lemma {
 
         // Shared Filter Weights
 		static const Eigen::Matrix<Real, 201, 3>  WT201;
+
+        /// Spines for lagged convolutions (real part)
+        std::vector <std::shared_ptr<CubicSplineInterpolator> > splineVecReal;
+
+        /// Spines for lagged convolutions (imaginary part)
+        std::vector < std::shared_ptr<CubicSplineInterpolator> > splineVecImag;
 
         /// Holds answer, dimensions are NumConv, and NumberRelated.
         Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic> Zans;

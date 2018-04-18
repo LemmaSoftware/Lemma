@@ -231,7 +231,7 @@ namespace Lemma {
         if (Antenna->GetName() == std::string("PolygonalWireAntenna") || Antenna->GetName() == std::string("TEMTransmitter") ) {
             icalc += 1;
             // Check to see if they are all on a plane? If so we can do this fast
-            if (Antenna->IsHorizontallyPlanar() && HankelType == ANDERSON801) {
+            if (Antenna->IsHorizontallyPlanar() && 1==2 && ( HankelType == ANDERSON801 || HankelType== FHTKEY201  )) {
                 #ifdef HAVE_BOOST_PROGRESS
                 if (progressbar) {
                     disp = new boost::progress_display( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
@@ -243,7 +243,12 @@ namespace Lemma {
                     #pragma omp parallel
                     {
                     #endif
-                    auto Hankel = FHTAnderson801::NewSP();
+                    //if (HankelType == ANDERSON801) {
+                        auto Hankel = FHTAnderson801::NewSP();
+                    //}
+                    //else if(HankelType == FHTKEY201) {
+                    //    auto Hankel = FHTKey201::NewSP();
+                    //}
                     #ifdef LEMMAUSEOMP
                     #pragma omp for schedule(static, 1)
                     #endif
@@ -797,9 +802,7 @@ namespace Lemma {
         //std::cout << Hankel->GetAnswer() << std::endl;
         //std::cout << Hankel->GetArg() << std::endl;
 
-
         // Sort the dipoles by rho
-
         for (int idip=0; idip<antenna->GetNumberOfDipoles(); ++idip) {
         //for (int idip=0; idip<1; ++idip) {
             auto tDipole = antenna->GetDipoleSource(idip);

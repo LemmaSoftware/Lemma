@@ -202,7 +202,9 @@ const char *buildString = __DATE__ ", " __TIME__;
 	for (int iy=0; iy<ny; ++iy) {
 	for (int ix=0; ix<nx; ++ix) {
         hreal << receivers->GetLocation(i).transpose() << "\t";
- 		hreal << receivers->GetHfield(0, i).transpose() << "\n";
+ 		//hreal << receivers->GetHfield(0, i).transpose() << "\n"; ( complex, notation )
+ 		hreal << receivers->GetHfield(0, i).transpose().real() << "\t";
+ 		hreal << receivers->GetHfield(0, i).transpose().imag() << "\n";
         ++i;
     }
     }
