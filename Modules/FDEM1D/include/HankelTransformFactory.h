@@ -23,6 +23,10 @@
 
 #include "FHTAnderson801.h"
 #include "FHTKey201.h"
+#include "FHTKey101.h"
+#include "FHTKey51.h"
+#include "QWEKey.h"
+#include "GQChave.h"
 
 namespace Lemma {
 
@@ -90,10 +94,21 @@ namespace Lemma {
         static std::shared_ptr< HankelTransform > NewSP( const HANKELTRANSFORMTYPE Type) {
             switch (Type) {
                 case ANDERSON801:
-                    break;
+                    return FHTAnderson801::NewSP();
+                case FHTKEY201:
+                    return FHTKey201::NewSP();
+                case FHTKEY101:
+                    return FHTKey101::NewSP();
+                case FHTKEY51:
+                    return FHTKey51::NewSP();
+                case CHAVE:
+                    return GQChave::NewSP();
+                case QWEKEY:
+                    return QWEKey::NewSP();
+                default:
+                    std::cerr << "HankelTransformFactory only works with defined types\n";
             }
-            return FHTKey201::NewSP();
-            //return FHTAnderson801::NewSP();
+
         }
 
         /**
