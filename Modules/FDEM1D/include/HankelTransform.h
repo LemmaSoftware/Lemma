@@ -42,6 +42,7 @@ namespace Lemma {
 
                 /// @todo this is actually a deprecated function. Only Chave
                 ///   uses this.
+                /// @deprecated
                 /// Performs numerical integration using Gaussian quadrature
                 /// ikk:   type of kernel depending on source and receiver couple
                 /// imode: a switch for TE(0) and TM(1) mode

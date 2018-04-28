@@ -778,13 +778,19 @@ namespace Lemma {
         }
 
         // Determine number of lagged convolutions to do
-        // TODO, can Hankel2 adjust the lagg spacing safely?
-        int nlag = 1; // We need an extra for some reason for stability
+        int nlag = 1; // (Key==0)  We need an extra for some reason for stability? Maybe in Spline?
         Real lrho ( 1.01* rhomax );
         while ( lrho > rhomin ) {
             nlag += 1;
             lrho *= Hankel->GetABSER();
+            //std::cout << "lrho\t" << lrho << std::endl;
         }
+        // Key variant
+//        Real lamMin = Filter.base(1)/rMax;
+//        Real lamMax = Filter.base(end)/rMin;
+//        auto nLambda = ceil(log(lamMax/lamMin)/log(filterSpacing))+1;
+        //nlag = 3;
+        //std::cout << "nlag\t" << nlag << std::endl;
 
         //int nlag = rhomin
         auto tDipole = antenna->GetDipoleSource(0);
@@ -793,8 +799,7 @@ namespace Lemma {
         // Instead we should pass the antenna into this so that Hankel hass all the rho arguments...
         Hankel->ComputeLaggedRelated( 1.01* rhomax, nlag, tDipole->GetKernelManager() );
 
-        //std::cout << Hankel->GetAnswer() << std::endl;
-        //std::cout << Hankel->GetArg() << std::endl;
+        //std::cout << "After! " << Hankel->GetAnswer() << std::endl;
 
         // Sort the dipoles by rho
         for (int idip=0; idip<antenna->GetNumberOfDipoles(); ++idip) {
