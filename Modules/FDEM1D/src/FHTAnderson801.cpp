@@ -949,9 +949,6 @@ namespace Lemma {
         DeleteSplines();
 
         // Now do cubic spline
-        // TODO Check that knots are set in right order, Eigen has reverse()
-        std::cout << "Arg\n" << Arg << std::endl;
-        std::cout << "Zans\n" << Zans << std::endl;
         for (int ii=0; ii<Zans.cols(); ++ii) {
             auto Spline = CubicSplineInterpolator::NewSP();
             Spline->SetKnots( Arg, Zans.col(ii).real() );

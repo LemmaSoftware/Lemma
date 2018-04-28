@@ -340,7 +340,6 @@ namespace Lemma {
         //kernelVec = KernelManager->GetSTLVector();
         int nrel = (int)(KernelManager->GetSTLVector().size());
         Eigen::Matrix<Complex, 201, Eigen::Dynamic > Zwork;
-        // TODO, if we want to allow lagged, then 1 below should be nlag
         Zans= Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic>::Zero(1, nrel);
         Zwork.resize(201, nrel);
         VectorXr lambda = WT201.col(0).array()/rho;
@@ -356,7 +355,6 @@ namespace Lemma {
                 // Zwork* needed due to sign convention of filter weights
  			    Zwork(ir, ir2) = std::conj(KernelManager->GetSTLVector()[ir2]->RelBesselArg(lambda(ir)));
             }
-
         }
 
         // We diverge slightly from Key here, each kernel is evaluated seperately, whereby instead
@@ -367,9 +365,6 @@ namespace Lemma {
         for (int ir2=0; ir2<nrel; ++ir2) {
             Zans(0, ir2) = Zwork.col(ir2).dot(WT201.col(KernelManager->GetSTLVector()[ir2]->GetBesselOrder() + 1))/rho;
         }
-        std::cout << "rho\n" << rho << std::endl;
-        std::cout << "Zans\n" << Zans << std::endl;
-        exit(EXIT_SUCCESS);
         return ;
     }		// -----  end of method FHTKey201::ComputeRelated  -----
 
@@ -379,13 +374,9 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     void FHTKey201::ComputeLaggedRelated ( const Real& rho, const int& nlag, std::shared_ptr<KernelEM1DManager> KernelManager ) {
 
-        //std::cout << "rho max\t " << rho << std::endl;
-        //Real rho = 214.963;
-
         int nrel = (int)(KernelManager->GetSTLVector().size());
 
         Eigen::Matrix< Complex, Eigen::Dynamic, Eigen::Dynamic > Zwork;
-        //Eigen::Matrix<Complex, 201+nrel, Eigen::Dynamic > Zwork;
         Zans= Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic>::Zero(nlag, nrel);
         Zwork.resize(201+nlag, nrel);  // Zwork needs to be expanded to filter length + nlag
 
@@ -398,14 +389,11 @@ namespace Lemma {
         int NumFun = 0;
         int idx = 0;
 
-        //std::cout << lambda.transpose() << std::endl;
-
         VectorXr Arg(nlag);
         Arg(nlag-1) = rho;
         for (int ilag=nlag-2; ilag>=0; --ilag) {
             Arg(ilag) = Arg(ilag+1) * GetABSER();
         }
-        //std::cout << "Arg\t" << Arg << std::endl;
 
         // Get Kernel values
         for (int ir=0; ir<lambda.size(); ++ir) {
@@ -413,8 +401,6 @@ namespace Lemma {
             ++NumFun;
             KernelManager->ComputeReflectionCoeffs(lambda(ir), idx, rho);
             for (int ir2=0; ir2<nrel; ++ir2) {
-                // Zwork* needed due to sign convention of filter weights
- 			    //Zwork(ir, ir2) = std::conj(KernelManager->GetSTLVector()[ir2]->RelBesselArg(lambda(ir)));
  			    Zwork(ir, ir2) = std::conj(KernelManager->GetSTLVector()[ir2]->RelBesselArg(lambda(ir)));
             }
         }
@@ -424,32 +410,19 @@ namespace Lemma {
         // in the interests of making them as generic and reusable as possible. This approach requires slightly
         // more multiplies, but the same number of kernel evaluations, which is the expensive part.
         // Inner product and scale
-        int ilagr = nlag-1;
+        int ilagr = nlag-1; // Zwork is in opposite order from Arg
         for (int ilag=0; ilag<nlag; ++ilag) {
             for (int ir2=0; ir2<nrel; ++ir2) {
-                //Zans(ilag, ir2) = Zwork.col(ir2).dot(WT201.col(KernelManager->GetSTLVector()[ir2]->GetBesselOrder() + 1))/rho;
-                //Zans(ilag, ir2) = Zwork.col(ir2).dot(WT201.col(KernelManager->GetSTLVector()[ir2]->GetBesselOrder()+1))/Arg(ilag);
-                // Segment
-                //std::cout << Zwork.col(ir2).segment(ilag,201).transpose() << std::endl;;
-                //WT201.col(KernelManager->GetSTLVector()[ir2]->GetBesselOrder()+1).segment(ilag,201);// / Arg(ilag);
                 Zans(ilagr, ir2) = Zwork.col(ir2).segment(ilag,201).dot( WT201.col(KernelManager->GetSTLVector()[ir2]->GetBesselOrder()+1) ) / Arg(ilagr);
             }
             ilagr -= 1;
         }
-        //std::cout << "Zans" << Zans << std::endl;
-        //exit(EXIT_SUCCESS);
 
         // make sure vectors are empty
         splineVecReal.clear();
         splineVecImag.clear();
 
         // Now do cubic spline
-        // TODO Check that knots are set in right order, Eigen has reverse()
-        //std::cout << "Arg\n" << Arg << std::endl;
-        //std::cout << "Arg.reverse()\n" << Arg.reverse() << std::endl;
-        //VectorXr Argr = Arg.reverse();
-        //std::cout << "Zans\n" << Zans << std::endl;
-        //exit(EXIT_SUCCESS);
         for (int ii=0; ii<Zans.cols(); ++ii) {
             auto SplineR = CubicSplineInterpolator::NewSP();
             SplineR->SetKnots( Arg, Zans.col(ii).real() );

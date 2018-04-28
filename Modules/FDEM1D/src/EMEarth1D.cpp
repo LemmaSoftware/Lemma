@@ -779,41 +779,27 @@ namespace Lemma {
 
         // Determine number of lagged convolutions to do
         int nlag = 1; // (Key==0)  We need an extra for some reason for stability? Maybe in Spline?
-        Real lrho ( 1.01* rhomax );
+        Real lrho ( 1.0 * rhomax );
         while ( lrho > rhomin ) {
             nlag += 1;
             lrho *= Hankel->GetABSER();
-            //std::cout << "lrho\t" << lrho << std::endl;
         }
-        // Key variant
-//        Real lamMin = Filter.base(1)/rMax;
-//        Real lamMax = Filter.base(end)/rMin;
-//        auto nLambda = ceil(log(lamMax/lamMin)/log(filterSpacing))+1;
-        //nlag = 3;
-        //std::cout << "nlag\t" << nlag << std::endl;
 
-        //int nlag = rhomin
         auto tDipole = antenna->GetDipoleSource(0);
         tDipole->SetKernels(ifreq, FieldsToCalculate, Receivers, irec, Earth);
 
         // Instead we should pass the antenna into this so that Hankel hass all the rho arguments...
-        Hankel->ComputeLaggedRelated( 1.01* rhomax, nlag, tDipole->GetKernelManager() );
-
-        //std::cout << "After! " << Hankel->GetAnswer() << std::endl;
+        Hankel->ComputeLaggedRelated( 1.0*rhomax, nlag, tDipole->GetKernelManager() );
 
         // Sort the dipoles by rho
         for (int idip=0; idip<antenna->GetNumberOfDipoles(); ++idip) {
-        //for (int idip=0; idip<1; ++idip) {
             auto tDipole = antenna->GetDipoleSource(idip);
             tDipole->SetKernels(ifreq, FieldsToCalculate, Receivers, irec, Earth);
             // Pass Hankel2 a message here so it knows which one to return in Zgauss!
             Real rho = (Receivers->GetLocation(irec).head<2>() - tDipole->GetLocation().head<2>()).norm();
-            //std::cout << " in Lagged " <<  rho << "\t" << rhomin << "\t" << rhomax << std::endl;
             Hankel->SetLaggedArg( rho );
             tDipole->UpdateFields( ifreq,  Hankel, wavef );
         }
-        //std::cout << "Spline\n";
-        //std::cout << Receivers->GetHfield(0, irec) << std::endl;
     }
 
     //////////////////////////////////////////////////////////
