@@ -178,11 +178,6 @@ namespace Lemma {
         }
         --i;
 
-//         if ( x > Spline.x[i] ) {
-//             std::cout << "DOOM\t" << x << "\t" << i << "\t" << Spline.x[i];
-//             throw std::runtime_error("CubicSplineInterpolator::Interpolate ATTEMPT TO INTERPOLATE PAST LAST KNOT");
-//         }
-
         return Spline.a[i] + Spline.b[i]*(x-Spline.x[i]) + Spline.c[i]*((x-Spline.x[i])*(x-Spline.x[i])) +
                Spline.d[i]*((x-Spline.x[i])*(x-Spline.x[i])*(x-Spline.x[i]) );
     }		// -----  end of method CubicSplineInterpolator::Interpolate  -----

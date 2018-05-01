@@ -779,7 +779,7 @@ namespace Lemma {
 
         // Determine number of lagged convolutions to do
         int nlag = 1; // (Key==0)  We need an extra for some reason for stability? Maybe in Spline?
-        Real lrho ( 1.0 * rhomax );
+        Real lrho ( 1.0001 * rhomax );
         while ( lrho > rhomin ) {
             nlag += 1;
             lrho *= Hankel->GetABSER();
@@ -789,7 +789,7 @@ namespace Lemma {
         tDipole->SetKernels(ifreq, FieldsToCalculate, Receivers, irec, Earth);
 
         // Instead we should pass the antenna into this so that Hankel hass all the rho arguments...
-        Hankel->ComputeLaggedRelated( 1.0*rhomax, nlag, tDipole->GetKernelManager() );
+        Hankel->ComputeLaggedRelated( 1.0001*rhomax, nlag, tDipole->GetKernelManager() );
 
         // Sort the dipoles by rho
         for (int idip=0; idip<antenna->GetNumberOfDipoles(); ++idip) {
