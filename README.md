@@ -1,4 +1,4 @@
-== About
+# About
 
 Lemma is an ElectroMagnetics Modelling API. Lemma is developed in the hopes that it will be helpful for academics, industry, and anyone else interested in modelling. 
 
@@ -8,7 +8,7 @@ Lemma is an ElectroMagnetics Modelling API. Lemma is developed in the hopes that
 * Fast 
 * Object oriented 
 
-== Team 
+## Team 
 
-== Getting involved
+## Getting involved
 * Testing code
