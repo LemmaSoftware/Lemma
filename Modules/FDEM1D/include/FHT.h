@@ -19,21 +19,25 @@
 
 
 #pragma once
-#include "HankekTransform.h"
+#include "HankelTransform.h"
 
 namespace Lemma {
 
     /**
-      \brief   Impliments a fast Hankel transform through digital filtering.
-      \details A genearl Fast Hankel Transform routine which uses the digital
-               filter apporach. This approach performs a complete sweep of the
-               coeficients, for a variant that uses a longer filter which may
+      \ingroup FDEM1D
+      \brief   Impliments lagged and related fast Hankel transform through
+               digital filtering.
+      \details A general Fast Hankel Transform routine which uses the digital
+               filter apporach. Both lagged and related kernels are supported in
+               order to minimize kernel function calls.
+               This approach performs a complete sweep of the
+               coefficients , for a variant that uses a longer filter which may
                be truncated, see FHTAnderson801.
-               @see FHTAndersion801
+               @see FHTAnderson801
                @see GQChave
-               @see @QKEKey
+               @see QWEKey
      */
-    class FHT : public HankekTransform {
+    class FHT : public HankelTransform {
 
         friend std::ostream &operator<<(std::ostream &stream, const FHT &ob);
 
@@ -41,11 +45,31 @@ namespace Lemma {
 
         // ====================  LIFECYCLE     =======================
 
-        /*
+        /**
+         * Default protected constructor, use NewSP methods to construct
+         * @see FHT::NewSP
+         */
+        FHT (const ctor_key& key ) : HankelTransform( key ) {
+        }
+
+        /**
+         * Protected DeDerializing constructor, use factory DeSerialize  method.
+         * @see FHT::DeSerialize
+         */
+        FHT (const YAML::Node& node, const ctor_key& key) : HankelTransform(node, key) {
+        }
+
+        /** Default protected destructor, use smart pointers (std::shared_ptr) */
+        ~FHT () {
+        }
+
+        /**
          *  Factory method for generating concrete class.
          *  @return a std::shared_ptr of type FHT
          */
-        static std::shared_ptr< FHT > NewSP();
+        static std::shared_ptr< FHT > NewSP() {
+            return std::make_shared< FHT >( ctor_key() );
+        }
 
         /**
          *  Uses YAML to serialize this object.
@@ -64,34 +88,29 @@ namespace Lemma {
 
         // ====================  OPERATIONS    =======================
 
+        Complex Zgauss(const int&, const Lemma::EMMODE&, const int&, const Real&, const Real&, Lemma::KernelEM1DBase*) {
+            return 0;
+        }
+
         // ====================  ACCESS        =======================
 
         // ====================  INQUIRY       =======================
 
+        /** Returns the name of the underlying class, similiar to Python's type */
+        virtual std::string GetName() const {
+            return this->CName;
+        }
 
 
         protected:
 
         // ====================  LIFECYCLE     =======================
 
-        /**
-         * Default protected constructor, use NewSP methods to construct
-         * @see FHT::NewSP
-         */
-        FHT (const std::string& name);
-
-        /**
-         * Protected DeDerializing constructor, use factory DeSerialize  method.
-         * @see FHT::DeSerialize
-         */
-        FHT (const YAML::Node& node);
-
-        /** Default protected destructor, use smart pointers (std::shared_ptr) */
-        ~FHT ();
-
         // ====================  DATA MEMBERS  =========================
 
         private:
+
+        static constexpr auto CName = "FHT";
 
     }; // -----  end of class  FHT  -----
 }  // -----  end of namespace Lemma ----

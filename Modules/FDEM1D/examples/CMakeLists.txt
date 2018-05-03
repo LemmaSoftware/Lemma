@@ -2,6 +2,10 @@ add_executable( LayeredEarthEM LayeredEarthEM.cpp  )
 target_link_libraries(  LayeredEarthEM  "lemmacore" "fdem1d")
 set_property(TARGET LayeredEarthEM PROPERTY CXX_STANDARD 14)
 
+add_executable( FHT FHT.cpp  )
+target_link_libraries(  FHT  "lemmacore" "fdem1d")
+set_property(TARGET FHT PROPERTY CXX_STANDARD 14)
+
 add_executable( FieldPoints FieldPoints.cpp  )
 target_link_libraries(  FieldPoints  "lemmacore" "fdem1d")
 set_property(TARGET FieldPoints PROPERTY CXX_STANDARD 14)
