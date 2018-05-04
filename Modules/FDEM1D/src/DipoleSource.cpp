@@ -749,7 +749,6 @@ namespace Lemma {
     }
 
     void DipoleSource::UpdateFields( const int& ifreq, HankelTransform* Hankel, const Real& wavef) {
-
         Vector3r Pol = Phat;
 
         switch (Type) {
@@ -875,8 +874,6 @@ namespace Lemma {
 
             case UNGROUNDEDELECTRICDIPOLE:
 
-                //Hankel->ComputeRelated(rho, KernelManager);
-
                 if (std::abs(Pol[2]) > 0) { // z dipole
                     switch(FieldsToCalculate) {
                         case E:
@@ -912,7 +909,8 @@ namespace Lemma {
                                      0. );
                     } // Fields to calculate Z polarity Electric dipole
                 }
-                if (std::abs(Pol[1]) > 0 || std::abs(Pol[0]) > 0) { // y dipole
+                if (std::abs(Pol[1]) > 0 || std::abs(Pol[0]) > 0) { // x or y dipole
+
                     switch(FieldsToCalculate) {
                         case E:
                             f(0) = 0;
@@ -934,11 +932,15 @@ namespace Lemma {
                             }
                             break;
                         case H:
+                            //std::cout << "Fuck me gently with a chainsaw..." << std::endl;
+                            //std::cout << f.cols() << "\t" << f.rows() << std::endl;
+                            //std::cout << "kern" <<  KernelManager->GetRAWKernel(ik[5]);
                             f(5) = Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[5]));
                             f(6) = Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[6]));
                             f(7) = Hankel->Zgauss(7, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[7]))*KernelManager->GetRAWKernel(ik[7])->GetZs()/KernelManager->GetRAWKernel(ik[7])->GetZm();
                             f(8) = Hankel->Zgauss(8, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[8]))*KernelManager->GetRAWKernel(ik[8])->GetZs()/KernelManager->GetRAWKernel(ik[8])->GetZm();
                             f(9) = Hankel->Zgauss(9, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[9]))*KernelManager->GetRAWKernel(ik[9])->GetZs()/KernelManager->GetRAWKernel(ik[9])->GetZm();
+                            //std::cout << "HARDER!!!!" << std::endl;
                             if (std::abs(Pol[1]) > 0) {
                                 this->Receivers->AppendHfield(ifreq, irec,
                                         Pol[1]*QPI*(sps*f(5)+c2p*f(6)/rho-cps*f(7)+c2p*f(8)/rho)*Moment,
@@ -953,6 +955,7 @@ namespace Lemma {
                                     Pol[0]*Moment*QPI*sp*f(9) );
                                 // Analytic whole space solution
                             }
+                            //std::cout << "ahhhhhh!!!!!!!!!" << std::endl;
                             break;
 
                         case BOTH:
@@ -996,9 +999,7 @@ namespace Lemma {
 
                 break; // UNGROUNDEDELECTRICDIPOLE
 
-
             case MAGNETICDIPOLE:
-
 
                 //Hankel->ComputeRelated(rho, KernelManager);
                 if (std::abs(Pol[2]) > 0) { // z dipole
@@ -1125,7 +1126,6 @@ namespace Lemma {
                 throw NonValidDipoleType(this);
 
         } // Source Type Switch
-
     }
 
     // ====================  INQUIRY       ======================

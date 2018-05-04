@@ -22,6 +22,8 @@
 #include "LemmaObject.h"
 
 #include "FHTAnderson801.h"
+#include "FHT.h"
+
 #include "FHTKey201.h"
 #include "FHTKey101.h"
 #include "FHTKey51.h"
@@ -96,7 +98,8 @@ namespace Lemma {
                 case ANDERSON801:
                     return FHTAnderson801::NewSP();
                 case FHTKEY201:
-                    return FHTKey201::NewSP();
+                    //return FHTKey201::NewSP();
+                    return FHT<FHTKEY201>::NewSP();
                 case FHTKEY101:
                     return FHTKey101::NewSP();
                 case FHTKEY51:

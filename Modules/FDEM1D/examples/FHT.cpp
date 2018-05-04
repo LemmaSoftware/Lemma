@@ -21,7 +21,14 @@
 using namespace Lemma;
 
 int main() {
-    std::cout << "FHT test" << std::endl;
+//    std::cout << "FHT test" << std::endl;
+    auto fht = FHT< FHTKEY201 >::NewSP();
+    std::cout << *fht << std::endl;
+    std::cout << fht->GetABSER() << std::endl;
 
-    //auto fht = FHT::NewSP();
+    auto fht1 = FHT< FHTKEY101 >::NewSP();
+    std::cout << *fht1 << std::endl;
+    std::cout << fht1->GetABSER() << std::endl;
+
+    //auto fhtq = FHT< QWEKEY >::NewSP();
 }

@@ -91,7 +91,7 @@ namespace Lemma {
                 HankelTransform ( const YAML::Node& node, const ctor_key& );
 
                 /// Default protected constructor.
-                ~HankelTransform ( );
+                virtual ~HankelTransform ( );
 
             private:
 
