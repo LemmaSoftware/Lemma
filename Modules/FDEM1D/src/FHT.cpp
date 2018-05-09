@@ -22,6 +22,12 @@
 namespace Lemma {
 
     template<>
+    FHT<FHTKEY201>::FHT( const ctor_key& key ) : HankelTransform(key)
+    {
+
+    }
+
+    template<>
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<FHTKEY201>::WT =
         ( Eigen::Matrix<Real, 201, 3>()   <<
         // Base                   J0                      J1
@@ -331,7 +337,7 @@ namespace Lemma {
        1.1528587427833875e+03,  -3.1406113278782205e-05,   6.2412989356183992e-06,
        1.3394307643944169e+03,   9.1385289919391839e-06,  -2.0349222128793154e-06,
        1.5561965278371533e+03,  -1.8949818224609619e-06,   4.8072849734177625e-07,
-       1.8080424144560632e+03,   2.0794387557779629e-07,  -6.0462736574031818e-08).finished();
+       1.8080424144560632e+03,   2.0794387557779629e-07,  -6.0462736574031818e-08 ).finished();
 
     template<>
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<FHTKEY51>::WT =

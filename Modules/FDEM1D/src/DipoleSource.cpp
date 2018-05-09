@@ -932,15 +932,17 @@ namespace Lemma {
                             }
                             break;
                         case H:
-                            //std::cout << "Fuck me gently with a chainsaw..." << std::endl;
+                            std::cout << "Fuck me gently with a chainsaw..." << std::endl;
                             //std::cout << f.cols() << "\t" << f.rows() << std::endl;
                             //std::cout << "kern" <<  KernelManager->GetRAWKernel(ik[5]);
+                            //std::cout << "Inputs\t" << TM << "\t" << rho << "\t" << wavef << "\t" << ik[5] << "\t" << KernelManager->GetRAWKernel(ik[5])<< std::endl;
+                            //Hankel->Zgauss(5, TM, 0, rho, wavef, nullptr);
                             f(5) = Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[5]));
                             f(6) = Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[6]));
                             f(7) = Hankel->Zgauss(7, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[7]))*KernelManager->GetRAWKernel(ik[7])->GetZs()/KernelManager->GetRAWKernel(ik[7])->GetZm();
                             f(8) = Hankel->Zgauss(8, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[8]))*KernelManager->GetRAWKernel(ik[8])->GetZs()/KernelManager->GetRAWKernel(ik[8])->GetZm();
                             f(9) = Hankel->Zgauss(9, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[9]))*KernelManager->GetRAWKernel(ik[9])->GetZs()/KernelManager->GetRAWKernel(ik[9])->GetZm();
-                            //std::cout << "HARDER!!!!" << std::endl;
+                            std::cout << "HARDER!!!!" << std::endl;
                             if (std::abs(Pol[1]) > 0) {
                                 this->Receivers->AppendHfield(ifreq, irec,
                                         Pol[1]*QPI*(sps*f(5)+c2p*f(6)/rho-cps*f(7)+c2p*f(8)/rho)*Moment,

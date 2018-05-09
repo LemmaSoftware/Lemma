@@ -101,11 +101,7 @@ namespace Lemma {
         // ====================  OPERATIONS    =======================
 
         Complex Zgauss(const int&, const Lemma::EMMODE&, const int&, const Real&,
-            const Real&, Lemma::KernelEM1DBase* Kernel) {
-            // TODO, in 101 or 51 we never reach here!!
-            std::cout << "Zgauss " << std::endl;
-            return this->Zans(0, Kernel->GetManagerIndex());
-        }
+            const Real&, Lemma::KernelEM1DBase* Kernel);
 
         /// Computes related kernels, if applicable, otherwise this is
         /// just a dummy function.
@@ -172,6 +168,15 @@ namespace Lemma {
         //static constexpr auto CName = "FHT";
 
     }; // -----  end of class  FHT  ----
+
+
+    template < HANKELTRANSFORMTYPE Type >
+    Complex FHT<Type>::Zgauss(const int& ii, const Lemma::EMMODE& mode, const int& jj, const Real& val,
+            const Real& val2, Lemma::KernelEM1DBase* Kernel){
+            // TODO, in 101 or 51 we never reach here!!
+            //std::cout << "Zgauss " << std::endl;
+            return this->Zans(0, Kernel->GetManagerIndex());
+    }
 
     // Specialisations
     // Note that ANDERSON801, CHAVE, QWEKEY will throw errors as they are not consistent
