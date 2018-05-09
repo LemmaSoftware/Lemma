@@ -193,6 +193,9 @@ HANKELTRANSFORMTYPE string2Enum<HANKELTRANSFORMTYPE>( const std::string& str ) {
     else if  (str == "FHTKEY201") return  FHTKEY201;
     else if  (str == "FHTKEY51") return  FHTKEY51;
     else if  (str == "FHTKEY101") return  FHTKEY101;
+    else if  (str == "FHTKONG61") return  FHTKONG61;
+    else if  (str == "FHTKONG121") return  FHTKONG121;
+    else if  (str == "FHTKONG241") return  FHTKONG241;
     else {
         throw std::runtime_error("string not recognized as HANKELTRANSFORMTYPE");
     }

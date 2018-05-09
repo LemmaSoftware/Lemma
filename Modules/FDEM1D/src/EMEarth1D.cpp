@@ -232,7 +232,7 @@ namespace Lemma {
             icalc += 1;
             // Check to see if they are all on a plane? If so we can do this fast
             if (Antenna->IsHorizontallyPlanar() && ( HankelType == ANDERSON801 || HankelType== FHTKEY201 || HankelType==FHTKEY101 ||
-                                                     HankelType == FHTKEY51 )) {
+                                                     HankelType == FHTKEY51 || HankelType == FHTKONG61 )) {
                 #ifdef HAVE_BOOST_PROGRESS
                 if (progressbar) {
                     disp = new boost::progress_display( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
@@ -296,6 +296,9 @@ namespace Lemma {
                             break;
                         case FHTKEY51:
                             Hankel = FHTKey51::NewSP();
+                            break;
+                        case FHTKONG61:
+                            Hankel = FHT<FHTKONG61>::NewSP();
                             break;
                         case QWEKEY:
                             Hankel = QWEKey::NewSP();
