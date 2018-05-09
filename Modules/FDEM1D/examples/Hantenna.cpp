@@ -30,6 +30,7 @@
 #if defined(__clang__)
 	/* Clang/LLVM. ---------------------------------------------- */
     const char* compiler = "clang";
+    const char* ver = __VERSION__;
 #elif defined(__ICC) || defined(__INTEL_COMPILER)
 	/* Intel ICC/ICPC. ------------------------------------------ */
     const char* compiler = "icpc";
