@@ -293,7 +293,8 @@
          *  FHTKEY51        Key's 51 point filter
          *  QWEKEY          Key's Gaussian quadrature integration method
          */
-        enum HANKELTRANSFORMTYPE { ANDERSON801, CHAVE, FHTKEY201, FHTKEY101, FHTKEY51, QWEKEY };
+        enum HANKELTRANSFORMTYPE { ANDERSON801, CHAVE, FHTKEY201, FHTKEY101, FHTKEY51, QWEKEY,
+                                    FHTKONG61, FHTKONG121, FHTKONG241 };
 
         /** Enum is OK because these are the only physically possible sources.
          @param NOSOURCETYPE is default.

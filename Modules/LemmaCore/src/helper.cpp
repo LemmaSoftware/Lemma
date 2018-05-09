@@ -146,6 +146,16 @@ std::string enum2String(const HANKELTRANSFORMTYPE& Type) {
         case FHTKEY51:
             t = std::string("FHTKEY51");
             break;
+        case FHTKONG61:
+            t = std::string("FHTKONG61");
+            break;
+        case FHTKONG121:
+            t = std::string("FHTKONG121");
+            break;
+        case FHTKONG241:
+            t = std::string("FHTKONG241");
+            break;
+
     }
     return t;
 }
