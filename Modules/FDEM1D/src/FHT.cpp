@@ -457,7 +457,7 @@ namespace Lemma {
 
     template<>
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<FHTKONG121>::WT =
-        ( Eigen::Matrix<Real, 61, 3>()   <<
+        ( Eigen::Matrix<Real, 121, 3>()   <<
        // Base                   J0                        J1
         0.10077854290485105e-02,  0.30018305463183890e+03,  0.14159106906236584e+05,
         0.11306077036215634e-02,  -.14997153161927693e+04,  -.63894162353990403e+05,
