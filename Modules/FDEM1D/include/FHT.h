@@ -176,13 +176,10 @@ namespace Lemma {
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<FHTKEY101>::WT;
     template<>
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<FHTKEY51>::WT;
-
     template<>
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<FHTKONG61>::WT;
-
     template<>
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<FHTKONG121>::WT;
-
     template<>
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<FHTKONG241>::WT;
 

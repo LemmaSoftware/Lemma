@@ -93,6 +93,7 @@ const char *buildString = __DATE__ ", " __TIME__;
         int ip=1;
         for ( ; ip<=(int)(Trans[0])*2; ip+=2) {
             trans->SetPoint(ip/2, Vector3r (Trans[ip], Trans[ip+1], -1e-3));
+            //trans->SetPoint(ip/2, Vector3r (Trans[ip], Trans[ip+1], 50.));
         }
  	    trans->SetNumberOfFrequencies(1);
  	    trans->SetFrequency(0, Trans[ip]);
