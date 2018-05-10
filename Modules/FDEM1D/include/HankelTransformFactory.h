@@ -107,8 +107,8 @@ namespace Lemma {
                     return FHT<FHTKEY51>::NewSP();
                 case FHTKONG61:
                     return FHT<FHTKONG61>::NewSP();
-//                 case FHTKONG121:
-//                     return FHT<FHTKONG121>::NewSP();
+                case FHTKONG121:
+                    return FHT<FHTKONG121>::NewSP();
 //                 case FHTKONG241:
 //                     return FHT<FHTKONG241>::NewSP();
                 case CHAVE:
