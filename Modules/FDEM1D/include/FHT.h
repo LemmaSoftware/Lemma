@@ -182,6 +182,8 @@ namespace Lemma {
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<FHTKONG121>::WT;
     template<>
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<FHTKONG241>::WT;
+    template<>
+    const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<IRONS>::WT;
 
     template < HANKELTRANSFORMTYPE Type >
     Complex FHT<Type>::Zgauss(const int& ii, const Lemma::EMMODE& mode, const int& jj, const Real& val,

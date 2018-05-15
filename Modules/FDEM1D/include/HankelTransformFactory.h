@@ -115,6 +115,8 @@ namespace Lemma {
                     return GQChave::NewSP();
                 case QWEKEY:
                     return QWEKey::NewSP();
+                case IRONS:
+                    return FHT<IRONS>::NewSP();
                 default:
                     std::cerr << "HankelTransformFactory only works with defined types\n";
             }

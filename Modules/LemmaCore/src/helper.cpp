@@ -155,6 +155,9 @@ std::string enum2String(const HANKELTRANSFORMTYPE& Type) {
         case FHTKONG241:
             t = std::string("FHTKONG241");
             break;
+        case IRONS:
+            t = std::string("IRONS");
+            break;
 
     }
     return t;
@@ -196,6 +199,7 @@ HANKELTRANSFORMTYPE string2Enum<HANKELTRANSFORMTYPE>( const std::string& str ) {
     else if  (str == "FHTKONG61") return  FHTKONG61;
     else if  (str == "FHTKONG121") return  FHTKONG121;
     else if  (str == "FHTKONG241") return  FHTKONG241;
+    else if  (str == "IRONS") return  IRONS;
     else {
         throw std::runtime_error("string not recognized as HANKELTRANSFORMTYPE");
     }

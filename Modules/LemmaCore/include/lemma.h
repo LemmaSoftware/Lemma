@@ -294,7 +294,7 @@
          *  QWEKEY          Key's Gaussian quadrature integration method
          */
         enum HANKELTRANSFORMTYPE { ANDERSON801, CHAVE, FHTKEY201, FHTKEY101, FHTKEY51, QWEKEY,
-                                    FHTKONG61, FHTKONG121, FHTKONG241 };
+                                    FHTKONG61, FHTKONG121, FHTKONG241, IRONS };
 
         /** Enum is OK because these are the only physically possible sources.
          @param NOSOURCETYPE is default.
