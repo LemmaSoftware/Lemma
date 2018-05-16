@@ -141,7 +141,6 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     void QWEKey::ComputeRelated ( const Real& rho, std::shared_ptr<KernelEM1DManager> KernelManagerIn ) {
         KernelManager = KernelManagerIn;  // OK becauase this is internal and we know what we are doing
-
         Lambda = Bx.array()/rho;
         Intervals = xInt.array()/rho;
         int nrel = (int)(KernelManager->GetSTLVector().size());
@@ -270,7 +269,10 @@ namespace Lemma {
                     }
 
                     // The extrapolated result plus the prev integration term:
-                    Textrap(j,n) = TS(j, (n-1)%2)+prev(0, j);
+                    if (n>0) {
+                        Textrap(j,n) = TS(j, (n-1)%2)+prev(0, j); // WAS  BUG
+                    }
+                    //Textrap(j,n) = TS(j, (n-1)%2 + 1)+prev(0, j);
                     //Textrap(j,n) = TS(j, n%2 + 1)+prev(0, j);
 
                     // Step 3: Analyze for convergence:

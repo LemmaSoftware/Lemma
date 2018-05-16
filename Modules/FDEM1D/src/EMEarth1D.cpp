@@ -232,7 +232,8 @@ namespace Lemma {
             icalc += 1;
             // Check to see if they are all on a plane? If so we can do this fast
             if (Antenna->IsHorizontallyPlanar() && ( HankelType == ANDERSON801 || HankelType== FHTKEY201 || HankelType==FHTKEY101 ||
-                                                     HankelType == FHTKEY51 || HankelType == FHTKONG61 || FHTKONG121 || FHTKONG241 || IRONS )) {
+                                                     HankelType == FHTKEY51 || HankelType == FHTKONG61 || HankelType == FHTKONG121 ||
+                                                     HankelType == FHTKONG241 || HankelType == IRONS )) {
                 #ifdef HAVE_BOOST_PROGRESS
                 if (progressbar) {
                     disp = new boost::progress_display( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
@@ -260,10 +261,9 @@ namespace Lemma {
                     }
                     #endif
                 }
-            } else
-            if (Receivers->GetNumberOfPoints() > Antenna->GetNumberOfFrequencies()) {
+            } else if (Receivers->GetNumberOfPoints() > Antenna->GetNumberOfFrequencies()) {
 
-                //std::cout << "freq parallel #1" << std::endl;
+                std::cout << "freq parallel #1" << std::endl;
                 //** Progress display bar for long calculations */
                 #ifdef HAVE_BOOST_PROGRESS
                 if (progressbar) {
@@ -279,7 +279,8 @@ namespace Lemma {
                     // Since these antennas change we need a local copy for each
                     // thread.
                     auto AntCopy = static_cast<PolygonalWireAntenna*>(Antenna.get())->ClonePA();
-
+                    auto Hankel = HankelTransformFactory::NewSP( HankelType );
+/*
                     std::shared_ptr<HankelTransform> Hankel;
                     switch (HankelType) {
                         case ANDERSON801:
@@ -304,13 +305,14 @@ namespace Lemma {
                             Hankel = FHT<FHTKONG121>::NewSP();
                             break;
                         case QWEKEY:
+                            std::cout << "QWEKEY" << std::endl;
                             Hankel = QWEKey::NewSP();
                             break;
                         default:
                             std::cerr << "Hankel transform cannot be created\n";
                             exit(EXIT_FAILURE);
                     }
-
+*/
                     //for (int irec=tid; irec<Receivers->GetNumberOfPoints(); irec+=nthreads) {
                     #ifdef LEMMAUSEOMP
                     #pragma omp for schedule(static, 1) //nowait
@@ -753,6 +755,7 @@ namespace Lemma {
 
     void EMEarth1D::SolveSingleTxRxPair (const int &irec, HankelTransform *Hankel, const Real &wavef, const int &ifreq,
                    DipoleSource *tDipole) {
+        //std::cout << "SolveSingleTxRxPair" << std::endl;
         ++icalcinner;
         Real rho = (Receivers->GetLocation(irec).head<2>() - tDipole->GetLocation().head<2>()).norm();
         tDipole->SetKernels(ifreq, FieldsToCalculate, Receivers, irec, Earth);
@@ -771,6 +774,8 @@ namespace Lemma {
 
     void EMEarth1D::SolveLaggedTxRxPair(const int &irec, HankelTransform* Hankel,
                     const Real &wavef, const int &ifreq, PolygonalWireAntenna* antenna) {
+
+        //std::cout << "SolveLaggedTxRxPair" << std::endl;
 
         antenna->ApproximateWithElectricDipoles(Receivers->GetLocation(irec));
 
