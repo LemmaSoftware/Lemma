@@ -44,7 +44,8 @@
     Lemma's approach is much different, by providing a set of general tools users
     can easily assemble applications that suite their needs. Furthermore, most are
     written in either Fortran or MATLAB, and can be difficult to integrate into
-    multiphysics applications.
+    multiphysics applications. To our knowlege, Lemma is the only C++ EM simulation
+    package freely available.
 
     \section Capabilities Capabilities
     In the long term, we have many goals for this software project. Due to its
