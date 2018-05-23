@@ -35,7 +35,7 @@
     We feel that this is a particularly approprate name, as Lemma's
     API can be leveraged create powerful applications such as forward
     modelling and inverting frequency and time-domain
-    surveys of arbitrary survey design, sNMR surveys, CSAMT and more.
+    surveys of arbitrary survey design, sNMR surveys, CSEM and more.
 
     \section Motivation
     Why another Geophysical EM project? For starters, there aren't that many
