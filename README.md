@@ -12,7 +12,7 @@ Lemma is an ElectroMagnetics Modelling API. Lemma is developed in the hopes that
 Lemma is and has been developed by several organisations and people, including: University of Utah, Colorado School of Mines, US Geological Survey. 
 
 ## Platforms 
-Lemma is tested on Linux, Mac OSX and Windows platforms. 
+Lemma is tested on Linux (Ubuntu & Arch), Mac OSX and Windows (7&10) platforms. 
 
 ## Getting involved
 * Testing code
