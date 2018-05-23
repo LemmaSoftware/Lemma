@@ -72,7 +72,8 @@
 
     \par 3D
     A fast 3D solver that can modify the 1D results based
-    on arbitrary electrical conductivity model is nearing completion.
+    on arbitrary electrical conductivity model is nearing completion and is
+    provided in a separate module.
 
     \par future work
     We are also planning on supporting grounded wires in the near future.
