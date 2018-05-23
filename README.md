@@ -7,6 +7,7 @@ Lemma is an ElectroMagnetics Modelling API. Lemma is developed in the hopes that
 * Fast 
 * Object oriented 
 * Python bindings planned
+* VTK integration 
 
 ## Team 
 Lemma is and has been developed by several organisations and people, including: University of Utah, Colorado School of Mines, US Geological Survey. 
