@@ -38,8 +38,8 @@
     surveys of arbitrary survey design, sNMR surveys, CSAMT and more.
 
     \section Motivation
-    Why another Geophysical EM project? For starters, there
-    aren't that many quality open source packages out there. Those that do
+    Why another Geophysical EM project? For starters, there aren't that many
+    quality open source packages out there. Those that do
     exist are generally specialized to perform a single task and extending
     them is a major undertaking. Lemma's approach is much different, by
     providing a set of general tools users can easily assemble applications
