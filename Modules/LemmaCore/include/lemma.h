@@ -39,11 +39,12 @@
 
     \section Motivation
     Why another Geophysical EM project? For starters, there aren't that many
-    quality open source packages out there. Those that do
-    exist are generally specialized to perform a single task and extending
-    them is a major undertaking. Lemma's approach is much different, by
-    providing a set of general tools users can easily assemble applications
-    that suite their needs.
+    quality open source packages out there. Those that do exist are generally
+    specialized to perform a single task and extending them is a major undertaking.
+    Lemma's approach is much different, by providing a set of general tools users
+    can easily assemble applications that suite their needs. Furthermore, most are
+    written in either Fortran or MATLAB, and can be difficult to integrate into
+    multiphysics applications.
 
     \section Capabilities Capabilities
     In the long term, we have many goals for this software project. Due to its
