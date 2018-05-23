@@ -19,10 +19,11 @@
     Originally Lemma was intended as a recursive acronym standing for
     <B>L</B>emma is an <B>E</B>lectro<B>M</B>agnetics <B>M</B>odelling <B>A</B>PI.
     As the breadth of the project has expanded, the name has remained
-    appropriate in a more liteal sense. Lemma is a flexible cross-platform
+    appropriate in a more literal sense. Lemma is a flexible cross-platform
     library delivering an expressive API that can be used to easily create
     versatile programs. Lemma is not itself a program, instead it is a
-    collection of building blocks to make applications. We retain this name because:
+    collection of building blocks to make geophysical applications.
+    We retain this name because:
 
     - In mathematics a Lemma is a proven proposition which is used as a
     stepping stone to a larger result rather than as a statement in-and-of
@@ -31,7 +32,7 @@
     provided such as numerical optimization and inversion capabilities. These
     tools are also considered stepping stones to final products.
 
-    We feel that this is a partucularily approprate name, as Lemma's
+    We feel that this is a particularly approprate name, as Lemma's
     API can be leveraged create powerful applications such as forward
     modelling and inverting frequency and time-domain
     surveys of arbitrary survey design, sNMR surveys, CSAMT and more.
