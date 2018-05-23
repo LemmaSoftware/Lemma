@@ -80,8 +80,6 @@
 	dipole source as well as a wire loop.  Currently, only one receiver is
 	modelled at a time, but will be generalised.  In addition, utilities
 	to read in data files for modelling have been implemented.
-    We would like to offer 3D time domain support, but this will not be
-    provided before our first stable release.
 
     \subsection DataFormats Data Formats
     The EM community is plagued with myriad data formats. Often each equiptment
