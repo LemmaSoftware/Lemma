@@ -51,9 +51,6 @@
     In the long term, we have many goals for this software project. Due to its
     design, Lemma can be built upon and extended easily. The initial aim is to
     provide flexible 1D and 3D EM modelling in the time and frequency domains.
-    The project is still in beta, but we have made a lot of progress already.
-    We will release our first non-beta release as soon as the following are
-    supported.
 
     \subsection FDM Frequency-domain forward modelling
     Lemma was initially called EMMODFD: Electromagnetic Modelling in the Frequency
