@@ -109,12 +109,17 @@ int main() {
 	std::cout << receivers->GetEfield(0,0) << std::endl;
 	receivers->ClearFields();
     */
+    auto lc = receivers->GetEfield(0,0);
 
- #ifdef NOKIHALEE_EM1D
+ #ifdef KIHALEE_EM1D
+	receivers->ClearFields();
     std::cout << "\nFORTRAN\n";
  	EmEarth->MakeCalc();
+    auto fc = receivers->GetEfield(0,0);
 // 	std::cout << receivers->GetHfield(0,0) << std::endl;
  	std::cout << receivers->GetEfield(0,0) << std::endl;
+
+    std::cout << "Difference norm |" << (lc - fc).norm() << "|" << std::endl;
  #endif
 
 }

@@ -84,14 +84,6 @@ if (LEMMA_ENABLE_TESTING)
     find_package (CxxTest QUIET)   # Unit testing 
 endif()
 
-#######################################################################
-# CXXTEST Framework
-if(CXXTEST_FOUND)
-	if (LEMMA_ENABLE_TESTING)
-    	#include_directories(${CXXTEST_INCLUDE_DIR}) # Add this in testing CMakeLists.txt instead, cleaner
-    	enable_testing()
-	endif()
-endif()
 
 ## Optional Dependencies
 if ( NOT Eigen3_FOUND OR 
@@ -296,10 +288,19 @@ include_directories ("${CMAKE_INSTALL_PREFIX}/include/")
 link_directories ("${CMAKE_INSTALL_PREFIX}/lib/")
 
 
-
 ########################################################################
 # Build Modules
 add_subdirectory (Modules) 
+
+#######################################################################
+# CXXTEST Framework
+if(CXXTEST_FOUND)
+	if (LEMMA_ENABLE_TESTING)
+        include (CTest)
+    	#include_directories(${CXXTEST_INCLUDE_DIR}) # Add this in testing CMakeLists.txt instead, cleaner
+    	#enable_testing()
+	endif()
+endif()
 
 ########################################################################
 # add a target to generate API documentation with Doxyfile.in 
