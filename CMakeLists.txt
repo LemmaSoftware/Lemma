@@ -39,6 +39,7 @@ option (LEMMA_VTK8_SUPPORT "VTK 8.x library for visualisation and grids" OFF)
 
 #option (CMAKE_CROSSCOMPILING "Target different arch than you are on" OFF)
 
+
 ##########################################################################################
 ## Only look for packages where we build them...this makes finding VTK a problem though! #
 ########################################################################################## 
@@ -111,6 +112,13 @@ endif()
 set(CMAKE_MACOSX_RPATH 1)
 
 project (Lemma CXX)
+
+if(CXXTEST_FOUND)
+	if (LEMMA_ENABLE_TESTING)
+        #include (CTest)
+    	enable_testing()
+	endif()
+endif()
 
 # Disallow in-source build
 if ("${Lemma_SOURCE_DIR}"  STREQUAL "${Lemma_BINARY_DIR}")
@@ -294,13 +302,12 @@ add_subdirectory (Modules)
 
 #######################################################################
 # CXXTEST Framework
-if(CXXTEST_FOUND)
-	if (LEMMA_ENABLE_TESTING)
-        include (CTest)
-    	#include_directories(${CXXTEST_INCLUDE_DIR}) # Add this in testing CMakeLists.txt instead, cleaner
+#if(CXXTEST_FOUND)
+#	if (LEMMA_ENABLE_TESTING)
+#        include (CTest)
     	#enable_testing()
-	endif()
-endif()
+#	endif()
+#endif()
 
 ########################################################################
 # add a target to generate API documentation with Doxyfile.in 
