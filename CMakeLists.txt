@@ -115,7 +115,7 @@ project (Lemma CXX)
 
 if(CXXTEST_FOUND)
 	if (LEMMA_ENABLE_TESTING)
-        #include (CTest)
+        include (CTest)
     	enable_testing()
 	endif()
 endif()

@@ -34,7 +34,7 @@
 #elif defined(__ICC) || defined(__INTEL_COMPILER)
 	/* Intel ICC/ICPC. ------------------------------------------ */
     const char* compiler = "icpc";
-
+    const char* ver = __VERSION__;
 #elif defined(__GNUC__) || defined(__GNUG__)
 	/* GNU GCC/G++. --------------------------------------------- */
     const char* compiler = "gcc (GCC) ";//  __VERSION__;
