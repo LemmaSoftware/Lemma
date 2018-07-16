@@ -18,6 +18,7 @@
 #include "yaml-cpp/yaml.h"
 
 #include <chrono>
+#include <ctime>
 #include <memory>
 
 #include <iostream>
@@ -82,13 +83,20 @@ class LemmaObject {
             // Alternative formulation
             std::time_t now = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
             std::stringstream out;
+
             // use locale format
             //out.imbue(std::locale("")); // use whatever is on the system
             //out << std::put_time(std::localtime(& now), L"%c") ; // locale on system
             // ISO-8601 format;
-            out << std::put_time(std::localtime(& now), "%F %T %z");
-            node["Serialized"] = out.str();
+            //out << std::put_time(std::localtime(& now), "%F %T %z");
+            
+	    // Use thread safe variant to suppress MSVC warning
+	    struct tm timeinfo;
+	    localtime_s(&timeinfo, &now);
+	    // ISO-8601 format;
+            out << std::put_time(&timeinfo, "%F %T %z");
 
+	    node["Serialized"] = out.str();
             node["Lemma_VERSION"] = LEMMA_VERSION;
             return node;
         };
