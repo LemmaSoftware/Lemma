@@ -89,14 +89,18 @@ class LemmaObject {
             //out << std::put_time(std::localtime(& now), L"%c") ; // locale on system
             // ISO-8601 format;
             //out << std::put_time(std::localtime(& now), "%F %T %z");
-            
-	    // Use thread safe variant to suppress MSVC warning
-	    struct tm timeinfo;
-	    localtime_s(&timeinfo, &now);
-	    // ISO-8601 format;
+
+            // Use thread safe variant to suppress MSVC warning
+            struct tm timeinfo;
+            #if _MSC_VER && !__INTEL_COMPILER
+            localtime_s(&timeinfo, &now);
+            #else
+            localtime_r(&now, &timeinfo);
+            #endif
+            // ISO-8601 format;
             out << std::put_time(&timeinfo, "%F %T %z");
 
-	    node["Serialized"] = out.str();
+	        node["Serialized"] = out.str();
             node["Lemma_VERSION"] = LEMMA_VERSION;
             return node;
         };
