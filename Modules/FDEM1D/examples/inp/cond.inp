@@ -1,0 +1,5 @@
+3              // Number of NON-AIR layers
+2  10         // resistivity [Ohm-m], thickness [m] of top layer
+.2 20         // resistivity [Ohm-m], thickness [m] of middle layer
+.3            // resistivity [Ohm-m] of infinite thickness bottom layer
+

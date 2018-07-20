@@ -26,7 +26,7 @@ add_executable( Hantenna Hantenna.cpp  )
 target_link_libraries(  Hantenna  "lemmacore" "fdem1d")
 set_property(TARGET Hantenna PROPERTY CXX_STANDARD 14)
 
-INSTALL_TARGETS( "/share/FEM1D/"
+INSTALL_TARGETS( "/share/FDEM1D/"
 	LayeredEarthEM 
 	FieldPoints
 	PolygonalWireAntenna
@@ -34,3 +34,5 @@ INSTALL_TARGETS( "/share/FEM1D/"
     CircularLoop
 	Hantenna
 )
+
+install (DIRECTORY inp  DESTINATION "${CMAKE_INSTALL_PREFIX}/share/FDEM1D/" )

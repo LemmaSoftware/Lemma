@@ -1,0 +1,5 @@
+20 20 20          // number of points (nx, ny, nz) in (northing, easting, depth) z pos down
+-100 -100 1e-1    // offset in x, y, z (location of first calculation)
+5 4 3 2 1 .5 .5 .5 .5 .5 .5 .5 .5 .5 1 2 3 4 5 // x direction point spacing, in metres, (nx-1) 
+5 4 3 2 1 .5 .5 .5 .5 .5 .5 .5 .5 .5 1 2 3 4 5 // y direction point spacing, in metres, (ny-1) 
+.1 .1 .1 2 2 2 3 3 3 4 4 4 4 4 4 5 5 5 5       // z direction point spacing, in metres, (nz-1) 

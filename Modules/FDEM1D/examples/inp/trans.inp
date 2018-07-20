@@ -1,0 +1,8 @@
+5	    // number of points in transmitter
+ 50  50     // coordinates of first point   (northing, easting)
+150  50     // coordinates of second point
+150 150     //          |
+ 50 150     //          V 
+ 50  50     // coordinates of last point, same as first for closed loop
+1000.5      // Frequency of Tx [Hz]
+1.          // Current in loop, [Amperes]
