@@ -169,8 +169,8 @@ namespace Lemma {
 
     }; // -----  end of class  FHT  ----
 
-    // Forward declarations
-/*
+    // Clang wants forward declarations, MSVC doesn't
+#if defined( __clang__) || defined(__GNUC__) || defined(__GNUG__) || defined(__ICC) || defined(__INTEL_COMPILER)
     template<>
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<FHTKEY201>::WT;
     template<>
@@ -185,7 +185,7 @@ namespace Lemma {
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<FHTKONG241>::WT;
     template<>
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<IRONS>::WT;
-*/
+#endif
 
     template < HANKELTRANSFORMTYPE Type >
     Complex FHT<Type>::Zgauss(const int& ii, const Lemma::EMMODE& mode, const int& jj, const Real& val,
