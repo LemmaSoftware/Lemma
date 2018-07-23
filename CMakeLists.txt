@@ -24,6 +24,7 @@ set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMM
 ## Options--what do you want to do
 option ( BUILD_SHARED_LIBS      "Shared or static libraries"  OFF )
 
+# If CMAKE_BUILD_TYPE is not specified, assume Release. 
 IF( NOT CMAKE_BUILD_TYPE )
    SET( CMAKE_BUILD_TYPE Release ... FORCE )
 ENDIF()
@@ -39,6 +40,7 @@ option (LEMMA_VTK8_SUPPORT "VTK 8.x library for visualisation and grids" OFF)
 
 #option (CMAKE_CROSSCOMPILING "Target different arch than you are on" OFF)
 
+SET (CMAKE_CROSSCOMPILING TRUE)
 
 ##########################################################################################
 ## Only look for packages where we build them...this makes finding VTK a problem though! #
@@ -47,22 +49,29 @@ if (CMAKE_CROSSCOMPILING)
     message ( STATUS "Cross-compiling! Only searching in install directory for components." )
     # Kind of hack-ish, CMake doesn't always find this. It's buried in Cross compilation, so, 
     # hopefully anyone doing this can problem solve. 
-    SET( CMAKE_PREFIX_PATH ${CMAKE_INSTALL_PREFIX}/CMake ${CMAKE_INSTALL_PREFIX}/share/eigen3 )
-    #SET( CMAKE_MODULE_PATH ${CMAKE_INSTALL_PREFIX} )
-    SET( CMAKE_FIND_ROOT_PATH ONLY ${CMAKE_INSTALL_PREFIX})
-    SET( CMAKE_FIND_ROOT_PATH_MODE_LIBRARY  ONLY ) 
-    SET( CMAKE_FIND_ROOT_PATH_MODE_INCLUDE  ONLY ) 
-    SET( CMAKE_FIND_ROOT_PATH_MODE_PACKAGE  ONLY )
-    UNSET( Eigen3_DIR CACHE ) 
-    UNSET( yaml-cpp_DIR CACHE ) 
-    UNSET( Eigen3_FOUND CACHE ) 
-    UNSET( yaml-cpp_FOUND CACHE ) 
-    find_package (yaml-cpp 0.6 PATHS ${CMAKE_INSTALL_PREFIX} ) #QUIET )  # Serialisation of classes 
-    find_package (Eigen3 3.3 PATHS ${CMAKE_INSTALL_PREFIX}  )   # QUIET)     # Matrix/Vector & Math
-endif()
+    #    SET( CMAKE_PREFIX_PATH ${CMAKE_INSTALL_PREFIX}/CMake ${CMAKE_INSTALL_PREFIX}/share/eigen3 )
 
-find_package (Eigen3 3.3 QUIET)     # Matrix/Vector & Math
-find_package (yaml-cpp 0.6 QUIET )  # Serialisation of classes 
+    #    SET( CMAKE_MODULE_PATH ${CMAKE_INSTALL_PREFIX} )
+    #    SET( CMAKE_FIND_ROOT_PATH ONLY ${CMAKE_INSTALL_PREFIX} )
+    #    SET( CMAKE_FIND_ROOT_PATH_MODE_LIBRARY  ONLY ) 
+    #    SET( CMAKE_FIND_ROOT_PATH_MODE_INCLUDE  ONLY ) 
+    #    SET( CMAKE_FIND_ROOT_PATH_MODE_PACKAGE  ONLY )
+
+    #    UNSET( Eigen3_DIR CACHE ) 
+    #    UNSET( yaml-cpp_DIR CACHE ) 
+    #    UNSET( Eigen3_FOUND CACHE ) 
+    #    UNSET( yaml-cpp_FOUND CACHE ) 
+
+    #message( STATUS "........Looking for yaml-cpp in ${CMAKE_INSTALL_PREFIX}" )
+    
+    find_package (yaml-cpp 0.6 PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH ) # Serialisation of classes 
+    find_package (Eigen3   3.3 PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH ) # Matrix/Vector & Math
+
+    #message( STATUS "yaml-cpp include dir ${YAML_CPP_INCLUDE_DIR}" )
+else()
+    find_package (Eigen3 3.3 QUIET)     # Matrix/Vector & Math
+    find_package (yaml-cpp 0.6 QUIET )  # Serialisation of classes 
+endif()
 
 INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
 
