@@ -73,7 +73,11 @@ class jsw_timer {
         Real last() const { return elapsed; }
 
     private:
+        #ifdef LEMMAUSEOMP
+        Real start;
+        #else
         std::clock_t start;
+        #endif
         Real    elapsed;
 };
 
