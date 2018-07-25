@@ -267,7 +267,7 @@ namespace Lemma {
 
         // lambda needs to be expanded to include lagged results
         VectorXr lambda = (VectorXr(WT.rows()+nlag) << WT.col(0).array()/rho, VectorXr::Zero(nlag)).finished();
-        for (int ilam =WT.rows(); ilam< nlag+WT.rows(); ++ilam) {
+        for (Index ilam = WT.rows(); ilam< nlag+WT.rows(); ++ilam) {
             lambda(ilam) = lambda(ilam-1)/GetABSER();
         }
 

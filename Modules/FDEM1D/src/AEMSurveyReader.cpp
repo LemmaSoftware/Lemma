@@ -105,13 +105,13 @@ namespace Lemma {
         int nb = Parser->ReadInts(1)[0];  // number of locations
         for (int ib=0; ib<nb; ++ib) {
             std::vector<Real> rvals = Parser->ReadReals(6); // position and moment
-            int bp = Parser->GetFileLocation(  );
+	    std::streamoff bp = Parser->GetFileLocation(  );
             Parser->JumpToLocation( 0 );
             //std::vector<int> ivals = Parser->ReadInts(1);   // number of frequencies
             int nf = Parser->ReadInts(1)[0];   // number of frequencies
             for (int isc=0; isc<nf; ++isc) {
                 Survey->Sources.push_back(DipoleSource::NewSP());
-                int cnt = Survey->Sources.size() - 1; //
+                size_t cnt = Survey->Sources.size() - 1; //
                 // and now set it
                 Survey->Sources[cnt]->SetNumberOfFrequencies(1);
                 Survey->Sources[cnt]->SetFrequency(0, Parser->ReadReals(1)[0]);

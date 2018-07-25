@@ -10,10 +10,9 @@
 /**
  * @file
  * @date      09/23/2013 02:33:41 PM
- * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2013, Trevor Irons
+ * @email     Trevor.Irons@Lemmasoftware.org
+ * @copyright Copyright (c) 2013,2018 Trevor Irons
  */
 
 #include "ASCIIParser.h"
@@ -24,7 +23,7 @@ namespace Lemma {
     // ====================  FRIEND METHODS  =====================
 
     std::ostream &operator << (std::ostream &stream, const ASCIIParser &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc
+        stream << ob.Serialize()  << "\n"; 
         return stream;
     }
 
@@ -211,7 +210,7 @@ namespace Lemma {
     //       Class:  ASCIIParser
     //      Method:  GetFileLocation
     //--------------------------------------------------------------------------------------
-    int ASCIIParser::GetFileLocation (  ) {
+    std::streamoff ASCIIParser::GetFileLocation (  ) {
         return input.tellg();
     }		// -----  end of method ASCIIParser::GetFileLocation  -----
 
@@ -219,7 +218,7 @@ namespace Lemma {
     //       Class:  ASCIIParser
     //      Method:  JumpToLocation
     //--------------------------------------------------------------------------------------
-    void ASCIIParser::JumpToLocation ( const int& loc ) {
+    void ASCIIParser::JumpToLocation ( const std::streamoff& loc ) {
         input.seekg( loc );
         return ;
     }		// -----  end of method ASCIIParser::JumpToLocation  -----

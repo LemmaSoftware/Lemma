@@ -10,10 +10,9 @@
 /**
  * @file
  * @date      09/23/2013 02:31:24 PM
- * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2013, Trevor Irons
+ * @email     Trevor.Irons@LemmaSoftware.org
+ * @copyright Copyright (c) 2013, 2018 Trevor Irons
  */
 
 #ifndef  ASCIIPARSER_INC
@@ -116,7 +115,7 @@ class ASCIIParser : public LemmaObject {
     /**
      * @param[in] loc is the point in the file to jump to. Uses seekg
      */
-    void JumpToLocation(const int& loc);
+    void JumpToLocation(const std::streamoff& loc);
 
     // ====================  ACCESS        =======================
 
@@ -135,7 +134,7 @@ class ASCIIParser : public LemmaObject {
     /**
      * @return the current position in the file, as reported by istream::tellg
      */
-    int GetFileLocation();
+    std::streamoff GetFileLocation();
 
     /** Returns the name of the underlying class, similiar to Python's type */
     virtual std::string GetName() const;

@@ -16,7 +16,7 @@
 namespace Lemma {
 
     std::ostream &operator << (std::ostream &stream, const RectilinearGrid &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc
+        stream << ob.Serialize()  << "\n"; 
         return stream;
     }
 
@@ -111,9 +111,13 @@ namespace Lemma {
 
     void RectilinearGrid::SetSpacing (const VectorXr &idx, const VectorXr &idy,
                 const VectorXr &idz) {
-        nx = idx.size();
-        ny = idy.size();
-        nz = idz.size();
+        // MSVC doens't allow static_cast here
+        //nx = std::static_cast<int>( idx.size() );
+        //ny = std::static_cast<int>( idy.size() );
+        //nz = std::static_cast<int>( idz.size() );
+        nx = (int)( idx.size() );
+        ny = (int)( idy.size() );
+        nz = (int)( idz.size() );
         dx = idx;
         dy = idy;
         dz = idz;

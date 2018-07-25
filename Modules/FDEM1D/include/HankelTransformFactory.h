@@ -119,8 +119,8 @@ namespace Lemma {
                     return FHT<IRONS>::NewSP();
                 default:
                     std::cerr << "HankelTransformFactory only works with defined types\n";
+                    return FHTAnderson801::NewSP(); // dummy return 
             }
-
         }
 
         /**

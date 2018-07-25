@@ -8,7 +8,6 @@
   @file
   @author   Trevor Irons
   @date     12/16/2009
-  @version  $Id: wireantenna.cpp 199 2014-12-29 19:25:20Z tirons $
  **/
 
 #include "WireAntenna.h"
@@ -119,7 +118,7 @@ namespace Lemma {
     }
 
     int WireAntenna::GetNumberOfFrequencies() {
-        return Freqs.size();
+        return (int)(Freqs.size());  // Index to int
     }
 
     Vector3Xr WireAntenna::GetPoints() {
@@ -223,8 +222,8 @@ namespace Lemma {
 
     // ====================  INQUIRY       =======================
 
-    int WireAntenna::GetNumberOfDipoles() {
-        return Dipoles.size();
+    size_t WireAntenna::GetNumberOfDipoles() {
+        return Dipoles.size();  // size_t to int
     }
 
     std::shared_ptr<DipoleSource> WireAntenna::GetDipoleSource(const int &dip) {

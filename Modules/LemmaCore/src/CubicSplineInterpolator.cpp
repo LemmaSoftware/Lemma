@@ -101,18 +101,19 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     void CubicSplineInterpolator::SetKnots ( const VectorXr& x, const VectorXr& y ) {
 
-        int n = x.size()-1;
+        //int n = x.size()-1;
+        Index n = x.size()-1;
 
         Spline = SplineSet(n);
 
         Spline.a = y;
         Spline.x = x;
         VectorXr h = VectorXr::Zero(n);
-        for(int i=0; i<n; ++i)
+        for(Index i=0; i<n; ++i)
             h(i) = Spline.x(i+1)-Spline.x(i);
 
         VectorXr alpha(n-1);
-        for(int i=1; i<n-1; ++i)
+        for(Index i=1; i<n-1; ++i)
             alpha(i) =  3.*(Spline.a[i+1]-Spline.a[i])/h[i] - 3.*(Spline.a[i]-Spline.a[i-1])/h[i-1] ;
 
         VectorXr l = VectorXr::Zero(n+1);
@@ -122,7 +123,7 @@ namespace Lemma {
         mu[0] = 0;
         z[0] = 0;
 
-        for(int i = 1; i < n-1; ++i) {
+        for(Index i = 1; i < n-1; ++i) {
             l[i] = 2 *(Spline.x[i+1]-Spline.x[i-1])-h[i-1]*mu[i-1];
             mu[i] = h[i]/l[i];
             z[i] = (alpha[i]-h[i-1]*z[i-1])/l[i];
@@ -130,7 +131,7 @@ namespace Lemma {
         l[n] = 1;
         z[n] = 0;
 
-        for(int j = n-1; j >= 0; --j) {
+        for(Index j = n-1; j >= 0; --j) {
             Spline.c[j] = z[j] - mu[j] * Spline.c[j+1];
             Spline.b[j] = (Spline.a[j+1]-Spline.a[j])/h[j]-h[j]*(Spline.c[j+1]+2*Spline.c[j])/3;
             Spline.d[j] = (Spline.c[j+1]-Spline.c[j])/3/h[j];
@@ -230,9 +231,8 @@ namespace Lemma {
     //--------------------------------------------------------------------------------------
     Real CubicSplineInterpolator::Integrate ( const Real& x0, const Real& x1 ) {
 
-
-        int i0 = Interval(x0);
-        int i1 = Interval(x1);
+        Index i0 = Interval(x0);
+        Index i1 = Interval(x1);
 
         Real h0 = x0 - Spline.x(i0);
         if (mflag == -1) h0 = 0;
@@ -245,7 +245,7 @@ namespace Lemma {
 
         // Include integrals over intervening intervals.
         if (i1 > i0) {
-            for (int i=i0; i<i1-1; ++i) {
+            for (Index i=i0; i<i1-1; ++i) {
                 Real h = Spline.x(i+1) - Spline.x(i);
                 cubint +=  (((Spline.d(i)*h/4.0 + Spline.c(i) )*h/3.0 +
                               Spline.b(i))*h/2.0 + Spline.a(i) )*h;
@@ -260,10 +260,10 @@ namespace Lemma {
     //       Class:  CubicSplineInterpolator
     //      Method:  Interval
     //--------------------------------------------------------------------------------------
-    int CubicSplineInterpolator::Interval ( const Real& x ) {
+    Index CubicSplineInterpolator::Interval ( const Real& x ) {
 
         std::cerr << "ENTERING CubicSplineInterpolator::Inverval. Known bugs here"  << std::endl;
-        int nx = Spline.x.size() - 2; // TODO check if this is correct or just -1
+        Index nx = Spline.x.size() - 2; // TODO check if this is correct or just -1
         // when x not in range
         if (x <= Spline.x(0) || nx <= 1 ) {
             mflag = -1;
@@ -277,7 +277,7 @@ namespace Lemma {
 
         mflag = 0;
         if (ilo >= nx) ilo = nx-1;
-        int ihi = ilo+1;
+        Index ihi = ilo+1;
 
         // if x is already in the interval
         if ( x<Spline.x(ihi) && x >= Spline.x(ilo) ) {
@@ -286,17 +286,17 @@ namespace Lemma {
         }
 
         if (x <= Spline.x(ilo)) { // decrease ilo to capture
-            int istep = 1;
-            for (int ix=1; ix<nx; ++ix) {
+            Index istep = 1;
+            for (Index ix=1; ix<nx; ++ix) {
                 ihi = ilo;
                 ilo = ihi - istep;
-                ilo = std::max(1, ilo);
+                ilo = std::max(Index(1), ilo);
                 if (x >= Spline.x(ilo) || ilo == 1) break;
                 istep *= 2;
             }
         } else if (x >= Spline.x(ihi)) { // increase ihi to capture
-            int istep = 1;
-            for (int ix=1; ix<nx; ++ix) {
+            Index istep = 1;
+            for (Index ix=1; ix<nx; ++ix) {
                 ilo = ihi;
                 ihi = ilo + istep;
                 ihi = std::min(ihi, nx);
@@ -307,8 +307,8 @@ namespace Lemma {
 
         // Now Spline.x(ilo) <= x < Spline.x(ihi) --> Narrow the interval.
         //std::cout << "WIDE INTERVAL " << Spline.x(ilo) << "\t" << x << "\t" << Spline.x(ihi) << std::endl;
-        for (int ix=1; ix<nx; ++ix) {
-            int middle = (ilo+ihi) / 2;
+        for (Index ix=1; ix<nx; ++ix) {
+            Index middle = (ilo+ihi) / 2;
             if (middle == ilo) break;
             if (x < Spline.x(middle)) {
                 ihi = middle;

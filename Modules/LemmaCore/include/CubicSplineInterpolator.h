@@ -34,7 +34,7 @@ struct SplineSet{
     SplineSet( ) {
     }
 
-    SplineSet(const int&n) {
+    SplineSet(const Index& n) {
         a = VectorXr::Zero(n+1);
         b = VectorXr::Zero(n);
         c = VectorXr::Zero(n+1);
@@ -163,7 +163,7 @@ class CubicSplineInterpolator : public LemmaObject {
 
     /** Finds the interval of knots in spline to use for integration.
      */
-    int Interval(const Real& x);
+    Index Interval(const Real& x);
 
     private:
 
@@ -175,7 +175,7 @@ class CubicSplineInterpolator : public LemmaObject {
 
     SplineSet Spline;
 
-    int ilo;
+    Index ilo;
 
     int mflag;
 

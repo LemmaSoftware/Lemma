@@ -8,7 +8,6 @@
   @file
   @author   Trevor Irons
   @date     07/20/2010
-  @version  $Id: windowfilter.cpp 87 2013-09-05 22:44:05Z tirons $
  **/
 
 #include "WindowFilter.h"
@@ -134,7 +133,7 @@ namespace Lemma {
         std::cout << "Window nyquist " << Nyquist << std::endl;
         std::cout << "Window Nw  " << Nw << std::endl;
         Real  df      = (Nyquist)/((Real)(Nw)); // df Hz per bin
-        Width         = Bandwidth/df;
+        Width         = (int)(std::round(Bandwidth/df));
         Coefficients.resize(Width);
         switch (Type) {
             case HAMMING:

@@ -165,7 +165,7 @@ namespace Lemma {
               * returns number of dipoles used to approximate this
               * loop
 			  */
-            int GetNumberOfDipoles();
+            size_t GetNumberOfDipoles();
 
 			/**
               * @return the number of frequencies of this wire loop.

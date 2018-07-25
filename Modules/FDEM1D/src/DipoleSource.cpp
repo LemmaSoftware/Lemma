@@ -8,7 +8,6 @@
   @file
   @author   Trevor Irons
   @date     12/02/2009
-  @version  $Id: dipolesource.cpp 203 2015-01-09 21:19:04Z tirons $
  **/
 
 #include "DipoleSource.h"
@@ -1266,7 +1265,7 @@ namespace Lemma {
     }
 
     int DipoleSource::GetNumberOfFrequencies() {
-        return this->Freqs.size();
+        return (int)(this->Freqs.size());
     }
 
     void DipoleSource::SetNumberOfFrequencies(const int &nfreq){

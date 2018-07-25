@@ -544,7 +544,7 @@ namespace Lemma{
         np  = 0; // TI, zero based indexing
 
         int  NPB   = 1; // 0?
-        int  L     = 0; // TODO, should be 0?
+        int  L     = 0; 
         Real B     = 0.;
         Real A     = 0.;
         Real SUMR  = 0.;
@@ -580,7 +580,9 @@ namespace Lemma{
                     LASTI=XSUMI;
                 }
             }
-            while (ZeroJ(NPB,IORDER) > XSUM(NSUM*rho)) {
+	    // TODO, evaluate this case triggering cerr, as well as sttement below
+            //while ( ZeroJ(NPB,IORDER) > XSUM(NSUM*rho)) {
+            while ( ZeroJ(NPB,IORDER) > XSUM( (int)(NSUM*rho) )) {
                 ++NPB;
             }
         }

@@ -213,7 +213,9 @@
         /// A 3 component Eigen vector of Reals
         typedef Eigen::Matrix<Real, 3, 1> Vector3r;
 
-        /// A 3 X Dynamic Component Eigen matrix of Reals
+        typedef Eigen::Matrix<Real, Eigen::Dynamic, 1>::Index Index;
+        
+	/// A 3 X Dynamic Component Eigen matrix of Reals
         typedef Eigen::Matrix<Real, 3, Eigen::Dynamic> Vector3Xr;
 
         /// Variable length Eigen vector of Reals

@@ -67,7 +67,7 @@ namespace Lemma {
 
             virtual void SetMode(const EMMODE& mode)=0;
 
-            int GetManagerIndex() const {
+            Index GetManagerIndex() const {
                 return this->managerIdx;
             }
 
@@ -91,7 +91,7 @@ namespace Lemma {
             // ====================  DATA MEMBERS  =========================
 
             /** Where does this kernel live on the vector managed by the manager */
-            int  managerIdx;
+            Index  managerIdx;
 
         private:
 
