@@ -46,7 +46,7 @@ if (LEMMA_ENABLE_TESTING)
 endif()
 
 # Install
-install (  TARGETS lemmacore DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )
+install ( TARGETS lemmacore        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )
 install ( FILES include/LemmaCore  DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma ) 
 install ( DIRECTORY include/       DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma  FILES_MATCHING PATTERN "*.h" )
 

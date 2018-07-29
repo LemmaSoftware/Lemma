@@ -31,6 +31,7 @@
 #include "RectilinearGrid.h"
 #include "RectilinearGridReader.h"
 #include "RectilinearGridVTKExporter.h"
+#include "RectilinearGridVTKImporter.h"
 #include "WindowFilter.h"
 // helpers and utilities
 #include "banner.h"

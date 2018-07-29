@@ -12,9 +12,9 @@
  * @date      09/25/2013 08:20:01 AM
  * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
+ * @email     Trevor.Irons@LemmaSoftware.org
  * @copyright Copyright (c) 2013, XRI Geophysics, LLC
- * @copyright Copyright (c) 2013, Trevor Irons
+ * @copyright Copyright (c) 2013,2017,2018 Trevor Irons
  */
 
 

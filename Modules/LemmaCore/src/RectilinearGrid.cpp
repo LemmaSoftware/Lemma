@@ -16,7 +16,7 @@
 namespace Lemma {
 
     std::ostream &operator << (std::ostream &stream, const RectilinearGrid &ob) {
-        stream << ob.Serialize()  << "\n"; 
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
 
