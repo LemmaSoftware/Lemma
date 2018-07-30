@@ -104,7 +104,8 @@ namespace Lemma {
     //       Class:  RectilinearGridVTKImporter
     //      Method:  ConvertGrid
     //--------------------------------------------------------------------------------------
-    void RectilinearGridVTKImporter::ConvertGrid (  ) {
+    void RectilinearGridVTKImporter::ConvertGrid ( const Real& shiftx, const Real& shifty, const Real& shiftz  ) {
+
         rGrid = RectilinearGrid::NewSP();
 
         int dims[3];
@@ -128,7 +129,7 @@ namespace Lemma {
         }
 
         rGrid->SetDimensions( dims[0], dims[1], dims[2] );
-        rGrid->SetOffset( xcoords->GetTuple1(0), ycoords->GetTuple1(0), zcoords->GetTuple1(0) );
+        rGrid->SetOffset( xcoords->GetTuple1(0)+shiftx, ycoords->GetTuple1(0)+shifty, zcoords->GetTuple1(0)+shiftz );
         rGrid->SetSpacing( dx, dy, dz  );
 
         return ;

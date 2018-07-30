@@ -115,9 +115,18 @@ namespace Lemma {
 
         /**
          *  Performs the actual grid conversion
+         *  @param[in] xshift is additional offset to apply in x direction.
+         *  @param[in] yshift is additional offset to apply in y direction.
+         *  @param[in] zshift is additional offset to apply in z direction.
          */
-        void ConvertGrid( );
+        void ConvertGrid( const Real& xshift, const Real& yshift, const Real& zshift );
 
+        /**
+         *  @return smart pointer to RectilinearGrid class
+         */
+        std::shared_ptr<RectilinearGrid> GetGrid() {
+            return this->rGrid;
+        }
 
         // ====================  INQUIRY       =======================
         /**
@@ -145,7 +154,8 @@ namespace Lemma {
         /** VTK file to import */
         vtkSmartPointer<vtkRectilinearGrid> vtkGrid;
 
-        std::shared_ptr<RectilinearGrid>  rGrid;
+        /** container to hold imported grid */
+        std::shared_ptr<RectilinearGrid>  rGrid = nullptr;
 
     }; // -----  end of class  RectilinearGridVTKImporter  -----
 
