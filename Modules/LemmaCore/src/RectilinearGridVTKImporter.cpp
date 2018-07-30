@@ -17,6 +17,8 @@
  * @copyright Copyright (c) 2018, Lemma Software, LLC
  */
 
+#if LEMMAUSEVTK
+
 #include "RectilinearGridVTKImporter.h"
 
 namespace Lemma {
@@ -141,3 +143,4 @@ namespace Lemma {
 /* vim: set tabstop=4 expandtab: */
 /* vim: set filetype=cpp: */
 
+#endif     // -----  not LEMMAUSEVTK  -----
