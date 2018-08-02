@@ -40,6 +40,9 @@ option (LEMMA_VTK8_SUPPORT "VTK 8.x library for visualisation and grids" OFF)
 
 #option (CMAKE_CROSSCOMPILING "Target different arch than you are on" OFF)
 
+SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/CMake/ )
+message( STATUS "MODULE PATH ${CMAKE_MODULE_PATH}" )
+
 SET (CMAKE_CROSSCOMPILING TRUE)
 
 ##########################################################################################
