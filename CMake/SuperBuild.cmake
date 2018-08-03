@@ -1,5 +1,7 @@
 include(ExternalProject)
 
+project (SuperBuild CXX C)
+
 if (Eigen3_FOUND)
     message( STATUS "Eigen was found ${eigen_DIR}" )
 else()
@@ -14,7 +16,6 @@ else()
 		#BUILD_COMMAND     ""
 		#INSTALL_COMMAND     ""
     )
-
     #message("Source dir of myExtProj = ${SOURCE_DIR}")   
     #ExternalProject_Get_property(EIGEN SOURCE_DIR)
     #message("Source dir of myExtProj = ${SOURCE_DIR}")   
@@ -29,6 +30,7 @@ else()
     #endif()
 endif()
 
+
 if (yaml-cpp_FOUND)
     message( STATUS "YAML-CPP was found ${yaml-cpp_FOUND}" )
     #message( STATUS "YAML-CPP PATH ${yaml-cpp_PATH}" )
@@ -39,7 +41,25 @@ if (yaml-cpp_FOUND)
 else()
     message( STATUS "YAML-CPP WAS NOT FOUND, BUILDING" )
     message( STATUS "CMAKE BUILD TYPE ${CMAKE_BUILD_TYPE}" )
-	ExternalProject_Add(YAML_CPP
+    message( STATUS "CMAKE CXX COMPILER ${CMAKE_CXX_COMPILER}" )
+#    if ( ${CMAKE_C_COMPILER} )
+#        message( STATUS "Compiling Yaml with Cxx COMPILER ${CMAKE_CXX_COMPILER}" )
+#	    ExternalProject_Add(YAML_CPP
+#		GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
+#		GIT_TAG   "yaml-cpp-0.6.1" # "master" 
+#		UPDATE_COMMAND ""
+#		PATCH_COMMAND ""
+#    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
+#    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
+#                   -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+#                   -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} 
+#    	           -DYAML_CPP_BUILD_TESTS=OFF
+#                   -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+#                   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} 
+#                   -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} 
+#        )
+#    else()
+	    ExternalProject_Add(YAML_CPP
 		GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
 		GIT_TAG   "yaml-cpp-0.6.1" # "master" 
 		UPDATE_COMMAND ""
@@ -52,11 +72,8 @@ else()
                    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
                    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} 
                    -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} 
-		#INSTALL_COMMAND ""
-	)	
-
-    # is this necessary?
-	#include_directories ("${CMAKE_INSTALL_PREFIX}/include/yaml-cpp")
+        )
+#    endif()
 endif()
 
 if (LEMMA_ENABLE_TESTING)
