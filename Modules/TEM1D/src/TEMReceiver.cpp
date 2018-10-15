@@ -10,11 +10,9 @@
 /**
  * @file
  * @date      10/08/2014 03:04:56 PM
- * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2014, XRI Geophysics, LLC
- * @copyright Copyright (c) 2014, Trevor Irons
+ * @email     Trevor.Irons@utah.edu
+ * @copyright Copyright (c) 2014, 2018 Trevor Irons
  */
 
 #include "TEMReceiver.h"
@@ -23,36 +21,29 @@ namespace Lemma {
 
 
     // ====================  FRIEND METHODS  =====================
-#ifdef HAVE_YAMLCPP
+
     std::ostream &operator << (std::ostream &stream, const TEMReceiver &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
-#else
-    std::ostream &operator<<(std::ostream &stream, const TEMReceiver& ob) {
-        stream << *(ReceiverPoints*)(&ob);
-        return stream;
-    }
-#endif
 
     // ====================  LIFECYCLE     =======================
 
     //--------------------------------------------------------------------------------------
     //       Class:  TEMReceiver
     //      Method:  TEMReceiver
-    // Description:  constructor (protected)
+    // Description:  constructor (locked)
     //--------------------------------------------------------------------------------------
-    TEMReceiver::TEMReceiver (const std::string& name) : ReceiverPoints(name), moment(1), referenceTime(0) {
+    TEMReceiver::TEMReceiver ( const ctor_key& key ) : FieldPoints(key), moment(1), referenceTime(0) {
 
     }  // -----  end of method TEMReceiver::TEMReceiver  (constructor)  -----
 
-#ifdef HAVE_YAMLCPP
     //--------------------------------------------------------------------------------------
     //       Class:  TEMReceiver
     //      Method:  TEMReceiver
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    TEMReceiver::TEMReceiver (const YAML::Node& node) : ReceiverPoints(node) {
+    TEMReceiver::TEMReceiver (const YAML::Node& node, const ctor_key& key) : FieldPoints(node, key) {
 
         moment = node["moment"].as<Real>();
         referenceTime = node["referenceTime"].as<Real>();
@@ -63,17 +54,14 @@ namespace Lemma {
         noiseSTD      = node["noiseSTD"].as<VectorXr>();
         //location = node["location"].as<Vector3r>();
     }  // -----  end of method TEMReceiver::TEMReceiver  (constructor)  -----
-#endif
 
     //--------------------------------------------------------------------------------------
     //       Class:  TEMReceiver
     //      Method:  New()
     // Description:  public constructor
     //--------------------------------------------------------------------------------------
-    TEMReceiver* TEMReceiver::New() {
-        TEMReceiver*  Obj = new TEMReceiver("TEMReceiver");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<TEMReceiver> TEMReceiver::NewSP() {
+        return std::make_shared<TEMReceiver> ( ctor_key() );
     }
 
 
@@ -81,6 +69,7 @@ namespace Lemma {
     //       Class:  TEMReceiver
     //      Method:  Clone
     //--------------------------------------------------------------------------------------
+/*
     TEMReceiver* TEMReceiver::Clone() {
         TEMReceiver* Copy = TEMReceiver::New();
             Copy->SetNumberOfReceivers( this->NumberOfReceivers );
@@ -96,6 +85,7 @@ namespace Lemma {
             Copy->noiseSTD = this->noiseSTD;
         return Copy;
     }		// -----  end of method TEMReceiver::Clone  -----
+*/
 
     //--------------------------------------------------------------------------------------
     //       Class:  TEMReceiver
@@ -105,25 +95,6 @@ namespace Lemma {
     TEMReceiver::~TEMReceiver () {
 
     }  // -----  end of method TEMReceiver::~TEMReceiver  (destructor)  -----
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  TEMReceiver
-    //      Method:  Delete
-    // Description:  public destructor
-    //--------------------------------------------------------------------------------------
-    void TEMReceiver::Delete() {
-        this->DetachFrom(this);
-    }
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  TEMReceiver
-    //      Method:  Release
-    // Description:  destructor (protected)
-    //--------------------------------------------------------------------------------------
-    void TEMReceiver::Release() {
-        delete this;
-    }
-
 
     //--------------------------------------------------------------------------------------
     //       Class:  TEMReceiver
@@ -185,15 +156,15 @@ namespace Lemma {
     //      Method:  SampleNoise
     //--------------------------------------------------------------------------------------
     VectorXr TEMReceiver::SampleNoise (  ) {
-        
-	/* we have C++-11 now! No Boost! 
+
+	/* we have C++-11 now! No Boost!
         boost::mt19937 rng(time(0));
         boost::normal_distribution<> nd(0.0, 1.0);
         boost::variate_generator<boost::mt19937&, boost::normal_distribution<> > var_nor(rng, nd);
 	*/
 
         std::random_device rd;
-        std::mt19937 gen(rd()); 
+        std::mt19937 gen(rd());
         std::normal_distribution<> d(0.0, 1.00);
 
         VectorXr noise = VectorXr::Zero( windowCentres.size() );
@@ -251,7 +222,7 @@ namespace Lemma {
     //      Method:  SetLocation
     //--------------------------------------------------------------------------------------
     void TEMReceiver::SetRxLocation ( const Vector3r& loc ) {
-        this->SetNumberOfReceivers(1); // Valgrind doesn't like??
+        this->SetNumberOfPoints(1); // Valgrind doesn't like??
         this->SetLocation(0, loc);
         //location = loc;
         return ;
@@ -296,14 +267,13 @@ namespace Lemma {
     }		// -----  end of method TEMReceiver::GetReferenceTime  -----
 
 
-#ifdef HAVE_YAMLCPP
     //--------------------------------------------------------------------------------------
     //       Class:  TEMReceiver
     //      Method:  Serialize
     //--------------------------------------------------------------------------------------
     YAML::Node  TEMReceiver::Serialize (  ) const {
-        YAML::Node node = ReceiverPoints::Serialize();
-        node.SetTag( this->Name );
+        YAML::Node node = FieldPoints::Serialize();
+        node.SetTag( GetName() );
         node["moment"] = moment;
         node["referenceTime"] = referenceTime;
         node["component"] = enum2String(component);
@@ -320,14 +290,12 @@ namespace Lemma {
     //       Class:  TEMReceiver
     //      Method:  DeSerialize
     //--------------------------------------------------------------------------------------
-    TEMReceiver* TEMReceiver::DeSerialize ( const YAML::Node& node  ) {
-        TEMReceiver* Object = new TEMReceiver(node);
-        Object->AttachTo(Object);
-        DESERIALIZECHECK( node, Object )
-        return Object ;
-
+    std::shared_ptr<TEMReceiver> TEMReceiver::DeSerialize ( const YAML::Node& node  ) {
+        if (node.Tag() != "TEMReceiver") {
+            throw  DeSerializeTypeMismatch( "TEMReceiver", node.Tag());
+        }
+        return std::make_shared<TEMReceiver> ( node, ctor_key() );
     }		// -----  end of method TEMReceiver::DeSerialize  -----
-#endif
 
 }		// -----  end of Lemma  name  -----
 

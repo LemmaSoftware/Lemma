@@ -10,58 +10,66 @@
 /**
  * @file
  * @date      10/08/2014 02:36:47 PM
- * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2014, XRI Geophysics, LLC
+ * @email     Trevor.Irons@Utah.edu
  * @copyright Copyright (c) 2014, Trevor Irons
  */
+#pragma once
 
 #ifndef  TEMRECEIVER_INC
 #define  TEMRECEIVER_INC
 
-#include "receiverpoints.h"
+#include <random>
+//#include "yaml-cpp/yaml.h"
+#include <LemmaCore>
+#include <FDEM1D>
 
 //#include <boost/random.hpp>
 //#include <boost/random/normal_distribution.hpp>
-#include <random>
 
 namespace Lemma {
-
-#ifdef HAVE_YAMLCPP
-#include "yaml-cpp/yaml.h"
-#endif
-
 
 /**
   \brief
   \details
  */
-class TEMReceiver : public ReceiverPoints {
+class TEMReceiver : public FieldPoints {
 
-    friend std::ostream &operator<<(std::ostream &stream,
-            const TEMReceiver &ob);
+    friend std::ostream &operator<<(std::ostream &stream, const TEMReceiver &ob);
 
     public:
 
     // ====================  LIFECYCLE     =======================
 
-    /**
-     * @copybrief LemmaObject::New()
-     * @copydetails LemmaObject::New()
-     */
-    static TEMReceiver* New();
+    /** Default locked constructor. */
+    explicit TEMReceiver ( const ctor_key& );
+
+    /** Locked deserializing constructor. */
+    TEMReceiver (const YAML::Node& node, const ctor_key&);
+
+    /** Default destructor. */
+    ~TEMReceiver ();
 
     /**
-     *   @return a deep copy of this
+     *  Factory method for generating concrete class.
+     *  @return a std::shared_ptr of type TEMReceiver
      */
-    TEMReceiver* Clone();
+    static std::shared_ptr<TEMReceiver> NewSP();
 
     /**
-     *  @copybrief   LemmaObject::Delete()
-     *  @copydetails LemmaObject::Delete()
+     *  Uses YAML to serialize this object.
+     *  @note The actual calculation results are not serialized, currently.
+     *  @return a YAML::Node
      */
-    void Delete();
+    YAML::Node Serialize() const;
+
+    /**
+     *   Constructs an object from a YAML::Node.
+     *   @param[in] node is a YAML node containing the serialized class information
+     *   @return a std::shared_ptr object of TEMReceiver
+     */
+    static std::shared_ptr<TEMReceiver> DeSerialize(const YAML::Node& node);
+
 
     // ====================  OPERATORS     =======================
 
@@ -141,20 +149,10 @@ class TEMReceiver : public ReceiverPoints {
      *  @return the reference time
      */
     Real    GetReferenceTime();
+
     protected:
 
     // ====================  LIFECYCLE     =======================
-
-    /** Default protected constructor, use New */
-    TEMReceiver (const std::string& name);
-
-     #ifdef HAVE_YAMLCPP
-    /** Default protected de-serializing constructor, use factory DeSerialize */
-    TEMReceiver (const YAML::Node& node);
-    #endif
-
-    /** Default protected destructor, use Delete */
-    ~TEMReceiver ();
 
     /**
      *  @copybrief   LemmaObject::Release()
