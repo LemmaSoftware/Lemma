@@ -38,27 +38,21 @@ namespace Lemma {
 
         // ====================  LIFECYCLE     =======================
 
+        /** Default protected constructor, use NewSP */
+        explicit TEMInductiveReceiver (const ctor_key& key);
+
+        /** Default protected constructor, use DeSerialize */
+        TEMInductiveReceiver (const YAML::Node& node, const ctor_key& key);
+
+        /** Default protected destructor */
+        ~TEMInductiveReceiver ();
+
         /**
          * @copybrief LemmaObject::New()
          * @copydetails LemmaObject::New()
          */
-        static TEMInductiveReceiver* New();
+        static std::shared_ptr<TEMInductiveReceiver> NewSP();
 
-        /**
-         *  @copybrief   LemmaObject::Delete()
-         *  @copydetails LemmaObject::Delete()
-         */
-        void Delete();
-
-        // ====================  OPERATORS     =======================
-
-        // ====================  OPERATIONS    =======================
-
-        // ====================  ACCESS        =======================
-
-        // ====================  INQUIRY       =======================
-
-#ifdef HAVE_YAMLCPP
         /**
          *  Uses YAML to serialize this object.
          *  @return a YAML::Node
@@ -68,33 +62,30 @@ namespace Lemma {
         /**
          *   Constructs an object from a YAML::Node.
          */
-        static TEMInductiveReceiver* DeSerialize(const YAML::Node& node);
-#endif
+        static std::shared_ptr<TEMInductiveReceiver> DeSerialize(const YAML::Node& node);
+
+        // ====================  OPERATORS     =======================
+
+        // ====================  OPERATIONS    =======================
+
+        // ====================  ACCESS        =======================
+
+        // ====================  INQUIRY       =======================
+
+        /** Returns the name of the underlying class, similiar to Python's type */
+        virtual std::string GetName() const {
+            return this->CName;
+        }
 
         protected:
 
         // ====================  LIFECYCLE     =======================
 
-        /** Default protected constructor, use New */
-        TEMInductiveReceiver (const std::string& name);
-
-#ifdef HAVE_YAMLCPP
-        /** Default protected constructor, use New */
-        TEMInductiveReceiver (const YAML::Node& node);
-#endif
-
-        /** Default protected destructor, use Delete */
-        ~TEMInductiveReceiver ();
-
-        /**
-         *  @copybrief   LemmaObject::Release()
-         *  @copydetails LemmaObject::Release()
-         */
-        void Release();
-
         private:
 
         // ====================  DATA MEMBERS  =========================
+
+        static constexpr auto CName = "PolygonalWireAntenna";
 
     }; // -----  end of class  TEMInductiveReceiver  -----
 

@@ -21,20 +21,12 @@
 
 namespace Lemma {
 
-
-
     // ====================  FRIEND METHODS  =====================
-#ifdef HAVE_YAMLCPP
+
     std::ostream &operator << (std::ostream &stream, const TEMInductiveReceiver &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
-#else
-    std::ostream &operator<<(std::ostream &stream, const TEMInductiveReceiver& ob) {
-        stream << *(TEMReceiver*)(&ob);
-        return stream;
-    }
-#endif
 
     // ====================  LIFECYCLE     =======================
 
@@ -43,30 +35,26 @@ namespace Lemma {
     //      Method:  TEMInductiveReceiver
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    TEMInductiveReceiver::TEMInductiveReceiver (const std::string& name) : TEMReceiver(name) {
+    TEMInductiveReceiver::TEMInductiveReceiver (const ctor_key& key) : TEMReceiver(key) {
 
     }  // -----  end of method TEMInductiveReceiver::TEMInductiveReceiver  (constructor)  -----
 
-#ifdef HAVE_YAMLCPP
     //--------------------------------------------------------------------------------------
     //       Class:  TEMInductiveReceiver
     //      Method:  TEMInductiveReceiver
     // Description:  constructor (protected)
     //--------------------------------------------------------------------------------------
-    TEMInductiveReceiver::TEMInductiveReceiver (const YAML::Node& node) : TEMReceiver(node) {
+    TEMInductiveReceiver::TEMInductiveReceiver (const YAML::Node& node, const ctor_key& key) : TEMReceiver(node, key) {
 
     }  // -----  end of method TEMInductiveReceiver::TEMInductiveReceiver  (constructor)  -----
-#endif
 
     //--------------------------------------------------------------------------------------
     //       Class:  TEMInductiveReceiver
     //      Method:  New()
     // Description:  public constructor
     //--------------------------------------------------------------------------------------
-    TEMInductiveReceiver* TEMInductiveReceiver::New() {
-        TEMInductiveReceiver*  Obj = new TEMInductiveReceiver("TEMInductiveReceiver");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<TEMInductiveReceiver> TEMInductiveReceiver::NewSP() {
+        return std::make_shared<TEMInductiveReceiver>( ctor_key() );
     }
 
     //--------------------------------------------------------------------------------------
@@ -80,32 +68,12 @@ namespace Lemma {
 
     //--------------------------------------------------------------------------------------
     //       Class:  TEMInductiveReceiver
-    //      Method:  Delete
-    // Description:  public destructor
-    //--------------------------------------------------------------------------------------
-    void TEMInductiveReceiver::Delete() {
-        this->DetachFrom(this);
-    }
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  TEMInductiveReceiver
-    //      Method:  Release
-    // Description:  destructor (protected)
-    //--------------------------------------------------------------------------------------
-    void TEMInductiveReceiver::Release() {
-        delete this;
-    }
-
-
-#ifdef HAVE_YAMLCPP
-    //--------------------------------------------------------------------------------------
-    //       Class:  TEMInductiveReceiver
     //      Method:  Serialize
     //--------------------------------------------------------------------------------------
     YAML::Node  TEMInductiveReceiver::Serialize (  ) const {
         YAML::Node node;
         node = TEMReceiver::Serialize();
-        node.SetTag( this->Name ); // Set Tag after doing parents
+        node.SetTag( this->GetName() ); // Set Tag after doing parents
         return node;
     }		// -----  end of method TEMInductiveReceiver::Serialize  -----
 
@@ -114,14 +82,12 @@ namespace Lemma {
     //       Class:  TEMInductiveReceiver
     //      Method:  DeSerialize
     //--------------------------------------------------------------------------------------
-    TEMInductiveReceiver* TEMInductiveReceiver::DeSerialize ( const YAML::Node& node  ) {
-        TEMInductiveReceiver* Object = new TEMInductiveReceiver(node);
-        Object->AttachTo(Object);
-        DESERIALIZECHECK( node, Object )
-        return Object ;
+    std::shared_ptr<TEMInductiveReceiver> TEMInductiveReceiver::DeSerialize ( const YAML::Node& node  ) {
+        if (node.Tag() != CName) {
+            throw  DeSerializeTypeMismatch( CName, node.Tag());
+        }
+        return std::make_shared<TEMInductiveReceiver>(node, ctor_key());
     }		// -----  end of method TEMInductiveReceiver::DeSerialize  -----
-#endif
-
 
 }		// -----  end of Lemma  name  -----
 

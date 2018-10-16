@@ -2,6 +2,7 @@
 
 #include "TEMTransmitter.h"
 #include "TEMReceiver.h"
+#include "TEMInductiveReceiver.h"
 
 /* vim: set tabstop=4 expandtab: */
 /* vim: set filetype=cpp: */

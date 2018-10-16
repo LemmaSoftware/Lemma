@@ -22,7 +22,6 @@ namespace Lemma {
     // ===================================================================
     //  Class:  CosTransIntegrationKernel
     /**
-      @class
       \ingroup  FDEM1D
       \brief    Integration kernel for testing cosine transform.
       \details  Evaluates cosine at the argument, using lagged convolution.
