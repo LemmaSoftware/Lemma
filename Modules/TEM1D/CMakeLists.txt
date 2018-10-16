@@ -27,6 +27,8 @@ install ( DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma  
 #install ( DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma/  FILES_MATCHING PATTERN "FDEM1D")
 #install ( DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma/FDEM1D  FILES_MATCHING PATTERN "*.h")
 
+install ( FILES include/TEM1D  DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma ) 
+
 # Examples
 if (LEMMA_BUILD_EXAMPLES)
 	add_subdirectory(examples)

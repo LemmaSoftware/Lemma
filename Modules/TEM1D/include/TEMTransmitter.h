@@ -10,10 +10,8 @@
 /**
  * @file
  * @date      09/29/2014 11:43:17 AM
- * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2014, XRI Geophysics, LLC
+ * @email     Trevor.Irons@lemmasoftware.org
  * @copyright Copyright (c) 2014, Trevor Irons
  */
 
@@ -22,17 +20,12 @@
 
 #include "PolygonalWireAntenna.h"
 
-#ifdef HAVE_YAMLCPP
-#include "yaml-cpp/yaml.h"
-#endif
-
 namespace Lemma {
 
 /**
-  \brief   Describes a TEM pulse sequence
-  \details Flexible class desribing a pulse sequence used by
-           a TEM instruement. Can be used by Airborne or Ground
-           instruments.
+  \brief   Describes a TEM transmitter
+  \details Flexible class desribing a source used by TEM instrument.
+           Can be used by Airborne or Ground instruments.
  */
 class TEMTransmitter : public PolygonalWireAntenna {
 
@@ -42,22 +35,29 @@ class TEMTransmitter : public PolygonalWireAntenna {
 
     // ====================  LIFECYCLE     =======================
 
+    /** Default protected constructor, use New */
+    explicit TEMTransmitter (const ctor_key& );
+
+    /** Default protected constructor, use New */
+    TEMTransmitter (const YAML::Node& node, const ctor_key& );
+
+    /** Default protected destructor, use Delete */
+    ~TEMTransmitter ();
+
     /**
      * @copybrief LemmaObject::New()
      * @copydetails LemmaObject::New()
      */
-    static TEMTransmitter* New();
+    static std::shared_ptr<TEMTransmitter> NewSP();
 
     /**
      *  Performs a deep copy of this and returns pointer
      */
-    TEMTransmitter* Clone();
+    std::shared_ptr<TEMTransmitter> Clone();
 
-    /**
-     *  @copybrief   LemmaObject::Delete()
-     *  @copydetails LemmaObject::Delete()
-     */
-    void Delete();
+    YAML::Node Serialize() const;
+
+    static std::shared_ptr<TEMTransmitter> DeSerialize(const YAML::Node& node);
 
     // ====================  OPERATORS     =======================
 
@@ -71,6 +71,8 @@ class TEMTransmitter : public PolygonalWireAntenna {
 
     void SetWaveform( const VectorXr& times, const VectorXr& amps, const TIMEUNITS& units );
 
+    // ====================  INQUIRY       =======================
+
     /**
      *  @return the waveform times in seconds
      */
@@ -80,35 +82,18 @@ class TEMTransmitter : public PolygonalWireAntenna {
      */
     VectorXr GetWfmAmps();
 
-    // ====================  INQUIRY       =======================
-
-#ifdef HAVE_YAMLCPP
-    YAML::Node Serialize() const;
-    static TEMTransmitter* DeSerialize(const YAML::Node& node);
-#endif
+    /** Returns the name of the underlying class, similiar to Python's type */
+    virtual std::string GetName() const {
+        return this->CName;
+    }
 
     protected:
 
     // ====================  LIFECYCLE     =======================
 
-    /** Default protected constructor, use New */
-    TEMTransmitter (const std::string& name);
-
-#ifdef HAVE_YAMLCPP
-    /** Default protected constructor, use New */
-    TEMTransmitter (const YAML::Node& node);
-#endif
-
-    /** Default protected destructor, use Delete */
-    ~TEMTransmitter ();
-
-    /**
-     *  @copybrief   LemmaObject::Release()
-     *  @copydetails LemmaObject::Release()
-     */
-    void Release();
-
     private:
+
+    static constexpr auto CName = "TEMTransmitter";
 
     // ====================  DATA MEMBERS  =========================
 

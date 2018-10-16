@@ -23,24 +23,10 @@ namespace Lemma {
 
 // ====================  FRIEND METHODS  =====================
 
-#ifdef HAVE_YAMLCPP
 std::ostream &operator << (std::ostream &stream, const TEMTransmitter &ob) {
-    stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
+    stream << ob.Serialize()  << "\n";
     return stream;
 }
-// TODO CONSIDER INPUT OPERATOR TOO!
-//std::ostream &operator << (std::ostream &stream, const TEMTransmitter &ob) {
-//    stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulste thingy
-//    return stream;
-//}
-#else
-std::ostream &operator << (std::ostream &stream, const TEMTransmitter &ob) {
-    stream << *(PolygonalWireAntenna*)(&ob);
-    stream << "YOU SHOULD COMPILE WITH YAML-CPP\n";
-    return stream;
-}
-#endif
-
 
 // ====================  LIFECYCLE     =======================
 
@@ -49,36 +35,34 @@ std::ostream &operator << (std::ostream &stream, const TEMTransmitter &ob) {
 //      Method:  TEMTransmitter
 // Description:  constructor (protected)
 //--------------------------------------------------------------------------------------
-TEMTransmitter::TEMTransmitter (const std::string& name) : PolygonalWireAntenna(name),
-    repFreq(0), repFreqUnits(HZ) {
+TEMTransmitter::TEMTransmitter (const ctor_key& key) :
+    PolygonalWireAntenna(key), repFreq(0), repFreqUnits(HZ)
+{
 
 }  // -----  end of method TEMTransmitter::TEMTransmitter  (constructor)  -----
 
-#ifdef HAVE_YAMLCPP
 //--------------------------------------------------------------------------------------
 //       Class:  TEMTransmitter
 //      Method:  TEMTransmitter
 // Description:  Deserializing constructor (protected)
 //--------------------------------------------------------------------------------------
-TEMTransmitter::TEMTransmitter (const YAML::Node& node) : PolygonalWireAntenna(node) {
-
+TEMTransmitter::TEMTransmitter (const YAML::Node& node, const ctor_key& key) :
+        PolygonalWireAntenna(node, key)
+{
     repFreq =  node["repFreq"].as<Real>();
     repFreqUnits =  string2Enum<FREQUENCYUNITS>( node["repFreqUnits"].as<std::string>() );
     wfmTimes = node["wfmTimes"].as<VectorXr>();
     wfmTimes = node["wfmAmps"].as<VectorXr>();
 
 }  // -----  end of method TEMTransmitter::TEMTransmitter  (constructor)  -----
-#endif
 
 //--------------------------------------------------------------------------------------
 //       Class:  TEMTransmitter
 //      Method:  New()
 // Description:  public constructor
 //--------------------------------------------------------------------------------------
-TEMTransmitter* TEMTransmitter::New() {
-    TEMTransmitter*  Obj = new TEMTransmitter("TEMTransmitter");
-    Obj->AttachTo(Obj);
-    return Obj;
+std::shared_ptr<TEMTransmitter> TEMTransmitter::NewSP() {
+    return std::make_shared<TEMTransmitter>( ctor_key() );
 }
 
 
@@ -86,8 +70,8 @@ TEMTransmitter* TEMTransmitter::New() {
 //       Class:  TEMTransmitter
 //      Method:  Clone
 //--------------------------------------------------------------------------------------
-TEMTransmitter* TEMTransmitter::Clone (  ) {
-    TEMTransmitter* copy = TEMTransmitter::New();
+std::shared_ptr<TEMTransmitter> TEMTransmitter::Clone (  ) {
+    auto copy = TEMTransmitter::NewSP();
     //copy->AttachTo(copy); // NO! Attached above!
 	copy->NumberOfPoints = this->NumberOfPoints;
 	copy->Freqs = this->Freqs;
@@ -116,32 +100,12 @@ TEMTransmitter::~TEMTransmitter () {
 
 //--------------------------------------------------------------------------------------
 //       Class:  TEMTransmitter
-//      Method:  Delete
-// Description:  public destructor
-//--------------------------------------------------------------------------------------
-void TEMTransmitter::Delete() {
-    this->DetachFrom(this);
-}
-
-//--------------------------------------------------------------------------------------
-//       Class:  TEMTransmitter
-//      Method:  Release
-// Description:  destructor (protected)
-//--------------------------------------------------------------------------------------
-void TEMTransmitter::Release() {
-    delete this;
-}
-
-//--------------------------------------------------------------------------------------
-//       Class:  TEMTransmitter
 //      Method:  Serialize
 //--------------------------------------------------------------------------------------
-#ifdef HAVE_YAMLCPP
 YAML::Node TEMTransmitter::Serialize (  ) const {
 
     YAML::Node node = PolygonalWireAntenna::Serialize();
-        // or we could do just like below. Same basic uglyness
-        node.SetTag( this->Name) ; //((PolygonalWireAntenna*)(&ob))->GetName() );
+        node.SetTag( this->GetName() );
         //node["address"] =  ss.str();
 
         node["repFreq"]      = this->repFreq;
@@ -156,13 +120,12 @@ YAML::Node TEMTransmitter::Serialize (  ) const {
 //       Class:  TEMTransmitter
 //      Method:  DeSerialize
 //--------------------------------------------------------------------------------------
-TEMTransmitter* TEMTransmitter::DeSerialize ( const  YAML::Node& node  ) {
-    TEMTransmitter* Object = new TEMTransmitter(node);
-    Object->AttachTo(Object);
-    DESERIALIZECHECK( node, Object )
-    return  Object;
+std::shared_ptr<TEMTransmitter> TEMTransmitter::DeSerialize ( const  YAML::Node& node  ) {
+    if (node.Tag() != "TEMTransmitter") {
+        throw  DeSerializeTypeMismatch( "TEMTransmitter", node.Tag());
+    }
+    return std::make_shared<TEMTransmitter> ( node, ctor_key() );
 }		// -----  end of method TEMTransmitter::DeSerialize  -----
-#endif
 
     // ====================  INQUIRY       =======================
 

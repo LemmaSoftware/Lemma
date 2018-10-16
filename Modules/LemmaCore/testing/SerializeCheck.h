@@ -10,7 +10,6 @@
 /**
  * @file
  * @date      06/16/2016 09:12:46 PM
- * @version   $Id$
  * @author    Trevor Irons (ti)
  * @email     tirons@egi.utah.edu
  * @copyright Copyright (c) 2016, University of Utah

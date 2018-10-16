@@ -11,7 +11,7 @@
  * @file
  * @date      10/08/2014 02:36:47 PM
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@Utah.edu
+ * @email     Trevor.Irons@lemmasoftware.org
  * @copyright Copyright (c) 2014, Trevor Irons
  */
 #pragma once
@@ -30,8 +30,8 @@
 namespace Lemma {
 
 /**
-  \brief
-  \details
+  \brief   Describes a TEM receiver
+  \details A general class for TEM receivers
  */
 class TEMReceiver : public FieldPoints {
 
@@ -122,19 +122,6 @@ class TEMReceiver : public FieldPoints {
 
     // ====================  INQUIRY       =======================
 
-     #ifdef HAVE_YAMLCPP
-	/**
-     *  Uses YAML to serialize this object.
-     *  @return a YAML::Node
-     */
-    YAML::Node Serialize() const;
-
-    /**
-     *   Constructs an object from a YAML::Node.
-     */
-    static TEMReceiver* DeSerialize(const YAML::Node& node);
-     #endif
-
     /**
      * @return centre point of gates in sec
      */
@@ -150,6 +137,11 @@ class TEMReceiver : public FieldPoints {
      */
     Real    GetReferenceTime();
 
+    /** Returns the name of the underlying class, similiar to Python's type */
+    virtual std::string GetName() const {
+        return this->CName;
+    }
+
     protected:
 
     // ====================  LIFECYCLE     =======================
@@ -161,6 +153,9 @@ class TEMReceiver : public FieldPoints {
     void Release();
 
     private:
+
+    /** ASCII string representation of the class name */
+    static constexpr auto CName = "TEMReceiver";
 
     // ====================  DATA MEMBERS  =========================
 
