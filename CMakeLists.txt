@@ -277,6 +277,11 @@ if (LEMMA_USE_BOOST)
 	endif()
 endif()
 
+option( MSVC_EXTENDED_ALIGNMENT "Turn on MSVC compiler definition _ENABLE_EXTENDED_ALIGNED_STORAGE " OFF  )
+if (MSVC_EXTENDED_ALIGNMENT)
+    add_definitions(-D_ENABLE_EXTENDED_ALIGNED_STORAGE)
+endif()
+
 ####################
 # Magic rpath flag
 ####################

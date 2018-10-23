@@ -43,7 +43,7 @@ namespace Lemma {
             GQChave ( const YAML::Node& node, const ctor_key& );
 
             /// Default destructor
-			~GQChave ();
+			virtual ~GQChave ();
 
             /**
              *  Returns shared_ptr to new GQChave.
