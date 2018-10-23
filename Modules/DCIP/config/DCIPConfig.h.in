@@ -9,23 +9,15 @@
 
 /**
  * @file
- * @date      02/27/2015 11:02:43 AM
+ * @date      10/23/2018 01:57:40 PM
  * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2015, XRI Geophysics, LLC
- * @copyright Copyright (c) 2015, Trevor Irons
+ * @email     Trevor.Irons@utah.edu
+ * @copyright Copyright (c) 2018, University of Utah
+ * @copyright Copyright (c) 2018, Lemma Software, LLC
  */
 
-// SkyTEM forward modelling programme
-
-#include "TEMSurvey.h"
-
-int main() {
-
-    std::cout << "SkyTEM modelling\n";
-
-
-
-}
-
+#define DCIP_VERSION_MAJOR @DCIP_VERSION_MAJOR@
+#define DCIP_VERSION_MINOR @DCIP_VERSION_MINOR@
+#define DCIP_VERSION_PATCH @DCIP_VERSION_PATCH@
+#define DCIP_VERSION @DCIP_VERSION@

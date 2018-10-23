@@ -21,7 +21,6 @@ namespace Lemma {
     // ===================================================================
     //  Class:  SinTransIntegrationKernel
     /**
-      @class
       \brief    Integration kernel for testing sinine transform.
       \details  Evaluates sinine at the argument, using lagged convolution.
                 all of these kernels have exact solutions.

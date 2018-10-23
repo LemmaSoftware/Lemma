@@ -25,7 +25,6 @@ namespace Lemma {
     // ===================================================================
     //  Class:  KernelEM1DManager
     /**
-      @class
       \ingroup FDEM1D
       \brief   Keeps track of Kernels for EM1D
       \details This class keeps track of the various types of kernel terms

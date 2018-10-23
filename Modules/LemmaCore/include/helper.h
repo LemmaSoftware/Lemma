@@ -182,6 +182,9 @@ struct convert<Lemma::Vector3Xr> {
   }
 };
 
+/**
+ *   \brief Serializes and Deserializes VectorXr arrays
+ */
 template<>
 struct convert<Lemma::VectorXr> {
   static Node encode(const Lemma::VectorXr& rhs) {

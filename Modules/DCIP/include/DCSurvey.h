@@ -10,11 +10,9 @@
 /**
  * @file
  * @date      10/08/2014 01:51:50 PM
- * @version   $Id$
  * @author    Trevor Irons (ti)
- * @email     Trevor.Irons@xri-geo.com
- * @copyright Copyright (c) 2014, XRI Geophysics, LLC
- * @copyright Copyright (c) 2014, Trevor Irons
+ * @email     Trevor.Irons@lemmasoftware.org
+ * @copyright Copyright (c) 2014, 2018 Trevor Irons
  */
 
 #ifndef  DCSURVEY
@@ -22,10 +20,6 @@
 
 #include "LemmaObject.h"
 #include "DCIPElectrode.h"
-
-#ifdef HAVE_YAMLCPP
-#include "yaml-cpp/yaml.h"
-#endif
 
 #ifdef LEMMAUSEVTK
 #include <vtkDataSet.h>
@@ -49,16 +43,30 @@ namespace Lemma {
         // ====================  LIFECYCLE     =======================
 
         /**
-         * @copybrief LemmaObject::New()
-         * @copydetails LemmaObject::New()
+         * \brief   Returns new shared pointer to DCIP object.
+         * \details Use this method, as the default constructor is locked.
          */
-        static DCSurvey* New();
+        static std::shared_ptr<DCSurvey> NewSP();
 
         /**
-         *  @copybrief   LemmaObject::Delete()
-         *  @copydetails LemmaObject::Delete()
+         *  Uses YAML to serialize this object.
+         *  @return a YAML::Node
          */
-        void Delete();
+        YAML::Node Serialize() const;
+
+        /**
+         *   Constructs an object from a YAML::Node.
+         */
+        static std::shared_ptr<DCSurvey> DeSerialize(const YAML::Node& node);
+
+        /** Default protected constructor, use New */
+        explicit DCSurvey (const ctor_key& key);
+
+        /** Default protected constructor, use New */
+        DCSurvey (const YAML::Node& node, const ctor_key& key);
+
+        /** Default protected destructor, use Delete */
+        virtual ~DCSurvey ();
 
         // ====================  OPERATORS     =======================
 
@@ -75,7 +83,7 @@ namespace Lemma {
          *   @param[in] label is an optional tag for electrode.
          *   @param[in] nodeID is the optional node ID on a mesh
          */
-        int PoundElectrode( DCIPElectrode* Electrode, const std::string& label = "NULL", const int& nodeID=-1 );
+        int PoundElectrode( std::shared_ptr<DCIPElectrode> Electrode, const std::string& label = "NULL", const int& nodeID=-1 );
 
         /** Alternative Factory method of setting electrodes. IN this manner all memoy management
          *  is handled by DCSurvey.
@@ -88,10 +96,10 @@ namespace Lemma {
          *  @param[in] label is an optional label for electrode.
          *  @param[in] nodeID is the optional node ID on a mesh
          */
-        DCIPElectrode* PoundElectrode( const Vector3r& loc, const std::string& label = "NULL", const int& nodeID=-1  );
+        std::shared_ptr<DCIPElectrode> PoundElectrode( const Vector3r& loc, const std::string& label = "NULL", const int& nodeID=-1  );
 
 #ifdef LEMMAUSEVTK
-        DCIPElectrode* PoundElectrode( const int& nodeID, vtkDataSet* Mesh, const std::string& label = "NULL" );
+        std::shared_ptr<DCIPElectrode> PoundElectrode( const int& nodeID, vtkDataSet* Mesh, const std::string& label = "NULL" );
 #endif
 
         /**
@@ -106,9 +114,9 @@ namespace Lemma {
          *   @param[in] J is the current intensity
          *   @see AddInjection(const int& iA, const int& iB, const Real& J)
          *   @see AddInjection(const int& iA, const Real& J)
-         *   @see AddInjection(DCIPElectrode* A, const Real& J)
+         *   @see AddInjection(std::shared_ptr<DCIPElectrode> A, const Real& J)
          */
-        int AddInjection( DCIPElectrode* A, DCIPElectrode* B, const Real& J);
+        int AddInjection( std::shared_ptr<DCIPElectrode> A, std::shared_ptr<DCIPElectrode> B, const Real& J);
 
         /**
          *   Adds an injection point.
@@ -117,17 +125,17 @@ namespace Lemma {
          *   B,  the negative current electrode is taken to be infinity
          *   @see AddInjection(const int& iA, const int& iB, const Real& J)
          *   @see AddInjection(const int& iA, const Real& J)
-         *   @see AddInjection(DCIPElectrode* A, DCIPElectrode* B, const Real& J)
+         *   @see AddInjection(std::shared_ptr<DCIPElectrode> A, std::shared_ptr<DCIPElectrode> B, const Real& J)
          */
-        int AddInjection( DCIPElectrode* A, const Real& J );
+        int AddInjection( std::shared_ptr<DCIPElectrode> A, const Real& J );
 
         /**
          *   Adds an injection point.
          *   @param[in] A is the positive current electrode index
          *   @param[in] B is the negative current electrode index
          *   @param[in] J is the current intensity
-         *   @see AddInjection(DCIPElectrode* A, DCIPElectrode* B, const Real& J)
-         *   @see AddInjection(DCIPElectrode* A, const Real& J)
+         *   @see AddInjection(std::shared_ptr<DCIPElectrode> A, std::shared_ptr<DCIPElectrode> B, const Real& J)
+         *   @see AddInjection(std::shared_ptr<DCIPElectrode> A, const Real& J)
          *   @see AddInjection(const int& iA, const Real& J)
          */
         int AddInjection( const int& iA, const int& iB, const Real& J );
@@ -136,8 +144,8 @@ namespace Lemma {
          *   Adds an injection point with the negative electrode at infinity.
          *   @param[in] A is the positive current electrode index
          *   @param[in] J is the current intensity
-         *   @see AddInjection(DCIPElectrode* A, DCIPElectrode* B, const Real& J)
-         *   @see AddInjection(DCIPElectrode* A, const Real& J)
+         *   @see AddInjection(std::shared_ptr<DCIPElectrode> A, std::shared_ptr<DCIPElectrode> B, const Real& J)
+         *   @see AddInjection(std::shared_ptr<DCIPElectrode> A, const Real& J)
          *   @see AddInjection(const int& iA, const int& iB, const Real& J)
          */
         int AddInjection( const int& iA, const Real& J );
@@ -147,13 +155,13 @@ namespace Lemma {
          *   @param[in] N is a pointer to the `negative' electrode
          *   @param[in] iJ is the current injection index to associate with this measurement
          */
-        void AddMeasurement( const int& iJ, DCIPElectrode* M, DCIPElectrode* N );
+        void AddMeasurement( const int& iJ, std::shared_ptr<DCIPElectrode> M, std::shared_ptr<DCIPElectrode> N );
 
         /** Adds a potential measurement via the electrode pair comparison \f$ M - N \f$.
          *   @param[in] M is the `positive' electrode string label name
          *   @param[in] N is the `negative' electrode string label name
          *   @param[in] iJ is the current injection index to associate with this measurement
-         *   @see AddMeasurement( const int& iJ, DCIPElectrode* M, DCIPElectrode* N )
+         *   @see AddMeasurement( const int& iJ, std::shared_ptr<DCIPElectrode> M, std::shared_ptr<DCIPElectrode> N )
          */
         void AddMeasurement( const int& ij, const std::string& M, const std::string& N);
 
@@ -178,44 +186,28 @@ namespace Lemma {
 
         // ====================  INQUIRY       =======================
 
-        #ifdef HAVE_YAMLCPP
-        YAML::Node Serialize() const;
-        static DCSurvey* DeSerialize(const YAML::Node& node);
-        #endif
-
         protected:
 
         // ====================  LIFECYCLE     =======================
-
-        /** Default protected constructor, use New */
-        DCSurvey (const std::string& name);
-
-        #ifdef HAVE_YAMLCPP
-        /** Default protected constructor, use New */
-        DCSurvey (const YAML::Node& node);
-        #endif
-
-        /** Default protected destructor, use Delete */
-        ~DCSurvey ();
-
-        /**
-         *  @copybrief   LemmaObject::Release()
-         *  @copydetails LemmaObject::Release()
-         */
-        void Release();
 
         private:
 
         // ====================  DATA MEMBERS  =========================
 
+        /** ASCII string representation of the class name */
+        static constexpr auto CName = "DCSurvey";
+
+        /** no copy */
+        DCSurvey ( const DCSurvey& ) = delete;
+
         /** The electrodes */
-        std::vector<DCIPElectrode*>                Electrodes;
+        std::vector< std::shared_ptr<DCIPElectrode> >                Electrodes;
 
         /** Tags for the electrodes, lines etc. Ordered with Electrodes std::vector */
         std::vector<std::string>                   OrderedElectrodeLabels;
 
         /** Map of tags for the electrodes, lines etc. */
-        std::map<std::string, std::pair<DCIPElectrode*, int> >      ElectrodeLabelMap;
+        std::map<std::string, std::pair< std::shared_ptr<DCIPElectrode>, int> >      ElectrodeLabelMap;
 
         /** The A Injection electrodes */
         std::vector<int>     A_Electrodes;

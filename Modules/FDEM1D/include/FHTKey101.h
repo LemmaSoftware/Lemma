@@ -54,8 +54,8 @@ namespace Lemma {
         ~FHTKey101 ();
 
         /**
-         * @copybrief LemmaObject::New()
-         * @copydetails LemmaObject::New()
+         * \brief   returns shared_ptr with new object
+         * \details Use this method as default constructor is locked.
          */
         static std::shared_ptr<FHTKey101> NewSP();
 

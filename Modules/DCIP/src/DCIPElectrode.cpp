@@ -24,54 +24,45 @@ namespace Lemma {
 
 
     // ====================  FRIEND METHODS  =====================
-#ifdef HAVE_YAMLCPP
+
     std::ostream &operator << (std::ostream &stream, const DCIPElectrode &ob) {
-        stream << ob.Serialize()  << "\n---\n"; // End of doc --- as a direct stream should encapulate thingy
+        stream << ob.Serialize()  << "\n";
         return stream;
     }
-#else
-    std::ostream &operator<<(std::ostream &stream, const DCIPElectrode& ob) {
-        stream << *(LemmaObject*)(&ob);
-        return stream;
-    }
-#endif
 
     // ====================  LIFECYCLE     =======================
 
     //--------------------------------------------------------------------------------------
     //       Class:  DCIPElectrode
     //      Method:  DCIPElectrode
-    // Description:  constructor (protected)
+    // Description:  constructor (locked)
     //--------------------------------------------------------------------------------------
-    DCIPElectrode::DCIPElectrode (const std::string& name) : LemmaObject(name), Node_ID(-1), Label(std::string("None")) {
+    DCIPElectrode::DCIPElectrode (const ctor_key& key) :
+            LemmaObject(key), Node_ID(-1), Label(std::string("None")) {
 
     }  // -----  end of method DCIPElectrode::DCIPElectrode  (constructor)  -----
 
-#ifdef HAVE_YAMLCPP
     //--------------------------------------------------------------------------------------
     //       Class:  DCIPElectrode
     //      Method:  DCIPElectrode
-    // Description:  DeSerializing constructor (protected)
+    // Description:  DeSerializing constructor (locked)
     //--------------------------------------------------------------------------------------
-    DCIPElectrode::DCIPElectrode (const YAML::Node& node) : LemmaObject(node) {
-        if (node.Tag() != this->Name) {
+    DCIPElectrode::DCIPElectrode (const YAML::Node& node, const ctor_key& key) : LemmaObject(node, key) {
+        if (node.Tag() != DCIPElectrode::CName) {
             throw std::runtime_error("In DCIPElectrode(node), node is of wrong type");
         }
         this->Location = node["Location"].as<Vector3r>();
         this->Node_ID = node["Node_ID"].as<int>();
         this->Label = node["Label"].as<std::string>();
     }  // -----  end of method DCIPElectrode::DCIPElectrode  (constructor)  -----
-#endif
 
     //--------------------------------------------------------------------------------------
     //       Class:  DCIPElectrode
     //      Method:  New()
     // Description:  public constructor
     //--------------------------------------------------------------------------------------
-    DCIPElectrode* DCIPElectrode::New() {
-        DCIPElectrode*  Obj = new DCIPElectrode("DCIPElectrode");
-        Obj->AttachTo(Obj);
-        return Obj;
+    std::shared_ptr<DCIPElectrode> DCIPElectrode::NewSP() {
+        return std::make_shared<DCIPElectrode>( ctor_key() );
     }
 
     //--------------------------------------------------------------------------------------
@@ -85,31 +76,11 @@ namespace Lemma {
 
     //--------------------------------------------------------------------------------------
     //       Class:  DCIPElectrode
-    //      Method:  Delete
-    // Description:  public destructor
-    //--------------------------------------------------------------------------------------
-    void DCIPElectrode::Delete() {
-        this->DetachFrom(this);
-    }
-
-    //--------------------------------------------------------------------------------------
-    //       Class:  DCIPElectrode
-    //      Method:  Release
-    // Description:  destructor (protected)
-    //--------------------------------------------------------------------------------------
-    void DCIPElectrode::Release() {
-        delete this;
-    }
-
-
-#ifdef HAVE_YAMLCPP
-    //--------------------------------------------------------------------------------------
-    //       Class:  DCIPElectrode
     //      Method:  Serialize
     //--------------------------------------------------------------------------------------
     YAML::Node  DCIPElectrode::Serialize (  ) const {
         YAML::Node node = LemmaObject::Serialize();
-        node.SetTag( this->Name );
+        node.SetTag( this->GetName() );
         // FILL IN CLASS SPECIFICS HERE
         node["Location"] = Location;
         node["Node_ID"] = Node_ID;
@@ -117,19 +88,16 @@ namespace Lemma {
         return node;
     }		// -----  end of method DCIPElectrode::Serialize  -----
 
-
     //--------------------------------------------------------------------------------------
     //       Class:  DCIPElectrode
     //      Method:  DeSerialize
     //--------------------------------------------------------------------------------------
-    DCIPElectrode* DCIPElectrode::DeSerialize ( const YAML::Node& node  ) {
-        DCIPElectrode* Object = new DCIPElectrode(node);
-        Object->AttachTo(Object);
-        DESERIALIZECHECK( node, Object )
-        return Object ;
+    std::shared_ptr<DCIPElectrode> DCIPElectrode::DeSerialize ( const YAML::Node& node  ) {
+        if ( node.Tag() != DCIPElectrode::CName ) {
+            throw  DeSerializeTypeMismatch( DCIPElectrode::CName, node.Tag());
+        }
+        return std::make_shared< DCIPElectrode > ( node, ctor_key() );
     }		// -----  end of method DCIPElectrode::DeSerialize  -----
-#endif
-
 
     //--------------------------------------------------------------------------------------
     //       Class:  DCIPElectrode

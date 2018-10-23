@@ -25,7 +25,6 @@ namespace Lemma {
     // ===================================================================
     //  Class:  InverseSolver
     /**
-      @class  InverseSolver
       \brief   Abstract class for inverse problem solver.
       \details General solution of inverse problems.
      */

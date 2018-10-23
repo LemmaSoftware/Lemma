@@ -21,7 +21,7 @@ namespace Lemma {
     // ===================================================================
     //        Class:  EarthModel
     /// \ingroup LemmaCore
-    /// \brief abstract class for Earth models
+    /// \brief   abstract class for Earth models
     /// \details
     // ===================================================================
     class EarthModel : public LemmaObject {
@@ -58,40 +58,48 @@ namespace Lemma {
             void SetMagneticFieldComponents(const Vector3r &bfield,
                             const MAGUNITS &unit);
 
-            /// Sets the magnetic field using inclination, declination,
-            /// and magnitude, units of Tesla
-            /// @param[in] inc is the field's inclination
-            /// @param[in] dec is the field's declination
-            /// @param[in] Mag is the field's magnitude
-            /// @param[in] unit specifies the the units used.
-            /// The components are set according to
-            /// \f{eqnarray*} { B_x =& B \cos(inc (\pi/180)) \cos(dec (\pi/180))
-            ///            \\   B_y =& B \cos(inc (\pi/180)) \sin(dec (\pi/180))
-            ///            \\   B_z =& B \sin(inc (\pi/180))
-            /// \f}
+            /** Sets the magnetic field using inclination, declination,
+                and magnitude, units of Tesla
+                @param[in] inc is the field's inclination
+                @param[in] dec is the field's declination
+                @param[in] Mag is the field's magnitude
+                @param[in] unit specifies the the units used.
+                The components are set according to
+                \f{eqnarray*} { B_x =& B \cos(inc (\pi/180)) \cos(dec (\pi/180))
+                           \\   B_y =& B \cos(inc (\pi/180)) \sin(dec (\pi/180))
+                           \\   B_z =& B \sin(inc (\pi/180))
+                \f}
+             */
             void SetMagneticFieldIncDecMag(const Real& inc, const Real&dec,
                             const Real& Mag, const MAGUNITS &unit);
 
             // ====================  INQUIRY       =======================
 
-            /// Gets the magnetic field of the earth, in T
+            /** @return the magnetic field of the earth, in T
+             */
             Vector3r GetMagneticField( );
 
-            /// Gets the magnetic field of the earth, in T
+            /** @return the magnetic field of the earth, in Gauss
+             */
             Vector3r GetMagneticFieldInGauss(  );
 
-            /// Gets the magnetic field unit vector of the earth
+            /** @return the magnetic field unit vector of the earth
+             */
             Vector3r GetMagneticFieldUnitVector( );
 
-            /// Returns the magnitude of the magnetic field \f$ \Vert
-            /// \mathbf{B}_0 \Vert \f$
+            /** @return the magnitude of the magnetic field (in T)
+             * \f$ \Vert \mathbf{B}_0 \Vert \f$
+             */
             Real GetMagneticFieldMagnitude();
 
-            /// Returns the magnitude of the magnetic field \f$ \Vert
-            /// \mathbf{B}_0 \Vert \f$ in Gauss units
+            /** @return the magnitude of the magnetic field
+             *  \f$ \Vert \mathbf{B}_0 \Vert \f$ in Gauss units
+             */
             Real GetMagneticFieldMagnitudeInGauss( );
 
-            /** Returns the name of the underlying class, similiar to Python's type */
+            /** @return the name of the underlying class, similiar to Python's
+                        type
+             */
             virtual inline std::string GetName() const;
 
         protected:

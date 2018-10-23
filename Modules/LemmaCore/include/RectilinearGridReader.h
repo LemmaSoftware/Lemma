@@ -25,7 +25,6 @@
 namespace Lemma {
 
     /**
-      @class
       \ingroup LemmaCore
       \brief   Base Class for rectilinear grid reader data files
       \details

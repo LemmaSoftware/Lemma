@@ -26,8 +26,9 @@
 namespace Lemma {
 
     /**
-      \brief
-      \details
+      \brief    Describes the location of an electrode used in a DC/IP survey
+      \details  This class is used together with FEM4EllipticPDE to solve DC/IP
+                problems.
      */
     class DCIPElectrode : public LemmaObject {
 
@@ -39,16 +40,30 @@ namespace Lemma {
         // ====================  LIFECYCLE     =======================
 
         /**
-         * @copybrief LemmaObject::New()
-         * @copydetails LemmaObject::New()
+         * \brief   Returns new shared pointer to DCIP object.
+         * \details Use this method, as the default constructor is locked.
          */
-        static DCIPElectrode* New();
+        static std::shared_ptr<DCIPElectrode> NewSP();
 
         /**
-         *  @copybrief   LemmaObject::Delete()
-         *  @copydetails LemmaObject::Delete()
+         *  Uses YAML to serialize this object.
+         *  @return a YAML::Node
          */
-        void Delete();
+        YAML::Node Serialize() const;
+
+        /**
+         *   Constructs an object from a YAML::Node.
+         */
+        static std::shared_ptr<DCIPElectrode> DeSerialize(const YAML::Node& node);
+
+        /** Default protected constructor, use New */
+        explicit DCIPElectrode (const ctor_key& key);
+
+        /** Protected DeDerializing constructor, use factory DeSerialize  method*/
+        DCIPElectrode (const YAML::Node& node, const ctor_key& key);
+
+        /** Default protected destructor, use Delete */
+        virtual ~DCIPElectrode ();
 
         // ====================  OPERATORS     =======================
 
@@ -72,43 +87,24 @@ namespace Lemma {
         int GetNodeID() {return Node_ID;}
         // ====================  INQUIRY       =======================
 
-#ifdef HAVE_YAMLCPP
-        /**
-         *  Uses YAML to serialize this object.
-         *  @return a YAML::Node
-         */
-        YAML::Node Serialize() const;
-
-        /**
-         *   Constructs an object from a YAML::Node.
-         */
-        static DCIPElectrode* DeSerialize(const YAML::Node& node);
-#endif
+        /** Returns the name of the underlying class, similiar to Python's type */
+        virtual std::string GetName() const {
+            return this->CName;
+        }
 
         protected:
 
         // ====================  LIFECYCLE     =======================
 
-        /** Default protected constructor, use New */
-        DCIPElectrode (const std::string& name);
-
-#ifdef HAVE_YAMLCPP
-        /** Protected DeDerializing constructor, use factory DeSerialize  method*/
-        DCIPElectrode (const YAML::Node& node);
-#endif
-
-        /** Default protected destructor, use Delete */
-        ~DCIPElectrode ();
-
-        /**
-         *  @copybrief   LemmaObject::Release()
-         *  @copydetails LemmaObject::Release()
-         */
-        void Release();
-
         private:
 
         // ====================  DATA MEMBERS  =========================
+
+        /** ASCII string representation of the class name */
+        static constexpr auto CName = "DCIPElectrode";
+
+        /** no copy */
+        DCIPElectrode ( const DCIPElectrode& ) = delete;
 
         /** The location of the electrode */
         Vector3r Location;

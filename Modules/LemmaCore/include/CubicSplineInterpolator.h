@@ -23,7 +23,11 @@
 
 namespace Lemma {
 
-// Simple struct to hold spline terms
+
+/**
+ * \brief Simple struct to hold spline terms
+ * \details This struct holds the actual knot and spline interpolation terms.
+ */
 struct SplineSet{
     VectorXr a;
     VectorXr b;

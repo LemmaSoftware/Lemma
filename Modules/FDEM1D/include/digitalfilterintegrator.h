@@ -22,7 +22,6 @@ namespace Lemma {
     // ===================================================================
     //  Class:  DigitalFilterIntegrator
     /**
-      @class
       \brief   Reimplimentation of Walt Anderson's digital filtering
                algorithms which are public domain.
       \details Walt Anderson wrote several routines for digital filtering

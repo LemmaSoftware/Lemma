@@ -26,7 +26,6 @@ namespace Lemma {
     // ===================================================================
     //  Class:  KernelEM1DReflSpec
     /**
-      @class
       \ingroup FDEM1D
       \brief   Specialized version of KernelEM1DReflBase
       \details Through use of template specialisations, this KernelEm1D

@@ -21,7 +21,6 @@ namespace Lemma {
     // ===================================================================
     //  Class:  IntegrationKernel
     /**
-      @class
       \brief    Abstract class that computes arguments for numerical
                 integrators.
       \details  Needs to provide Argument function, as well as be able to
