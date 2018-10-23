@@ -544,7 +544,7 @@ namespace Lemma{
         np  = 0; // TI, zero based indexing
 
         int  NPB   = 1; // 0?
-        int  L     = 0; 
+        int  L     = 0;
         Real B     = 0.;
         Real A     = 0.;
         Real SUMR  = 0.;

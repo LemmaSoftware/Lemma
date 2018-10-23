@@ -37,7 +37,7 @@ namespace Lemma {
 			// ====================  LIFECYCLE     ===========================
 
 			/// Default locked constructor.
-			GQChave ( const ctor_key& );
+			explicit GQChave ( const ctor_key& );
 
             /** DeSerializing locked constructor, use DeSerialize */
             GQChave ( const YAML::Node& node, const ctor_key& );
