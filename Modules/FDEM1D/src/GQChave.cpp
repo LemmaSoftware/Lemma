@@ -265,8 +265,8 @@ namespace Lemma{
 */
 
     GQChave::GQChave( const ctor_key& key ) : HankelTransform( key ) {
-        karg.resize(255, 100);
-        kern.resize(510, 100);
+        //karg.resize(255, 100);
+        //kern.resize(510, 100);
     }
 
     GQChave::GQChave( const YAML::Node& node, const ctor_key& key ) : HankelTransform(node, key) {
@@ -281,7 +281,6 @@ namespace Lemma{
     std::shared_ptr<GQChave> GQChave::NewSP() {
         return std::make_shared<GQChave>( ctor_key() );
     }
-
 
     //--------------------------------------------------------------------------------------
     //       Class:  GQChave
@@ -329,6 +328,8 @@ namespace Lemma{
         //Kernel->SetMode(mode);
         //ik   = ikk+1;
         //mode = imode;
+        karg.resize(255, 100);
+        kern.resize(510, 100);
 
         Real Besr(0);
         Real Besi(0);
