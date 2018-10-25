@@ -38,7 +38,7 @@ install ( FILES  ${PROJECT_BINARY_DIR}/include/EMSchur3DConfig.h   DESTINATION $
 
 	# Install
 	install ( TARGETS dcip DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )
-	install ( FILES include/EMSchur3D  DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma ) 
+	install ( FILES include/DCIP  DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma ) 
 	install ( DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma  FILES_MATCHING PATTERN "*.h")
 
 	#install ( DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma/  FILES_MATCHING PATTERN "FDEM1D")

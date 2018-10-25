@@ -177,6 +177,21 @@ std::string enum2String( const WINDOWTYPE& Type ) {
     }
 }
 
+std::string enum2String( const DIPOLESOURCETYPE& Type ) {
+    switch (Type) {
+        case NOSOURCETYPE:
+            return std::string("NOSOURCETYPE");
+        case GROUNDEDELECTRICDIPOLE:
+            return std::string("GROUNDEDELECTRICDIPOLE");
+        case UNGROUNDEDELECTRICDIPOLE:
+            return std::string("UNGROUNDEDELECTRICDIPOLE");
+        case MAGNETICDIPOLE:
+            return std::string("MAGNETICDIPOLE");
+        default:
+            throw( std::runtime_error( "In enum2String DIPOLESOURCETYPE, type not identified" ) );
+    }
+}
+
 template<>
 FREQUENCYUNITS string2Enum<FREQUENCYUNITS>( const std::string& str ) {
     if       (str ==  "HZ") return   HZ;
@@ -235,6 +250,17 @@ WINDOWTYPE string2Enum<WINDOWTYPE>( const std::string& str ) {
     if      (str == "RECTANGULAR")  return RECTANGULAR;
     else {
         throw std::runtime_error("string not recognized as WindowType");
+    }
+}
+
+template<>
+DIPOLESOURCETYPE string2Enum<DIPOLESOURCETYPE>( const std::string& str ) {
+    if      (str == "NOSOURCETYPE")              return NOSOURCETYPE;
+    if      (str == "GROUNDEDELECTRICDIPOLE")    return GROUNDEDELECTRICDIPOLE;
+    if      (str == "UNGROUNDEDELECTRICDIPOLE")  return UNGROUNDEDELECTRICDIPOLE;
+    if      (str == "MAGNETICDIPOLE")            return MAGNETICDIPOLE;
+    else {
+        throw std::runtime_error("string not recognized as DipoleSource");
     }
 }
 

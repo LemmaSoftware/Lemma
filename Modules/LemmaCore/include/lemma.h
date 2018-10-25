@@ -214,8 +214,8 @@
         typedef Eigen::Matrix<Real, 3, 1> Vector3r;
 
         typedef Eigen::Matrix<Real, Eigen::Dynamic, 1>::Index Index;
-        
-	/// A 3 X Dynamic Component Eigen matrix of Reals
+
+	    /// A 3 X Dynamic Component Eigen matrix of Reals
         typedef Eigen::Matrix<Real, 3, Eigen::Dynamic> Vector3Xr;
 
         /// Variable length Eigen vector of Reals
@@ -299,10 +299,11 @@
 
         /** Enum is OK because these are the only physically possible sources.
          @param NOSOURCETYPE is default.
-         @param ELECTRICDIPOLE is an electric dipole
+         @param GROUNDEDELECTRICDIPOLE is an grounded electric dipole
+         @param UNGROUNDEDELECTRICDIPOLE is an ungrounded electric dipole
          @param MAGNETICDIPOLE is a magnetic dipole
         */
-        enum DipoleSourceType {NOSOURCETYPE, GROUNDEDELECTRICDIPOLE, UNGROUNDEDELECTRICDIPOLE, MAGNETICDIPOLE};
+        enum DIPOLESOURCETYPE {NOSOURCETYPE, GROUNDEDELECTRICDIPOLE, UNGROUNDEDELECTRICDIPOLE, MAGNETICDIPOLE};
 
         /// Only three polarizations are supported. They may be summed to
         /// approximate others

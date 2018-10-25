@@ -320,7 +320,7 @@ namespace Lemma {
                     for (int irec=0; irec<Receivers->GetNumberOfPoints(); ++irec) {
                         if (!Receivers->GetMask(irec)) {
                             AntCopy->ApproximateWithElectricDipoles(Receivers->GetLocation(irec));
-                            for (int idip=0; idip<AntCopy->GetNumberOfDipoles(); ++idip) {
+                            for (unsigned int idip=0; idip<AntCopy->GetNumberOfDipoles(); ++idip) {
                                 auto tDipole = AntCopy->GetDipoleSource(idip);
                                 //#ifdef LEMMAUSEOMP
                                 //#pragma omp for schedule(static, 1)
@@ -381,7 +381,7 @@ namespace Lemma {
                             #pragma omp for schedule(static, 1)
                             #endif
                             for (int ifreq=0; ifreq<Antenna->GetNumberOfFrequencies(); ++ifreq) {
-                                for (int idip=0; idip<Antenna->GetNumberOfDipoles(); ++idip) {
+                                for (unsigned int idip=0; idip<Antenna->GetNumberOfDipoles(); ++idip) {
                                     auto tDipole = Antenna->GetDipoleSource(idip);
                                     // Propogation constant in free space
                                     Real wavef   = tDipole->GetAngularFrequency(ifreq) *
@@ -445,7 +445,7 @@ namespace Lemma {
                                 #ifdef LEMMAUSEOMP
                                 #pragma omp for schedule(static, 1)
                                 #endif
-                                for (int idip=0; idip<Antenna->GetNumberOfDipoles(); ++idip) {
+                                for (unsigned int idip=0; idip<Antenna->GetNumberOfDipoles(); ++idip) {
                                     //#pragma omp critical
                                     //{
                                     //cout << "idip=" << idip << "\tthread num=" << omp_get_thread_num() << '\n';
@@ -473,7 +473,7 @@ namespace Lemma {
             // TODO, getting wrong answer, curiously worKernel->GetKs() with MakeCalc, maybe
             // a threading issue, use SolveSingleTxRxPair maype instead of call
             // to MakeCalc3? !!!
-            for (int idip=0; idip<Antenna->GetNumberOfDipoles(); ++idip) {
+            for (unsigned int idip=0; idip<Antenna->GetNumberOfDipoles(); ++idip) {
                 this->Dipole = Antenna->GetDipoleSource(idip);
                 MakeCalc3();
                 //++disp;
@@ -782,7 +782,7 @@ namespace Lemma {
         // Determine the min and max arguments
         Real rhomin = 1e9;
         Real rhomax = 1e-9;
-        for (int idip=0; idip<antenna->GetNumberOfDipoles(); ++idip) {
+        for (unsigned int idip=0; idip<antenna->GetNumberOfDipoles(); ++idip) {
             auto tDipole = antenna->GetDipoleSource(idip);
             Real rho = (Receivers->GetLocation(irec).head<2>() - tDipole->GetLocation().head<2>()).norm();
             rhomin = std::min(rhomin, rho);
@@ -804,7 +804,7 @@ namespace Lemma {
         Hankel->ComputeLaggedRelated( 1.0*rhomax, nlag, tDipole->GetKernelManager() );
 
         // Sort the dipoles by rho
-        for (int idip=0; idip<antenna->GetNumberOfDipoles(); ++idip) {
+        for (unsigned int idip=0; idip<antenna->GetNumberOfDipoles(); ++idip) {
             auto tDipole = antenna->GetDipoleSource(idip);
             tDipole->SetKernels(ifreq, FieldsToCalculate, Receivers, irec, Earth);
             // Pass Hankel2 a message here so it knows which one to return in Zgauss!

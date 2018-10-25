@@ -1,0 +1,11 @@
+#ifndef  DCIP_INC
+#define  DCIP_INC
+
+#include "DCSurvey.h"
+#include "DCIPElectrode.h"
+
+#endif   // ----- #ifndef DCIP_INC  -----
+
+/* vim: set tabstop=4 expandtab: */
+/* vim: set filetype=cpp: */
+

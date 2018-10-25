@@ -26,6 +26,10 @@ add_executable( Hantenna Hantenna.cpp  )
 target_link_libraries(  Hantenna  "lemmacore" "fdem1d")
 set_property(TARGET Hantenna PROPERTY CXX_STANDARD 14)
 
+add_executable( DipoleSource DipoleSource.cpp  )
+target_link_libraries(  DipoleSource  "lemmacore" "fdem1d")
+set_property(TARGET DipoleSource PROPERTY CXX_STANDARD 14)
+
 INSTALL_TARGETS( "/share/FDEM1D/"
 	LayeredEarthEM 
 	FieldPoints
@@ -33,6 +37,7 @@ INSTALL_TARGETS( "/share/FDEM1D/"
 	EMDipEarth1D
     CircularLoop
 	Hantenna
+	DipoleSource
 )
 
 install (DIRECTORY inp  DESTINATION "${CMAKE_INSTALL_PREFIX}/share/FDEM1D/" )

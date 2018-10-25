@@ -8,7 +8,6 @@
   @file
   @author   Trevor Irons
   @date     12/02/2009
-  @version  $Id: dipolesource.h 203 2015-01-09 21:19:04Z tirons $
  **/
 
 #ifndef __DIPOLESOURCE_H
@@ -47,7 +46,11 @@ namespace Lemma {
 
         friend std::ostream &operator<<(std::ostream &stream, const DipoleSource &ob);
 
+        friend class EMEarth1D;
+
         public:
+
+            //bool operator==(DipoleSource& rhs)const;
 
             // ====================  LIFECYCLE     ======================
 
@@ -86,19 +89,6 @@ namespace Lemma {
 
             // ====================  OPERATORS     ======================
 
-            // ====================  OPERATIONS    ======================
-
-            /** Determines if kernels have been loaded already, and if so if they can be reused
-             */
-            void SetKernels(const int& ifreq,  const FIELDCALCULATIONS&  Fields, std::shared_ptr<FieldPoints> Receivers, const int& irec,
-                    std::shared_ptr<LayeredEarthEM> Earth );
-
-            /** resets the kernels if they cannot be reused */
-            virtual void ReSetKernels(const int& ifreq,  const FIELDCALCULATIONS&  Fields, std::shared_ptr<FieldPoints> Receivers,
-                    const int& irec, std::shared_ptr<LayeredEarthEM> Earth );
-
-            /** Updates the receiver fields */
-            virtual void UpdateFields(const int& ifreq, HankelTransform* Hankel, const Real& wavef);
 
             // ====================  ACCESS        ======================
 
@@ -133,7 +123,7 @@ namespace Lemma {
             /// Sets the dipole source type
             /// @param[in] stype is one of the enerated values taking either
             /// ELECTRICDIPOLE or MAGNETICDIPOLE
-            void SetType(const DipoleSourceType &stype);
+            void SetType(const DIPOLESOURCETYPE &stype);
 
             /// Sets the dipole moment
             void SetMoment(const Real &moment);
@@ -157,7 +147,6 @@ namespace Lemma {
             /// number of frequencies
             void SetFrequencies(const VectorXr& freqs);
 
-
             // ====================  INQUIRY       ======================
 
             /**  Accessor to polarisation vector.
@@ -172,11 +161,11 @@ namespace Lemma {
             /// @param coordinate 0=x, 1=y, 2=z
             Real  GetLocation(const int &coordinate);
 
-            /// Returns enumerated of DipoleSourceType
-            DipoleSourceType GetDipoleSourceType();
+            /// Returns enumerated of DIPOLESOURCETYPE
+            DIPOLESOURCETYPE GetDipoleSourceType();
 
             /// Returns the dipole type
-            DipoleSourceType GetType();
+            DIPOLESOURCETYPE GetType();
 
             /// Returns pointer to KernelEM1DManager
             std::shared_ptr<KernelEM1DManager>  GetKernelManager();
@@ -212,12 +201,28 @@ namespace Lemma {
             /** Returns the name of the underlying class, similiar to Python's type */
             virtual std::string GetName() const ;
 
+        protected:
+
+            // ====================  OPERATIONS    ======================
+
+            /** Determines if kernels have been loaded already, and if so if they can be reused
+             */
+            void SetKernels(const int& ifreq,  const FIELDCALCULATIONS&  Fields, std::shared_ptr<FieldPoints> Receivers, const int& irec,
+                    std::shared_ptr<LayeredEarthEM> Earth );
+
+            /** resets the kernels if they cannot be reused */
+            virtual void ReSetKernels(const int& ifreq,  const FIELDCALCULATIONS&  Fields, std::shared_ptr<FieldPoints> Receivers,
+                    const int& irec, std::shared_ptr<LayeredEarthEM> Earth );
+
+            /** Updates the receiver fields */
+            virtual void UpdateFields(const int& ifreq, HankelTransform* Hankel, const Real& wavef);
+
         private:
 
             // ====================  DATA MEMBERS  ======================
 
             /// Defines the type of source (magnetic or electric)
-            DipoleSourceType             Type;
+            DIPOLESOURCETYPE             Type;
 
             // Polarization of the dipole, (x, y or z)
             //DipoleSourcePolarisation     Polarisation;
@@ -253,13 +258,13 @@ namespace Lemma {
             VectorXi                     ik;
 
             /// Central location of the dipole
-            Vector3r                     Location;
+            Vector3r                                    Location;
 
             /// Unit vector defining directionality of the dipole
-            Vector3r                     Phat;
+            Vector3r                                    Phat;
 
             /// Freqencies of the source, in Hz
-            VectorXr                     Freqs;
+            VectorXr                                    Freqs;
 
             /// Storage of the EM1D kernels used by this dipole
             std::shared_ptr<KernelEM1DManager>          KernelManager;

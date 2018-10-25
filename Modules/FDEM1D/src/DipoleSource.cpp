@@ -24,11 +24,18 @@ namespace Lemma {
 
 
     // ====================    FRIENDS     ======================
+
     std::ostream &operator<<(std::ostream &stream, const DipoleSource &ob) {
         stream << ob.Serialize()  << "\n";
         return stream;
     }
 
+/*
+    bool DipoleSource::operator == (DipoleSource& rhs) const {
+        if (Location != rhs.Location) return false;
+        return true;
+    }
+*/
 
     // ====================  LIFECYCLE     ======================
 
@@ -45,6 +52,21 @@ namespace Lemma {
         this->Phat.setZero();
     }
 
+    DipoleSource::DipoleSource( const YAML::Node& node, const ctor_key& key ) : LemmaObject( node, key ),
+                    Type(NOSOURCETYPE),
+                    irec(-1),
+                    Phase(0),
+                    Moment(1),
+                    KernelManager(nullptr),
+                    Receivers(nullptr),
+                    Earth(nullptr)
+    {
+        Type = string2Enum<DIPOLESOURCETYPE>(node["Type"].as<std::string>());
+        this->Location = node["Location"].as<Vector3r>();
+        this->Phat.setZero();
+    }
+
+
     DipoleSource::~DipoleSource() {
     }
 
@@ -53,22 +75,22 @@ namespace Lemma {
     }
 
     YAML::Node DipoleSource::Serialize() const {
-        YAML::Node node = DipoleSource::Serialize();
+        YAML::Node node = LemmaObject::Serialize();
         node.SetTag( GetName() );
-        /*
-        node["LayerConductivity"] = LayerConductivity;
-        node["LayerSusceptibility"] = LayerSusceptibility;
-        node["LayerLowFreqSusceptibility"] = LayerLowFreqSusceptibility;
-        node["LayerHighFreqSusceptibility"] = LayerHighFreqSusceptibility;
-        node["LayerTauSusceptibility"] = LayerTauSusceptibility;
-        node["LayerBreathSusceptibility"] = LayerBreathSusceptibility;
-        node["LayerPermitivity"] = LayerPermitivity;
-        node["LayerLowFreqPermitivity"] = LayerLowFreqPermitivity;
-        node["LayerHighFreqPermitivity"] = LayerHighFreqPermitivity;
-        node["LayerTauPermitivity"] = LayerTauPermitivity;
-        node["LayerBreathPermitivity"] = LayerBreathPermitivity;
-        */
+        node["Type"] = enum2String(Type);
+        node["Location"] = Location;
+        node["Phat"] = Phat;
+        node["Freqs"] = Freqs;
+        node["Phase"] = Phase;
+        node["Moment"] = Moment;
         return node;
+    }
+
+    std::shared_ptr< DipoleSource > DipoleSource::DeSerialize(const YAML::Node& node) {
+        if (node.Tag() != "DipoleSource") {
+            throw  DeSerializeTypeMismatch( "DipoleSource", node.Tag());
+        }
+        return std::make_shared<DipoleSource> ( node, ctor_key() );
     }
 
     std::shared_ptr<DipoleSource> DipoleSource::Clone() {
@@ -152,7 +174,7 @@ namespace Lemma {
 //         };
     }
 
-    void DipoleSource::SetType(const DipoleSourceType & stype) {
+    void DipoleSource::SetType(const DIPOLESOURCETYPE & stype) {
 
         switch (stype) {
             case (GROUNDEDELECTRICDIPOLE):
@@ -182,7 +204,7 @@ namespace Lemma {
         return Phat;
     }
 
-    DipoleSourceType DipoleSource::GetType() {
+    DIPOLESOURCETYPE DipoleSource::GetType() {
         return Type;
     }
 
@@ -1236,7 +1258,7 @@ namespace Lemma {
         }
     }
 
-    DipoleSourceType DipoleSource::GetDipoleSourceType() {
+    DIPOLESOURCETYPE DipoleSource::GetDipoleSourceType() {
         return this->Type;
     }
 

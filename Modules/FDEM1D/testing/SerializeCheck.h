@@ -100,5 +100,15 @@ class MyTestSuite : public CxxTest::TestSuite
             TS_ASSERT_EQUALS( Obj->GetLocationZ(ip), Obj->GetLocation(ip)(2) );
         }
     }
+
+    void testDipoleSource(void)
+    {
+        auto Obj = DipoleSource::NewSP();
+        YAML::Node node = Obj->Serialize();
+        auto Obj2 = DipoleSource::DeSerialize(node);
+        TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
+    }
+
+
 };
 

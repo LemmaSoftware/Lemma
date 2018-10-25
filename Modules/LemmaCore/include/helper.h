@@ -64,6 +64,8 @@ namespace Lemma {
     std::string enum2String(const FIELDCALCULATIONS& Htype);
     /// convert enums to string saves repeated code useful for YAML serializing
     std::string enum2String(const WINDOWTYPE& Wtype);
+    /// convert enums to string saves repeated code useful for YAML serializing
+    std::string enum2String(const DIPOLESOURCETYPE& Wtype);
 
     // other way around is a template, where template argument lets us know
     // which specialisation to use.
@@ -120,7 +122,7 @@ namespace Lemma {
 } // end namespace Lemma
 
 ///////////////////////////////////////////////////////
-// YAML Serializing helper functions. Can we move this into helper.h
+// YAML Serializing helper functions.
 namespace YAML {
 
 template<>
