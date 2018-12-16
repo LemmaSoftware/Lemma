@@ -9,7 +9,6 @@
   @author   M. Andy Kass and Trevor P. Irons
   @date     02/16/2011
             15 Dec 2018
-  @version  $Id: digitalfiltersintrans.cpp 87 2013-09-05 22:44:05Z tirons $
  **/
 #include "FastSinTransformAnderson.h"
 
