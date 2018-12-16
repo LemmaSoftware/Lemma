@@ -46,6 +46,7 @@ set (FDEM1DSOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/IntegrationKernel.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/DigitalFilterIntegratorAnderson.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/FastSinTransformAnderson.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/FastCosTransformAnderson.cpp
 		
 	# Calculation
 	${CMAKE_CURRENT_SOURCE_DIR}/EMEarth1D.cpp
