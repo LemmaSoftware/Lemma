@@ -19,14 +19,14 @@ namespace Lemma {
 
     std::ostream &operator<<(std::ostream &stream,
 			const FastCosTransformAnderson &ob) {
-		stream << *(DigitalFilterIntegrator<Real>*)(&ob);
+		stream << *(DigitalFilterIntegratorAnderson<Real>*)(&ob);
 		return stream;
 	}
 
     // ====================  LIFECYCLE     =======================
 
-	FastCosTransformAnderson::FastCosTransformAnderson(const std::string&name) :
-		DigitalFilterIntegrator<Real>(name) {
+	FastCosTransformAnderson::FastCosTransformAnderson(const ctor_key& key) :
+		DigitalFilterIntegratorAnderson<Real>(key) {
         SetFilterWeights();
         NumConv = 1;
         ilow = 425;
