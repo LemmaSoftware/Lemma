@@ -24,6 +24,7 @@ set (FDEM1DSOURCE
 	#####################
 	# Hankel transforms #
 	#####################
+
 	# FHT
 	${CMAKE_CURRENT_SOURCE_DIR}/HankelTransform.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/FHTAnderson801.cpp
@@ -38,6 +39,14 @@ set (FDEM1DSOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/GQChave.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/QWEKey.cpp
 	
+	######################
+	# Sin/Cos transforms #
+	######################
+	
+	${CMAKE_CURRENT_SOURCE_DIR}/IntegrationKernel.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/DigitalFilterIntegratorAnderson.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/FastSinTransformAnderson.cpp
+		
 	# Calculation
 	${CMAKE_CURRENT_SOURCE_DIR}/EMEarth1D.cpp
 

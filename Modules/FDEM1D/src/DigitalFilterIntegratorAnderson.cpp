@@ -11,23 +11,23 @@
   @version  $Id: digitalfilterintegrator.cpp 87 2013-09-05 22:44:05Z tirons $
  **/
 
-#include "digitalfilterintegrator.h"
+#include "DigitalFilterIntegratorAnderson.h"
 
 namespace Lemma {
 
     // Specialisations to templated class are found here. This means that
-    // DigitalFilterIntegrator is not strictly templated, and must be linked
+    // DigitalFilterIntegratorAnderson is not strictly templated, and must be linked
     // with lemma for functionality.
 
     template < >
-    inline Complex DigitalFilterIntegrator<Complex>::AbsMax(const Complex& C,
+    inline Complex DigitalFilterIntegratorAnderson<Complex>::AbsMax(const Complex& C,
         const Complex& Cmax) {
 		return Complex(std::max(std::abs(real(C)), std::real(Cmax)),
 					   std::max(std::abs(imag(C)), std::imag(Cmax)) );
     }
 
     template < >
-    Real DigitalFilterIntegrator<Real>::AbsMax(const Real& C,
+    Real DigitalFilterIntegratorAnderson<Real>::AbsMax(const Real& C,
         const Real& Cmax) {
         return std::max(C, Cmax);
     }
@@ -36,7 +36,7 @@ namespace Lemma {
 	// Computes the transform y
 
     template < >
-    void DigitalFilterIntegrator<Real>::Compute(const Real& rho,
+    void DigitalFilterIntegratorAnderson<Real>::Compute(const Real& rho,
         const int& ntol, const Real& tol) {
 
 		Real y1 = this->ABSCISSA/rho;
@@ -44,15 +44,15 @@ namespace Lemma {
 
 		// Check to make sure everything is set
 		if (rho<=0) {
-			throw std::runtime_error("In DigitalFilterIntegrator Argument rho < 0.");
+			throw std::runtime_error("In DigitalFilterIntegratorAnderson Argument rho < 0.");
 		}
 
 		if (this->NumConv<1) {
-			throw std::runtime_error("In DigitalFilterIntegrator NumConv is less than 1.");
+			throw std::runtime_error("In DigitalFilterIntegratorAnderson NumConv is less than 1.");
 		}
 
 		if (this->IntKernel == NULL) {
-			throw std::runtime_error("In DigitalFilterIntegrator Unset Kernel Calculator");
+			throw std::runtime_error("In DigitalFilterIntegratorAnderson Unset Kernel Calculator");
 		}
 
 		Arg = VectorXr::Zero(this->NumConv);
@@ -138,7 +138,7 @@ namespace Lemma {
 
 
     template < >
-	void DigitalFilterIntegrator<Complex>::Compute(const Real &rho,
+	void DigitalFilterIntegratorAnderson<Complex>::Compute(const Real &rho,
             const int& ntol, const Real &tol) {
 
 		Real y1 = this->ABSCISSA/rho;
@@ -147,15 +147,15 @@ namespace Lemma {
 
 		// Check to make sure everything is set
 		if (rho<=0) {
-			throw std::runtime_error("In DigitalFilterIntegrator Argument rho < 0.");
+			throw std::runtime_error("In DigitalFilterIntegratorAnderson Argument rho < 0.");
 		}
 
 		if (this->NumConv<1) {
-			throw std::runtime_error("In DigitalFilterIntegrator NumConv is less than 1.");
+			throw std::runtime_error("In DigitalFilterIntegratorAnderson NumConv is less than 1.");
 		}
 
 		if (this->IntKernel == NULL) {
-			throw std::runtime_error("In DigitalFilterIntegrator Unset Kernel Calculator");
+			throw std::runtime_error("In DigitalFilterIntegratorAnderson Unset Kernel Calculator");
 		}
 
 		Arg = VectorXr::Zero(this->NumConv);

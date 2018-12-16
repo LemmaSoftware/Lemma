@@ -14,16 +14,17 @@
 #ifndef __INSTRUMENTTEM_H
 #define __INSTRUMENTTEM_H
 
-#include "instrument.h"
-#include "emearth1d.h"
+#include "Instrument.h"
+#include "EMEarth1D.h"
 #include "WireAntenna.h"
 #include "PolygonalWireAntenna.h"
-#include "receiverpoints.h"
-#include "dipolesource.h"
-#include "layeredearthem.h"
-#include "digitalfiltercostrans.h"
-#include "digitalfiltersintrans.h"
-#include "temintegrationkernel.h"
+#include "FieldPoints.h"
+#include "DipoleSource.h"
+#include "LayeredEarthEM.h"
+
+//#include "DigitalFilterCosTrans.h"
+//#include "DigitalFilterSinTrans.h"
+//#include "TEMIntegrationKernel.h"
 #include "CubicSplineInterpolator.h"
 
 namespace Lemma {
@@ -42,15 +43,13 @@ class InstrumentTem : public Instrument {
 
 	public:
 
-	// ====================  LIFECYCLE     =======================
+	    // ====================  LIFECYCLE     =======================
 
-		static InstrumentTem* New();
+		static InstrumentTem* NewSP();
 
-		void Delete();
+	    // ====================  OPERATORS     =======================
 
-	// ====================  OPERATORS     =======================
-
-	// ====================  OPERATIONS    =======================
+	    // ====================  OPERATIONS    =======================
 
 		/// Perform the forward model calculation
 		void MakeDirectCalculation( const HANKELTRANSFORMTYPE& hType );
@@ -60,7 +59,7 @@ class InstrumentTem : public Instrument {
          */
 		void MakeLaggedCalculation( const HANKELTRANSFORMTYPE& hType );
 
-	// ====================  ACCESS        =======================
+	    // ====================  ACCESS        =======================
 
 		/** Sets pulse parameters as a linearly segmented graph, so
          *  for example a triangle wave needs three points in Amps and
@@ -128,8 +127,6 @@ class InstrumentTem : public Instrument {
 
 		/// Default protected constructor.
 		~InstrumentTem ();
-
-		void Release();
 
     // ====================  OPERATIONS    =======================
 

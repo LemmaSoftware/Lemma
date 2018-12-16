@@ -207,11 +207,13 @@ namespace Lemma {
 
             /** Determines if kernels have been loaded already, and if so if they can be reused
              */
-            void SetKernels(const int& ifreq,  const FIELDCALCULATIONS&  Fields, std::shared_ptr<FieldPoints> Receivers, const int& irec,
+            void SetKernels(const int& ifreq,  const FIELDCALCULATIONS&  Fields,
+                    std::shared_ptr<FieldPoints> Receivers, const int& irec,
                     std::shared_ptr<LayeredEarthEM> Earth );
 
             /** resets the kernels if they cannot be reused */
-            virtual void ReSetKernels(const int& ifreq,  const FIELDCALCULATIONS&  Fields, std::shared_ptr<FieldPoints> Receivers,
+            virtual void ReSetKernels(const int& ifreq,  const FIELDCALCULATIONS&  Fields,
+                    std::shared_ptr<FieldPoints> Receivers,
                     const int& irec, std::shared_ptr<LayeredEarthEM> Earth );
 
             /** Updates the receiver fields */

@@ -10,7 +10,7 @@
   @date     02/10/2011
   @version  $Id: instrumenttem.cpp 266 2015-04-01 03:24:00Z tirons $
  **/
-#include "instrumenttem.h"
+#include "InstrumentTEM.h"
 
 namespace Lemma {
 

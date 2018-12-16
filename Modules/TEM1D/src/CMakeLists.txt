@@ -4,7 +4,8 @@ set (TEM1DSOURCE
 
 	${CMAKE_CURRENT_SOURCE_DIR}/TEMReceiver.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/TEMInductiveReceiver.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/TEMTransmitter.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/TEMTransmitter.cpp	
+#	${CMAKE_CURRENT_SOURCE_DIR}/InstrumentTEM.cpp
 	
 	PARENT_SCOPE
 )

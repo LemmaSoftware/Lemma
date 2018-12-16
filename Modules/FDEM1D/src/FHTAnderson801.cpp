@@ -994,7 +994,8 @@ namespace Lemma {
 		this->Key.setZero( );
         //std::memset(Key, 0, 801*sizeof(int));
 
-		// Check to make sure everything is set
+		// Check to make sure everything is set, we call this a lot though, so disable checks
+        // in release.
         #ifndef NDEBUG
 		if (rho<=0) {
 			throw std::runtime_error("In Hankel 2 Argument rho < 0.");

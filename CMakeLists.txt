@@ -24,10 +24,27 @@ set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMM
 ## Options--what do you want to do
 option ( BUILD_SHARED_LIBS      "Shared or static libraries"  OFF )
 
+# Disallow in-source build
+#if ("${Lemma_SOURCE_DIR}"  STREQUAL "${Lemma_BINARY_DIR}")
+#  message(FATAL_ERROR
+#    "ParaView requires an out of source Build. "
+#    "Please create a separate binary directory and run CMake there.")
+#endif()
+
+#------------------------------------------------------------------------------
+# Set a default build type if none was specified
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to 'Debug' as none was specified.")
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
+    "MinSizeRel" "RelWithDebInfo")
+endif()
+
 # If CMAKE_BUILD_TYPE is not specified, assume Release. 
-IF( NOT CMAKE_BUILD_TYPE )
-   SET( CMAKE_BUILD_TYPE Release ... FORCE )
-ENDIF()
+#IF( NOT CMAKE_BUILD_TYPE )
+#   SET( CMAKE_BUILD_TYPE Release ... FORCE )
+#ENDIF()
 
 option ( LEMMA_ENABLE_TESTING       "Turn on unit testing" OFF )
 option ( LEMMA_BUILD_EXAMPLES       "Compile example Lemma applications" OFF )
@@ -49,7 +66,7 @@ SET (CMAKE_CROSSCOMPILING TRUE)
 ## Only look for packages where we build them...this makes finding VTK a problem though! #
 ########################################################################################## 
 if (CMAKE_CROSSCOMPILING)
-    message ( STATUS "Cross-compiling! Only searching in install directory for components." )
+    message ( STATUS "Performing SuperBuild") #, Only searching in install directory for components." )
     # Kind of hack-ish, CMake doesn't always find this. It's buried in Cross compilation, so, 
     # hopefully anyone doing this can problem solve. 
     #    SET( CMAKE_PREFIX_PATH ${CMAKE_INSTALL_PREFIX}/CMake ${CMAKE_INSTALL_PREFIX}/share/eigen3 )

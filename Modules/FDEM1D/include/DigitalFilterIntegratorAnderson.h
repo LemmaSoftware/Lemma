@@ -11,22 +11,23 @@
   @version  $Id: digitalfilterintegrator.h 124 2014-02-07 04:26:26Z tirons $
  **/
 
+#pragma once
+
 #ifndef  DIGITALFILTERINTEGRATOR_INC
 #define  DIGITALFILTERINTEGRATOR_INC
 
-#include "integrator.h"
-#include "integrationkernel.h"
+#include "IntegrationKernel.h"
 
 namespace Lemma {
 
     // ===================================================================
-    //  Class:  DigitalFilterIntegrator
+    //  Class:  DigitalFilterIntegratorAnderson
     /**
       \brief   Reimplimentation of Walt Anderson's digital filtering
                algorithms which are public domain.
       \details Walt Anderson wrote several routines for digital filtering
-               that reused a lot of code. The original fortran codes are
-               available at:
+               that reused a lot of boilerplate code. The original fortran
+               codes are available at:
         ftp://ftpext.usgs.gov/pub/cr/co/denver/musette/pub/anderson/
                This is an abstract class. Concrete classes must define the
                a function to make arguments.
@@ -36,17 +37,33 @@ namespace Lemma {
      */
     // ===================================================================
     template <typename Scalar>
-    class DigitalFilterIntegrator : public Integrator {
+    class DigitalFilterIntegratorAnderson : public LemmaObject {
 
         /** Prints out basic info about the class, Complex implimentation */
 
         template <typename Scalar2>
         friend std::ostream &operator<<(std::ostream &stream,
-                        const DigitalFilterIntegrator<Scalar2> &ob);
+                        const DigitalFilterIntegratorAnderson<Scalar2> &ob);
 
         public:
 
             // ====================  LIFECYCLE     =======================
+
+            /** Default protected constructor. */
+            explicit DigitalFilterIntegratorAnderson (const ctor_key& key);
+
+            /** Default protected constructor. */
+            ~DigitalFilterIntegratorAnderson ();
+
+            /**
+             *  @return a YAML::Node serial object
+             */
+            YAML::Node Serialize() const;
+
+            /** Returns the name of the underlying class, similiar to Python's type */
+            virtual std::string GetName() const {
+                return this->CName;
+            }
 
             // ====================  OPERATORS     =======================
 
@@ -132,12 +149,6 @@ namespace Lemma {
 
             // ====================  LIFECYCLE     =======================
 
-            /** Default protected constructor. */
-            DigitalFilterIntegrator (const std::string& name);
-
-            /** Default protected constructor. */
-            ~DigitalFilterIntegrator ();
-
             // ====================  DATA MEMBERS  =========================
 
             /** A rewrite of Anderson's Pseudo-subroutine. */
@@ -213,8 +224,10 @@ namespace Lemma {
             Eigen::Matrix<int, Eigen::Dynamic, 1> Key;
 
         private:
+            /** ASCII string representation of the class name */
+            static constexpr auto CName = "DigitalFilterIntegratorAnderson.h";
 
-    }; // -----  end of class  DigitalFilterIntegrator  -----
+    }; // -----  end of class  DigitalFilterIntegratorAnderson  -----
 
 
     /////////////////////////////////////////
@@ -223,19 +236,19 @@ namespace Lemma {
     /////////////////////////////////////////
     /////////////////////////////////////////
 
+
     template <typename Scalar>
-    std::ostream &operator<<(std::ostream &stream,
-			const DigitalFilterIntegrator<Scalar> &ob) {
-		stream << *(Integrator*)(&ob);
-		return stream;
-	}
+    std::ostream &operator<<(std::ostream &stream, const DigitalFilterIntegratorAnderson<Scalar> &ob) {
+        stream << ob.Serialize()  << "\n";
+        return stream;
+    }
 
     // ====================  LIFECYCLE     =======================
 
     template <typename Scalar>
-    DigitalFilterIntegrator<Scalar>::
-            DigitalFilterIntegrator(const std::string& name) :
-        Integrator(name), Lambda(0), NumFun(0), NumConv(0), NumRel(0),
+    DigitalFilterIntegratorAnderson<Scalar>::
+            DigitalFilterIntegratorAnderson(const ctor_key& key) :
+        LemmaObject(key), Lambda(0), NumFun(0), NumConv(0), NumRel(0),
         ABSCISSA(0),
         ABSE(1.10517091807564762),   //   exp(.1)
         ABSER(0.904837418035959573), // 1/exp(.1)
@@ -243,24 +256,37 @@ namespace Lemma {
     }
 
     template <typename Scalar>
-    DigitalFilterIntegrator<Scalar>::~DigitalFilterIntegrator( ) {
+    YAML::Node DigitalFilterIntegratorAnderson<Scalar>::Serialize() const {
+        YAML::Node node = LemmaObject::Serialize();
+        node.SetTag( GetName() );
+        //node["Type"] = enum2String(Type);
+        //node["Location"] = Location;
+        //node["Phat"] = Phat;
+        //node["Freqs"] = Freqs;
+        //node["Phase"] = Phase;
+        //node["Moment"] = Moment;
+        return node;
+    }
+
+    template <typename Scalar>
+    DigitalFilterIntegratorAnderson<Scalar>::~DigitalFilterIntegratorAnderson( ) {
     }
 
     template <typename Scalar>
     Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic >
-        DigitalFilterIntegrator<Scalar>::GetAnswer() {
+        DigitalFilterIntegratorAnderson<Scalar>::GetAnswer() {
         return Ans;
     }
 
     // ====================  OPERATIONS    =======================
 
     template <typename Scalar>
-    void DigitalFilterIntegrator<Scalar>::SetNumConv(const int& i) {
+    void DigitalFilterIntegratorAnderson<Scalar>::SetNumConv(const int& i) {
         this->NumConv = i;
     }
 
     template <typename Scalar>
-    void DigitalFilterIntegrator<Scalar>::
+    void DigitalFilterIntegratorAnderson<Scalar>::
             AttachKernel(IntegrationKernel<Scalar> *ck) {
 		if (this->IntKernel == ck) return;
         if (this->IntKernel != NULL) {
@@ -272,7 +298,7 @@ namespace Lemma {
 
 
     template <typename Scalar>
-	void DigitalFilterIntegrator<Scalar>::DetachKernel( ) {
+	void DigitalFilterIntegratorAnderson<Scalar>::DetachKernel( ) {
 		if (this->IntKernel != NULL) {
 			this->IntKernel->DetachFrom(this);
 		}
@@ -280,19 +306,19 @@ namespace Lemma {
 	}
 
 //     template < >
-//     inline Complex DigitalFilterIntegrator<Complex>::AbsMax(const Complex& C,
+//     inline Complex DigitalFilterIntegratorAnderson<Complex>::AbsMax(const Complex& C,
 //         const Complex& Cmax) {
 // 		return Complex(std::max(std::abs(real(C)), std::real(Cmax)),
 // 					   std::max(std::abs(imag(C)), std::imag(Cmax)) );
 //     }
 //     template < >
-//     Real DigitalFilterIntegrator<Real>::AbsMax(const Real& C,
+//     Real DigitalFilterIntegratorAnderson<Real>::AbsMax(const Real& C,
 //         const Real& Cmax) {
 //         return std::max(C, Cmax);
 //     }
 
     template <typename Scalar>
-    VectorXr  DigitalFilterIntegrator<Scalar>::GetAbscissaArguments() {
+    VectorXr  DigitalFilterIntegratorAnderson<Scalar>::GetAbscissaArguments() {
         return this->Arg;
     }
 
@@ -300,7 +326,7 @@ namespace Lemma {
 // 	// Computes the transform
 //
 //     template < >
-//     void DigitalFilterIntegrator<Real>::Compute(const Real& rho,
+//     void DigitalFilterIntegratorAnderson<Real>::Compute(const Real& rho,
 //         const int& ntol, const Real& tol) {
 //
 // 		Real y1 = this->ABSCISSA/rho;
@@ -308,15 +334,15 @@ namespace Lemma {
 //
 // 		// Check to make sure everything is set
 // 		if (rho<=0) {
-// 			throw std::runtime_error("In DigitalFilterIntegrator Argument rho < 0.");
+// 			throw std::runtime_error("In DigitalFilterIntegratorAnderson Argument rho < 0.");
 // 		}
 //
 // 		if (this->NumConv<1) {
-// 			throw std::runtime_error("In DigitalFilterIntegrator NumConv is less than 1.");
+// 			throw std::runtime_error("In DigitalFilterIntegratorAnderson NumConv is less than 1.");
 // 		}
 //
 // 		if (this->IntKernel == NULL) {
-// 			throw std::runtime_error("In DigitalFilterIntegrator Unset Kernel Calculator");
+// 			throw std::runtime_error("In DigitalFilterIntegratorAnderson Unset Kernel Calculator");
 // 		}
 //
 // 		Arg = VectorXr::Zero(this->NumConv);
@@ -402,7 +428,7 @@ namespace Lemma {
 //
 //
 //     template < >
-// 	void DigitalFilterIntegrator<Complex>::Compute(const Real &rho,
+// 	void DigitalFilterIntegratorAnderson<Complex>::Compute(const Real &rho,
 //             const int& ntol, const Real &tol) {
 //
 // 		Real y1 = this->ABSCISSA/rho;
@@ -411,15 +437,15 @@ namespace Lemma {
 //
 // 		// Check to make sure everything is set
 // 		if (rho<=0) {
-// 			throw std::runtime_error("In DigitalFilterIntegrator Argument rho < 0.");
+// 			throw std::runtime_error("In DigitalFilterIntegratorAnderson Argument rho < 0.");
 // 		}
 //
 // 		if (this->NumConv<1) {
-// 			throw std::runtime_error("In DigitalFilterIntegrator NumConv is less than 1.");
+// 			throw std::runtime_error("In DigitalFilterIntegratorAnderson NumConv is less than 1.");
 // 		}
 //
 // 		if (this->IntKernel == NULL) {
-// 			throw std::runtime_error("In DigitalFilterIntegrator Unset Kernel Calculator");
+// 			throw std::runtime_error("In DigitalFilterIntegratorAnderson Unset Kernel Calculator");
 // 		}
 //
 // 		Arg = VectorXr::Zero(this->NumConv);
@@ -506,13 +532,13 @@ namespace Lemma {
 // 	}
 
     template <typename Scalar>
-    int DigitalFilterIntegrator<Scalar>::GetNumFun() {
+    int DigitalFilterIntegratorAnderson<Scalar>::GetNumFun() {
         return NumFun;
     }
 
     // generic rewrite of store-retreive 'pseudo-subroutine'
     template <typename Scalar>
-    void DigitalFilterIntegrator<Scalar>::StoreRetreive(const int &idx,
+    void DigitalFilterIntegratorAnderson<Scalar>::StoreRetreive(const int &idx,
             const int& lag, const Real& y, Scalar& Sum,
             const int& jrel, Scalar& C) {
 

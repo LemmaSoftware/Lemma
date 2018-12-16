@@ -11,13 +11,13 @@
   @version  $Id: integrationkernel.cpp 193 2014-11-10 23:51:41Z tirons $
  **/
 
-#include "integrationkernel.h"
+#include "IntegrationKernel.h"
 
 namespace Lemma {
 
     template <typename T>
-    IntegrationKernel<T>::IntegrationKernel(const std::string& name) :
-        LemmaObject(name) {
+    IntegrationKernel<T>::IntegrationKernel(const ctor_key& key) :
+        LemmaObject(key) {
     }
 
     template<typename T>

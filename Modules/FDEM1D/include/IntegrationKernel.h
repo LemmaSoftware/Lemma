@@ -7,9 +7,10 @@
 /**
   @file
   @author   Trevor Irons
-  @date     02/07/2011
-  @version  $Id: integrationkernel.h 193 2014-11-10 23:51:41Z tirons $
+  @date     02/07/2011, revisions 13 Dec. 2018
  **/
+
+#pragma once
 
 #ifndef  INTEGRATIONKERNEL_INC
 #define  INTEGRATIONKERNEL_INC
@@ -34,6 +35,11 @@ namespace Lemma {
 
             // ====================  LIFECYCLE     =======================
 
+            /// Default protected constructor.
+            explicit IntegrationKernel (const ctor_key& key);
+
+            /// Default protected constructor.
+            virtual ~IntegrationKernel ();
 
             // ====================  OPERATORS     =======================
 
@@ -55,18 +61,13 @@ namespace Lemma {
 
             // ====================  LIFECYCLE     =======================
 
-            /// Default protected constructor.
-            IntegrationKernel (const std::string& name);
-
-            /// Default protected constructor.
-            ~IntegrationKernel ();
-
             // ====================  DATA MEMBERS  =========================
 
         private:
 
     }; // -----  end of class  IntegrationKernel  -----
 
+/*
     template <typename T>
     IntegrationKernel<T>::IntegrationKernel(const std::string& name) :
         LemmaObject(name) {
@@ -75,6 +76,7 @@ namespace Lemma {
     template<typename T>
     IntegrationKernel<T>::~IntegrationKernel( ) {
     }
+*/
 
 //     template <typename T>
 //     T IntegrationKernel<T>::Argument(const Real& x, const int& iRelated) {
