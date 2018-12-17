@@ -61,7 +61,7 @@ else()
 #    else()
 	    ExternalProject_Add(YAML_CPP
 		GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
-		GIT_TAG "yaml-cpp-0.6.2" # "master" 
+		GIT_TAG "master" # "yaml-cpp-0.6.2" # "master" 
 		UPDATE_COMMAND ""
 		PATCH_COMMAND ""
     	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
