@@ -1246,13 +1246,13 @@ namespace Lemma {
         switch (coordinate) {
             case (0):
                 return this->Location.x();
-                break;
+                //break; // implicit
             case (1):
                 return this->Location.y();
-                break;
+                //break; // implicit
             case (2):
                 return this->Location.z();
-                break;
+                //break; // implicit
             default:
                 throw  NonValidLocationCoordinate( );
         }

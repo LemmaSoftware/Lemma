@@ -67,7 +67,7 @@ namespace Lemma {
 
             // ====================  INQUIRY       =======================
 
-            virtual std::string GetName() {
+            virtual std::string GetName() const {
                 return CName;
             }
 

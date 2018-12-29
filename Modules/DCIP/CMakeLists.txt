@@ -11,7 +11,7 @@ configure_file (
 	"${CMAKE_CURRENT_SOURCE_DIR}/config/DCIPConfig.h.in"
 	"${PROJECT_BINARY_DIR}/include/DCIPConfig.h"
 	)
-install ( FILES  ${PROJECT_BINARY_DIR}/include/EMSchur3DConfig.h   DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma/ )
+install ( FILES  ${PROJECT_BINARY_DIR}/include/DCIPConfig.h   DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma/ )
 
 	add_subdirectory("src")
 	add_library( dcip ${DCIPSOURCE} )  

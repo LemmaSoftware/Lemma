@@ -31,6 +31,8 @@ namespace Lemma {
 	// =======================================================================
 	class GQChave : public HankelTransform {
 
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
 		friend std::ostream &operator<<(std::ostream &stream, const GQChave &ob);
 		public:
 
@@ -187,7 +189,7 @@ namespace Lemma {
  			void Bestrn( Real &BESR, Real &BESI, const int &iorder,
  					const int &NG, const Real &R,
  					const Real &RERR, const Real &AERR, const int &npcs,
- 					VectorXi &XSUM, int &NSUM, int &NEW,
+ 					const VectorXi& XSUM, int &NSUM, int &NEW,
  					int &IERR, int &NCNTRL, const Real &AORB,
 					KernelEM1DBase* Kernel);
 
@@ -242,8 +244,8 @@ namespace Lemma {
 			/// CFCOR,CFCOI ARE REAL AND IMAGINARY VECTORS OF CONTINUED FRACTION
 			/// COEFFICIENTS
 			void CF(        Real& RESR, Real &RESI,
-							Eigen::Matrix<Real, 100, 1> &CFCOR,
-							Eigen::Matrix<Real, 100, 1> &CFCOI,
+							const VectorXr& CFCOR,
+							const VectorXr& CFCOI,
 							const int &N);
 
 
@@ -318,6 +320,7 @@ namespace Lemma {
 			Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>  kern;
 
 			// Was Besval COMMON block
+            /*
 			Eigen::Matrix<Real, 100, 1> Xr;
 			Eigen::Matrix<Real, 100, 1> Xi;
 			Eigen::Matrix<Real, 100, 1> Dr;
@@ -326,11 +329,22 @@ namespace Lemma {
 			Eigen::Matrix<Real, 100, 1> Si;
 			Eigen::Matrix<Real, 100, 1> Cfcor;
 			Eigen::Matrix<Real, 100, 1> Cfcoi;
+			*/
+
 
 		private:
 
+            Eigen::Matrix<Real, Eigen::Dynamic, 1> Xr;
+			Eigen::Matrix<Real, Eigen::Dynamic, 1> Xi;
+			Eigen::Matrix<Real, Eigen::Dynamic, 1> Dr;
+			Eigen::Matrix<Real, Eigen::Dynamic, 1> Di;
+			Eigen::Matrix<Real, Eigen::Dynamic, 1> Sr;
+			Eigen::Matrix<Real, Eigen::Dynamic, 1> Si;
+			Eigen::Matrix<Real, Eigen::Dynamic, 1> Cfcor;
+			Eigen::Matrix<Real, Eigen::Dynamic, 1> Cfcoi;
+
             /** ASCII string representation of the class name */
-            static constexpr auto CName = "FHTKey51";
+            static constexpr auto CName = "GQChave";
 
 	}; // -----  end of class  GQChave  -----
 

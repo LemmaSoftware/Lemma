@@ -267,6 +267,14 @@ namespace Lemma{
     GQChave::GQChave( const ctor_key& key ) : HankelTransform( key ) {
         //karg.resize(255, 100);
         //kern.resize(510, 100);
+        Xr.resize(100);
+        Xi.resize(100);
+        Dr.resize(100);
+        Di.resize(100);
+        Sr.resize(100);
+        Si.resize(100);
+        Cfcor.resize(100);
+        Cfcoi.resize(100);
     }
 
     GQChave::GQChave( const YAML::Node& node, const ctor_key& key ) : HankelTransform(node, key) {
@@ -355,6 +363,8 @@ namespace Lemma{
         //this->karg.setZero();
         //this->kern.setZero();
 
+        //std::cout << "calling Besautn" << std::endl;
+
         Besautn(Besr, Besi, itype, nl, nu, rho, rerr, aerr, npcs, inew, wavef, Kernel);
 
         return Complex(Besr, Besi);
@@ -400,6 +410,7 @@ namespace Lemma{
         int nsum(0);
 
         // Check for Rtud
+        //std::cout << "calling Bestrn" << std::endl;
         Bestrn(besr_1, besi_1, besselOrder, lowerGaussLimit, rho,
                         .1*relativeError, .1*absError,
                         numPieces, xsum, nsum, nw, ierr, ncntrl, aorb, Kernel);
@@ -498,12 +509,14 @@ namespace Lemma{
     /////////////////////////////////////////////////////////////
     void GQChave::
         Bestrn(Real &BESR, Real &BESI, const int &IORDER,
-            const int &NG, const Real &rho,
-            const Real &RERR, const Real &AERR, const int &NPCS,
-            VectorXi &XSUM, int &NSUM, int &NEW,
-            int &IERR, int &NCNTRL, const Real &AORB, KernelEM1DBase* Kernel) {
+            const int& NG, const Real& rho,
+            const Real& RERR, const Real& AERR, const int& NPCS,
+            const VectorXi& XSUM, int& NSUM, int& NEW,
+            int& IERR, int& NCNTRL, const Real& AORB, KernelEM1DBase* Kernel) {
 
-
+        //std::cout << "Bestrn setZero " << NEW << std::endl;
+        //Xr.array() = 0.;
+        //Xi.array() = 0.;
         Xr.setZero();
         Xi.setZero();
         Dr.setZero();
@@ -514,6 +527,7 @@ namespace Lemma{
         Cfcoi.setZero();
         Dr.setZero();
         Di.setZero();
+        //std::cout << "Bestrn wat " << NEW << std::endl;
 
         Dr(0) = (Real)(-1);
 
@@ -587,6 +601,7 @@ namespace Lemma{
                 ++NPB;
             }
         }
+        //std::cout << "Bestrn NEW " << NEW << std::endl;
 
         // ENTRY POINT FOR PADE SUMMATION OF PARTIAL INTEGRANDS
         Real LASTR=0.e0;
@@ -1033,8 +1048,8 @@ namespace Lemma{
 
     /////////////////////////////////////////////////////////////
     void GQChave::CF(Real& RESR, Real &RESI,
-                    Eigen::Matrix<Real, 100, 1> &CFCOR,
-                    Eigen::Matrix<Real, 100, 1> &CFCOI,
+                    const VectorXr& CFCOR,
+                    const VectorXr& CFCOI,
                     const int &N) {
 
         ////////////////////////////////////////////////
@@ -1071,7 +1086,6 @@ namespace Lemma{
 
         Real BETA(0);
         switch (besselOrder) {
-
             case 0:
                 BETA=(nzero-.25e0)*PI;
                 return BETA-ZT1/BETA-ZT2/std::pow(BETA,3) -
@@ -1083,7 +1097,7 @@ namespace Lemma{
             default:
                 throw 77;
         }
-        return 0.;
+        //return 0.;
     }
 
 
