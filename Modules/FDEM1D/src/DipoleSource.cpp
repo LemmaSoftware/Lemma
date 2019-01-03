@@ -770,6 +770,7 @@ namespace Lemma {
     }
 
     void DipoleSource::UpdateFields( const int& ifreq, HankelTransform* Hankel, const Real& wavef) {
+
         Vector3r Pol = Phat;
 
         switch (Type) {
@@ -813,7 +814,7 @@ namespace Lemma {
                                      0. );
                     } // Fields to calculate Z polarity Electric dipole
                 }
-                if (std::abs(Pol[1]) > 0 || std::abs(Pol[0]) > 0) { // y dipole
+                if (std::abs(Pol[1]) > 0 || std::abs(Pol[0]) > 0) { // x or y dipole
                     switch(FieldsToCalculate) {
                         case E:
                             f(2) = Hankel->Zgauss(2, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[2])) * KernelManager->GetRAWKernel(ik[2])->GetZs();
@@ -823,9 +824,9 @@ namespace Lemma {
                             f(4) = Hankel->Zgauss(4, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[4])) / KernelManager->GetRAWKernel(ik[4])->GetYm();
                             if (std::abs(Pol[1]) > 0) {
                                 this->Receivers->AppendEfield(ifreq, irec,
-                                    Pol[1]*QPI*scp*((f(0)-(Real)(2.)*f(1)/rho)+(f(2)-(Real)(2.)*f(3)/rho))*Moment,
-                                    Pol[1]*QPI*((sps*f(0)+c2p*f(1)/rho)-(cps*f(2)-c2p*f(3)/rho))*Moment,
-                                    Pol[1]*QPI*sp*f(4)*Moment);
+                                    Pol[1]*Moment*QPI*scp*((f(0)-(Real)(2.)*f(1)/rho)+(f(2)-(Real)(2.)*f(3)/rho)),
+                                    Pol[1]*Moment*QPI*((sps*f(0)+c2p*f(1)/rho)-(cps*f(2)-c2p*f(3)/rho)),
+                                    Pol[1]*Moment*QPI*sp*f(4));
                             }
                             if (std::abs(Pol[0]) > 0) {
                                 this->Receivers->AppendEfield(ifreq, irec,

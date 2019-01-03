@@ -755,9 +755,12 @@ namespace Lemma {
 
     void EMEarth1D::SolveSingleTxRxPair (const int &irec, HankelTransform *Hankel, const Real &wavef, const int &ifreq,
                    DipoleSource *tDipole) {
-        //std::cout << "SolveSingleTxRxPair" << std::endl;
         ++icalcinner;
+
+        // The PGI compilers fail on the below line, and others like it.
         Real rho = (Receivers->GetLocation(irec).head<2>() - tDipole->GetLocation().head<2>()).norm();
+        //Real rho = ( ((Receivers->GetLocation(irec) - tDipole->GetLocation()).head(2)).eval() ).norm();
+
         tDipole->SetKernels(ifreq, FieldsToCalculate, Receivers, irec, Earth);
         Hankel->ComputeRelated( rho, tDipole->GetKernelManager() );
         tDipole->UpdateFields( ifreq,  Hankel, wavef );

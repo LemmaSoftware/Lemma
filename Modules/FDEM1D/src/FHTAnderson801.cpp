@@ -998,7 +998,8 @@ namespace Lemma {
         // in release.
         #ifndef NDEBUG
 		if (rho<=0) {
-			throw std::runtime_error("In Hankel 2 Argument rho < 0.");
+            //std::cout << "rho= " << rho << std::endl;
+			throw std::runtime_error("In Hankel 2 Argument rho <= 0; rho=" + to_string(rho) );
 		}
 
 		if (this->NumConv<1) {

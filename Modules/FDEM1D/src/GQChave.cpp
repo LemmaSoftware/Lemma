@@ -325,10 +325,9 @@ namespace Lemma{
         return CName;
     }		// -----  end of method GQChave::GetName  -----
 
-    Complex GQChave::
-            Zgauss(const int &ikk, const EMMODE &mode,
-                    const int &itype, const Real &rho, const Real &wavef,
-                    KernelEM1DBase* Kernel){
+    Complex GQChave::Zgauss(const int &ikk, const EMMODE &mode,
+            const int &itype, const Real &rho, const Real &wavef,
+            KernelEM1DBase* Kernel){
 
         // TI, TODO, change calls to Zgauss to reflect this, go and fix so we
         // dont subract 1 from this everywhere

@@ -45,7 +45,7 @@ int main() {
 		dipole->SetFrequency(0, 4400.1000);
 		//dipole->SetPhase(0);
 		//dipole->SetLocation( (VectorXr(3) << 49, 49, -1e-4).finished() );
-		dipole->SetLocation( 49, 49, -1e-4  );
+		dipole->SetLocation( 0, 0, -1e-4  );
 
 
 	// Define model
@@ -74,6 +74,7 @@ int main() {
 		int ir = 0;
 		for (int iz=0; iz<nz; ++iz) {
 			loc << ox, oy, depth;
+            std::cout << "Receiver location " << loc.transpose() << std::endl;
 			receivers->SetLocation(ir, loc);
 			depth += dz;
 			++ ir;
@@ -113,7 +114,7 @@ int main() {
 
  #ifdef KIHALEE_EM1D
 	receivers->ClearFields();
-    std::cout << "\nFORTRAN\n";
+    std::cout << "\nFORTRAN KiHa\n";
  	EmEarth->MakeCalc();
     auto fc = receivers->GetEfield(0,0);
 // 	std::cout << receivers->GetHfield(0,0) << std::endl;
