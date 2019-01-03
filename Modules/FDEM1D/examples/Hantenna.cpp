@@ -213,6 +213,14 @@ const char *buildString = __DATE__ ", " __TIME__;
     }
     hreal.close();
     // Clean up
+
+    // report timings
+    #ifdef LEMMAUSEOMP
+    std::ofstream outfile;
+    outfile.open("timings.csv", std::ios_base::app);
+    outfile << compiler << "," << ver << "," <<  buildString << "," << config[0] << "," <<  omp_get_max_threads() << "," << paTime/60. << "\n";
+    #endif
+
 }
 
 std::vector<Real>  readinpfile(const std::string& fname) {

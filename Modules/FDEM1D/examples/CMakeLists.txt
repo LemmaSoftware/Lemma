@@ -41,3 +41,4 @@ INSTALL_TARGETS( "/share/FDEM1D/"
 )
 
 install (DIRECTORY inp  DESTINATION "${CMAKE_INSTALL_PREFIX}/share/FDEM1D/" )
+install (FILES  Bench.sh plottimings.py  DESTINATION "${CMAKE_INSTALL_PREFIX}/share/FDEM1D/" )

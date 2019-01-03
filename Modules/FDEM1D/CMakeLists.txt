@@ -15,7 +15,13 @@ target_link_libraries(fdem1d "lemmacore")
 
 if ( KIHA_EM1D )
 	target_link_libraries(fdem1d "kihaem1d")
-	target_link_libraries(fdem1d "gfortran")
+	if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  		# using GCC
+		target_link_libraries(fdem1d "gfortran")
+	elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+  		# using Intel C++
+		target_link_libraries(fdem1d "ifcore" "imf" "svml" "intlc")
+	endif()
 endif()
 
 # Testing

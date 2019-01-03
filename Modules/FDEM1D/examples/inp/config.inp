@@ -1,9 +1,9 @@
 // Hankel Transform type uncomment desired
-//FHTKEY51       // Key's   51 point FHT
+FHTKEY51       // Key's   51 point FHT
 //FHTKEY101      // Key's  101 point FHT
 //FHTKEY201      // Key's  201 point FHT
 //FHTKONG61      // Kong's  61 point FHT
-FHTKONG121     // Kong's 121 point FHT
+//FHTKONG121     // Kong's 121 point FHT
 //FHTKONG241	 // Kong's 241 point FHT
 //ANDERSON801    // Anderson's 801 Point FHT, with lagged convolution
 //CHAVE          // Chave's Gaussian Quadrature
