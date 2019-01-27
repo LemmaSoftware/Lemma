@@ -65,5 +65,8 @@ leg = plt.legend()
 deSpine(plt.gca())
 fixLeg(leg)
 
+plt.gca().set_xlabel("OMP_NUM_THREADS")
+plt.gca().set_ylabel("execution time (s)")
+
 plt.savefig("timings.png")
 plt.show()

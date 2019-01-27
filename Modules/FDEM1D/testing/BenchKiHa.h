@@ -59,15 +59,15 @@ public:
 		dipole->SetLocation( 0, 0, -1e-4  );
 
 	    // Define model
-	    VectorXcr sigma(2);
-		sigma << 0., 1e-3;//, .1;//, .01, .001;
-	    VectorXr  thick(1);
-		thick << 10;//, 10, 10;
+	    VectorXcr sigma(8);
+		sigma << 0., 1e-2, .1, .01, .001, .1, .05, .2;
+	    VectorXr  thick(6);
+		thick << 10, 10, 10, 10, 10;
 
 	    earth = LayeredEarthEM::NewSP();
-        earth->SetNumberOfLayers(2);
+        earth->SetNumberOfLayers(8);
 		earth->SetLayerConductivity(sigma);
-		//earth->SetLayerThickness(thick);
+		earth->SetLayerThickness(thick);
 
 	    receivers = FieldPoints::NewSP();
 		Vector3r loc;

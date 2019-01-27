@@ -197,14 +197,14 @@ const char *buildString = __DATE__ ", " __TIME__;
     //hreal << *earth << std::endl;
 
     hreal << "// Right hand coordinate system, z is positive down\n";
-    hreal << "// x[m]\ty[m]\tz[m]\tHx[A/m]\tHy[A/m]\tHz[A/m]\n";
+    hreal << "// x[m]\ty[m]\tz[m]\tRe(Hx[A/m])\tRe(Hy[A/m])\tRe(Hz[A/m])\tIm(Hx)\tIm(Hy)\tIm(Hz)\n";
     hreal.precision(8);
     int i=0;
 	for (int iz=0; iz<nz; ++iz) {
 	for (int iy=0; iy<ny; ++iy) {
 	for (int ix=0; ix<nx; ++ix) {
         hreal << receivers->GetLocation(i).transpose() << "\t";
- 		//hreal << receivers->GetHfield(0, i).transpose() << "\n"; ( complex, notation )
+ 		//hreal << receivers->GetHfield(0, i).transpose() << "\n"; // ( complex, notation )
  		hreal << receivers->GetHfield(0, i).transpose().real() << "\t";
  		hreal << receivers->GetHfield(0, i).transpose().imag() << "\n";
         ++i;

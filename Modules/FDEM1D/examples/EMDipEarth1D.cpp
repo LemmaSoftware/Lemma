@@ -45,7 +45,7 @@ int main() {
 		dipole->SetFrequency(0, 4400.1000);
 		//dipole->SetPhase(0);
 		//dipole->SetLocation( (VectorXr(3) << 49, 49, -1e-4).finished() );
-		dipole->SetLocation( 0, 0, -1e-4  );
+		dipole->SetLocation( 49, 49, -1e-4  );
 
 
 	// Define model
@@ -74,7 +74,7 @@ int main() {
 		int ir = 0;
 		for (int iz=0; iz<nz; ++iz) {
 			loc << ox, oy, depth;
-            std::cout << "Receiver location " << loc.transpose() << std::endl;
+            //std::cout << "Receiver location " << loc.transpose() << std::endl;
 			receivers->SetLocation(ir, loc);
 			depth += dz;
 			++ ir;
@@ -93,6 +93,8 @@ int main() {
 //         //for
 // 	    receivers->SetLocation(0, ox, oy, depth);
 
+    std::cout << "Dipole location " << dipole->GetLocation( ).transpose() << "\n";
+    std::cout << "Receiver location " << receivers->GetLocation(0).transpose() << "\n";
 
 	std::cout << "C++\n";
 	EmEarth->MakeCalc3();
