@@ -9,8 +9,8 @@ SET_PROPERTY(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
 ####################################################################################################
 # Lemma versioning, set Major, minor, and patch here                                               #
 set(LEMMA_VERSION_MAJOR "0")                                                                       #
-set(LEMMA_VERSION_MINOR "2")                                                                       #
-set(LEMMA_VERSION_PATCH "3")                                                                       #
+set(LEMMA_VERSION_MINOR "3")                                                                       #
+set(LEMMA_VERSION_PATCH "0")                                                                       #
 set(LEMMA_VERSION "\"${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}\"")      #
 set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}") #
 ####################################################################################################
@@ -51,8 +51,7 @@ option ( LEMMA_BUILD_EXAMPLES       "Compile example Lemma applications" OFF )
 option ( LEMMA_USE_OPENMP           "Use OpenMP in Lemma" OFF )
 option ( LEMMA_BUILD_DOCUMENTATION  "Build Doxygen man pages" OFF )
 
-option (LEMMA_VTK6_SUPPORT "VTK 6.x library for visualisation and grids" OFF)
-option (LEMMA_VTK7_SUPPORT "VTK 7.x library for visualisation and grids" OFF)
+#option (LEMMA_VTK7_SUPPORT "VTK 7.x library for visualisation and grids" OFF)
 option (LEMMA_VTK8_SUPPORT "VTK 8.x library for visualisation and grids" OFF)
 
 #option (CMAKE_CROSSCOMPILING "Target different arch than you are on" OFF)
@@ -185,54 +184,38 @@ endif()
 ###################
 
 # We don't build VTK, it is too heavy.
-
-if ( LEMMA_VTK6_SUPPORT ) 
-	#find_package(VTK 6 REQUIRED NO_MODULE)
-	find_package(VTK 6.0 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
-			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkInteractionStyle 
-			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL NO_MODULE)
-	set(volumeRenderer volumerenderer.cxx)
-	include(${VTK_USE_FILE}) 
-	add_compile_options(-DLEMMAUSEVTK) 
-	# Compile Matplot_vtk if VTK is present
-	#add_subdirectory(Matplot_vtk)	
-	#include_directories ("${PROJECT_SOURCE_DIR}/Matplot_vtk")
-endif()
-
-
-if ( LEMMA_VTK7_SUPPORT ) 
-	#find_package(VTK 7 REQUIRED NO_MODULE)
-	find_package(VTK 7.0 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
-			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkInteractionStyle 
-			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
-	set(volumeRenderer volumerenderer.cxx)
-	if (VTK_FOUND)
-		message(STATUS "VTK 7 was found! ") 
-	        include(${VTK_USE_FILE}) 
-		#add_compile_options(-DLEMMAUSEVTK)
-		#target_compile_definitions( lemmacore PRIVATE LEMMAUSEVTK=1 )
-		add_definitions(-DLEMMAUSEVTK) 
-	else()
-		ExternalProject_Add(VTK
-  		GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
-		GIT_TAG  "v7.1.1"
-    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/vtk7
-  		CMAKE_ARGS
-   	        -DBUILD_SHARED_LIBS:BOOL=ON
-	        -DBUILD_EXAMPLES:BOOL=OFF
-	        -DBUILD_TESTING:BOOL=OFF
-		    -DVTK_Group_Web:BOOL=OFF
-	        -DModule_vtkImagingMath:BOOL=ON
-	  	    LOG_DOWNLOAD 0
-	  	    LOG_UPDATE 0
-		)
-	endif()
-endif()
-
+#if ( LEMMA_VTK7_SUPPORT ) 
+#	#find_package(VTK 7 REQUIRED NO_MODULE)
+#	find_package(VTK 7.0 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
+#			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkIOGeometry vtkInteractionStyle 
+#			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
+#	set(volumeRenderer volumerenderer.cxx)
+#	if (VTK_FOUND)
+#		message(STATUS "VTK 7 was found! ") 
+#	        include(${VTK_USE_FILE}) 
+#		#add_compile_options(-DLEMMAUSEVTK)
+#		#target_compile_definitions( lemmacore PRIVATE LEMMAUSEVTK=1 )
+#		add_definitions(-DLEMMAUSEVTK) 
+#	else()
+#		ExternalProject_Add(VTK
+#  		GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
+#		GIT_TAG  "v7.1.1"
+#    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/vtk7
+#  		CMAKE_ARGS
+#  	        -DBUILD_SHARED_LIBS:BOOL=ON
+#	        -DBUILD_EXAMPLES:BOOL=OFF
+#	        -DBUILD_TESTING:BOOL=OFF
+#		    -DVTK_Group_Web:BOOL=OFF
+#	        -DModule_vtkImagingMath:BOOL=ON
+#	  	    LOG_DOWNLOAD 0
+#	  	    LOG_UPDATE 0
+#		)
+#	endif()
+#endif()
 
 if ( LEMMA_VTK8_SUPPORT ) 
 	find_package(VTK 8.0 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
-			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkInteractionStyle 
+			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkIOGeometry vtkInteractionStyle 
 			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
 	if (VTK_FOUND)
 		message(STATUS "VTK 8 was found! ") 

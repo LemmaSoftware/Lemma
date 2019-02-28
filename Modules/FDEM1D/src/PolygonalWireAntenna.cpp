@@ -8,7 +8,6 @@
   @file
   @author   Trevor Irons
   @date     05/18/2010
-  @version  $Id: PolygonalWireAntenna.cpp 211 2015-02-27 05:43:26Z tirons $
  **/
 
 #include "PolygonalWireAntenna.h"

@@ -28,7 +28,7 @@ namespace Lemma {
     // ===================================================================
     class PolygonalWireAntenna : public WireAntenna {
 
-        friend std::ostream &operator<<(std::ostream &stream, const PolygonalWireAntenna &ob);
+        friend std::ostream &operator << (std::ostream &stream, const PolygonalWireAntenna &ob);
 
         public:
 
