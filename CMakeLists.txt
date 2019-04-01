@@ -214,18 +214,21 @@ endif()
 #endif()
 
 if ( LEMMA_VTK8_SUPPORT ) 
-	find_package(VTK 8.0 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
+	find_package(VTK 8.2 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
 			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkIOGeometry vtkInteractionStyle 
 			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
+	#find_package(VTK 8 NO_MODULE) 
+			#vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkIOGeometry vtkInteractionStyle 
+			#vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
 	if (VTK_FOUND)
-		message(STATUS "VTK 8 was found! ") 
+		message(STATUS "VTK 8 was found! " ${VTK_VERSION}, ${VTK_USE_FILE} ) 
 		set(volumeRenderer volumerenderer.cxx)
-	    include(${VTK_USE_FILE}) 
+	    #include(${VTK_USE_FILE}) 
 	else()
 		message( STATUS "External build of VTK 8 has been added, this may take some time to build." )
 		ExternalProject_Add(VTK8
   		GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
-		GIT_TAG  "v8.1.0"
+		GIT_TAG  "v8.2.0"
     	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/vtk8
   		CMAKE_ARGS 
     	    -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 

@@ -144,6 +144,7 @@ namespace Lemma {
     // Default mode definitions
     template<EMMODE Mode, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
     void KernelEM1DReflSpec<Mode, Isource, Irecv>::ComputeReflectionCoeffs(const Real& lambda) {
+
         static bool called = false;
         if (!called) {
             std::cout << "unspecialised Reflection function KernelEM1DReflSpec<"
@@ -153,6 +154,7 @@ namespace Lemma {
         }
 
         rams = lambda*lambda;
+
         //////////////////////////////////////////
         // Compute TEM stuff
 

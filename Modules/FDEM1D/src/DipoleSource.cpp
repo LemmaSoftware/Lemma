@@ -223,15 +223,12 @@ namespace Lemma {
 
         switch (pol) {
             case (XPOLARISATION):
-                //this->Polarisation = pol;
                 this->Phat = (VectorXr(3) << 1, 0, 0).finished();
                 break;
             case (YPOLARISATION):
-                //this->Polarisation = pol;
                 this->Phat = (VectorXr(3) << 0, 1, 0).finished();
                 break;
             case (ZPOLARISATION):
-                //this->Polarisation = pol;
                 this->Phat = (VectorXr(3) << 0, 0, 1).finished();
                 break;
             default:
@@ -784,7 +781,6 @@ namespace Lemma {
                         case E:
                             f(10) = Hankel->Zgauss(10, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[10])) / KernelManager->GetRAWKernel(ik[10])->GetYm();
                             f(11) = Hankel->Zgauss(11, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[11])) / KernelManager->GetRAWKernel(ik[11])->GetYm();
-                            std::cout.precision(12);
                             this->Receivers->AppendEfield(ifreq, irec,
                                 -Pol[2]*QPI*cp*f(10)*Moment,
                                 -Pol[2]*QPI*sp*f(10)*Moment,

@@ -1228,6 +1228,7 @@ namespace Lemma {
         return pot/ReflCalc->uk;
 
     }
+
     template<EMMODE Mode, int Ikernel, DIPOLE_LOCATION Isource, DIPOLE_LOCATION Irecv>
     int KernelEM1DSpec<Mode, Ikernel, Isource, Irecv>::GetBesselOrder( ) {
         std::cerr << "Calling base GetBesselOrder in KernelEM1DSpec < " << Mode
@@ -1449,12 +1450,15 @@ namespace Lemma {
                         ((Real)(2.)*ReflCalc->LayerDepth(ReflCalc->nlay-2)-ReflCalc->rx_z-ReflCalc->tx_z));
             } else {
                 con = ReflCalc->rtu(ReflCalc->lays)*(SS_SN(ReflCalc->id-1,0)*
-                    std::exp(ReflCalc->uk*((Real)(2.)*ReflCalc->LayerDepth(ReflCalc->lays-1) -
-                                    ReflCalc->rx_z-ReflCalc->tx_z)) + SS_SN(ReflCalc->id-1, 1)*ReflCalc->rtd(ReflCalc->lays) *
-                        std::exp(ReflCalc->uk*(ReflCalc->tx_z-ReflCalc->rx_z-(Real)(2.)* ReflCalc->LayerThickness(ReflCalc->lays)))) +
-                    ReflCalc->rtd(ReflCalc->lays)*(SS_SN(ReflCalc->id-1, 2)* std::exp(ReflCalc->uk*(ReflCalc->rx_z+ReflCalc->tx_z-(Real)(2.) *
-                        ReflCalc->LayerDepth(ReflCalc->lays))) + SS_SN(ReflCalc->id-1, 3)*ReflCalc->rtu(ReflCalc->lays) *
-                    std::exp(ReflCalc->uk*(ReflCalc->rx_z-ReflCalc->tx_z-(Real)(2.) * ReflCalc->LayerThickness(ReflCalc->lays)))) ;
+                    std::exp(ReflCalc->uk*((Real)(2.)*ReflCalc->LayerDepth(ReflCalc->lays-1)-ReflCalc->rx_z-ReflCalc->tx_z))
+                    + SS_SN(ReflCalc->id-1, 1)*ReflCalc->rtd(ReflCalc->lays)
+                    * std::exp(ReflCalc->uk*(ReflCalc->tx_z-ReflCalc->rx_z-(Real)(2.)* ReflCalc->LayerThickness(ReflCalc->lays))))
+                    + ReflCalc->rtd(ReflCalc->lays)
+                    * ( SS_SN(ReflCalc->id-1, 2)
+                        * std::exp(ReflCalc->uk*(ReflCalc->rx_z+ReflCalc->tx_z-(Real)(2.) * ReflCalc->LayerDepth(ReflCalc->lays)))
+                        + SS_SN(ReflCalc->id-1, 3)*ReflCalc->rtu(ReflCalc->lays)
+                        * std::exp(ReflCalc->uk*(ReflCalc->rx_z-ReflCalc->tx_z-(Real)(2.) * ReflCalc->LayerThickness(ReflCalc->lays)))
+                      ) ;
                 con /= ((Real)(1.)-ReflCalc->rtu(ReflCalc->lays)*ReflCalc->rtd(ReflCalc->lays)*ReflCalc->cf(ReflCalc->lays)) ;
             }
         }
