@@ -10,7 +10,7 @@ SET_PROPERTY(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
 # Lemma versioning, set Major, minor, and patch here                                               #
 set(LEMMA_VERSION_MAJOR "0")                                                                       #
 set(LEMMA_VERSION_MINOR "3")                                                                       #
-set(LEMMA_VERSION_PATCH "0")                                                                       #
+set(LEMMA_VERSION_PATCH "1")                                                                       #
 set(LEMMA_VERSION "\"${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}\"")      #
 set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}") #
 ####################################################################################################
@@ -23,13 +23,6 @@ set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMM
 
 ## Options--what do you want to do
 option ( BUILD_SHARED_LIBS      "Shared or static libraries"  OFF )
-
-# Disallow in-source build
-#if ("${Lemma_SOURCE_DIR}"  STREQUAL "${Lemma_BINARY_DIR}")
-#  message(FATAL_ERROR
-#    "ParaView requires an out of source Build. "
-#    "Please create a separate binary directory and run CMake there.")
-#endif()
 
 #------------------------------------------------------------------------------
 # Set a default build type if none was specified
@@ -45,22 +38,16 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   )
 endif()
 
-# If CMAKE_BUILD_TYPE is not specified, assume Release. 
-#IF( NOT CMAKE_BUILD_TYPE )
-#   SET( CMAKE_BUILD_TYPE Release ... FORCE )
-#ENDIF()
-
 option ( LEMMA_ENABLE_TESTING       "Turn on unit testing" OFF )
 option ( LEMMA_BUILD_EXAMPLES       "Compile example Lemma applications" OFF )
 option ( LEMMA_USE_OPENMP           "Use OpenMP in Lemma" OFF )
 option ( LEMMA_BUILD_DOCUMENTATION  "Build Doxygen man pages" OFF )
+option ( LEMMA_VTK8_SUPPORT         "VTK 8.x library for visualisation and grids" OFF)
 
-option (LEMMA_VTK8_SUPPORT "VTK 8.x library for visualisation and grids" OFF)
-
+# We end up using this for all builds, TODO remove this variable but follow same path
 #option (CMAKE_CROSSCOMPILING "Target different arch than you are on" OFF)
 
 SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/CMake/ )
-#message( STATUS "MODULE PATH ${CMAKE_MODULE_PATH}" )
 
 SET (CMAKE_CROSSCOMPILING TRUE)
 
@@ -69,35 +56,26 @@ SET (CMAKE_CROSSCOMPILING TRUE)
 ########################################################################################## 
 
 if (CMAKE_CROSSCOMPILING)
-    message ( STATUS "Performing SuperBuild") #, Only searching in install directory for components." )
-    # Kind of hack-ish, CMake doesn't always find this. It's buried in Cross compilation, so, 
-    # hopefully anyone doing this can problem solve. 
-    #    SET( CMAKE_PREFIX_PATH ${CMAKE_INSTALL_PREFIX}/CMake ${CMAKE_INSTALL_PREFIX}/share/eigen3 )
-
-    #    SET( CMAKE_MODULE_PATH ${CMAKE_INSTALL_PREFIX} )
-    #    SET( CMAKE_FIND_ROOT_PATH ONLY ${CMAKE_INSTALL_PREFIX} )
-    #    SET( CMAKE_FIND_ROOT_PATH_MODE_LIBRARY  ONLY ) 
-    #    SET( CMAKE_FIND_ROOT_PATH_MODE_INCLUDE  ONLY ) 
-    #    SET( CMAKE_FIND_ROOT_PATH_MODE_PACKAGE  ONLY )
-
-    #    UNSET( Eigen3_DIR CACHE ) 
-    #    UNSET( yaml-cpp_DIR CACHE ) 
-    #    UNSET( Eigen3_FOUND CACHE ) 
-    #    UNSET( yaml-cpp_FOUND CACHE ) 
-
-    #message( STATUS "........Looking for yaml-cpp in ${CMAKE_INSTALL_PREFIX}" )
-    project (CHECKSUPERBUILD CXX)
+    message ( STATUS "Performing SuperBuild") 
+    project (CHECKSUPERBUILD CXX) # Necessary for VTK query 
     find_package (yaml-cpp 0.6 PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH ) # Serialisation of classes 
     find_package (Eigen3   3.3 PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH ) # Matrix/Vector & Math
-    find_package (VTK      8.2.0 EXACT PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH ) # Visualization 
-    #message( STATUS "yaml-cpp include dir ${YAML_CPP_INCLUDE_DIR}" )
+    if (LEMMA_VTK8_SUPPORT)
+        find_package (VTK      8.2.0 EXACT PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH ) # Visualization 
+    endif()
 else()
     find_package (Eigen3   3.3 QUIET )  # Matrix/Vector & Math
     find_package (yaml-cpp 0.6 QUIET )  # Serialisation of classes 
-    find_package (VTK      8.2 QUIET )  # Visualization 
+    if (LEMMA_VTK8_SUPPORT)
+        find_package (VTK      8.2 QUIET )  # Visualization 
+    endif()
 endif()
 
 INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
+if (VTK_FOUND)
+    set(volumeRenderer volumerenderer.cxx)
+	add_definitions(-DLEMMAUSEVTK) 
+endif()
 
 if (LEMMA_BUILD_DOCUMENTATION)
     find_package(Doxygen REQUIRED)
@@ -177,58 +155,6 @@ if(BUILD_SHARED_LIBS)
 else()
 	set(LABEL_SUFFIX "static")
 endif()
-
-#if(NOT CMAKE_BUILD_TYPE)
-#   set(CMAKE_BUILD_TYPE "Release" CACHE STRING
-#       "Choose the type of build, options are: Debug Release
-#        RelWithDebInfo MinSizeRel."
-#       FORCE)
-#endif(NOT CMAKE_BUILD_TYPE)
-
-###################
-# External Projects
-###################
-
-#if ( LEMMA_VTK8_SUPPORT ) 
-#	find_package(VTK 8) 
-#	find_package(VTK 8.9 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
-#			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkIOGeometry vtkInteractionStyle 
-#			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
-	#find_package(VTK 8 NO_MODULE) 
-			#vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkIOGeometry vtkInteractionStyle 
-			#vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
-    #if ( ${VTK_MINOR_VERSION} != 2 )
-	#	message(FATAL_ERROR "VTK 8 was found! " ${VTK_VERSION}, ${VTK_MINOR_VERSION}, ${VTK_USE_FILE} ) 
-    #endif()
-#    if (VTK_VERSION VERSION_GREATER "8.20.0")
-#		message( AUTHOR_WARNING  "VTK > 8.20.0 was found! " ${VTK_VERSION}, ${VTK_MINOR_VERSION}, ${VTK_USE_FILE} ) 
-#    endif()
-#	if (VTK_FOUND)
-#		#message(STATUS "VTK 8 was found! " ${VTK_VERSION}, ${VTK_USE_FILE} ) 
-#		message(STATUS "VTK 8 was found! " ${VTK_VERSION}, ${VTK_MINOR_VERSION}, ${VTK_USE_FILE} ) 
-#		set(volumeRenderer volumerenderer.cxx)
-#	    #include(${VTK_USE_FILE}) 
-#	else()
-#		message( STATUS "External build of VTK 8 has been added, this may take some time to build." )
-#		ExternalProject_Add(VTK8
-#  		GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
-#		GIT_TAG  "v8.2.0"
-#    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/vtk8
-#  		CMAKE_ARGS 
-#    	    -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
-#            -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
-#            -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} /
-#   	        -DBUILD_SHARED_LIBS:BOOL=ON /
-#	        -DBUILD_EXAMPLES:BOOL=OFF /
-#	        -DBUILD_TESTING:BOOL=OFF /
-#		    -DVTK_Group_Web:BOOL=OFF /
-#	        -DModule_vtkImagingMath:BOOL=ON /
-#	  	    LOG_DOWNLOAD 0 /
-#	  	    LOG_UPDATE 0
-#		)
-#	endif()
-#	add_definitions(-DLEMMAUSEVTK) 
-#endif()
 
 #######################
 # Lemma Configuration #
