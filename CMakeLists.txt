@@ -60,18 +60,56 @@ if (CMAKE_CROSSCOMPILING)
     project (CHECKSUPERBUILD CXX) # Necessary for VTK query 
     find_package (yaml-cpp 0.6         PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Serialisation of classes 
     find_package (Eigen3   3.3         PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Matrix/Vector & Math
-    if (LEMMA_VTK8_SUPPORT)
-        find_package (VTK  8.2.0 EXACT PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Visualization 
+    if (LEMMA_VTK8_SUPPORT)                                                            # Visualisation 
+        find_package (VTK  8.2.0       PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH 
+        COMPONENTS 
+        vtkCommonCore 
+        vtkRenderingCore 
+        vtkFiltersCore 
+        vtkFiltersSources 
+        vtkCommonDataModel 
+        vtkFiltersHyperTree 
+        vtkIOXML 
+        vtkIOImage 
+        vtkIOLegacy 
+        vtkIOGeometry 
+        vtkInteractionStyle 
+        vtkRenderingAnnotation 
+        vtkFiltersHybrid 
+        vtkFiltersModeling 
+        vtkRenderingVolumeOpenGL2
+        QUIET 
+        ) 
     endif()
 else()
     find_package (Eigen3   3.3 QUIET )  # Matrix/Vector & Math
     find_package (yaml-cpp 0.6 QUIET )  # Serialisation of classes 
     if (LEMMA_VTK8_SUPPORT)
-        find_package (VTK  8.2 QUIET )  # Visualization 
+        find_package (VTK  8.2 COMPONENTS
+        vtkCommonCore 
+        vtkRenderingCore 
+        vtkFiltersCore 
+        vtkFiltersSources 
+        vtkCommonDataModel 
+        vtkFiltersHyperTree 
+        vtkIOXML 
+        vtkIOImage 
+        vtkIOLegacy 
+        vtkIOGeometry 
+        vtkInteractionStyle 
+        vtkRenderingAnnotation 
+        vtkFiltersHybrid 
+        vtkFiltersModeling 
+        vtkRenderingVolumeOpenGL2 
+        QUIET )  
     endif()
 endif()
 
 INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
+if (VTK_VERSION VERSION_GREATER "8.2.0")
+    message( STATUS "${VTK_VERSION} is compatible??  ${VTK_VERSION_COMPATIBLE}")
+    set (VTK_FOUND False) 
+endif()
 if (VTK_FOUND)
     set(volumeRenderer volumerenderer.cxx)
 	add_definitions(-DLEMMAUSEVTK) 

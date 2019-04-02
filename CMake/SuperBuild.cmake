@@ -38,20 +38,8 @@ else()
 endif()
 
 if ( LEMMA_VTK8_SUPPORT )
-    find_package(VTK 8)
-#   find_package(VTK 8.9 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
-#           vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkIOGeometry vtkInteractionStyle 
-#           vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
-    #find_package(VTK 8 NO_MODULE) 
-            #vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkIOGeometry vtkInteractionStyle 
-            #vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
     if ( NOT VTK_FOUND OR  VTK_VERSION VERSION_GREATER "8.2.0" )
-        #message(FATAL_ERROR "VTK 8 was found, but the wrong one! " ${VTK_VERSION}, ${VTK_MINOR_VERSION}, ${VTK_USE_FILE} ) 
-        #endif()
-        #if ( VTK_VERSION VERSION_GREATER "8.20.0" ) # or VTK_DIR-NOTFOUND)
-        #message( AUTHOR_WARNING  "VTK > 8.20.0 was found! " ${VTK_VERSION}, ${VTK_MINOR_VERSION}, ${VTK_USE_FILE} )
-        #message( FATAL_ERROR  "VTK > 8.20.0 was found! Version found: " ${VTK_VERSION}, ${VTK_USE_FILE} )
-        message( STATUS  "VTK > 8.20.0 was found! Version found: " ${VTK_VERSION}, ${VTK_USE_FILE} )
+        message( STATUS "VTK > 8.20.0 was found! Version found: " ${VTK_VERSION}, ${VTK_USE_FILE} )
         message( STATUS "External build of VTK 8 has been added, this may take some time to build." )
         ExternalProject_Add(VTK8
         GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
