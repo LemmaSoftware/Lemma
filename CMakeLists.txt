@@ -60,8 +60,9 @@ if (CMAKE_CROSSCOMPILING)
     project (CHECKSUPERBUILD CXX) # Necessary for VTK query 
     find_package (yaml-cpp 0.6         PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Serialisation of classes 
     find_package (Eigen3   3.3         PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Matrix/Vector & Math
+#${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH 
     if (LEMMA_VTK8_SUPPORT)                                                            # Visualisation 
-        find_package (VTK  8.2.0       PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH 
+        find_package (VTK  8.2        
         COMPONENTS 
         vtkCommonCore 
         vtkRenderingCore 
@@ -78,7 +79,7 @@ if (CMAKE_CROSSCOMPILING)
         vtkFiltersHybrid 
         vtkFiltersModeling 
         vtkRenderingVolumeOpenGL2
-        QUIET 
+        QUIET
         ) 
     endif()
 else()
@@ -107,8 +108,8 @@ endif()
 
 INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
 if (VTK_VERSION VERSION_GREATER "8.2.0")
-    message( STATUS "${VTK_VERSION} is compatible??  ${VTK_VERSION_COMPATIBLE}")
-    set (VTK_FOUND False) 
+    message( STATUS "${VTK_VERSION} is compatible: ${VTK_VERSION_COMPATIBLE}" )
+    #set (VTK_FOUND False) 
 endif()
 if (VTK_FOUND)
     set(volumeRenderer volumerenderer.cxx)
