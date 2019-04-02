@@ -1,6 +1,5 @@
-include(ExternalProject)
-
 project (SuperBuild CXX C)
+include(ExternalProject)
 
 if (Eigen3_FOUND)
     message( STATUS "Eigen was found ${eigen_DIR}" )
@@ -16,65 +15,72 @@ else()
 		#BUILD_COMMAND     ""
 		#INSTALL_COMMAND     ""
     )
-    #message("Source dir of myExtProj = ${SOURCE_DIR}")   
-    #ExternalProject_Get_property(EIGEN SOURCE_DIR)
-    #message("Source dir of myExtProj = ${SOURCE_DIR}")   
- 
-    # Are these necessary?
-    #include_directories ("${CMAKE_INSTALL_PREFIX}/include/eigen3/")
-    #set (Eigen3_DIR  "${CMAKE_INSTALL_PREFIX}/include/eigen3" CACHE  PATH "" FORCE )
-    
-    #find_package (Eigen3 3.3 NO_MODULE REQUIRED)
-    #if (eigen3_FOUND)
-    #    message( STATUS "Eigen was found!!!!!!!!!!!!!! ${eigen_DIR}" )
-    #endif()
 endif()
-
 
 if (yaml-cpp_FOUND)
     message( STATUS "YAML-CPP was found ${yaml-cpp_FOUND}" )
-    #message( STATUS "YAML-CPP PATH ${yaml-cpp_PATH}" )
-    #message( STATUS "YAML-CPP DIR ${yaml-cpp_DIR}" )
-    #message( STATUS "YAML-CPP INCLUDE DIR ${yaml-cpp_INCLUDE_DIR}" )
-    #message( STATUS "YAML-CPP LIBRARIES ${YAML_CPP_LIBRARIES}" )
-    #message( STATUS "YAML-CPP LIBRARY ${yaml-cpp_LIBRARY}" )
 else()
     message( STATUS "YAML-CPP WAS NOT FOUND, BUILDING" )
-    message( STATUS "CMAKE BUILD TYPE ${CMAKE_BUILD_TYPE}" )
-    message( STATUS "CMAKE CXX COMPILER ${CMAKE_CXX_COMPILER}" )
-#    if ( ${CMAKE_C_COMPILER} )
-#        message( STATUS "Compiling Yaml with Cxx COMPILER ${CMAKE_CXX_COMPILER}" )
-#	    ExternalProject_Add(YAML_CPP
-#		GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
-#		GIT_TAG   "yaml-cpp-0.6.1" # "master" 
-#		UPDATE_COMMAND ""
-#		PATCH_COMMAND ""
-#    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
-#    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
-#                   -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
-#                   -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} 
-#    	           -DYAML_CPP_BUILD_TESTS=OFF
-#                   -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
-#                   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} 
-#                   -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} 
-#        )
-#    else()
-	    ExternalProject_Add(YAML_CPP
-		GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
-		GIT_TAG "master" # "yaml-cpp-0.6.2" # "master" 
-		UPDATE_COMMAND ""
-		PATCH_COMMAND ""
-    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
-    	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
+    ExternalProject_Add(YAML_CPP
+        GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
+        GIT_TAG "master" # "yaml-cpp-0.6.2" # "master" 
+        UPDATE_COMMAND ""
+        PATCH_COMMAND ""
+        PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
                    -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} 
     	           -DYAML_CPP_BUILD_TESTS=OFF
                    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
                    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} 
                    -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} 
-        )
-#    endif()
+    )
 endif()
+
+if ( LEMMA_VTK8_SUPPORT )
+    find_package(VTK 8)
+#   find_package(VTK 8.9 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
+#           vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkIOGeometry vtkInteractionStyle 
+#           vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
+    #find_package(VTK 8 NO_MODULE) 
+            #vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkIOGeometry vtkInteractionStyle 
+            #vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
+    if ( NOT VTK_FOUND OR  VTK_VERSION VERSION_GREATER "8.2.0" )
+        #message(FATAL_ERROR "VTK 8 was found, but the wrong one! " ${VTK_VERSION}, ${VTK_MINOR_VERSION}, ${VTK_USE_FILE} ) 
+        #endif()
+        #if ( VTK_VERSION VERSION_GREATER "8.20.0" ) # or VTK_DIR-NOTFOUND)
+        #message( AUTHOR_WARNING  "VTK > 8.20.0 was found! " ${VTK_VERSION}, ${VTK_MINOR_VERSION}, ${VTK_USE_FILE} )
+        #message( FATAL_ERROR  "VTK > 8.20.0 was found! Version found: " ${VTK_VERSION}, ${VTK_USE_FILE} )
+        message( STATUS  "VTK > 8.20.0 was found! Version found: " ${VTK_VERSION}, ${VTK_USE_FILE} )
+        message( STATUS "External build of VTK 8 has been added, this may take some time to build." )
+        ExternalProject_Add(VTK8
+        GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
+        GIT_TAG  "v8.2.0"
+        PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/vtk8
+        CMAKE_ARGS
+            -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+            -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
+            -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} /
+            -DBUILD_SHARED_LIBS:BOOL=ON /
+            -DBUILD_EXAMPLES:BOOL=OFF /
+            -DBUILD_TESTING:BOOL=OFF /
+            -DVTK_Group_Web:BOOL=OFF /
+            -DModule_vtkImagingMath:BOOL=ON /
+            LOG_DOWNLOAD 0 /
+            LOG_UPDATE 0
+        )
+    endif()
+    if (VTK_FOUND AND VTK_VERSION VERSION_LESS_EQUAL "8.20.0")
+        #message(STATUS "VTK 8 was found! " ${VTK_VERSION}, ${VTK_USE_FILE} ) 
+        message(STATUS "VTK 8.2 was found! " ${VTK_VERSION}, ${VTK_MINOR_VERSION}, ${VTK_USE_FILE} )
+        set(volumeRenderer volumerenderer.cxx)
+        #include(${VTK_USE_FILE}) 
+        add_definitions(-DLEMMAUSEVTK)
+    else()
+    endif()
+
+endif()
+
 
 if (LEMMA_ENABLE_TESTING)
     if (CXXTEST_FOUND)

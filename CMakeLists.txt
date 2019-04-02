@@ -37,8 +37,12 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   message(STATUS "Setting build type to 'Debug' as none was specified.")
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
   # Set the possible values of build type for cmake-gui
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
-    "MinSizeRel" "RelWithDebInfo")
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS 
+    "Debug" 
+    "Release"
+    "MinSizeRel" 
+    "RelWithDebInfo"
+  )
 endif()
 
 # If CMAKE_BUILD_TYPE is not specified, assume Release. 
@@ -51,7 +55,6 @@ option ( LEMMA_BUILD_EXAMPLES       "Compile example Lemma applications" OFF )
 option ( LEMMA_USE_OPENMP           "Use OpenMP in Lemma" OFF )
 option ( LEMMA_BUILD_DOCUMENTATION  "Build Doxygen man pages" OFF )
 
-#option (LEMMA_VTK7_SUPPORT "VTK 7.x library for visualisation and grids" OFF)
 option (LEMMA_VTK8_SUPPORT "VTK 8.x library for visualisation and grids" OFF)
 
 #option (CMAKE_CROSSCOMPILING "Target different arch than you are on" OFF)
@@ -64,6 +67,7 @@ SET (CMAKE_CROSSCOMPILING TRUE)
 ##########################################################################################
 ## Only look for packages where we build them...this makes finding VTK a problem though! #
 ########################################################################################## 
+
 if (CMAKE_CROSSCOMPILING)
     message ( STATUS "Performing SuperBuild") #, Only searching in install directory for components." )
     # Kind of hack-ish, CMake doesn't always find this. It's buried in Cross compilation, so, 
@@ -82,14 +86,15 @@ if (CMAKE_CROSSCOMPILING)
     #    UNSET( yaml-cpp_FOUND CACHE ) 
 
     #message( STATUS "........Looking for yaml-cpp in ${CMAKE_INSTALL_PREFIX}" )
-    
+    project (CHECKSUPERBUILD CXX)
     find_package (yaml-cpp 0.6 PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH ) # Serialisation of classes 
     find_package (Eigen3   3.3 PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH ) # Matrix/Vector & Math
-
+    find_package (VTK      8.2.0 EXACT PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH ) # Visualization 
     #message( STATUS "yaml-cpp include dir ${YAML_CPP_INCLUDE_DIR}" )
 else()
-    find_package (Eigen3 3.3 QUIET)     # Matrix/Vector & Math
+    find_package (Eigen3   3.3 QUIET )  # Matrix/Vector & Math
     find_package (yaml-cpp 0.6 QUIET )  # Serialisation of classes 
+    find_package (VTK      8.2 QUIET )  # Visualization 
 endif()
 
 INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
@@ -117,6 +122,7 @@ endif()
 ## Optional Dependencies
 if ( NOT Eigen3_FOUND OR 
      NOT yaml-cpp_FOUND OR 
+     (LEMMA_VTK8_SUPPORT AND NOT VTK_FOUND) OR
      (LEMMA_ENABLE_TESTING AND NOT CxxTest_FOUND) )
     message ( STATUS "Missing hard dependencies have been found, these will be downloaded any compiled." )
     message ( STATUS "This necessitates a two step build." )
@@ -183,68 +189,46 @@ endif()
 # External Projects
 ###################
 
-# We don't build VTK, it is too heavy.
-#if ( LEMMA_VTK7_SUPPORT ) 
-#	#find_package(VTK 7 REQUIRED NO_MODULE)
-#	find_package(VTK 7.0 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
+#if ( LEMMA_VTK8_SUPPORT ) 
+#	find_package(VTK 8) 
+#	find_package(VTK 8.9 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
 #			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkIOGeometry vtkInteractionStyle 
 #			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
-#	set(volumeRenderer volumerenderer.cxx)
-#	if (VTK_FOUND)
-#		message(STATUS "VTK 7 was found! ") 
-#	        include(${VTK_USE_FILE}) 
-#		#add_compile_options(-DLEMMAUSEVTK)
-#		#target_compile_definitions( lemmacore PRIVATE LEMMAUSEVTK=1 )
-#		add_definitions(-DLEMMAUSEVTK) 
-#	else()
-#		ExternalProject_Add(VTK
-#  		GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
-#		GIT_TAG  "v7.1.1"
-#    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/vtk7
-#  		CMAKE_ARGS
-#  	        -DBUILD_SHARED_LIBS:BOOL=ON
-#	        -DBUILD_EXAMPLES:BOOL=OFF
-#	        -DBUILD_TESTING:BOOL=OFF
-#		    -DVTK_Group_Web:BOOL=OFF
-#	        -DModule_vtkImagingMath:BOOL=ON
-#	  	    LOG_DOWNLOAD 0
-#	  	    LOG_UPDATE 0
-#		)
-#	endif()
-#endif()
-
-if ( LEMMA_VTK8_SUPPORT ) 
-	find_package(VTK 8.2 COMPONENTS vtkCommonCore vtkRenderingCore vtkFiltersCore vtkFiltersSources 
-			vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkIOGeometry vtkInteractionStyle 
-			vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
 	#find_package(VTK 8 NO_MODULE) 
 			#vtkCommonDataModel vtkFiltersHyperTree vtkIOXML vtkIOImage vtkIOLegacy vtkIOGeometry vtkInteractionStyle 
 			#vtkRenderingAnnotation vtkFiltersHybrid vtkFiltersModeling vtkRenderingVolumeOpenGL2 NO_MODULE)
-	if (VTK_FOUND)
-		message(STATUS "VTK 8 was found! " ${VTK_VERSION}, ${VTK_USE_FILE} ) 
-		set(volumeRenderer volumerenderer.cxx)
-	    #include(${VTK_USE_FILE}) 
-	else()
-		message( STATUS "External build of VTK 8 has been added, this may take some time to build." )
-		ExternalProject_Add(VTK8
-  		GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
-		GIT_TAG  "v8.2.0"
-    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/vtk8
-  		CMAKE_ARGS 
-    	    -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
-            -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
-            -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} /
-   	        -DBUILD_SHARED_LIBS:BOOL=ON /
-	        -DBUILD_EXAMPLES:BOOL=OFF /
-	        -DBUILD_TESTING:BOOL=OFF /
-		    -DVTK_Group_Web:BOOL=OFF /
-	        -DModule_vtkImagingMath:BOOL=ON /
-	  	    LOG_DOWNLOAD 0 /
-	  	    LOG_UPDATE 0
-		)
-	endif()
-	add_definitions(-DLEMMAUSEVTK) 
-endif()
+    #if ( ${VTK_MINOR_VERSION} != 2 )
+	#	message(FATAL_ERROR "VTK 8 was found! " ${VTK_VERSION}, ${VTK_MINOR_VERSION}, ${VTK_USE_FILE} ) 
+    #endif()
+#    if (VTK_VERSION VERSION_GREATER "8.20.0")
+#		message( AUTHOR_WARNING  "VTK > 8.20.0 was found! " ${VTK_VERSION}, ${VTK_MINOR_VERSION}, ${VTK_USE_FILE} ) 
+#    endif()
+#	if (VTK_FOUND)
+#		#message(STATUS "VTK 8 was found! " ${VTK_VERSION}, ${VTK_USE_FILE} ) 
+#		message(STATUS "VTK 8 was found! " ${VTK_VERSION}, ${VTK_MINOR_VERSION}, ${VTK_USE_FILE} ) 
+#		set(volumeRenderer volumerenderer.cxx)
+#	    #include(${VTK_USE_FILE}) 
+#	else()
+#		message( STATUS "External build of VTK 8 has been added, this may take some time to build." )
+#		ExternalProject_Add(VTK8
+#  		GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
+#		GIT_TAG  "v8.2.0"
+#    	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/vtk8
+#  		CMAKE_ARGS 
+#    	    -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
+#            -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} /
+#            -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} /
+#   	        -DBUILD_SHARED_LIBS:BOOL=ON /
+#	        -DBUILD_EXAMPLES:BOOL=OFF /
+#	        -DBUILD_TESTING:BOOL=OFF /
+#		    -DVTK_Group_Web:BOOL=OFF /
+#	        -DModule_vtkImagingMath:BOOL=ON /
+#	  	    LOG_DOWNLOAD 0 /
+#	  	    LOG_UPDATE 0
+#		)
+#	endif()
+#	add_definitions(-DLEMMAUSEVTK) 
+#endif()
 
 #######################
 # Lemma Configuration #
