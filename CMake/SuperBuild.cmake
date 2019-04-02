@@ -146,12 +146,4 @@ if ( LEMMA_MATIO_SUPPORT )
 	)
 endif()
 
-#ExternalProject_Add (Lemma_SB
-#  DEPENDS ${DEPENDENCIES}
-#  SOURCE_DIR ${PROJECT_SOURCE_DIR}
-#  CMAKE_ARGS -DUSE_SUPERBUILD=OFF ${EXTRA_CMAKE_ARGS}
-#  INSTALL_COMMAND ""
-#  BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/blah)
-
-
 # vim: set tabstop=4 shiftwidth=4 expandtab: 

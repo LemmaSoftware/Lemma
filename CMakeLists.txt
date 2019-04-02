@@ -58,16 +58,16 @@ SET (CMAKE_CROSSCOMPILING TRUE)
 if (CMAKE_CROSSCOMPILING)
     message ( STATUS "Performing SuperBuild") 
     project (CHECKSUPERBUILD CXX) # Necessary for VTK query 
-    find_package (yaml-cpp 0.6 PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH ) # Serialisation of classes 
-    find_package (Eigen3   3.3 PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH ) # Matrix/Vector & Math
+    find_package (yaml-cpp 0.6         PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Serialisation of classes 
+    find_package (Eigen3   3.3         PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Matrix/Vector & Math
     if (LEMMA_VTK8_SUPPORT)
-        find_package (VTK      8.2.0 EXACT PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH ) # Visualization 
+        find_package (VTK  8.2.0 EXACT PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Visualization 
     endif()
 else()
     find_package (Eigen3   3.3 QUIET )  # Matrix/Vector & Math
     find_package (yaml-cpp 0.6 QUIET )  # Serialisation of classes 
     if (LEMMA_VTK8_SUPPORT)
-        find_package (VTK      8.2 QUIET )  # Visualization 
+        find_package (VTK  8.2 QUIET )  # Visualization 
     endif()
 endif()
 
@@ -96,7 +96,8 @@ if (LEMMA_ENABLE_TESTING)
     find_package (CxxTest QUIET)   # Unit testing 
 endif()
 
-
+    
+message ( STATUS "VTK Found? " ${VTK_FOUND} )
 ## Optional Dependencies
 if ( NOT Eigen3_FOUND OR 
      NOT yaml-cpp_FOUND OR 
@@ -111,7 +112,7 @@ if ( NOT Eigen3_FOUND OR
   	include (CMake/SuperBuild.cmake)
   	return()                      # stop processing this file further
 else()
-	#project (Blah)                # <-- YOUR PROJECT NAME HERE
+	#project (Blah)               # <-- YOUR PROJECT NAME HERE
 	message( STATUS "Everything was found, happy Lemma-ing" )
 endif()
 
