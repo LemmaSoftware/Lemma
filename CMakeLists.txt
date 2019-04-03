@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
+# add this options before PROJECT keyword
+set(CMAKE_DISABLE_SOURCE_CHANGES ON)
+set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
+
 # Bug in CMake on Linux, but Linux, Mac, and Win all support shared libraries, no harm in this, 
 # but remove when warning no longer shows.
 # Related to calling find_package before a project is created... 
