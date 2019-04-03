@@ -42,7 +42,7 @@ option ( LEMMA_ENABLE_TESTING       "Turn on unit testing" OFF )
 option ( LEMMA_BUILD_EXAMPLES       "Compile example Lemma applications" OFF )
 option ( LEMMA_USE_OPENMP           "Use OpenMP in Lemma" OFF )
 option ( LEMMA_BUILD_DOCUMENTATION  "Build Doxygen man pages" OFF )
-option ( LEMMA_VTK8_SUPPORT         "VTK 8.x library for visualisation and grids" OFF)
+option ( LEMMA_VTK8_SUPPORT         "VTK 8.x library for visualisation and grids" OFF )
 
 # We end up using this for all builds, TODO remove this variable but follow same path
 #option (CMAKE_CROSSCOMPILING "Target different arch than you are on" OFF)
@@ -58,11 +58,18 @@ SET (CMAKE_CROSSCOMPILING TRUE)
 if (CMAKE_CROSSCOMPILING)
     message ( STATUS "Performing SuperBuild") 
     project (CHECKSUPERBUILD CXX) # Necessary for VTK query 
+
+#    if ("${CHECKSUPERBUILD_SOURCE_DIR}"  STREQUAL "${CHECKSUPERBUILD_BINARY_DIR}")
+#        message(FATAL_ERROR
+#            "Lemma (SuperBuild) requires an out of source Build. "
+#            "Please create a separate binary directory and run CMake there.")
+#    endif()
+
     find_package (yaml-cpp 0.6         PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Serialisation of classes 
     find_package (Eigen3   3.3         PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Matrix/Vector & Math
 #${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH 
     if (LEMMA_VTK8_SUPPORT)                                                            # Visualisation 
-        find_package (VTK  8.2        
+        find_package (VTK  8.2.0      
         COMPONENTS 
         vtkCommonCore 
         vtkRenderingCore 
@@ -86,7 +93,7 @@ else()
     find_package (Eigen3   3.3 QUIET )  # Matrix/Vector & Math
     find_package (yaml-cpp 0.6 QUIET )  # Serialisation of classes 
     if (LEMMA_VTK8_SUPPORT)
-        find_package (VTK  8.2 COMPONENTS
+        find_package (VTK  8.2.0 COMPONENTS
         vtkCommonCore 
         vtkRenderingCore 
         vtkFiltersCore 
@@ -108,9 +115,10 @@ endif()
 
 INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
 if (VTK_VERSION VERSION_GREATER "8.2.0")
-    message( STATUS "${VTK_VERSION} is compatible: ${VTK_VERSION_COMPATIBLE}" )
-    #set (VTK_FOUND False) 
+    message( STATUS "${VTK_VERSION} is compatible: ${VTK_VERSION_COMPATIBLE} exact? ${VTK_VERSION_EXACT}" )
+    set (VTK_FOUND False) 
 endif()
+
 if (VTK_FOUND)
     set(volumeRenderer volumerenderer.cxx)
 	add_definitions(-DLEMMAUSEVTK) 
