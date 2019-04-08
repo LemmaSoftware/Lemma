@@ -177,18 +177,18 @@ set(CMAKE_MACOSX_RPATH 1)
 
 project (Lemma CXX)
 
-if(CXXTEST_FOUND)
-	if (LEMMA_ENABLE_TESTING)
-        include (CTest)
-    	enable_testing()
-	endif()
-endif()
-
 # Disallow in-source build
 if ("${Lemma_SOURCE_DIR}"  STREQUAL "${Lemma_BINARY_DIR}")
   message(FATAL_ERROR
     "Lemma requires an out of source Build. "
     "Please create a separate binary directory and run CMake there.")
+endif()
+
+if(CXXTEST_FOUND)
+	if (LEMMA_ENABLE_TESTING)
+        include (CTest)
+    	enable_testing()
+	endif()
 endif()
 
 ##############################
@@ -313,12 +313,12 @@ add_subdirectory (Modules)
 
 #######################################################################
 # CXXTEST Framework
-#if(CXXTEST_FOUND)
-#	if (LEMMA_ENABLE_TESTING)
-#        include (CTest)
-    	#enable_testing()
-#	endif()
-#endif()
+if(CXXTEST_FOUND)
+	if (LEMMA_ENABLE_TESTING)
+        include (CTest)
+    	enable_testing()
+	endif()
+endif()
 
 ########################################################################
 # add a target to generate API documentation with Doxyfile.in 
