@@ -131,7 +131,7 @@ class LemmaObject {
         /** Protected DeSerializing constructor */
         LemmaObject ( const YAML::Node& node, const ctor_key& );
 
-        /** Disable copying Lemma Object */
+        /* Disable copying Lemma Object */
         LemmaObject( const LemmaObject& ) = delete;
 
         /** Protected default destructor. This is an abstract class and

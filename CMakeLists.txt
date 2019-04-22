@@ -47,6 +47,7 @@ option ( LEMMA_BUILD_EXAMPLES       "Compile example Lemma applications" OFF )
 option ( LEMMA_USE_OPENMP           "Use OpenMP in Lemma" OFF )
 option ( LEMMA_BUILD_DOCUMENTATION  "Build Doxygen man pages" OFF )
 option ( LEMMA_VTK8_SUPPORT         "VTK 8.x library for visualisation and grids" OFF )
+option ( LEMMA_PYTHON3_BINDINGS     "Compile Python 3 bindings" OFF )
 
 # We end up using this for all builds, TODO remove this variable but follow same path
 #option (CMAKE_CROSSCOMPILING "Target different arch than you are on" OFF)
@@ -118,6 +119,7 @@ else()
 endif()
 
 INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
+
 if (VTK_VERSION VERSION_GREATER "8.2.0")
     message( STATUS "${VTK_VERSION} is compatible: ${VTK_VERSION_COMPATIBLE} exact? ${VTK_VERSION_EXACT}" )
     set (VTK_FOUND False) 
@@ -226,7 +228,7 @@ endif()
 option (LEMMA_USE_BOOST "Boost is required by gaussian quadrature classes" OFF)
 if (LEMMA_USE_BOOST)
 	find_package(Boost
-  		1.58.0                         # Minimum or EXACT version e.g. 1.36.0
+  		1.64.0                         # Minimum or EXACT version e.g. 1.36.0
 #  		COMPONENTS math                # Boost libraries by their canonical name
 	)  
 	if(Boost_FOUND)
@@ -242,6 +244,20 @@ if (LEMMA_USE_BOOST)
 	endif()
 endif()
 
+if (LEMMA_PYTHON3_BINDINGS)
+
+    find_package(PythonLibs 3.0 REQUIRED)
+    find_package(Boost 1.64.0   REQUIRED COMPONENTS system python3 numpy3)
+
+    # Is this OK for portability of non-python libraries
+    include_directories(${PYTHON_INCLUDE_DIRS})
+    include_directories(${Boost_INCLUDE_DIRS})
+
+endif()
+
+####################
+# MSVC error fix 
+####################
 option( MSVC_EXTENDED_ALIGNMENT "Turn on MSVC compiler definition _ENABLE_EXTENDED_ALIGNED_STORAGE " OFF  )
 if (MSVC_EXTENDED_ALIGNMENT)
     add_definitions(-D_ENABLE_EXTENDED_ALIGNED_STORAGE)

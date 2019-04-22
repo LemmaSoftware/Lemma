@@ -102,7 +102,7 @@ if (LEMMA_ENABLE_TESTING)
 endif()
 
 # tinyxml2, this library is used for XML IO 
-option( LEMMA_TINYXML_SUPPORT  "TinyXML library support for .xml files" OFF)
+#option( LEMMA_TINYXML_SUPPORT  "TinyXML library support for .xml files" OFF)
 if ( LEMMA_TINYXML_SUPPORT )
 	ExternalProject_Add(TINYXML2
 		GIT_REPOSITORY "https://github.com/leethomason/tinyxml2.git"
@@ -116,7 +116,7 @@ if ( LEMMA_TINYXML_SUPPORT )
 	add_compile_options(-DTINYXMLSUPPORT) 
 endif()
 
-option( LEMMA_MATIO_SUPPORT  "MATIO library support for MATLAB .mat files" OFF)
+#option( LEMMA_MATIO_SUPPORT  "MATIO library support for MATLAB .mat files" OFF)
 if ( LEMMA_MATIO_SUPPORT )
 	add_compile_options(-DHAVE_MATIO) 
 	# matio, this library is used for MATLAB file IO

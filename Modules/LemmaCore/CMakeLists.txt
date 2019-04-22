@@ -9,16 +9,14 @@ set_target_properties(lemmacore PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
-
-# External project dependencies 
 #add_dependencies(lemmacore YAML_CPP)
 
-if (LEMMA_TINYXML_SUPPORT)
-	add_dependencies(lemmacore TINYXML2)
-endif()
-if (LEMMA_MATIO_SUPPORT)
-	add_dependencies(lemmacore MATIO)
-endif()
+#if (LEMMA_TINYXML_SUPPORT)
+#	add_dependencies(lemmacore TINYXML2)
+#endif()
+#if (LEMMA_MATIO_SUPPORT)
+#	add_dependencies(lemmacore MATIO)
+#endif()
 
 target_link_libraries (lemmacore Eigen3::Eigen)
 #target_link_libraries (lemmacore CxxTest)
@@ -43,6 +41,11 @@ endif()
 # Testing
 if (LEMMA_ENABLE_TESTING)
 	add_subdirectory(testing)
+endif()
+
+# Python Bindings
+if (LEMMA_PYTHON3_BINDINGS)
+	add_subdirectory(python)
 endif()
 
 # Install

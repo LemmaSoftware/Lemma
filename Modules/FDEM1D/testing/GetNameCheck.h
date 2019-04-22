@@ -87,6 +87,12 @@ class MyTestSuite : public CxxTest::TestSuite
         TS_ASSERT_EQUALS( Obj->GetName(), std::string("AEMSurveyReader") );
     }
 
+    void testChargedWellCasing( void )
+    {
+        auto Obj = ChargedWellCasing::NewSP();
+        TS_ASSERT_EQUALS( Obj->GetName(), std::string("ChargedWellCasing") );
+    }
+
 //     void testKernelEM1DManager( void )
 //     {
 //         auto Obj = KernelEM1DManager::NewSP();

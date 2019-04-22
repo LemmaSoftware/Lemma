@@ -14,8 +14,8 @@ CXXTEST_ADD_TEST(unittest_LemmaCore_CopyDisableCheck CopyDisableCheck.cc ${CMAKE
 target_link_libraries(unittest_LemmaCore_CopyDisableCheck "lemmacore")
  
 set_target_properties( unittest_LemmaCore_GetNameCheck 
-	               unittest_LemmaCore_SerializeCheck
-		       unittest_LemmaCore_CopyDisableCheck
+	                   unittest_LemmaCore_SerializeCheck
+		               unittest_LemmaCore_CopyDisableCheck
 	PROPERTIES
 	CXX_STANDARD 14 
 	CXX_STANDARD_REQUIRED ON

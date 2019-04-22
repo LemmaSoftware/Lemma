@@ -46,6 +46,9 @@ int main(int argc, char** argv) {
         }
         wire->SetPoint(np-1, cx, cy+rad, -1e-3);
 
+    wire->SetNumberOfFrequencies(1);
+        wire->SetFrequency(0, 1);
+
     std::cout << *wire << std::endl;
 
     //auto wire2 = wire->Clone();

@@ -16,6 +16,8 @@ set (FDEM1DSOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/WireAntenna.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/PolygonalWireAntenna.cpp
 
+	${CMAKE_CURRENT_SOURCE_DIR}/ChargedWellCasing.cpp
+
 	# Kernel management	
 	${CMAKE_CURRENT_SOURCE_DIR}/KernelEM1DManager.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/KernelEM1DSpec.cpp

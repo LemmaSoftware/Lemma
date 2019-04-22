@@ -109,6 +109,14 @@ class MyTestSuite : public CxxTest::TestSuite
         TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
     }
 
+    void testChargedWellCasing(void)
+    {
+        auto Obj = ChargedWellCasing::NewSP();
+        YAML::Node node = Obj->Serialize();
+        auto Obj2 = ChargedWellCasing::DeSerialize(node);
+        TS_ASSERT_EQUALS( Obj->GetName(), Obj2->GetName() );
+    }
+
 
 };
 
