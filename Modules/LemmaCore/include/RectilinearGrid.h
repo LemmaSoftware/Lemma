@@ -72,6 +72,12 @@ namespace Lemma {
             virtual YAML::Node Serialize() const;
 
             /**
+             *  Uses YAML to serialize this object.
+             *  @return a YAML::Node
+             */
+            virtual std::string Print() const;
+
+            /**
              *  Factory method for generating concrete class.
              *  @return a std::shared_ptr of type RectilinearGrid
              */
@@ -155,7 +161,7 @@ namespace Lemma {
             /** Returns a spacing
              *  @return dx[ix]
              */
-            Real GetDx(const int& ix);
+            Real GetDx1(const int& ix);
 
             /** Returns Spacing Vector
              *  @return dy
@@ -165,7 +171,7 @@ namespace Lemma {
             /** Returns a spacing
              *  @return dy[iy]
              */
-            Real GetDy(const int& iy);
+            Real GetDy1(const int& iy);
 
             /** Returns Spacing Vector
              *  @return dz
@@ -175,7 +181,7 @@ namespace Lemma {
             /** Returns Spacing Vector
              *  @return dz[iz]
              */
-            Real GetDz(const int& iz);
+            Real GetDz1(const int& iz);
 
             // ====================  INQUIRY       =======================
 
@@ -227,4 +233,4 @@ namespace Lemma {
 #endif   // ----- #ifndef RECTILINEARGRID_INC  -----
 
 /* vim: set tabstop=4 expandtab: */
-/* vim: set filetype=cpp syntax=cpp.doxygen: */
+/* vim: set filetype=cpp syntax=cpp.doxygen */

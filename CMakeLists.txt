@@ -72,6 +72,11 @@ if (CMAKE_CROSSCOMPILING)
 
     find_package (yaml-cpp 0.6         PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Serialisation of classes 
     find_package (Eigen3   3.3         PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Matrix/Vector & Math
+
+    if (LEMMA_PYTHON3_BINDINGS)
+        find_package(pybind11 PATHS ${CMAKE_INSTALL_PREFIX} NO_DEFAULT_PATH)           # Python 3 bindings
+    endif()
+
 #${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH 
     if (LEMMA_VTK8_SUPPORT)                                                            # Visualisation 
         find_package (VTK  8.2.0      
@@ -154,6 +159,7 @@ message ( STATUS "VTK Found? " ${VTK_FOUND} )
 ## Optional Dependencies
 if ( NOT Eigen3_FOUND OR 
      NOT yaml-cpp_FOUND OR 
+     (LEMMA_PYTHON3_BINDINGS AND NOT pybind11_FOUND) OR 
      (LEMMA_VTK8_SUPPORT AND NOT VTK_FOUND) OR
      (LEMMA_ENABLE_TESTING AND NOT CxxTest_FOUND) )
     message ( STATUS "Missing hard dependencies have been found, these will be downloaded any compiled." )
@@ -245,14 +251,12 @@ if (LEMMA_USE_BOOST)
 endif()
 
 if (LEMMA_PYTHON3_BINDINGS)
-
     find_package(PythonLibs 3.0 REQUIRED)
-    find_package(Boost 1.64.0   REQUIRED COMPONENTS system python3 numpy3)
-
+    find_package(pybind11 REQUIRED)
+    #    find_package(Boost 1.64.0   REQUIRED COMPONENTS system python3 numpy3)
     # Is this OK for portability of non-python libraries
     include_directories(${PYTHON_INCLUDE_DIRS})
-    include_directories(${Boost_INCLUDE_DIRS})
-
+#    include_directories(${Boost_INCLUDE_DIRS})
 endif()
 
 ####################

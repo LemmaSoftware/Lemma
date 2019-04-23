@@ -69,6 +69,12 @@ namespace Lemma {
         return node;
     }
 
+    std::string RectilinearGrid::Print() const {
+        YAML::Emitter out;
+        out << this->Serialize();
+        return out.c_str();
+    }
+
 
     //--------------------------------------------------------------------------------------
     //       Class:  RectilinearGrid
@@ -183,7 +189,7 @@ namespace Lemma {
     //       Class:  RectilinearGrid
     //      Method:  GetDx
     //--------------------------------------------------------------------------------------
-    Real RectilinearGrid::GetDx ( const int& ix  ) {
+    Real RectilinearGrid::GetDx1 ( const int& ix  ) {
         return dx[ix];
     }		// -----  end of method RectilinearGrid::GetDx  -----
 
@@ -199,7 +205,7 @@ namespace Lemma {
     //       Class:  RectilinearGrid
     //      Method:  GetDy
     //--------------------------------------------------------------------------------------
-    Real RectilinearGrid::GetDy ( const int& iy  ) {
+    Real RectilinearGrid::GetDy1 ( const int& iy  ) {
         return dy[iy];
     }		// -----  end of method RectilinearGrid::GetDy  -----
 
@@ -215,7 +221,7 @@ namespace Lemma {
     //       Class:  RectilinearGrid
     //      Method:  GetDz
     //--------------------------------------------------------------------------------------
-    Real RectilinearGrid::GetDz ( const int& iz  ) {
+    Real RectilinearGrid::GetDz1 ( const int& iz  ) {
         return dz[iz];
     }		// -----  end of method RectilinearGrid::GetDz  -----
 

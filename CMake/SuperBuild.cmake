@@ -68,6 +68,29 @@ if ( LEMMA_VTK8_SUPPORT )
 
 endif()
 
+if (LEMMA_PYTHON3_BINDINGS)
+    if (pybind11_FOUND)
+        message( STATUS "pybind11 was found" )
+    else()
+        message( STATUS "pybind11 was NOT found, please build or remove LEMMA_PYTHON3_BINDINGS" )
+	    ExternalProject_Add(pybind11
+		    GIT_REPOSITORY "https://github.com/pybind/pybind11.git"
+		    GIT_TAG "master"
+		    UPDATE_COMMAND ""
+		    PATCH_COMMAND ""
+    	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/pybind11
+            CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
+                       -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+                       -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} 
+                       -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+                       -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} 
+                       -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} 
+		    #CONFIGURE_COMMAND ""
+		    #BUILD_COMMAND     ""
+		    #INSTALL_COMMAND   ""
+	    )
+    endif()
+endif()
 
 if (LEMMA_ENABLE_TESTING)
     if (CXXTEST_FOUND)

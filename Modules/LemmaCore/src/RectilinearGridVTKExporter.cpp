@@ -142,27 +142,27 @@ void RectilinearGridVTKExporter::BuildVTKRectilinearGrid (  ) {
 
     // Set Coordinate>s
     vtkDoubleArray *xCoords = vtkDoubleArray::New();
-    xCoords->InsertNextValue(Grid->GetOx()-Grid->GetDx(0)/2.);
-    double xm1 = Grid->GetOx() - Grid->GetDx(0)/2.;
+    xCoords->InsertNextValue(Grid->GetOx()-Grid->GetDx1(0)/2.);
+    double xm1 = Grid->GetOx() - Grid->GetDx1(0)/2.;
     for (int ix=0; ix<Grid->GetNx(); ix++) {
-        xCoords->InsertNextValue(xm1 + Grid->GetDx(ix));
-        xm1 += Grid->GetDx(ix);
+        xCoords->InsertNextValue(xm1 + Grid->GetDx1(ix));
+        xm1 += Grid->GetDx1(ix);
     }
 
     vtkDoubleArray *yCoords = vtkDoubleArray::New();
-    yCoords->InsertNextValue(Grid->GetOy()-Grid->GetDy(0)/2.);
-    double ym1 = Grid->GetOy()-Grid->GetDy(0)/2.;
+    yCoords->InsertNextValue(Grid->GetOy()-Grid->GetDy1(0)/2.);
+    double ym1 = Grid->GetOy()-Grid->GetDy1(0)/2.;
     for (int iy=0; iy<Grid->GetNy(); iy++) {
-        yCoords->InsertNextValue(ym1 + Grid->GetDy(iy));
-        ym1 += Grid->GetDy(iy);
+        yCoords->InsertNextValue(ym1 + Grid->GetDy1(iy));
+        ym1 += Grid->GetDy1(iy);
     }
 
     vtkDoubleArray *zCoords = vtkDoubleArray::New();
-    zCoords->InsertNextValue(Grid->GetOz()-Grid->GetDz(0)/2.);
-    double zm1 = Grid->GetOz()-Grid->GetDz(0)/2.;
+    zCoords->InsertNextValue(Grid->GetOz()-Grid->GetDz1(0)/2.);
+    double zm1 = Grid->GetOz()-Grid->GetDz1(0)/2.;
     for (int iz=0; iz<Grid->GetNz(); iz++) {
-        zCoords->InsertNextValue(zm1 + Grid->GetDz(iz));
-        zm1 += Grid->GetDz(iz);
+        zCoords->InsertNextValue(zm1 + Grid->GetDz1(iz));
+        zm1 += Grid->GetDz1(iz);
     }
 
     VTKGrid = vtkSmartPointer<vtkRectilinearGrid>::New();
