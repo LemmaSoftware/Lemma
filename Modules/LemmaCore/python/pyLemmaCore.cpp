@@ -37,7 +37,7 @@ PYBIND11_MODULE(pyLemmaCore, m) {
 
         // print
         .def("__repr__", &Lemma::RectilinearGrid::Print)
-        .def("Serialize", &Lemma::RectilinearGrid::Print)
+        .def("Serialize", &Lemma::RectilinearGrid::Print, "YAML representation of the class")
 
         // accessors
         .def("GetName", &Lemma::RectilinearGrid::GetName, "Returns the name of the class")
@@ -51,9 +51,37 @@ PYBIND11_MODULE(pyLemmaCore, m) {
         .def("GetDy", &Lemma::RectilinearGrid::GetDy, "Returns the grid spacing in the y direction")
         .def("GetDz", &Lemma::RectilinearGrid::GetDz, "Returns the grid spacing in the z direction")
 
+        // modifiers
         .def("SetDimensions", &Lemma::RectilinearGrid::SetDimensions, "Sets the number of cells in x, y, and z")
         .def("SetOffset", &Lemma::RectilinearGrid::SetOffset, "Sets the origin offset in x, y, and z")
         .def("SetSpacing", &Lemma::RectilinearGrid::SetSpacing, "Sets the grid spacing in x, y, and z");
+
+    py::class_<Lemma::ASCIIParser, std::shared_ptr<Lemma::ASCIIParser> >(m, "ASCIIParser")
+
+        // lifecycle
+        .def(py::init(&Lemma::ASCIIParser::NewSP))
+
+        // print
+        .def("__repr__", &Lemma::ASCIIParser::Print)
+        .def("Serialize", &Lemma::ASCIIParser::Print, "YAML representation of the class")
+
+        // accessors
+        .def("GetName", &Lemma::ASCIIParser::GetName, "Returns the name of the class")
+        .def("GetFileLocation", &Lemma::ASCIIParser::GetFileLocation, "Returns the current file location")
+
+        // modifiers
+        .def("SetCommentString", &Lemma::ASCIIParser::SetCommentString, "Sets the comment string after which all text is ignored")
+        .def("SetBufferSize", &Lemma::ASCIIParser::SetBufferSize, "Sets the buffer size")
+
+        // methods
+        .def("Open", &Lemma::ASCIIParser::Open, "Opens file specified by argument")
+        .def("Close", &Lemma::ASCIIParser::Close, "Closes current file object")
+        .def("ReadReals", &Lemma::ASCIIParser::ReadReals, "Returns vector of nr reals")
+        .def("ReadInts", &Lemma::ASCIIParser::ReadInts, "Returns vector of ni ints")
+        .def("ReadStrings", &Lemma::ASCIIParser::ReadStrings, "Returns vector of ns strings")
+        .def("JumpToLocation", &Lemma::ASCIIParser::JumpToLocation, "File object jumps to specified location")
+
+    ;
 }
 
 
@@ -74,10 +102,6 @@ BOOST_PYTHON_MODULE(pyLemmaCore)
         //.def("DeSerialize", &Lemma::RectilinearGrid::DeSerialize)
 
         // Accessors
-
-
-
     ;
-
 }
 */

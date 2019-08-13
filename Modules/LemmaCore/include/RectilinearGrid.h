@@ -72,12 +72,6 @@ namespace Lemma {
             virtual YAML::Node Serialize() const;
 
             /**
-             *  Uses YAML to serialize this object.
-             *  @return a YAML::Node
-             */
-            virtual std::string Print() const;
-
-            /**
              *  Factory method for generating concrete class.
              *  @return a std::shared_ptr of type RectilinearGrid
              */

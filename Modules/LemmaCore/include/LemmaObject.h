@@ -111,6 +111,12 @@ class LemmaObject {
 
         // ====================  ACCESS        ==============================
 
+        virtual std::string Print() {
+            YAML::Emitter out;
+            out << this->Serialize();
+            return out.c_str();
+        }
+
         // ====================  INQUIRY       ==============================
 
         /** Returns the name of the underlying class; Run-time type information (RTTI). This approach

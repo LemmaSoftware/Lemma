@@ -69,6 +69,14 @@ namespace Lemma {
              */
             static std::shared_ptr<WireAntenna> DeSerialize( const YAML::Node& node );
 
+            /**
+             *   Constructs an object from a string representation of a YAML::Node. This is primarily
+             *   used in Python wrapping
+             */
+            static std::shared_ptr<WireAntenna> DeSerialize( const std::string& node ) {
+                return WireAntenna::DeSerialize(YAML::Load(node));
+            }
+
             // ====================  OPERATORS     =======================
 
             // ====================  OPERATIONS    =======================

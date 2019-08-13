@@ -169,4 +169,4 @@ class ASCIIParser : public LemmaObject {
 #endif   // ----- #ifndef ASCIIPARSER_INC  -----
 
 /* vim: set tabstop=4 expandtab: */
-/* vim: set filetype=cpp syntax=cpp.doxygen: */
+/* vim: set filetype=cpp syntax=cpp.doxygen */

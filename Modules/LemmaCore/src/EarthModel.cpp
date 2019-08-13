@@ -31,6 +31,7 @@ namespace Lemma {
         BDec = node["BDec"].as<double>();
         BMag = node["BMag"].as<double>();
         BField = node["BField"].as<Vector3r>();
+	    SetMagneticFieldIncDecMag(BInc, BDec, BMag, TESLA);
     }
 
 

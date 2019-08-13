@@ -29,6 +29,11 @@ if (LEMMA_ENABLE_TESTING)
 	add_subdirectory(testing)
 endif()
 
+# Python Bindings
+if (LEMMA_PYTHON3_BINDINGS)
+	add_subdirectory(python)
+endif()
+
 # Install
 install ( TARGETS fdem1d DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )
 install ( FILES include/FDEM1D  DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma ) 

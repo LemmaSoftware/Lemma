@@ -46,7 +46,6 @@ endif()
 # Python Bindings
 if (LEMMA_PYTHON3_BINDINGS)
 	add_subdirectory(python)
-	#pybind11_add_module(Lemma pyLemmaCore.cpp)
 endif()
 
 # Install

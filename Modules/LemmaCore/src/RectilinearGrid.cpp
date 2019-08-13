@@ -69,13 +69,6 @@ namespace Lemma {
         return node;
     }
 
-    std::string RectilinearGrid::Print() const {
-        YAML::Emitter out;
-        out << this->Serialize();
-        return out.c_str();
-    }
-
-
     //--------------------------------------------------------------------------------------
     //       Class:  RectilinearGrid
     //      Method:  DeSerialize
