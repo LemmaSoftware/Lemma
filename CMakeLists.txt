@@ -265,6 +265,10 @@ endif()
 option( MSVC_EXTENDED_ALIGNMENT "Turn on MSVC compiler definition _ENABLE_EXTENDED_ALIGNED_STORAGE " OFF  )
 if (MSVC_EXTENDED_ALIGNMENT)
     add_definitions(-D_ENABLE_EXTENDED_ALIGNED_STORAGE)
+    SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} /LTCG")
+    #add_definitions(-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE)
+    #set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+    #include(GenerateExportHeader)
 endif()
 
 ####################

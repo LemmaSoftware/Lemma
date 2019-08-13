@@ -1,5 +1,5 @@
 add_subdirectory("src")
-add_library( lemmacore ${SOURCE} )  
+add_library( lemmacore ${SOURCE} ) 
 target_include_directories( lemmacore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include" )
 
 set_target_properties(lemmacore PROPERTIES 
@@ -9,6 +9,9 @@ set_target_properties(lemmacore PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
+
+#generate_export_header(lemmacore)
+
 #add_dependencies(lemmacore YAML_CPP)
 
 #if (LEMMA_TINYXML_SUPPORT)
