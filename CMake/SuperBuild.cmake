@@ -75,7 +75,7 @@ if (LEMMA_PYTHON3_BINDINGS)
         message( STATUS "pybind11 was NOT found, please build or remove LEMMA_PYTHON3_BINDINGS" )
 	    ExternalProject_Add(pybind11
 		    GIT_REPOSITORY "https://github.com/pybind/pybind11.git"
-		    GIT_TAG "master"
+		    GIT_TAG "v2.3.0" #"master"
 		    UPDATE_COMMAND ""
 		    PATCH_COMMAND ""
     	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/pybind11

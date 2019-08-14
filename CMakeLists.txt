@@ -255,8 +255,10 @@ if (LEMMA_PYTHON3_BINDINGS)
     find_package(pybind11 REQUIRED)
     #    find_package(Boost 1.64.0   REQUIRED COMPONENTS system python3 numpy3)
     # Is this OK for portability of non-python libraries
-    include_directories(${PYTHON_INCLUDE_DIRS})
-#    include_directories(${Boost_INCLUDE_DIRS})
+    #include_directories(${PYTHON_INCLUDE_DIRS})
+    #include_directories(${Boost_INCLUDE_DIRS})
+    install ( FILES python/setup.py DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
+    install ( DIRECTORY python/pyLemma DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
 endif()
 
 ####################
