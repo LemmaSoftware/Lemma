@@ -12,7 +12,7 @@ class BinaryDistribution(Distribution):
 
 setup(
   name             = 'pyLemma',
-  version          = '0.0.2', 
+  version          = '0.0.4', 
   author           = 'Trevor Irons and others',
   author_email     = 'Trevor.Irons@lemmasoftware.org',
   description      = 'A short description of the app/lib',
@@ -34,7 +34,7 @@ setup(
     #'pyLemma': ['pyFDEM1D.*.so']
     #'pyLemma.pyFDEM1D': ['pyFDEM1D.*.so']
     #'pyLemma.pyFDEM1D': ['pyFDEM1D.*.so']
-    '': ['pyFDEM1D.*.so']
+    '': ['LemmaCore.*.so','FDEM1D.*.so']
   },
   zip_safe=False,
   distclass=BinaryDistribution,

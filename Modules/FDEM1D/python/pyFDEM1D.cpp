@@ -24,7 +24,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(pyFDEM1D, m) {
+PYBIND11_MODULE(FDEM1D, m) {
 
     py::add_ostream_redirect(m, "ostream_redirect");
 

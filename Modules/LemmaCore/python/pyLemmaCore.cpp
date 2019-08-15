@@ -24,7 +24,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(pyLemmaCore, m) {
+PYBIND11_MODULE(LemmaCore, m) {
 
     py::add_ostream_redirect(m, "ostream_redirect");
 
