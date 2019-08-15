@@ -1,4 +1,5 @@
 from setuptools import setup, Extension, find_packages
+from setuptools.command.install import install
 from setuptools.dist import Distribution
 import sys
 
@@ -7,8 +8,16 @@ if sys.version_info < (3,0):
 
 class BinaryDistribution(Distribution):
     """Distribution which always forces a binary package with platform name"""
-    def has_ext_modules(foo):
+    def is_pure(self):
+        return False
+    def has_ext_modules(self):
         return True
+
+class InstallPlatlib(install):
+    def finalize_options(self):
+        install.finalize_options(self)
+        if self.distribution.has_ext_modules():
+            self.install_lib = self.install_platlib
 
 setup(
   name             = 'pyLemma',
@@ -37,6 +46,7 @@ setup(
     '': ['pyFDEM1D.*.so']
   },
   zip_safe=False,
+  cmdclass={'install':InstallPlatlib},
   distclass=BinaryDistribution,
 )
 
