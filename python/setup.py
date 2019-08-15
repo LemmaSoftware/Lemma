@@ -1,9 +1,14 @@
-#from distutils.core import setup
 from setuptools import setup, Extension, find_packages
-
+from setuptools.dist import Distribution
 import sys
+
 if sys.version_info < (3,0):
   sys.exit('Sorry, Python < 3.0 is not supported')
+
+class BinaryDistribution(Distribution):
+    """Distribution which always forces a binary package with platform name"""
+    def has_ext_modules(foo):
+        return True
 
 setup(
   name             = 'pyLemma',
@@ -15,7 +20,7 @@ setup(
   classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MPL License',
+        'License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)',
         'Topic :: Scientific/Engineering',
         'Programming Language :: Python :: 3',
   ],
@@ -32,8 +37,8 @@ setup(
     '': ['pyFDEM1D.*.so']
   },
   zip_safe=False,
+  distclass=BinaryDistribution,
 )
-
 
     #ext_modules=[CMakeExtension('proj_name')],
     #cmdclass=dict(build_ext=CMakeBuild),
