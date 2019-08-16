@@ -30,10 +30,11 @@ PYBIND11_MODULE(LemmaCore, m) {
 
     m.doc() = "Python binding of LemmaCore, additional details can be found at https://lemmasoftware.org";
 
-    py::class_<Lemma::RectilinearGrid, std::shared_ptr<Lemma::RectilinearGrid> >(m, "RectilinearGrid")
+    py::class_<Lemma::RectilinearGrid, std::shared_ptr<Lemma::RectilinearGrid> > RectilinearGrid(m, "RectilinearGrid");
 
         // lifecycle
-        .def(py::init(&Lemma::RectilinearGrid::NewSP))
+        RectilinearGrid.def(py::init(&Lemma::RectilinearGrid::NewSP))
+        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::RectilinearGrid::DeSerialize), "Construct object from yaml representation")
 
         // print
         .def("__repr__", &Lemma::RectilinearGrid::Print)
@@ -54,12 +55,14 @@ PYBIND11_MODULE(LemmaCore, m) {
         // modifiers
         .def("SetDimensions", &Lemma::RectilinearGrid::SetDimensions, "Sets the number of cells in x, y, and z")
         .def("SetOffset", &Lemma::RectilinearGrid::SetOffset, "Sets the origin offset in x, y, and z")
-        .def("SetSpacing", &Lemma::RectilinearGrid::SetSpacing, "Sets the grid spacing in x, y, and z");
+        .def("SetSpacing", &Lemma::RectilinearGrid::SetSpacing, "Sets the grid spacing in x, y, and z")
+    ;
 
-    py::class_<Lemma::ASCIIParser, std::shared_ptr<Lemma::ASCIIParser> >(m, "ASCIIParser")
+    py::class_<Lemma::ASCIIParser, std::shared_ptr<Lemma::ASCIIParser> > ASCIIParser(m, "ASCIIParser");
 
         // lifecycle
-        .def(py::init(&Lemma::ASCIIParser::NewSP))
+        ASCIIParser.def(py::init(&Lemma::ASCIIParser::NewSP))
+        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::ASCIIParser::DeSerialize), "Construct object from yaml representation")
 
         // print
         .def("__repr__", &Lemma::ASCIIParser::Print)
@@ -82,26 +85,50 @@ PYBIND11_MODULE(LemmaCore, m) {
         .def("JumpToLocation", &Lemma::ASCIIParser::JumpToLocation, "File object jumps to specified location")
 
     ;
-}
 
+    py::class_<Lemma::CubicSplineInterpolator, std::shared_ptr<Lemma::CubicSplineInterpolator> >(m, "CubicSplineInterpolator")
 
-/*
-BOOST_PYTHON_MODULE(pyLemmaCore)
-{
-    Py_Initialize();
-    np::initialize();
-
- 	bp::class_<Lemma::RectilinearGrid, boost::noncopyable> ("RectilinearGrid", boost::python::no_init)
+        // lifecycle
+        .def(py::init(&Lemma::CubicSplineInterpolator::NewSP))
+        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::CubicSplineInterpolator::DeSerialize), "Construct object from yaml representation")
 
         // print
-        .def(boost::python::self_ns::str(bp::self))
+        .def("__repr__", &Lemma::CubicSplineInterpolator::Print)
+        .def("Serialize", &Lemma::CubicSplineInterpolator::Print, "YAML representation of the class")
 
-        // Lifecycle
-        .def("__init__", boost::python::make_constructor(&Lemma::RectilinearGrid::NewSP))
-        //.def("Serialize", &Lemma::RectilinearGrid::Serialize)
-        //.def("DeSerialize", &Lemma::RectilinearGrid::DeSerialize)
+        // accessors
+        .def("GetName", &Lemma::CubicSplineInterpolator::GetName, "Returns the name of the class")
+        .def("GetKnotAbscissa", &Lemma::CubicSplineInterpolator::GetKnotAbscissa, "Returns the knot abscissa values")
+        .def("GetKnotOrdinate", &Lemma::CubicSplineInterpolator::GetKnotOrdinate, "Returns the knot ordinate values")
 
-        // Accessors
+        // modifiers
+        .def("SetKnots", &Lemma::CubicSplineInterpolator::SetKnots, "Sets the knots to use for interpolation")
+        .def("ResetKnotOrdinate", &Lemma::CubicSplineInterpolator::ResetKnotOrdinate, "Resets the knots to use for interpolation, when abscissa values haven't changed")
+
+        // methods
+        .def("InterpolateOrderedSet", &Lemma::CubicSplineInterpolator::InterpolateOrderedSet, "Interpolate a monotonically increasing ordered set.")
+        .def("Integrate", py::overload_cast<const Lemma::Real&, const Lemma::Real& >(&Lemma::CubicSplineInterpolator::Integrate), "Integrates between the arguments using cubic spline values.")
+        .def("IntegrateN", py::overload_cast<const Lemma::Real&, const Lemma::Real&, const int& >(&Lemma::CubicSplineInterpolator::Integrate), "Integrates the spline from x0 to x1. Uses composite Simpson's rule and n is the number of segments")
+        .def("Interpolate", py::overload_cast<const Lemma::Real& >(&Lemma::CubicSplineInterpolator::Interpolate), "Interpolation at a single point, x is the interpolation abscissa point, returns the ordinate value at x")
+        .def("InterpolateI", py::overload_cast<const Lemma::Real&, int& >(&Lemma::CubicSplineInterpolator::Interpolate), "Interpolation at a single point, x is the interpolation abscissa point and i is the knot to begin searchin at returns the ordinate value at x")
+
     ;
+
+    // ABC
+    //py::class_<Lemma::EarthModel, std::shared_ptr<Lemma::EarthModel> >(m, "EarthModel")
+
+    /*
+    py::class_<Lemma::LayeredEarth, std::shared_ptr<Lemma::LayeredEarth> >(m, "LayeredEarth")
+
+        // lifecycle
+        .def(py::init(&Lemma::LayeredEarth::NewSP))
+        //.def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::LayeredEarth::DeSerialize), "Construct object from yaml representation")
+
+        // print
+        .def("__repr__", &Lemma::LayeredEarth::Print)
+        .def("Serialize", &Lemma::LayeredEarth::Print, "YAML representation of the class")
+
+    ;
+    */
 }
-*/
+

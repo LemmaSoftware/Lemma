@@ -82,6 +82,14 @@ namespace Lemma {
              */
             static std::shared_ptr< RectilinearGrid > DeSerialize(const YAML::Node& node);
 
+            /**
+             *   Constructs an object from a string representation of a YAML::Node. This is primarily
+             *   used in Python wrapping
+             */
+            static std::shared_ptr<RectilinearGrid> DeSerialize( const std::string& node ) {
+                return RectilinearGrid::DeSerialize(YAML::Load(node));
+            }
+
             // ====================  OPERATORS     =======================
 
             // ====================  OPERATIONS    =======================

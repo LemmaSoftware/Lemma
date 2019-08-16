@@ -97,6 +97,14 @@ class CubicSplineInterpolator : public LemmaObject {
      */
     static std::shared_ptr< CubicSplineInterpolator > DeSerialize(const YAML::Node& node);
 
+    /**
+     *   Constructs an object from a string representation of a YAML::Node. This is primarily
+     *   used in Python wrapping
+     */
+    static std::shared_ptr<CubicSplineInterpolator> DeSerialize( const std::string& node ) {
+        return CubicSplineInterpolator::DeSerialize(YAML::Load(node));
+    }
+
     // ====================  OPERATORS     =======================
 
     // ====================  OPERATIONS    =======================

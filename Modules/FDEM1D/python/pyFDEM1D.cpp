@@ -35,11 +35,11 @@ PYBIND11_MODULE(FDEM1D, m) {
 
         // lifecycle
         WireAntenna.def(py::init(&Lemma::WireAntenna::NewSP))
+        .def("Serialize", &Lemma::WireAntenna::Print, "YAML representation of the class")
+        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::WireAntenna::DeSerialize), "Construct object from yaml representation")
 
         // print
         .def("__repr__", &Lemma::WireAntenna::Print)
-        .def("Serialize", &Lemma::WireAntenna::Print, "YAML representation of the class")
-        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::WireAntenna::DeSerialize), "Construct object from yaml representation")
 
         // modifiers
         .def("SetNumberOfPoints", &Lemma::WireAntenna::SetNumberOfPoints, "Sets the number of points comprising the antenna")
@@ -67,6 +67,7 @@ PYBIND11_MODULE(FDEM1D, m) {
 
         // lifecycle
         PolygonalWireAntenna.def(py::init(&Lemma::PolygonalWireAntenna::NewSP))
+        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::PolygonalWireAntenna::DeSerialize), "Construct object from yaml representation")
 
         // print
         .def("__repr__", &Lemma::PolygonalWireAntenna::Print)

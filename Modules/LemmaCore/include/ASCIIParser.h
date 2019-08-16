@@ -75,6 +75,14 @@ class ASCIIParser : public LemmaObject {
     static std::shared_ptr< ASCIIParser >  DeSerialize( const YAML::Node& node );
 
     /**
+     *   Constructs an object from a string representation of a YAML::Node. This is primarily
+     *   used in Python wrapping
+     */
+    static std::shared_ptr<ASCIIParser> DeSerialize( const std::string& node ) {
+        return ASCIIParser::DeSerialize(YAML::Load(node));
+    }
+
+    /**
      *  Uses YAML to serialize this object.
      *  @return a YAML::Node
      */
