@@ -41,6 +41,7 @@ namespace Lemma {
     ///           dipoles.
     // ==========================================================================
     class DipoleSource : public std::enable_shared_from_this<DipoleSource>,  LemmaObject {
+    //class DipoleSource : public LemmaObject {
 
         // ====================    FRIENDS     ======================
 

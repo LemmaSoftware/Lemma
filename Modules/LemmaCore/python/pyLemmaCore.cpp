@@ -34,7 +34,8 @@ PYBIND11_MODULE(LemmaCore, m) {
 
         // lifecycle
         RectilinearGrid.def(py::init(&Lemma::RectilinearGrid::NewSP))
-        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::RectilinearGrid::DeSerialize), "Construct object from yaml representation")
+        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::RectilinearGrid::DeSerialize),
+            "Construct object from yaml representation")
 
         // print
         .def("__repr__", &Lemma::RectilinearGrid::Print)
@@ -58,11 +59,35 @@ PYBIND11_MODULE(LemmaCore, m) {
         .def("SetSpacing", &Lemma::RectilinearGrid::SetSpacing, "Sets the grid spacing in x, y, and z")
     ;
 
+    py::class_<Lemma::RectilinearGridReader, std::shared_ptr<Lemma::RectilinearGridReader> > RectilinearGridReader(m, "RectilinearGridReader");
+
+        // lifecycle
+        RectilinearGridReader.def(py::init(&Lemma::RectilinearGridReader::NewSP))
+        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::RectilinearGridReader::DeSerialize),
+            "Construct object from yaml representation")
+
+        // print
+        .def("__repr__", &Lemma::RectilinearGridReader::Print)
+        .def("Serialize", &Lemma::RectilinearGridReader::Print, "YAML representation of the class")
+
+        // accessors
+        .def("GetName", &Lemma::RectilinearGridReader::GetName, "Returns the name of the class")
+
+        // modifiers
+
+        //methods
+        .def("ReadASCIIGridFile", &Lemma::RectilinearGridReader::ReadASCIIGridFile, "Opens file specified by argument")
+
+        //methods
+        .def("GetGrid", &Lemma::RectilinearGridReader::GetGrid, "Returns the grid object")
+    ;
+
     py::class_<Lemma::ASCIIParser, std::shared_ptr<Lemma::ASCIIParser> > ASCIIParser(m, "ASCIIParser");
 
         // lifecycle
         ASCIIParser.def(py::init(&Lemma::ASCIIParser::NewSP))
-        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::ASCIIParser::DeSerialize), "Construct object from yaml representation")
+        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::ASCIIParser::DeSerialize),
+            "Construct object from yaml representation")
 
         // print
         .def("__repr__", &Lemma::ASCIIParser::Print)
@@ -90,7 +115,8 @@ PYBIND11_MODULE(LemmaCore, m) {
 
         // lifecycle
         .def(py::init(&Lemma::CubicSplineInterpolator::NewSP))
-        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::CubicSplineInterpolator::DeSerialize), "Construct object from yaml representation")
+        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::CubicSplineInterpolator::DeSerialize),
+            "Construct object from yaml representation")
 
         // print
         .def("__repr__", &Lemma::CubicSplineInterpolator::Print)
@@ -103,14 +129,19 @@ PYBIND11_MODULE(LemmaCore, m) {
 
         // modifiers
         .def("SetKnots", &Lemma::CubicSplineInterpolator::SetKnots, "Sets the knots to use for interpolation")
-        .def("ResetKnotOrdinate", &Lemma::CubicSplineInterpolator::ResetKnotOrdinate, "Resets the knots to use for interpolation, when abscissa values haven't changed")
+        .def("ResetKnotOrdinate", &Lemma::CubicSplineInterpolator::ResetKnotOrdinate,
+            "Resets the knots to use for interpolation, when abscissa values haven't changed")
 
         // methods
         .def("InterpolateOrderedSet", &Lemma::CubicSplineInterpolator::InterpolateOrderedSet, "Interpolate a monotonically increasing ordered set.")
-        .def("Integrate", py::overload_cast<const Lemma::Real&, const Lemma::Real& >(&Lemma::CubicSplineInterpolator::Integrate), "Integrates between the arguments using cubic spline values.")
-        .def("IntegrateN", py::overload_cast<const Lemma::Real&, const Lemma::Real&, const int& >(&Lemma::CubicSplineInterpolator::Integrate), "Integrates the spline from x0 to x1. Uses composite Simpson's rule and n is the number of segments")
-        .def("Interpolate", py::overload_cast<const Lemma::Real& >(&Lemma::CubicSplineInterpolator::Interpolate), "Interpolation at a single point, x is the interpolation abscissa point, returns the ordinate value at x")
-        .def("InterpolateI", py::overload_cast<const Lemma::Real&, int& >(&Lemma::CubicSplineInterpolator::Interpolate), "Interpolation at a single point, x is the interpolation abscissa point and i is the knot to begin searchin at returns the ordinate value at x")
+        .def("Integrate", py::overload_cast<const Lemma::Real&, const Lemma::Real& >(&Lemma::CubicSplineInterpolator::Integrate),
+                "Integrates between the arguments using cubic spline values.")
+        .def("IntegrateN", py::overload_cast<const Lemma::Real&, const Lemma::Real&, const int& >(&Lemma::CubicSplineInterpolator::Integrate),
+                "Integrates the spline from x0 to x1. Uses composite Simpson's rule and n is the number of segments")
+        .def("Interpolate", py::overload_cast<const Lemma::Real& >(&Lemma::CubicSplineInterpolator::Interpolate),
+                "Interpolation at a single point, x is the interpolation abscissa point, returns the ordinate value at x")
+        .def("InterpolateI", py::overload_cast<const Lemma::Real&, int& >(&Lemma::CubicSplineInterpolator::Interpolate),
+                "Interpolation at a single point, x is the interpolation abscissa point and i is the knot to begin searchin at returns the ordinate value at x")
 
     ;
 

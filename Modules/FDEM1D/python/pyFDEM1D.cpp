@@ -31,22 +31,24 @@ PYBIND11_MODULE(FDEM1D, m) {
     m.doc() = "Python binding of Lemma::FDEM1D, additional details can be found at https://lemmasoftware.org";
 
 
-    py::class_<Lemma::WireAntenna, std::shared_ptr<Lemma::WireAntenna> > WireAntenna(m, "WireAntenna"); //, py::dynamic_attr());
+    py::class_<Lemma::WireAntenna, std::shared_ptr<Lemma::WireAntenna> > WireAntenna(m, "WireAntenna");
 
         // lifecycle
         WireAntenna.def(py::init(&Lemma::WireAntenna::NewSP))
-        .def("Serialize", &Lemma::WireAntenna::Print, "YAML representation of the class")
         .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::WireAntenna::DeSerialize), "Construct object from yaml representation")
 
         // print
+        .def("Serialize", &Lemma::WireAntenna::Print, "YAML representation of the class")
         .def("__repr__", &Lemma::WireAntenna::Print)
 
         // modifiers
         .def("SetNumberOfPoints", &Lemma::WireAntenna::SetNumberOfPoints, "Sets the number of points comprising the antenna")
         .def("SetPoint", py::overload_cast<const int&, const Lemma::Real&, const Lemma::Real&, const Lemma::Real&>(&Lemma::WireAntenna::SetPoint), "Sets a point in the antenna")
-        .def("SetPoint", py::overload_cast<const int&, const Lemma::Vector3r&>(&Lemma::WireAntenna::SetPoint), "Sets a point in the antenna")
+        .def("SetPoint", py::overload_cast<const int&, const Lemma::Vector3r&>(&Lemma::WireAntenna::SetPoint),
+            "Sets a point in the antenna")
         .def("SetNumberOfTurns", &Lemma::WireAntenna::SetNumberOfTurns, "Sets the number of turns of the antenna")
-        .def("SetNumberOfFrequencies", &Lemma::WireAntenna::SetNumberOfFrequencies, "Sets the number of frequencies of the transmitter")
+        .def("SetNumberOfFrequencies", &Lemma::WireAntenna::SetNumberOfFrequencies,
+            "Sets the number of frequencies of the transmitter")
         .def("SetFrequency", &Lemma::WireAntenna::SetFrequency, "Sets a single frequency of the transmitter")
         .def("SetCurrent", &Lemma::WireAntenna::SetCurrent, "Sets the current of the transmitter in amps")
 
@@ -54,20 +56,24 @@ PYBIND11_MODULE(FDEM1D, m) {
         .def("GetCurrent", &Lemma::WireAntenna::GetCurrent, "Returns the current of the transmitter in amps")
         .def("GetPoints", &Lemma::WireAntenna::GetPoints, "Returns the points defining the transmitter")
         .def("GetNumberOfDipoles", &Lemma::WireAntenna::GetNumberOfDipoles, "Returns the number of dipoles defining the transmitter")
-        .def("GetNumberOfFrequencies", &Lemma::WireAntenna::GetNumberOfFrequencies, "Returns the number of frequencies for the transmitter")
+        .def("GetNumberOfFrequencies", &Lemma::WireAntenna::GetNumberOfFrequencies,
+            "Returns the number of frequencies for the transmitter")
         .def("IsHorizontallyPlanar", &Lemma::WireAntenna::IsHorizontallyPlanar, "Returns true if the transmitter is flat")
         .def("GetName", &Lemma::WireAntenna::GetName, "Returns the class name of the object")
 
         // operations
-        .def("ApproximateWithElectricDipoles", &Lemma::WireAntenna::ApproximateWithElectricDipoles, "Approximates loop with electric dipoles")
+        .def("ApproximateWithElectricDipoles", &Lemma::WireAntenna::ApproximateWithElectricDipoles,
+            "Approximates loop with electric dipoles")
 
     ;
 
-    py::class_<Lemma::PolygonalWireAntenna, std::shared_ptr<Lemma::PolygonalWireAntenna> > PolygonalWireAntenna(m, "PolygonalWireAntenna", WireAntenna); //, py::dynamic_attr())
+    py::class_<Lemma::PolygonalWireAntenna, std::shared_ptr<Lemma::PolygonalWireAntenna> > PolygonalWireAntenna(m,
+            "PolygonalWireAntenna", WireAntenna);
 
         // lifecycle
         PolygonalWireAntenna.def(py::init(&Lemma::PolygonalWireAntenna::NewSP))
-        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::PolygonalWireAntenna::DeSerialize), "Construct object from yaml representation")
+        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::PolygonalWireAntenna::DeSerialize),
+            "Construct object from yaml representation")
 
         // print
         .def("__repr__", &Lemma::PolygonalWireAntenna::Print)
@@ -76,14 +82,23 @@ PYBIND11_MODULE(FDEM1D, m) {
         // accessors
         .def("GetName", &Lemma::PolygonalWireAntenna::GetName, "Returns the name of the class")
 
-        // modifiers
-        //.def("SetNumberOfPoints", &Lemma::WireAntenna::SetNumberOfPoints, "Sets the number of points comprising the antenna")
-
         // operations
-        .def("ApproximateWithElectricDipoles", &Lemma::PolygonalWireAntenna::ApproximateWithElectricDipoles, "Approximates loop with series of electric dipoles around loop")
+        .def("ApproximateWithElectricDipoles", &Lemma::PolygonalWireAntenna::ApproximateWithElectricDipoles,
+            "Approximates loop with series of electric dipoles around loop")
 
     ;
 
+    //py::class_<Lemma::DipoleSource, std::shared_ptr<Lemma::DipoleSource> > DipoleSource(m, "DipoleSource");
+
+        // lifecycle
+        //DipoleSource.def(py::init(&Lemma::DipoleSource::NewSP))
+        //.def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::DipoleSource::DeSerialize), "Construct object from yaml representation")
+
+        // print
+        //.def("Serialize", &Lemma::DipoleSource::Print, "YAML representation of the class")
+        //.def("__repr__", &Lemma::DipoleSource::Print)
+
+        //;
 }
 
 
