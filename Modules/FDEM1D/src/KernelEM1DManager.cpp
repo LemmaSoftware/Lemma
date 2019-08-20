@@ -51,8 +51,9 @@ namespace Lemma {
         Earth = Earthin;
     }
 
-    void KernelEM1DManager::SetDipoleSource( DipoleSource* DipoleIn, const int& ifreqin,
-            const Real& rx_zin) {
+    void KernelEM1DManager::SetDipoleSource( DipoleSource* DipoleIn,
+                                             const int& ifreqin,
+                                             const Real& rx_zin) {
         Dipole = DipoleIn;
 
         ifreq = ifreqin;

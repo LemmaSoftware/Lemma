@@ -13,6 +13,7 @@
 #ifndef __DIPOLESOURCE_H
 #define __DIPOLESOURCE_H
 
+#include <memory>
 #include "LemmaObject.h"
 #include "LayeredEarthEM.h"
 
@@ -40,8 +41,9 @@ namespace Lemma {
     /// \details  More complex sources are constructed from a superposition of
     ///           dipoles.
     // ==========================================================================
-    class DipoleSource : public std::enable_shared_from_this<DipoleSource>,  LemmaObject {
-    //class DipoleSource : public LemmaObject {
+    //class DipoleSource : public std::enable_shared_from_this<DipoleSource>,  LemmaObject {
+    class DipoleSource : public LemmaObject, std::enable_shared_from_this<DipoleSource> {
+    //class DipoleSource : public LemmaObject, private std::enable_shared_from_this<DipoleSource> {
 
         // ====================    FRIENDS     ======================
 

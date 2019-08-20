@@ -279,6 +279,8 @@ namespace Lemma {
             KernelManager->SetEarth(Earth);
             // alternative is to use weak_ptr here, this is deep and internal, and we are safe.
             KernelManager->SetDipoleSource( shared_from_this().get() , ifreq, Receivers->GetLocation(irec)[2]);
+
+            //KernelManager->SetDipoleSource( this.get() , ifreq, Receivers->GetLocation(irec)[2] );
             kernelFreq = Freqs(ifreq); // this is never used
 
         ReSetKernels( ifreq, Fields, Receivers, irec, Earth );
@@ -288,7 +290,8 @@ namespace Lemma {
 
     // TODO we could make the dipoles template specializations avoiding this rats nest of switch statements. Probably
     //      not the most critical piece though
-    void DipoleSource::ReSetKernels(const int& ifreq, const FIELDCALCULATIONS&  Fields , std::shared_ptr<FieldPoints> Receivers, const int& irec,
+    void DipoleSource::ReSetKernels(const int& ifreq, const FIELDCALCULATIONS&  Fields ,
+            std::shared_ptr<FieldPoints> Receivers, const int& irec,
             std::shared_ptr<LayeredEarthEM> Earth  ) {
 
         Vector3r Pol = Phat;
