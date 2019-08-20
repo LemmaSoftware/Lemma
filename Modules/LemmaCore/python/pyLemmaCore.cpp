@@ -30,6 +30,86 @@ PYBIND11_MODULE(LemmaCore, m) {
 
     m.doc() = "Python binding of LemmaCore, additional details can be found at https://lemmasoftware.org";
 
+    //////////////////
+    // Enumerations //
+    //////////////////
+
+    py::enum_<Lemma::MAGUNITS>(m, "MAGUNITS")
+        .value("TESLA", Lemma::TESLA)
+        .value("NANOTESLA", Lemma::NANOTESLA)
+        .value("GAUSS", Lemma::GAUSS)
+        .export_values();
+
+    py::enum_<Lemma::TEMPUNITS>(m, "TEMPUNITS")
+        .value("CELCIUS", Lemma::CELCIUS)
+        .value("KELVIN", Lemma::KELVIN)
+        .export_values();
+
+    py::enum_<Lemma::TIMEUNITS>(m, "TIMEUNITS")
+        .value("SEC", Lemma::SEC)
+        .value("MILLISEC", Lemma::MILLISEC)
+        .value("MICROSEC", Lemma::MICROSEC)
+        .value("NANOSEC", Lemma::NANOSEC)
+        .value("PICOSEC", Lemma::PICOSEC)
+        .export_values();
+
+    py::enum_<Lemma::FREQUENCYUNITS>(m, "FREQUENCYUNITS")
+        .value("HZ", Lemma::HZ)
+        .value("KHZ", Lemma::KHZ)
+        .value("MHZ", Lemma::MHZ)
+        .value("GHZ", Lemma::GHZ)
+        .export_values();
+
+    py::enum_<Lemma::FEMCOILORIENTATION>(m, "FEMCOILORIENTATION")
+        .value("COAXIAL", Lemma::COAXIAL)
+        .value("COPLANAR", Lemma::COPLANAR)
+        .export_values();
+
+    py::enum_<Lemma::DIPOLESOURCETYPE>(m, "DIPOLESOURCETYPE")
+        .value("NOSOURCETYPE", Lemma::NOSOURCETYPE)
+        .value("GROUNDEDELECTRICDIPOLE", Lemma::GROUNDEDELECTRICDIPOLE )
+        .value("UNGROUNDEDELECTRICDIPOLE", Lemma::UNGROUNDEDELECTRICDIPOLE )
+        .value("MAGNETICDIPOLE", Lemma::MAGNETICDIPOLE )
+        .export_values();
+
+    py::enum_<Lemma::HANKELTRANSFORMTYPE>(m, "HANKELTRANSFORMTYPE")
+        .value("ANDERSON801", Lemma::ANDERSON801)
+        .value("CHAVE", Lemma::CHAVE)
+        .value("FHTKEY201", Lemma::FHTKEY201)
+        .value("FHTKEY101", Lemma::FHTKEY101)
+        .value("FHTKEY51", Lemma::FHTKEY51)
+        .value("QWEKEY", Lemma::QWEKEY)
+        .value("FHTKONG61", Lemma::FHTKONG61)
+        .value("FHTKONG121", Lemma::FHTKONG121)
+        .value("FHTKONG241", Lemma::FHTKONG241)
+        .value("IRONS", Lemma::IRONS)
+        .export_values();
+
+
+    py::enum_<Lemma::FIELDCALCULATIONS>(m, "FIELDCALCULATIONS")
+        .value("E", Lemma::E)
+        .value("H", Lemma::H)
+        .value("BOTH", Lemma::BOTH)
+        .export_values();
+
+    //what the what? This won't compile on gcc?? Maybe because not all caps?
+    /*
+    py::enum_<Lemma::DipoleSourcePolarity>(m "DipoleSourcePolarity")
+        .value("NEGATIVE", Lemma::NEGATIVE)
+        .value("POSITIVE", Lemma::POSITIVE)
+        .export_values();
+
+    py::enum_<Lemma::DipoleSourcePolarisation>(m "DipoleSourcePolarisation")
+        .value("NOPOLARISATION", Lemma::NOPOLARISATION)
+        .value("XPOLARISATION", Lemma::XPOLARISATION)
+        .value("YPOLARISATION", Lemma::YPOLARISATION)
+        .value("ZPOLARISATION", Lemma::ZPOLARISATION)
+        .export_values();
+    */
+
+    ///////////////////////
+    // LemmaCore Classes //
+    ///////////////////////
     py::class_<Lemma::RectilinearGrid, std::shared_ptr<Lemma::RectilinearGrid> > RectilinearGrid(m, "RectilinearGrid");
 
         // lifecycle

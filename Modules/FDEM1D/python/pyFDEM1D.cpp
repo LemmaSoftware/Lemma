@@ -92,12 +92,40 @@ PYBIND11_MODULE(FDEM1D, m) {
 
         // lifecycle
         DipoleSource.def(py::init(&Lemma::DipoleSource::NewSP))
-        //.def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::DipoleSource::DeSerialize), "Construct object from yaml representation")
+        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::DipoleSource::DeSerialize),
+            "Construct object from yaml representation")
 
         // print
         .def("Serialize", &Lemma::DipoleSource::Print, "YAML representation of the class")
         .def("__repr__", &Lemma::DipoleSource::Print)
 
+        // accessors
+        .def("GetName", &Lemma::DipoleSource::GetName, "Returns the name of the class")
+        .def("GetNumberOfFrequencies", &Lemma::DipoleSource::GetNumberOfFrequencies,
+                "Returns the number of frequencies")
+        .def("GetFrequencies", &Lemma::DipoleSource::GetFrequencies, "Returns an array of frequencies")
+        .def("GetFrequency", &Lemma::DipoleSource::GetFrequency, "Returns the frequency of the argument index")
+        .def("GetAngularFrequency", &Lemma::DipoleSource::GetAngularFrequency,
+            "Returns the angular frequency of the argument index")
+        .def("GetPhase", &Lemma::DipoleSource::GetPhase, "Returns the phase of the dipole")
+        .def("GetMoment", &Lemma::DipoleSource::GetMoment, "Returns the moment of the dipole")
+        .def("GetLocation", py::overload_cast< >(&Lemma::DipoleSource::GetLocation), "Returns the location of the dipole")
+        .def("GetPolarisation", &Lemma::DipoleSource::GetPolarisation, "Returns the polarisation of the dipole")
+
+        // modifiers
+        .def("SetLocation", py::overload_cast<const Lemma::Vector3r&> (&Lemma::DipoleSource::SetLocation),
+            "Sets the location of the dipole")
+        .def("SetPolarisation", py::overload_cast<const Lemma::Vector3r&> (&Lemma::DipoleSource::SetPolarisation),
+            "Sets the polarisation of the dipole")
+        .def("SetType", &Lemma::DipoleSource::SetType, "Sets the type")
+        .def("SetMoment", &Lemma::DipoleSource::SetMoment, "Sets the moment of the dipole")
+        .def("SetPhase", &Lemma::DipoleSource::SetPhase, "Sets the phase of the dipole")
+        .def("SetNumberOfFrequencies", &Lemma::DipoleSource::SetNumberOfFrequencies,
+            "Sets the number of frequencies to calculate for the dipole")
+        .def("SetFrequency", &Lemma::DipoleSource::SetFrequency,
+            "Sets a single frequency, first argument is index, second argument is frequency")
+        .def("SetFrequencies", &Lemma::DipoleSource::SetFrequencies,
+            "Sets all frequencies, argument is numpy array of frequencies")
         ;
 }
 

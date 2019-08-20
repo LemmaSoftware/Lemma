@@ -85,6 +85,13 @@ namespace Lemma {
              */
             static std::shared_ptr< DipoleSource > DeSerialize(const YAML::Node& node);
 
+            /**
+             *   Constructs an object from a string representation of a YAML::Node. This is primarily
+             *   used in Python wrapping
+             */
+            static std::shared_ptr<DipoleSource> DeSerialize( const std::string& node ) {
+                return DipoleSource::DeSerialize(YAML::Load(node));
+            }
 
             /** Returns a deep copy of the dipole. Used to make thread safe methods. Does not
                 copy attachments.
