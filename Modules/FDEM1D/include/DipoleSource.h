@@ -41,9 +41,10 @@ namespace Lemma {
     /// \details  More complex sources are constructed from a superposition of
     ///           dipoles.
     // ==========================================================================
-    //class DipoleSource : public std::enable_shared_from_this<DipoleSource>,  LemmaObject {
-    class DipoleSource : public LemmaObject, std::enable_shared_from_this<DipoleSource> {
-    //class DipoleSource : public LemmaObject, private std::enable_shared_from_this<DipoleSource> {
+    // pybind11 struggles with deriving from enable_shared_from_this,
+    //          instead we revert to raw pointers inside Lemma which also boosts performance
+    //class DipoleSource : public LemmaObject, std::enable_shared_from_this<DipoleSource> {
+    class DipoleSource : public LemmaObject {
 
         // ====================    FRIENDS     ======================
 

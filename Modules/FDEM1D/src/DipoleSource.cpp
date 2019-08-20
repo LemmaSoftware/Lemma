@@ -276,9 +276,11 @@ namespace Lemma {
         layr = Earth->GetLayerAtThisDepth(Receivers->GetLocation(irec)[2]);
 
         KernelManager = KernelEM1DManager::NewSP();
+
             KernelManager->SetEarth(Earth);
             // alternative is to use weak_ptr here, this is deep and internal, and we are safe.
-            KernelManager->SetDipoleSource( shared_from_this().get() , ifreq, Receivers->GetLocation(irec)[2]);
+            //KernelManager->SetDipoleSource( shared_from_this().get() , ifreq, Receivers->GetLocation(irec)[2]);
+            KernelManager->SetDipoleSource( this, ifreq, Receivers->GetLocation(irec)[2]);
 
             //KernelManager->SetDipoleSource( this.get() , ifreq, Receivers->GetLocation(irec)[2] );
             kernelFreq = Freqs(ifreq); // this is never used

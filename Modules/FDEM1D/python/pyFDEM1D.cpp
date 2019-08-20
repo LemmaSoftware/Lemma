@@ -88,17 +88,17 @@ PYBIND11_MODULE(FDEM1D, m) {
 
     ;
 
-    //py::class_<Lemma::DipoleSource, std::shared_ptr<Lemma::DipoleSource> > DipoleSource(m, "DipoleSource");
+    py::class_<Lemma::DipoleSource, std::shared_ptr<Lemma::DipoleSource> > DipoleSource(m, "DipoleSource");
 
         // lifecycle
-        //DipoleSource.def(py::init(&Lemma::DipoleSource::NewSP))
+        DipoleSource.def(py::init(&Lemma::DipoleSource::NewSP))
         //.def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::DipoleSource::DeSerialize), "Construct object from yaml representation")
 
         // print
-        //.def("Serialize", &Lemma::DipoleSource::Print, "YAML representation of the class")
-        //.def("__repr__", &Lemma::DipoleSource::Print)
+        .def("Serialize", &Lemma::DipoleSource::Print, "YAML representation of the class")
+        .def("__repr__", &Lemma::DipoleSource::Print)
 
-        //;
+        ;
 }
 
 
