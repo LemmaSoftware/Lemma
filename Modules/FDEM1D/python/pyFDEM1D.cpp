@@ -35,7 +35,8 @@ PYBIND11_MODULE(FDEM1D, m) {
 
         // lifecycle
         WireAntenna.def(py::init(&Lemma::WireAntenna::NewSP))
-        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::WireAntenna::DeSerialize), "Construct object from yaml representation")
+        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::WireAntenna::DeSerialize),
+            "Construct object from yaml representation")
 
         // print
         .def("Serialize", &Lemma::WireAntenna::Print, "YAML representation of the class")
@@ -43,7 +44,8 @@ PYBIND11_MODULE(FDEM1D, m) {
 
         // modifiers
         .def("SetNumberOfPoints", &Lemma::WireAntenna::SetNumberOfPoints, "Sets the number of points comprising the antenna")
-        .def("SetPoint", py::overload_cast<const int&, const Lemma::Real&, const Lemma::Real&, const Lemma::Real&>(&Lemma::WireAntenna::SetPoint), "Sets a point in the antenna")
+        .def("SetPoint", py::overload_cast<const int&, const Lemma::Real&, const Lemma::Real&, const Lemma::Real&>(&Lemma::WireAntenna::SetPoint),
+            "Sets a point in the antenna")
         .def("SetPoint", py::overload_cast<const int&, const Lemma::Vector3r&>(&Lemma::WireAntenna::SetPoint),
             "Sets a point in the antenna")
         .def("SetNumberOfTurns", &Lemma::WireAntenna::SetNumberOfTurns, "Sets the number of turns of the antenna")
@@ -127,26 +129,37 @@ PYBIND11_MODULE(FDEM1D, m) {
         .def("SetFrequencies", &Lemma::DipoleSource::SetFrequencies,
             "Sets all frequencies, argument is numpy array of frequencies")
         ;
-}
 
+    py::class_<Lemma::LayeredEarthEM, std::shared_ptr<Lemma::LayeredEarthEM> > LayeredEarthEM(m, "LayeredEarthEM");
 
-/*
-BOOST_PYTHON_MODULE(pyLemmaCore)
-{
-    Py_Initialize();
-    np::initialize();
-
- 	bp::class_<Lemma::PolygonalWireAntenna, boost::noncopyable> ("PolygonalWireAntenna", boost::python::no_init)
+        // lifecycle
+        LayeredEarthEM.def(py::init(&Lemma::LayeredEarthEM::NewSP))
+        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::LayeredEarthEM::DeSerialize),
+            "Construct object from yaml representation")
 
         // print
-        .def(boost::python::self_ns::str(bp::self))
+        .def("Serialize", &Lemma::LayeredEarthEM::Print, "YAML representation of the class")
+        .def("__repr__", &Lemma::LayeredEarthEM::Print)
 
-        // Lifecycle
-        .def("__init__", boost::python::make_constructor(&Lemma::PolygonalWireAntenna::NewSP))
-        //.def("Serialize", &Lemma::PolygonalWireAntenna::Serialize)
-        //.def("DeSerialize", &Lemma::PolygonalWireAntenna::DeSerialize)
+        // accessors
+        .def("GetName", &Lemma::LayeredEarthEM::GetName, "Returns the name of the class")
 
-        // Accessors
-    ;
+        // modifiers
+        .def("SetNumberOfLayers", &Lemma::LayeredEarthEM::SetNumberOfLayers, "Sets the number of layers in the model")
+        .def("SetLayerConductivity", py::overload_cast< const Lemma::VectorXcr& >(&Lemma::LayeredEarthEM::SetLayerConductivity),
+            "Sets the conductivity of the layers, the input is a complex array of conductivity")
+        .def("SetLayerConductivity1", py::overload_cast< const int&, const Lemma::Complex& >(&Lemma::LayeredEarthEM::SetLayerConductivity),
+            "Sets the conductivity of a single layer, the first input is the layer index, and the secondinput is a complex conductivity")
+        .def("SetLayerThickness", &Lemma::LayeredEarthEM::SetLayerThickness,
+            "Sets the thickness of layers, excluding the air and bottom which are infinite")
+
+        // methods
+        .def("EvaluateColeColeModel", &Lemma::LayeredEarthEM::EvaluateColeColeModel,
+            "Calculates complex resistivity based on cole-cole parameters")
+
+
+        ;
+
 }
-*/
+
+

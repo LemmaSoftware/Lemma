@@ -62,6 +62,14 @@ namespace Lemma {
              */
             static std::shared_ptr< LayeredEarthEM > DeSerialize(const YAML::Node& node);
 
+            /**
+             *   Constructs an object from a string representation of a YAML::Node. This is primarily
+             *   used in Python wrapping
+             */
+            static std::shared_ptr< LayeredEarthEM > DeSerialize( const std::string& node ) {
+                return LayeredEarthEM::DeSerialize(YAML::Load(node));
+            }
+
             /** @return a deep copy
              */
 			std::shared_ptr<LayeredEarthEM> Clone();
@@ -94,7 +102,7 @@ namespace Lemma {
              *  @param[in] sigma is  the conducivity of the layer
              *  @param[in] ilay is  the layer index
              */
-            void SetLayerConductivity(const int& ilay, const Complex &sigma);
+            void SetLayerConductivity(const int& ilay, const Complex& sigma);
 
             /* Sets Complex resitivity of the layers
              *  @param[in] ohm is a vector of the resistivity of the layers
