@@ -57,7 +57,8 @@ PYBIND11_MODULE(FDEM1D, m) {
         // accessors
         .def("GetCurrent", &Lemma::WireAntenna::GetCurrent, "Returns the current of the transmitter in amps")
         .def("GetPoints", &Lemma::WireAntenna::GetPoints, "Returns the points defining the transmitter")
-        .def("GetNumberOfDipoles", &Lemma::WireAntenna::GetNumberOfDipoles, "Returns the number of dipoles defining the transmitter")
+        .def("GetNumberOfDipoles", &Lemma::WireAntenna::GetNumberOfDipoles,
+            "Returns the number of dipoles defining the transmitter")
         .def("GetNumberOfFrequencies", &Lemma::WireAntenna::GetNumberOfFrequencies,
             "Returns the number of frequencies for the transmitter")
         .def("IsHorizontallyPlanar", &Lemma::WireAntenna::IsHorizontallyPlanar, "Returns true if the transmitter is flat")
@@ -144,6 +145,54 @@ PYBIND11_MODULE(FDEM1D, m) {
         // accessors
         .def("GetName", &Lemma::LayeredEarthEM::GetName, "Returns the name of the class")
 
+        .def("GetLayerConductivity", py::overload_cast<>(&Lemma::LayeredEarthEM::GetLayerConductivity),
+            "Returns the conductivity of all layers")
+        .def("GetLayerConductivity1", py::overload_cast<const int&>(&Lemma::LayeredEarthEM::GetLayerConductivity),
+            "Returns the conductivity of the specified layer")
+
+        .def("GetLayerSusceptibility", py::overload_cast<>(&Lemma::LayeredEarthEM::GetLayerSusceptibility),
+            "Returns the susceptibility of all layers")
+        .def("GetLayerSusceptibility1", py::overload_cast<const int&>(&Lemma::LayeredEarthEM::GetLayerSusceptibility),
+            "Returns the susceptibilty of the specified layer")
+        .def("GetLayerLowFreqSusceptibility", py::overload_cast<>(&Lemma::LayeredEarthEM::GetLayerLowFreqSusceptibility),
+            "Returns the low frequqncy permitivity of all layers")
+        .def("GetLayerLowFreqSusceptibility1", py::overload_cast<const int&>(&Lemma::LayeredEarthEM::GetLayerLowFreqSusceptibility),
+            "Returns the low frequency permitivity of the specified layer")
+        .def("GetLayerHighFreqSusceptibility", py::overload_cast<>(&Lemma::LayeredEarthEM::GetLayerHighFreqSusceptibility),
+            "Returns the low frequency permitivity of all layers")
+        .def("GetLayerHighFreqSusceptibility1", py::overload_cast<const int&>(&Lemma::LayeredEarthEM::GetLayerHighFreqSusceptibility),
+            "Returns the low frequency permitivity of the specified layer")
+        .def("GetLayerTauSusceptibility", py::overload_cast<>(&Lemma::LayeredEarthEM::GetLayerTauSusceptibility),
+            "Returns the tau permitivity of all layers")
+        .def("GetLayerTauSusceptibility1", py::overload_cast<const int&>(&Lemma::LayeredEarthEM::GetLayerTauSusceptibility),
+            "Returns the tau permitivity of the specified layer")
+        .def("GetLayerBreathSusceptibility", py::overload_cast<>(&Lemma::LayeredEarthEM::GetLayerBreathSusceptibility),
+            "Returns the breth permitivity of all layers")
+        .def("GetLayerBreathSusceptibility1", py::overload_cast<const int&>(&Lemma::LayeredEarthEM::GetLayerBreathSusceptibility),
+            "Returns the breath permitivity of the specified layer")
+
+        .def("GetLayerPermitivity", py::overload_cast<>(&Lemma::LayeredEarthEM::GetLayerPermitivity),
+            "Returns the permitivity of all layers")
+        .def("GetLayerPermitivity1", py::overload_cast<const int&>(&Lemma::LayeredEarthEM::GetLayerPermitivity),
+            "Returns the permitivity of the specified layer")
+        .def("GetLayerLowFreqPermitivity", py::overload_cast<>(&Lemma::LayeredEarthEM::GetLayerLowFreqPermitivity),
+            "Returns the low frequqncy permitivity of all layers")
+        .def("GetLayerLowFreqPermitivity1", py::overload_cast<const int&>(&Lemma::LayeredEarthEM::GetLayerLowFreqPermitivity),
+            "Returns the low frequency permitivity of the specified layer")
+        .def("GetLayerHighFreqPermitivity", py::overload_cast<>(&Lemma::LayeredEarthEM::GetLayerHighFreqPermitivity),
+            "Returns the low frequency permitivity of all layers")
+        .def("GetLayerHighFreqPermitivity1", py::overload_cast<const int&>(&Lemma::LayeredEarthEM::GetLayerHighFreqPermitivity),
+            "Returns the low frequency permitivity of the specified layer")
+        .def("GetLayerTauPermitivity", py::overload_cast<>(&Lemma::LayeredEarthEM::GetLayerTauPermitivity),
+            "Returns the tau permitivity of all layers")
+        .def("GetLayerTauPermitivity1", py::overload_cast<const int&>(&Lemma::LayeredEarthEM::GetLayerTauPermitivity),
+            "Returns the tau permitivity of the specified layer")
+        .def("GetLayerBreathPermitivity", py::overload_cast<>(&Lemma::LayeredEarthEM::GetLayerBreathPermitivity),
+            "Returns the breth permitivity of all layers")
+        .def("GetLayerBreathPermitivity1", py::overload_cast<const int&>(&Lemma::LayeredEarthEM::GetLayerBreathPermitivity),
+            "Returns the breath permitivity of the specified layer")
+
+
         // modifiers
         .def("SetNumberOfLayers", &Lemma::LayeredEarthEM::SetNumberOfLayers, "Sets the number of layers in the model")
         .def("SetLayerConductivity", py::overload_cast< const Lemma::VectorXcr& >(&Lemma::LayeredEarthEM::SetLayerConductivity),
@@ -152,6 +201,21 @@ PYBIND11_MODULE(FDEM1D, m) {
             "Sets the conductivity of a single layer, the first input is the layer index, and the secondinput is a complex conductivity")
         .def("SetLayerThickness", &Lemma::LayeredEarthEM::SetLayerThickness,
             "Sets the thickness of layers, excluding the air and bottom which are infinite")
+
+        .def("SetLayerHighFreqSusceptibility", &Lemma::LayeredEarthEM::SetLayerHighFreqSusceptibility,
+            "Sets the high frequency susceptibility for Cole-COle model")
+        .def("SetLayerLowFreqSusceptibility", &Lemma::LayeredEarthEM::SetLayerLowFreqSusceptibility,
+            "Sets the low frequency susceptibility for Cole-COle model")
+        .def("SetLayerBreathSusceptibility", &Lemma::LayeredEarthEM::SetLayerBreathSusceptibility,
+            "Sets thesusceptibility breath for Cole-COle model")
+
+        .def("SetLayerHighFreqPermitivity", &Lemma::LayeredEarthEM::SetLayerHighFreqPermitivity,
+            "Sets the high frequency permitivity for Cole-COle model")
+        .def("SetLayerLowFreqPermitivity", &Lemma::LayeredEarthEM::SetLayerLowFreqPermitivity,
+            "Sets the low frequency permitivity for Cole-COle model")
+        .def("SetLayerBreathPermitivity", &Lemma::LayeredEarthEM::SetLayerBreathPermitivity,
+            "Sets the permitivity breath for Cole-COle model")
+
 
         // methods
         .def("EvaluateColeColeModel", &Lemma::LayeredEarthEM::EvaluateColeColeModel,
