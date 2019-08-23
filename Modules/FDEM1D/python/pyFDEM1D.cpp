@@ -90,6 +90,13 @@ PYBIND11_MODULE(FDEM1D, m) {
         .def("ApproximateWithElectricDipoles", &Lemma::PolygonalWireAntenna::ApproximateWithElectricDipoles,
             "Approximates loop with series of electric dipoles around loop")
 
+        // modifiers
+        .def("SetMinDipoleRatio", &Lemma::PolygonalWireAntenna::SetMinDipoleRatio,
+            "Sets the minimum dipole ratio use, smaller values increase precision")
+        .def("SetMinDipoleMoment", &Lemma::PolygonalWireAntenna::SetMinDipoleMoment,
+            "Sets the minimum dipole moment which will be used, smaller values increase precision and computational time")
+        .def("SetMaxDipoleMoment", &Lemma::PolygonalWireAntenna::SetMaxDipoleMoment,
+            "Sets the maximum dipole moment which will be used, smaller values increase precision and computational time")
     ;
 
     py::class_<Lemma::DipoleSource, std::shared_ptr<Lemma::DipoleSource> > DipoleSource(m, "DipoleSource");
