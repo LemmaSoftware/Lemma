@@ -92,6 +92,14 @@ namespace Lemma {
              */
             static std::shared_ptr<FieldPoints> DeSerialize(const YAML::Node& node);
 
+            /**
+             *   Constructs an object from a string representation of a YAML::Node. This is primarily
+             *   used in Python wrapping
+             */
+            static std::shared_ptr<FieldPoints> DeSerialize( const std::string& node ) {
+                return FieldPoints::DeSerialize(YAML::Load(node));
+            }
+
             // ====================  OPERATORS     ===========================
 
             // ====================  OPERATIONS    ===========================
@@ -116,11 +124,8 @@ namespace Lemma {
             /// Returns the number of receiverpoints.
             int GetNumberOfPoints();
 
-            /// Returns all the receiver locations as a 3 X matrix
-            Vector3Xr GetLocations();
-
-            /// Returns all the receiver locations as a general matrix, useful for python wrapper
-            MatrixXr GetLocationsMat();
+            /// Returns all of the computed E fields. Every frequency
+            std::vector<Vector3Xcr> GetEfield( );
 
             /// Returns the E field for all locations
             /// nfreq is the freqency desired
@@ -130,23 +135,20 @@ namespace Lemma {
             /// nfreq is the freqency desired, cast to general dynamic matrix, for python interoperability
             MatrixXcr GetEfieldMat(const int &nfreq);
 
-            /// Returns the H field for all locations
-            /// nfreq is the freqency desired, cast to general dynamic matrix, for python interoperability
-            MatrixXcr GetHfieldMat(const int &nfreq);
+            /// Returns the E field of a single receiver as an Eigen Vector
+            /// nfreq is the freqency desired
+            Vector3cr GetEfield(const int &nfreq, const int& loc);
+
+            /// Returns all of the computed H fields. Every frequency
+            std::vector<Vector3Xcr> GetHfield( );
 
             /// Returns the H field for all locations
             /// nfreq is the freqency desired
             Vector3Xcr GetHfield(const int &nfreq);
 
-            /// Returns all of the computed H fields. Every frequency
-            std::vector<Vector3Xcr> GetHfield( );
-
-            /// Returns all of the computed E fields. Every frequency
-            std::vector<Vector3Xcr> GetEfield( );
-
-            /// Returns the E field of a single receiver as an Eigen Vector
-            /// nfreq is the freqency desired
-            Vector3cr GetEfield(const int &nfreq, const int& loc);
+            /// Returns the H field for all locations
+            /// nfreq is the freqency desired, cast to general dynamic matrix, for python interoperability
+            MatrixXcr GetHfieldMat(const int &nfreq);
 
             /// Returns the H field of a single receiver as an Eigen Vector
             /// nfreq is the freqency desired
@@ -176,6 +178,12 @@ namespace Lemma {
                 const FIELDCOMPONENT& fcomp,
                 const VectorXr& Freqs);
             #endif
+
+            /// Returns all the receiver locations as a 3 X matrix
+            Vector3Xr GetLocations();
+
+            /// Returns all the receiver locations as a general matrix, useful for python wrapper
+            MatrixXr GetLocationsMat();
 
             /// Returns the location of a single receiver as an Eigen Vector
             Vector3r GetLocation(const int& loc);

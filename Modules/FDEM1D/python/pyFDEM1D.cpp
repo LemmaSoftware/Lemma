@@ -43,7 +43,8 @@ PYBIND11_MODULE(FDEM1D, m) {
         .def("__repr__", &Lemma::WireAntenna::Print)
 
         // modifiers
-        .def("SetNumberOfPoints", &Lemma::WireAntenna::SetNumberOfPoints, "Sets the number of points comprising the antenna")
+        .def("SetNumberOfPoints", &Lemma::WireAntenna::SetNumberOfPoints,
+            "Sets the number of points comprising the antenna")
         .def("SetPoint", py::overload_cast<const int&, const Lemma::Real&, const Lemma::Real&, const Lemma::Real&>(&Lemma::WireAntenna::SetPoint),
             "Sets a point in the antenna")
         .def("SetPoint", py::overload_cast<const int&, const Lemma::Vector3r&>(&Lemma::WireAntenna::SetPoint),
@@ -131,12 +132,13 @@ PYBIND11_MODULE(FDEM1D, m) {
             "Sets all frequencies, argument is numpy array of frequencies")
         ;
 
-    py::class_<Lemma::LayeredEarthEM, std::shared_ptr<Lemma::LayeredEarthEM> > LayeredEarthEM(m, "LayeredEarthEM");
+    py::class_<Lemma::LayeredEarthEM, std::shared_ptr<Lemma::LayeredEarthEM> >
+        LayeredEarthEM(m, "LayeredEarthEM");
 
         // lifecycle
         LayeredEarthEM.def(py::init(&Lemma::LayeredEarthEM::NewSP))
-        .def_static("DeSerialize", py::overload_cast<const std::string&>(&Lemma::LayeredEarthEM::DeSerialize),
-            "Construct object from yaml representation")
+        .def_static("DeSerialize", py::overload_cast<const std::string&>
+            (&Lemma::LayeredEarthEM::DeSerialize),"Construct object from yaml representation")
 
         // print
         .def("Serialize", &Lemma::LayeredEarthEM::Print, "YAML representation of the class")
@@ -194,7 +196,8 @@ PYBIND11_MODULE(FDEM1D, m) {
 
 
         // modifiers
-        .def("SetNumberOfLayers", &Lemma::LayeredEarthEM::SetNumberOfLayers, "Sets the number of layers in the model")
+        .def("SetNumberOfLayers", &Lemma::LayeredEarthEM::SetNumberOfLayers,
+            "Sets the number of layers in the model")
         .def("SetLayerConductivity", py::overload_cast< const Lemma::VectorXcr& >(&Lemma::LayeredEarthEM::SetLayerConductivity),
             "Sets the conductivity of the layers, the input is a complex array of conductivity")
         .def("SetLayerConductivity1", py::overload_cast< const int&, const Lemma::Complex& >(&Lemma::LayeredEarthEM::SetLayerConductivity),
@@ -220,10 +223,114 @@ PYBIND11_MODULE(FDEM1D, m) {
         // methods
         .def("EvaluateColeColeModel", &Lemma::LayeredEarthEM::EvaluateColeColeModel,
             "Calculates complex resistivity based on cole-cole parameters")
-
-
         ;
 
+    py::class_<Lemma::EMEarth1D, std::shared_ptr<Lemma::EMEarth1D> >
+        EMEarth1D(m, "EMEarth1D");
+
+        // lifecycle
+        EMEarth1D.def(py::init(&Lemma::EMEarth1D::NewSP))
+        //.def_static("DeSerialize", py::overload_cast<const std::string&>
+        //    (&Lemma::EMEarth1D::DeSerialize),"Construct object from yaml representation")
+
+        // print
+        .def("Serialize", &Lemma::EMEarth1D::Print, "YAML representation of the class")
+        .def("__repr__", &Lemma::EMEarth1D::Print)
+
+        // accessors
+        .def("GetName", &Lemma::EMEarth1D::GetName, "Returns the name of the class")
+        .def("GetFieldPoints", &Lemma::EMEarth1D::GetFieldPoints, "Returns the FieldPoint class")
+
+        // modifiers
+        .def("AttachWireAntenna", &Lemma::EMEarth1D::AttachWireAntenna,
+            "Sets the wire antenna to use for calculations")
+        .def("AttachDipoleSOurce", &Lemma::EMEarth1D::AttachDipoleSource,
+            "Sets a DipoleSource to use for calculations")
+        .def("AttachFieldPoints", &Lemma::EMEarth1D::AttachFieldPoints,
+            "Sets the FieldPoints to use for calculations")
+        .def("AttachLayeredEarthEM", &Lemma::EMEarth1D::AttachLayeredEarthEM,
+            "Sets the LayeredEarthEM to use for calculations")
+
+        .def("SetFieldToCalculate", &Lemma::EMEarth1D::SetFieldsToCalculate,
+            "Sets which fields to calculate")
+        .def("SetHankelTransformMethod", &Lemma::EMEarth1D::SetHankelTransformMethod,
+            "Sets which Hankel transform to use")
+        .def("SetTxRxMode", &Lemma::EMEarth1D::SetTxRxMode,
+            "Sets the TxRx mode flag")
+
+        //methods
+#ifdef KIHALEE_EM1D
+        .def("MakeCalc", &Lemma::EMEarth1D::MakeCalc, "Calls KiHa Lee's EM1D FORTRAN77 code")
+#endif
+
+        .def("MakeCalc3", &Lemma::EMEarth1D::MakeCalc3, "Native Lemma EM calculation")
+        .def("CalculateWireAntennaFields", &Lemma::EMEarth1D::CalculateWireAntennaFields,
+            "Native Lemma calculation of a wire antenna")
+        ;
+
+    py::class_<Lemma::FieldPoints, std::shared_ptr<Lemma::FieldPoints> >
+        FieldPoints(m, "FieldPoints");
+
+        // lifecycle
+        FieldPoints.def(py::init(&Lemma::FieldPoints::NewSP))
+        .def_static("DeSerialize", py::overload_cast<const std::string&>
+            (&Lemma::FieldPoints::DeSerialize),"Construct object from yaml representation")
+
+        // print
+        .def("Serialize", &Lemma::FieldPoints::Print, "YAML representation of the class")
+        .def("__repr__", &Lemma::FieldPoints::Print)
+
+        // modifiers
+        .def("SetNumberOfPoints", &Lemma::FieldPoints::SetNumberOfPoints,
+            "Sets the number of locations to make calculations on.")
+        .def("SetLocation", py::overload_cast< const int&, const Lemma::Vector3r& >
+            (&Lemma::FieldPoints::SetLocation), "Sets the location of the index-specified point." )
+        .def("SetLocation", py::overload_cast< const int&,
+                    const Lemma::Real&, const Lemma::Real&, const Lemma::Real& >
+            (&Lemma::FieldPoints::SetLocation),
+            "Sets the location of the index-specified point with the three coordinates")
+
+        // accessors
+        .def("GetNumberOfPoints", &Lemma::FieldPoints::GetNumberOfPoints,
+            "Returns the number of locations to make calculations on.")
+        .def("GetLocations", &Lemma::FieldPoints::GetLocations,
+            "Returns the locations which calculations are made on.")
+        .def("GetLocationsMat", &Lemma::FieldPoints::GetLocationsMat,
+            "Returns a matrix of the locations which calculations are made on.")
+        .def("GetLocation", &Lemma::FieldPoints::GetLocation,
+            "Returns the location of the specified index.")
+        .def("GetLocationX", &Lemma::FieldPoints::GetLocationX,
+            "Returns the northing (x) location of the specified index.")
+        .def("GetLocationY", &Lemma::FieldPoints::GetLocationY,
+            "Returns the easting (y) location of the specified index.")
+        .def("GetLocationZ", &Lemma::FieldPoints::GetLocationZ,
+            "Returns the altitude/depth (z) location of the specified index.")
+        .def("GetEfield", py::overload_cast<  > (&Lemma::FieldPoints::GetEfield),
+            "Returns the electric field for all frequencies.")
+        .def("GetEfield", py::overload_cast< const int& > (&Lemma::FieldPoints::GetEfield),
+            "Returns the electric field for the specified frequency index.")
+        .def("GetEfield", py::overload_cast< const int&, const int& > (&Lemma::FieldPoints::GetEfield),
+            "Returns the electric field for the specified frequency and location index.")
+        .def("GetEfieldMat", &Lemma::FieldPoints::GetEfieldMat,
+            "Returns the electric field for the specified frequency.")
+        .def("GetHfield", py::overload_cast<  > (&Lemma::FieldPoints::GetHfield),
+            "Returns the H field for all frequencies.")
+        .def("GetHfield", py::overload_cast< const int& > (&Lemma::FieldPoints::GetHfield),
+            "Returns the H field for the specified frequency index.")
+        .def("GetHfield", py::overload_cast< const int&, const int& > (&Lemma::FieldPoints::GetHfield),
+            "Returns the H field for the specified frequency and location index.")
+        //.def("GetBfield", py::overload_cast< const int&, const int& > (&Lemma::FieldPoints::GetBfield),
+        //    "Returns the magnetic (B) field for the specified frequency and location index.")
+        .def("GetHfieldMat", &Lemma::FieldPoints::GetHfieldMat,
+            "Returns the H field for the specified frequency.")
+        .def("GetMask", &Lemma::FieldPoints::MaskPoint, "Return the mask boolean value for the specified index")
+
+        // methods
+        .def("ClearFields", &Lemma::FieldPoints::ClearFields, "Clears calculated fields")
+        .def("MaskPoint", &Lemma::FieldPoints::MaskPoint, "Masks the index resulting in no calculation")
+        .def("UnMaskPoint", &Lemma::FieldPoints::UnMaskPoint, "Unmasks the index resulting in a calculation")
+
+        ;
 }
 
 

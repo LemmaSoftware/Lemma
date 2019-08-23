@@ -89,6 +89,7 @@ namespace Lemma {
              */
             YAML::Node Serialize() const;
 
+            // TODO, add this
             //static EMEarth1D* DeSerialize(const YAML::Node& node);
 
             // ====================  OPERATORS     ===========================
@@ -110,23 +111,23 @@ namespace Lemma {
             // ====================  ACCESS        ===========================
 
             /** Attaches an antennae */
-            void AttachWireAntenna( std::shared_ptr<WireAntenna> antennae);
+            void AttachWireAntenna( std::shared_ptr<WireAntenna> antennae );
 
             /** Attaches a dipole for calculation */
-            void AttachDipoleSource( std::shared_ptr<DipoleSource> dipole);
+            void AttachDipoleSource( std::shared_ptr<DipoleSource> dipole );
 
             /** Attaches a layered earth model for calculation */
-            void AttachLayeredEarthEM( std::shared_ptr<LayeredEarthEM> Earth);
+            void AttachLayeredEarthEM( std::shared_ptr<LayeredEarthEM> Earth );
 
             /** Attaches a set of receiver points for calculation */
-            void AttachFieldPoints( std::shared_ptr<FieldPoints> Receivers);
+            void AttachFieldPoints( std::shared_ptr<FieldPoints> Receivers );
 
             /** Sets the fields that are calcultated, E,H or BOTH */
-            void SetFieldsToCalculate(const FIELDCALCULATIONS &calc);
+            void SetFieldsToCalculate( const FIELDCALCULATIONS &calc );
 
             /** Sets the method to use to evaluate the Hankel integral,
              */
-            void SetHankelTransformMethod(const HANKELTRANSFORMTYPE &type);
+            void SetHankelTransformMethod( const HANKELTRANSFORMTYPE &type );
 
             /**
              *   Accesor for field points
