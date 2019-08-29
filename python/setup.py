@@ -44,7 +44,7 @@ setup(
     #'pyLemma.pyFDEM1D': ['pyFDEM1D.*.so']
     #'pyLemma.pyFDEM1D': ['pyFDEM1D.*.so']
     #'': ['LemmaCore.*.so','FDEM1D.*.so']
-    '': ['LemmaCore.*','FDEM1D.*']
+    '': ['LemmaCore.*','FDEM1D.*','Merlin.*']
   },
   zip_safe=False,
   cmdclass={'install':InstallPlatlib},

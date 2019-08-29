@@ -275,6 +275,7 @@ namespace Lemma {
         lays = Earth->GetLayerAtThisDepth(Location[2]);
         layr = Earth->GetLayerAtThisDepth(Receivers->GetLocation(irec)[2]);
 
+        // TODO, avoid smart pointer here maybe?
         KernelManager = KernelEM1DManager::NewSP();
 
             KernelManager->SetEarth(Earth);
@@ -955,8 +956,9 @@ namespace Lemma {
                             }
                             break;
                         case H:
-                            f(5) = Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[5]));
-                            f(6) = Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[6]));
+                            // TI - Comparisons with Amira show slight better agreement when neglecting these grounding terms
+                            f(5) = 0; //Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[5]));
+                            f(6) = 0; //Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[6]));
                             f(7) = Hankel->Zgauss(7, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[7]))*KernelManager->GetRAWKernel(ik[7])->GetZs()/KernelManager->GetRAWKernel(ik[7])->GetZm();
                             f(8) = Hankel->Zgauss(8, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[8]))*KernelManager->GetRAWKernel(ik[8])->GetZs()/KernelManager->GetRAWKernel(ik[8])->GetZm();
                             f(9) = Hankel->Zgauss(9, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[9]))*KernelManager->GetRAWKernel(ik[9])->GetZs()/KernelManager->GetRAWKernel(ik[9])->GetZm();
@@ -965,14 +967,12 @@ namespace Lemma {
                                         Pol[1]*QPI*(sps*f(5)+c2p*f(6)/rho-cps*f(7)+c2p*f(8)/rho)*Moment,
                                         Pol[1]*QPI*scp*(-f(5)+(Real)(2.)*f(6)/rho-f(7)+(Real)(2.)*f(8)/rho)*Moment,
                                         -Pol[1]*QPI*cp*f(9)*Moment );
-                                // Analytic whole space solution could go here
                             }
                             if (std::abs(Pol[0]) > 0) {
                                 this->Receivers->AppendHfield(ifreq, irec,
                                     Pol[0]*Moment*QPI*scp*(f(5)-(Real)(2.)*f(6)/rho+f(7)-(Real)(2.)*f(8)/rho),
                                     Pol[0]*Moment*QPI*(-cps*f(5)+c2p*f(6)/rho+sps*f(7)+c2p*f(8)/rho),
                                     Pol[0]*Moment*QPI*sp*f(9) );
-                                // Analytic whole space solution
                             }
                             break;
 
@@ -982,8 +982,8 @@ namespace Lemma {
                             f(4) = 0;
                             f(2) = Hankel->Zgauss(2, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[2])) * KernelManager->GetRAWKernel(0)->GetZs();
                             f(3) = Hankel->Zgauss(3, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[3])) * KernelManager->GetRAWKernel(1)->GetZs();
-                            f(5) = Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[5]));
-                            f(6) = Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[6]));
+                            f(5) = 0;//Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[5]));
+                            f(6) = 0;//Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[6]));
                             f(7) = Hankel->Zgauss(7, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[7]))*KernelManager->GetRAWKernel(ik[7])->GetZs()/KernelManager->GetRAWKernel(ik[7])->GetZm();
                             f(8) = Hankel->Zgauss(8, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[8]))*KernelManager->GetRAWKernel(ik[8])->GetZs()/KernelManager->GetRAWKernel(ik[8])->GetZm();
                             f(9) = Hankel->Zgauss(9, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[9]))*KernelManager->GetRAWKernel(ik[9])->GetZs()/KernelManager->GetRAWKernel(ik[9])->GetZm();

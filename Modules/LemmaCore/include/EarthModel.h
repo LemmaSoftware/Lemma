@@ -33,6 +33,10 @@ namespace Lemma {
         public:
 
             // ====================  LIFECYCLE     =======================
+
+            /// Default destructor
+            ~EarthModel ();
+
             /** YAML Serializing method
              */
             YAML::Node Serialize() const;
@@ -112,8 +116,6 @@ namespace Lemma {
             /** Deserialize constructor */
             EarthModel (const YAML::Node& node, const ctor_key&);
 
-            /// Default protected constructor.
-            ~EarthModel ();
 
             // ====================  DATA MEMBERS  =========================
 

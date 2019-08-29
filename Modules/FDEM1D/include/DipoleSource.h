@@ -16,6 +16,7 @@
 #include <memory>
 #include "LemmaObject.h"
 #include "LayeredEarthEM.h"
+//#include "PolygonalWireAntenna.h"
 
 #ifdef LEMMAUSEVTK
 #include "vtkActor.h"
@@ -51,6 +52,7 @@ namespace Lemma {
         friend std::ostream &operator<<(std::ostream &stream, const DipoleSource &ob);
 
         friend class EMEarth1D;
+        friend class PolygonalWireAntenna;
 
         public:
 

@@ -226,7 +226,19 @@ PYBIND11_MODULE(LemmaCore, m) {
     ;
 
     // ABC
-    //py::class_<Lemma::EarthModel, std::shared_ptr<Lemma::EarthModel> >(m, "EarthModel")
+    py::class_<Lemma::EarthModel, std::shared_ptr<Lemma::EarthModel> > abcEarthModel (m, "EarthModel");
+
+    // Modifiers
+    abcEarthModel.def("SetMagneticFieldIncDecMag", &Lemma::EarthModel::SetMagneticFieldIncDecMag, "Sets the inducing field" );
+    abcEarthModel.def("SetMagneticFieldComponents", &Lemma::EarthModel::SetMagneticFieldComponents, "Sets the inducing field" );
+
+    // Accessors
+    abcEarthModel.def("GetMagneticField", &Lemma::EarthModel::GetMagneticField, "returns the inducing field in Tesla" );
+    abcEarthModel.def("GetMagneticFieldInGauss", &Lemma::EarthModel::GetMagneticFieldInGauss, "returns the inducing field in Gauss" );
+    abcEarthModel.def("GetMagneticFieldUnitVector", &Lemma::EarthModel::GetMagneticFieldUnitVector, "returns the inducing field unit vector" );
+    abcEarthModel.def("GetMagneticFieldMagnitude", &Lemma::EarthModel::GetMagneticFieldMagnitude, "returns the magnitude of the inducing field" );
+    abcEarthModel.def("GetMagneticFieldMagnitudeInGauss", &Lemma::EarthModel::GetMagneticFieldMagnitudeInGauss, "returns the magnitude of the inducing field" );
+
 
     /*
     py::class_<Lemma::LayeredEarth, std::shared_ptr<Lemma::LayeredEarth> >(m, "LayeredEarth")

@@ -139,8 +139,7 @@ PYBIND11_MODULE(FDEM1D, m) {
             "Sets all frequencies, argument is numpy array of frequencies")
         ;
 
-    py::class_<Lemma::LayeredEarthEM, std::shared_ptr<Lemma::LayeredEarthEM> >
-        LayeredEarthEM(m, "LayeredEarthEM");
+    py::class_<Lemma::LayeredEarthEM, std::shared_ptr<Lemma::LayeredEarthEM>, Lemma::EarthModel > LayeredEarthEM(m, "LayeredEarthEM");
 
         // lifecycle
         LayeredEarthEM.def(py::init(&Lemma::LayeredEarthEM::NewSP))
@@ -225,7 +224,6 @@ PYBIND11_MODULE(FDEM1D, m) {
             "Sets the low frequency permitivity for Cole-COle model")
         .def("SetLayerBreathPermitivity", &Lemma::LayeredEarthEM::SetLayerBreathPermitivity,
             "Sets the permitivity breath for Cole-COle model")
-
 
         // methods
         .def("EvaluateColeColeModel", &Lemma::LayeredEarthEM::EvaluateColeColeModel,

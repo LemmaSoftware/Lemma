@@ -231,7 +231,7 @@ namespace Lemma {
         if (Antenna->GetName() == std::string("PolygonalWireAntenna") || Antenna->GetName() == std::string("TEMTransmitter") ) {
             icalc += 1;
             // Check to see if they are all on a plane? If so we can do this fast
-            if (Antenna->IsHorizontallyPlanar() && ( HankelType == ANDERSON801 || HankelType== FHTKEY201 || HankelType==FHTKEY101 ||
+            if ( Antenna->IsHorizontallyPlanar() && ( HankelType == ANDERSON801 || HankelType== FHTKEY201 || HankelType==FHTKEY101 ||
                                                      HankelType == FHTKEY51 || HankelType == FHTKONG61 || HankelType == FHTKONG121 ||
                                                      HankelType == FHTKONG241 || HankelType == IRONS )) {
                 #ifdef HAVE_BOOST_PROGRESS
@@ -246,11 +246,11 @@ namespace Lemma {
                     {
                     #endif
                     auto Hankel = HankelTransformFactory::NewSP( HankelType );
+                    auto AntCopy = static_cast<PolygonalWireAntenna*>(Antenna.get())->ClonePA();
                     #ifdef LEMMAUSEOMP
                     #pragma omp for schedule(static, 1)
                     #endif
                     for (int irec=0; irec<Receivers->GetNumberOfPoints(); ++irec) {
-                        auto AntCopy = static_cast<PolygonalWireAntenna*>(Antenna.get())->ClonePA();
                         SolveLaggedTxRxPair(irec, Hankel.get(), wavef, ifreq, AntCopy.get());
                         #ifdef HAVE_BOOST_PROGRESS
                         if (progressbar) ++(*disp);
@@ -270,7 +270,6 @@ namespace Lemma {
                     disp = new boost::progress_display( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
                 }
                 #endif
-
                 // parallelise across receivers
                 #ifdef LEMMAUSEOMP
                 #pragma omp parallel
@@ -452,8 +451,7 @@ namespace Lemma {
                                     //}
                                     auto tDipole = Antenna->GetDipoleSource(idip);
                                     // Propogation constant in free space
-                                    Real wavef   = tDipole->GetAngularFrequency(ifreq) *
-                                          std::sqrt(MU0*EPSILON0);
+                                    Real wavef   = tDipole->GetAngularFrequency(ifreq) * std::sqrt(MU0*EPSILON0);
                                     SolveSingleTxRxPair(irec, Hankel.get(), wavef, ifreq, tDipole.get());
                                 } // dipole loop
                             } // frequency loop
@@ -778,10 +776,7 @@ namespace Lemma {
     void EMEarth1D::SolveLaggedTxRxPair(const int &irec, HankelTransform* Hankel,
                     const Real &wavef, const int &ifreq, PolygonalWireAntenna* antenna) {
 
-        //std::cout << "SolveLaggedTxRxPair" << std::endl;
-
         antenna->ApproximateWithElectricDipoles(Receivers->GetLocation(irec));
-
         // Determine the min and max arguments
         Real rhomin = 1e9;
         Real rhomax = 1e-9;
