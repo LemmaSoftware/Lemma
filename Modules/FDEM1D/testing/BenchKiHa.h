@@ -56,7 +56,7 @@ public:
 		dipole->SetFrequency(0, 4400.1000);
 		//dipole->SetPhase(0);
 		//dipole->SetLocation( (VectorXr(3) << 49, 49, -1e-4).finished() );
-		dipole->SetLocation( 0, 0, -1e-4  );
+		dipole->SetLocation( 0, 0, -1e-1  );
 
 	    // Define model
 	    VectorXcr sigma(8);
@@ -72,17 +72,17 @@ public:
 	    receivers = FieldPoints::NewSP();
 		Vector3r loc;
 
-        Real ox = 2.;
-		Real oy = 2.;
-		Real oz = 2;
+        Real ox = 250.;
+		Real oy = 250.;
+		Real oz = -250.;
 
-		Real dx = 0.62;
-		Real dy = 0.62;
-		Real dz = 0.62;
+		Real dx = 20;
+		Real dy = 20;
+		Real dz = 20;
 
-		int  nx = 20;
-		int  ny = 20;
-		int  nz = 20;
+		int  nx = 13;
+		int  ny = 13;
+		int  nz = 13;
         Delta = nx*ny*nz*1e-10;
 
 		receivers->SetNumberOfPoints(nx*ny*nz);
@@ -118,6 +118,7 @@ public:
 		dipole->SetPolarisation(ZPOLARISATION);
 
         // Put in a unit test that will be slow.
+        std::cout << "MAGNETICDIPOLE Z polarisation" << std::endl;
 	    std::cout << "C++\n";
 
   	    timer.begin();
@@ -153,6 +154,7 @@ public:
 
         // Put in a unit test that will be slow.
 	    std::cout << "C++\n";
+        std::cout << "MAGNETICDIPOLE X polarisation" << std::endl;
 
   	    timer.begin();
 	    EmEarth->MakeCalc3();
@@ -187,6 +189,7 @@ public:
 
         // Put in a unit test that will be slow.
 	    std::cout << "C++\n";
+        std::cout << "MAGNETICDIPOLE Y polarisation" << std::endl;
 
   	    timer.begin();
 	    EmEarth->MakeCalc3();
@@ -221,6 +224,7 @@ public:
 
         // Put in a unit test that will be slow.
 	    std::cout << "C++\n";
+        std::cout << "GROUNDEDELECTRICDIPOLE X polarisation" << std::endl;
 
   	    timer.begin();
 	    EmEarth->MakeCalc3();

@@ -19,6 +19,7 @@ namespace Lemma {
 
         rams = lambda*lambda;
         u = (rams-kk.array()).sqrt(); // CRITICAL
+
         uk = u(0);
         um = u(0);
 
@@ -27,16 +28,14 @@ namespace Lemma {
 
         Zyd.tail<1>() = Zyi.tail<1>();
 
-        // Vectorise, performance is not really any better
+        // Vectorise, performance benchmarks approx. the same as loop w gcc 9 -TI
         cf.segment(1,nlay-2) = (-2.*u.segment(1, nlay-2).array() * LayerThickness.segment(1, nlay-2).array()).exp();
         th.segment(1,nlay-2) = (1.-cf.segment(1, nlay-2).array()) / (1.+cf.segment(1, nlay-2).array());
 
-        /*
-        for (int ilay=1; ilay<nlay-1; ++ilay) {
-            cf(ilay) = std::exp(-(Real)(2.)*u(ilay)*LayerThickness(ilay));
-            th(ilay) = ((Real)(1.)-cf(ilay)) / ((Real)(1.)+cf(ilay));
-        }
-        */
+//         for (int ilay=1; ilay<nlay-1; ++ilay) {
+//             cf(ilay) = std::exp(-(Real)(2.)*u(ilay)*LayerThickness(ilay));
+//             th(ilay) = ((Real)(1.)-cf(ilay)) / ((Real)(1.)+cf(ilay));
+//         }
 
         // recursive, can't vectorize
         for (int N=nlay-2; N >= 1; --N) {
@@ -54,6 +53,7 @@ namespace Lemma {
 
         rams = lambda*lambda;
         u = (rams-kk.array()).sqrt(); // CRITICAL
+
         uk = u(0);
         um = u(0);
 
@@ -62,16 +62,14 @@ namespace Lemma {
 
         Zyd.tail<1>() = Zyi.tail<1>();
 
-        // Vectorise
+        // Vectorise, performance benchmarks approx. the same as loop w/ gcc 9 -TI
         cf.segment(1,nlay-2) = (-2.*u.segment(1, nlay-2).array() * LayerThickness.segment(1, nlay-2).array()).exp();
         th.segment(1,nlay-2) = (1.-cf.segment(1, nlay-2).array()) / (1.+cf.segment(1, nlay-2).array());
 
-        /*
-        for (int ilay=1; ilay<nlay-1; ++ilay) {
-            cf(ilay) = std::exp(-(Real)(2.)*u(ilay)*LayerThickness(ilay));
-            th(ilay) = ((Real)(1.)-cf(ilay)) / ((Real)(1.)+cf(ilay));
-        }
-        */
+//         for (int ilay=1; ilay<nlay-1; ++ilay) {
+//             cf(ilay) = std::exp(-(Real)(2.)*u(ilay)*LayerThickness(ilay));
+//             th(ilay) = ((Real)(1.)-cf(ilay)) / ((Real)(1.)+cf(ilay));
+//         }
 
         // recursive, can't vectorize
         for (int N=nlay-2; N >=1; --N) {

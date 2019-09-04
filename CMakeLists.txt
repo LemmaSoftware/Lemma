@@ -332,6 +332,10 @@ include_directories("${PROJECT_BINARY_DIR}/include")
 include_directories ("${CMAKE_INSTALL_PREFIX}/include/")
 link_directories ("${CMAKE_INSTALL_PREFIX}/lib/")
 
+##############
+# gprof hack #
+##############
+#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
 
 ########################################################################
 # Build Modules
