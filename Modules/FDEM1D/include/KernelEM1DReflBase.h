@@ -64,13 +64,6 @@ namespace Lemma {
                 Zyi = VectorXcr::Zero(nlay);
                 th = VectorXcr::Zero(nlay);
 
-                // Don't attach Earth, because this is performance critical.
-                // Everying is internal, it's OK relax Frankie
-                //if (Earth != NULL) {
-                //    Earth->DetachFrom(this);
-                //    Earth = NULL;
-                //}
-                //EarthIn->AttachTo(this);
                 Earth = EarthIn;
 
                 LayerThickness.resize(nlay);
@@ -231,11 +224,11 @@ namespace Lemma {
 			VectorXr     LayerThickness;
 			VectorXr     LayerDepth;
 
-			/// Reflection/Transmission coeffients for upgoing waves in a
+			/// Reflection/Transmission coef. for upgoing waves in a
 			/// layered earth model
 			VectorXcr    rtu;
 
-			/// Reflection/Transmission coeffients for downgoing waves in
+			/// Reflection/Transmission coef. for downgoing waves in
 			/// a layered earth model
 			VectorXcr    rtd;
 

@@ -8,7 +8,6 @@
   @file
   @author   Trevor Irons
   @date     05/18/2010
-  @version  $Id: PolygonalWireAntenna.h 211 2015-02-27 05:43:26Z tirons $
  **/
 #ifndef  POLYGONALWIREANTENNA_INC
 #define  POLYGONALWIREANTENNA_INC
@@ -145,15 +144,8 @@ namespace Lemma {
                             const Vector3r &rp);
 
             /// Interpolates dipoles along line segment defined by p0 and p1.
-            void InterpolateLineSegment(const Vector3r &p0, const Vector3r &p1,
-                            const Vector3r &rp);
-
-
-            /// List of the dipoles
-            //std::vector<DipoleSource*>           Dipoles;
-
-            /// Points that define this loop
-            //Vector3Xr                            Points;
+            void InterpolateLineSegment(const Vector3r &p0, const Vector3r &p1, const Vector3r &rp,
+                            std::vector< std::shared_ptr<DipoleSource> > &Dipoles );
 
         private:
 

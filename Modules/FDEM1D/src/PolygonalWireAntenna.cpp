@@ -121,10 +121,15 @@ namespace Lemma {
         if ( (rRepeat-rp).norm() > 1e-16 ) {
 		    Dipoles.clear();
 
+            ///////////////////
+		    // dipole array, this has impoved performance over directly pushing
+		    std::vector< std::shared_ptr<DipoleSource> >       xDipoles;
+
 		    // loop over all segments
 		    for (int iseg=0; iseg<NumberOfPoints-1; ++iseg) {
-			    InterpolateLineSegment(Points.col(iseg), Points.col(iseg+1), rp);
+			    InterpolateLineSegment(Points.col(iseg), Points.col(iseg+1), rp, xDipoles);
 		    }
+            Dipoles = std::move(xDipoles);
             rRepeat = rp;
 
         } else {
@@ -191,8 +196,8 @@ namespace Lemma {
 	}
 
 	void PolygonalWireAntenna::InterpolateLineSegment(const Vector3r &p1,
-					const Vector3r &p2, const Vector3r & tp) {
-
+					const Vector3r &p2, const Vector3r & tp,
+					std::vector< std::shared_ptr<DipoleSource> > &xDipoles ) {
 
 		Vector3r phat = (p1-p2).array() / (p1-p2).norm();
 		Vector3r c    = this->ClosestPointOnLine(p1, p2, tp);
@@ -202,10 +207,6 @@ namespace Lemma {
 
         // unit vector
 		Vector3r cdir = (p2-p1).array() / (p2-p1).norm();
-
-		///////////////////
-		// dipoles for this segment
-		std::vector< std::shared_ptr<DipoleSource> >       xDipoles;
 
 		// go towards p1
 		if ( ((c-p1).array().abs() > minDipoleMoment).any() ) {
@@ -319,8 +320,11 @@ namespace Lemma {
 			}
 			// else case 0: nearly 'perfect' fit do nothing
 		}
-		Dipoles.insert(Dipoles.end(), xDipoles.begin(), xDipoles.end());
-	}
 
+        //Dipoles.insert(Dipoles.end(), xDipoles.begin(), xDipoles.end());
+        //Dipoles = xDipoles;
+        //xDipoles.clear();
+
+	}
 
 }
