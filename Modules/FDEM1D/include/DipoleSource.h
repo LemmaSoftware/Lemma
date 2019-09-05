@@ -224,6 +224,11 @@ namespace Lemma {
                     std::shared_ptr<FieldPoints> Receivers, const int& irec,
                     std::shared_ptr<LayeredEarthEM> Earth );
 
+            /** For use in lagged calculations, this does the necessary parts to make field calculations
+                for a segment.
+             */
+            void SetupLight(const int& ifreq,  const FIELDCALCULATIONS&  Fields, const int& irec);
+
             /** resets the kernels if they cannot be reused */
             virtual void ReSetKernels(const int& ifreq,  const FIELDCALCULATIONS&  Fields,
                     std::shared_ptr<FieldPoints> Receivers,

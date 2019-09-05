@@ -803,8 +803,15 @@ namespace Lemma {
 
         // Sort the dipoles by rho
         for (unsigned int idip=0; idip<antenna->GetNumberOfDipoles(); ++idip) {
-            auto tDipole = antenna->GetDipoleSource(idip);
-            tDipole->SetKernels(ifreq, FieldsToCalculate, Receivers, irec, Earth);
+            // Can we avoid these two lines, and instead vary the moment of the previous tDipole?
+            // SetKernels is somewhat heavy
+            auto rDipole = antenna->GetDipoleSource(idip);
+            //tDipole->SetKernels(ifreq, FieldsToCalculate, Receivers, irec, Earth); // expensive, and not used
+            tDipole->SetLocation( rDipole->GetLocation() );
+            tDipole->SetMoment( rDipole->GetMoment() );
+            tDipole->SetPolarisation( rDipole->GetPolarisation() );
+            tDipole->SetupLight( ifreq, FieldsToCalculate, irec );
+
             // Pass Hankel2 a message here so it knows which one to return in Zgauss!
             Real rho = (Receivers->GetLocation(irec).head<2>() - tDipole->GetLocation().head<2>()).norm();
             Hankel->SetLaggedArg( rho );

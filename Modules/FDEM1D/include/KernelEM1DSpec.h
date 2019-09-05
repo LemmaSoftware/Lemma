@@ -56,7 +56,8 @@ namespace Lemma {
                 return std::make_shared< KernelEM1DSpec > ( ctor_key() );
             }
 
-            static std::shared_ptr<KernelEM1DSpec> NewSP(LayeredEarthEM* Earth, std::shared_ptr<DipoleSource> Dipole,
+            /* Management has shifted from this approach, this will be removed
+            static std::shared_ptr<KernelEM1DSpec> NewSP2(LayeredEarthEM* Earth, std::shared_ptr<DipoleSource> Dipole,
                                                          const int& ifreq, const Real& rz) {
                 auto Obj = std::make_shared< KernelEM1DSpec > ( ctor_key() );
 
@@ -68,6 +69,7 @@ namespace Lemma {
 
                 return Obj;
             }
+            */
 
             // ====================  OPERATORS     =======================
 

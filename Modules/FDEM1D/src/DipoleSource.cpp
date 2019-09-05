@@ -291,6 +291,24 @@ namespace Lemma {
         return;
     }
 
+    void DipoleSource::SetupLight(const int& ifreq, const FIELDCALCULATIONS&  Fields, const int& irecin) {
+
+        xxp = Receivers->GetLocation(irec)[0] - Location[0];
+        yyp = Receivers->GetLocation(irec)[1] - Location[1];
+        rho = (Receivers->GetLocation(irec).head<2>() - Location.head<2>()).norm();
+
+        sp = yyp/rho;
+        cp = xxp/rho;
+        scp = sp*cp;
+        sps = sp*sp;
+        cps = cp*cp;
+        c2p = cps-sps;
+
+        return;
+    }
+
+
+
     // TODO we could make the dipoles template specializations avoiding this rats nest of switch statements. Probably
     //      not the most critical piece though
     void DipoleSource::ReSetKernels(const int& ifreq, const FIELDCALCULATIONS&  Fields ,
