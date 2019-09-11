@@ -231,9 +231,9 @@ namespace Lemma {
         if (Antenna->GetName() == std::string("PolygonalWireAntenna") || Antenna->GetName() == std::string("TEMTransmitter") ) {
             icalc += 1;
             // Check to see if they are all on a plane? If so we can do this fast
-            if ( Antenna->IsHorizontallyPlanar() && ( HankelType == ANDERSON801 || HankelType== FHTKEY201 || HankelType==FHTKEY101 ||
-                                                     HankelType == FHTKEY51 || HankelType == FHTKONG61 || HankelType == FHTKONG121 ||
-                                                     HankelType == FHTKONG241 || HankelType == IRONS )) {
+            if ( Antenna->IsHorizontallyPlanar() && ( HankelType == ANDERSON801 || HankelType == FHTKEY201  || HankelType==FHTKEY101 ||
+                                                      HankelType == FHTKEY51    || HankelType == FHTKONG61  || HankelType == FHTKONG121 ||
+                                                      HankelType == FHTKONG241  || HankelType == IRONS )) {
                 #ifdef HAVE_BOOST_PROGRESS
                 if (progressbar) {
                     disp = new boost::progress_display( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
@@ -263,7 +263,7 @@ namespace Lemma {
                 }
             } else if (Receivers->GetNumberOfPoints() > Antenna->GetNumberOfFrequencies()) {
 
-                std::cout << "freq parallel #1" << std::endl;
+                //std::cout << "freq parallel #1" << std::endl;
                 //** Progress display bar for long calculations */
                 #ifdef HAVE_BOOST_PROGRESS
                 if (progressbar) {
