@@ -1,3 +1,4 @@
+# manylinux 
 rm -rf build dist clean pyLemma.egg.info
 python setup.py build
 python setup.py bdist_wheel
