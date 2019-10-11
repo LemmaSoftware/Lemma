@@ -102,7 +102,7 @@ class CubicSplineInterpolator : public LemmaObject {
      *   used in Python wrapping
      */
     static std::shared_ptr<CubicSplineInterpolator> DeSerialize( const std::string& node ) {
-        return CubicSplineInterpolator::DeSerialize(YAML::Load(node));
+        return CubicSplineInterpolator::DeSerialize(YAML::LoadFile(node));
     }
 
     // ====================  OPERATORS     =======================

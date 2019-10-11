@@ -71,7 +71,7 @@ namespace Lemma {
              *   used in Python wrapping
              */
             static std::shared_ptr<PolygonalWireAntenna> DeSerialize( const std::string& node ) {
-                return PolygonalWireAntenna::DeSerialize(YAML::Load(node));
+                return PolygonalWireAntenna::DeSerialize(YAML::LoadFile(node));
             }
 
             // ====================  OPERATORS     =======================

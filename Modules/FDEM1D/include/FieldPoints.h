@@ -97,7 +97,7 @@ namespace Lemma {
              *   used in Python wrapping
              */
             static std::shared_ptr<FieldPoints> DeSerialize( const std::string& node ) {
-                return FieldPoints::DeSerialize(YAML::Load(node));
+                return FieldPoints::DeSerialize(YAML::LoadFile(node));
             }
 
             // ====================  OPERATORS     ===========================

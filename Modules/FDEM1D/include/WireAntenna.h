@@ -74,7 +74,7 @@ namespace Lemma {
              *   used in Python wrapping
              */
             static std::shared_ptr<WireAntenna> DeSerialize( const std::string& node ) {
-                return WireAntenna::DeSerialize(YAML::Load(node));
+                return WireAntenna::DeSerialize(YAML::LoadFile(node));
             }
 
             // ====================  OPERATORS     =======================

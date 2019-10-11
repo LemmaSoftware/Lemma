@@ -87,7 +87,7 @@ namespace Lemma {
              *   used in Python wrapping
              */
             static std::shared_ptr<RectilinearGrid> DeSerialize( const std::string& node ) {
-                return RectilinearGrid::DeSerialize(YAML::Load(node));
+                return RectilinearGrid::DeSerialize(YAML::LoadFile(node));
             }
 
             // ====================  OPERATORS     =======================

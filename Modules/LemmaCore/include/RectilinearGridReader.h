@@ -82,7 +82,7 @@ namespace Lemma {
              *   used in Python wrapping
              */
             static std::shared_ptr<RectilinearGridReader> DeSerialize( const std::string& node ) {
-                return RectilinearGridReader::DeSerialize(YAML::Load(node));
+                return RectilinearGridReader::DeSerialize(YAML::LoadFile(node));
             }
 
             /**

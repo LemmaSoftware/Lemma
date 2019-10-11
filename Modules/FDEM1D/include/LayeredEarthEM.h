@@ -67,7 +67,7 @@ namespace Lemma {
              *   used in Python wrapping
              */
             static std::shared_ptr< LayeredEarthEM > DeSerialize( const std::string& node ) {
-                return LayeredEarthEM::DeSerialize(YAML::Load(node));
+                return LayeredEarthEM::DeSerialize(YAML::LoadFile(node));
             }
 
             /** @return a deep copy

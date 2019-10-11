@@ -92,7 +92,7 @@ namespace Lemma {
              *   used in Python wrapping
              */
             static std::shared_ptr<DipoleSource> DeSerialize( const std::string& node ) {
-                return DipoleSource::DeSerialize(YAML::Load(node));
+                return DipoleSource::DeSerialize(YAML::LoadFile(node));
             }
 
             /** Returns a deep copy of the dipole. Used to make thread safe methods. Does not

@@ -79,7 +79,7 @@ class ASCIIParser : public LemmaObject {
      *   used in Python wrapping
      */
     static std::shared_ptr<ASCIIParser> DeSerialize( const std::string& node ) {
-        return ASCIIParser::DeSerialize(YAML::Load(node));
+        return ASCIIParser::DeSerialize(YAML::LoadFile(node));
     }
 
     /**
