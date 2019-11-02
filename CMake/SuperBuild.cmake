@@ -21,9 +21,10 @@ if (yaml-cpp_FOUND)
     message( STATUS "YAML-CPP was found ${yaml-cpp_FOUND}" )
 else()
     message( STATUS "YAML-CPP WAS NOT FOUND, BUILDING" )
+
     ExternalProject_Add(YAML_CPP
         GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git"
-        GIT_TAG "master" # "yaml-cpp-0.6.2", # "master" 
+        GIT_TAG "yaml-cpp-0.6.3"  # "master" 
         UPDATE_COMMAND ""
         PATCH_COMMAND ""
         PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
@@ -34,6 +35,9 @@ else()
                    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
                    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} 
                    -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} 
+                   -DCMAKE_CXX_STANDARD=14
+                   -DCMAKE_CXX_STANDARD_REQUIRED=ON
+                   -DCMAKE_CXX_EXTENSIONS=OFF
     )
 endif()
 
