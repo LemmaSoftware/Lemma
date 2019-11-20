@@ -70,8 +70,8 @@ if (CMAKE_CROSSCOMPILING)
 #            "Please create a separate binary directory and run CMake there.")
 #    endif()
 
-    find_package (yaml-cpp 0.6         PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Serialisation of classes 
-    find_package (Eigen3   3.3         PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Matrix/Vector & Math
+    find_package (yaml-cpp 0.6    PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Serialisation of classes 
+    find_package (Eigen3   3.3    PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Matrix/Vector & Math
 
     if (LEMMA_PYTHON3_BINDINGS)
         find_package(pybind11 PATHS ${CMAKE_INSTALL_PREFIX} NO_DEFAULT_PATH)           # Python 3 bindings
@@ -165,10 +165,10 @@ if ( NOT Eigen3_FOUND OR
     message ( STATUS "Missing hard dependencies have been found, these will be downloaded any compiled." )
     message ( STATUS "This necessitates a two step build." )
     message ( STATUS "Build these packages first...THEN RERUN CMAKE!" )
-    project (SUPERBUILD NONE)
+    project (SUPERBUILD NONE) 
   	# execute the superbuild (this script will be invoked again without the
-  	# USE_SUPERBUILD option this time)
-  	include (CMake/SuperBuild.cmake)
+  	# USE_SUPERBUILD option this time) 
+    include (CMake/SuperBuild.cmake)
   	return()                      # stop processing this file further
 else()
 	#project (Blah)               # <-- YOUR PROJECT NAME HERE
