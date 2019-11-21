@@ -73,9 +73,6 @@ namespace Lemma {
     EMEarth1D::EMEarth1D( const ctor_key& key ) : LemmaObject( key ),
             Dipole(nullptr), Earth(nullptr), Receivers(nullptr), Antenna(nullptr),
             FieldsToCalculate(BOTH), HankelType(ANDERSON801), icalcinner(0), icalc(0)
-        //#ifdef HAVE_BOOST_PROGRESS
-        //    , disp(0)
-        //#endif
         {
     }
 
@@ -191,9 +188,7 @@ namespace Lemma {
 
     void EMEarth1D::CalculateWireAntennaFields(bool progressbar) {
 
-        #ifdef HAVE_BOOST_PROGRESS
-        boost::progress_display *disp;
-        #endif
+        ProgressBar *mdisp;
 
         if (Earth == nullptr) {
             throw NullEarth();
@@ -234,11 +229,10 @@ namespace Lemma {
             if ( Antenna->IsHorizontallyPlanar() && ( HankelType == ANDERSON801 || HankelType == FHTKEY201  || HankelType==FHTKEY101 ||
                                                       HankelType == FHTKEY51    || HankelType == FHTKONG61  || HankelType == FHTKONG121 ||
                                                       HankelType == FHTKONG241  || HankelType == IRONS )) {
-                #ifdef HAVE_BOOST_PROGRESS
                 if (progressbar) {
-                    disp = new boost::progress_display( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
+                    mdisp = new ProgressBar( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies(), "Progress");
                 }
-                #endif
+
                 for (int ifreq=0; ifreq<Antenna->GetNumberOfFrequencies();++ifreq) {
                     Real wavef = 2.*PI* Antenna->GetFrequency(ifreq);
                     #ifdef LEMMAUSEOMP
@@ -252,9 +246,9 @@ namespace Lemma {
                     #endif
                     for (int irec=0; irec<Receivers->GetNumberOfPoints(); ++irec) {
                         SolveLaggedTxRxPair(irec, Hankel.get(), wavef, ifreq, AntCopy.get());
-                        #ifdef HAVE_BOOST_PROGRESS
-                        if (progressbar) ++(*disp);
-                        #endif
+                        if (progressbar) {
+                            ++(*mdisp);
+                        }
                     }
                     #pragma omp barrier
                     #ifdef LEMMAUSEOMP
@@ -265,11 +259,10 @@ namespace Lemma {
 
                 //std::cout << "freq parallel #1" << std::endl;
                 //** Progress display bar for long calculations */
-                #ifdef HAVE_BOOST_PROGRESS
                 if (progressbar) {
-                    disp = new boost::progress_display( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
+                    mdisp = new ProgressBar( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
                 }
-                #endif
+
                 // parallelise across receivers
                 #ifdef LEMMAUSEOMP
                 #pragma omp parallel
@@ -336,9 +329,9 @@ namespace Lemma {
                         //std::cout << "Normal Path\n";
                         //std::cout << Receivers->GetHfield(0, irec) << std::endl;
                         //if (irec == 1) exit(0);
-                        #ifdef HAVE_BOOST_PROGRESS
-                        if (progressbar) ++(*disp);
-                        #endif
+                        if (progressbar) {
+                            ++(*mdisp);
+                        }
                     } // receiver loop
                 } // OMP_PARALLEL BLOCK
             } else if (Antenna->GetNumberOfFrequencies() > 8) {
@@ -390,11 +383,9 @@ namespace Lemma {
                             } // frequency loop
                         } // OMP_PARALLEL BLOCK
                     } // mask loop
-                    #ifdef HAVE_BOOST_PROGRESS
                     //if (Receivers->GetNumberOfPoints() > 100) {
-                    //    ++ disp;
+                    //    ++ mdisp;
                     //}
-                    #endif
                 } // receiver loop
                 //std::cout << "End freq parallel " << std::endl;
             } // Frequency Parallel
@@ -457,11 +448,9 @@ namespace Lemma {
                             } // frequency loop
                         } // OMP_PARALLEL BLOCK
                     } // mask loop
-                    #ifdef HAVE_BOOST_PROGRESS
                     //if (Receivers->GetNumberOfPoints() > 100) {
                     //    ++ disp;
                     //}
-                    #endif
                 } // receiver loop
            } // Polygonal parallel logic
         } else {
@@ -479,11 +468,10 @@ namespace Lemma {
             this->Dipole = nullptr;
         }
 
-        #ifdef HAVE_BOOST_PROGRESS
         if (progressbar) {
-            delete disp;
+            delete mdisp;
         }
-        #endif
+
     }
 
     #ifdef KIHALEE_EM1D

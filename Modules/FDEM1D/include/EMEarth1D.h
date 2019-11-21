@@ -33,9 +33,7 @@
 #include "QWEKey.h"
 #include "CubicSplineInterpolator.h"
 
-#ifdef HAVE_BOOST_PROGRESS
-#include "boost/progress.hpp"
-#endif
+#include "ProgressBar.h"
 
 namespace Lemma {
 
