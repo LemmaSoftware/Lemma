@@ -44,6 +44,7 @@ ProgressBar::~ProgressBar()
 
 void ProgressBar::operator++()
 {
+
     if (mEnded)
     {
         throw std::runtime_error(
@@ -54,7 +55,11 @@ void ProgressBar::operator++()
     const unsigned int percentage = static_cast<unsigned int>(
             mNumberOfTicks*100.0/mTotalIterations);
 
+    #ifdef LEMMAUSEOMP
+    #pragma omp critical
+    #endif
     std::cout << generateProgressBar(percentage) << "\r" << std::flush;
+
 }
 
 void ProgressBar::printNewMessage(const std::string& message)
