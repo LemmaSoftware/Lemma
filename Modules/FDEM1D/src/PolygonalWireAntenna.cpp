@@ -126,9 +126,17 @@ namespace Lemma {
 		    std::vector< std::shared_ptr<DipoleSource> >       xDipoles;
 
 		    // loop over all segments
-		    for (int iseg=0; iseg<NumberOfPoints-1; ++iseg) {
+		    int iseg;
+            for (iseg=0; iseg<NumberOfPoints-1; ++iseg) {
 			    InterpolateLineSegment(Points.col(iseg), Points.col(iseg+1), rp, xDipoles);
 		    }
+
+            // Check to see if the loop is closed, if not, assume its grounded on ends,
+            if ( (Points.col(0)-Points.col(iseg)).norm() > 1e-3 ) {
+                xDipoles[0]->SetType(GROUNDEDELECTRICDIPOLE);
+                xDipoles.back()->SetType(GROUNDEDELECTRICDIPOLE);
+            }
+
             Dipoles = std::move(xDipoles);
             rRepeat = rp;
 
