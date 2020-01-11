@@ -6,8 +6,8 @@ if (Eigen3_FOUND)
 else()
     message( STATUS "Eigen WAS NOT FOUND ${eigen_DIR}" )
         ExternalProject_Add(EIGEN
-	    GIT_REPOSITORY "https://github.com/eigenteam/eigen-git-mirror.git"
-	    UPDATE_COMMAND "" 
+	    GIT_REPOSITORY "https://gitlab.com/libeigen/eigen.git"
+        UPDATE_COMMAND "" 
 	    GIT_TAG "3.3.7" #"default"
    	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
    	    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
