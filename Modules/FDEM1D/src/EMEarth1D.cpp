@@ -444,7 +444,7 @@ namespace Lemma {
                                 #ifdef LEMMAUSEOMP
                                 #pragma omp for schedule(static, 1)
                                 #endif
-                                for (unsigned int idip=0; idip<Antenna->GetNumberOfDipoles(); ++idip) {
+                                for (int idip=0; idip < (int)Antenna->GetNumberOfDipoles(); ++idip) {
                                     //#pragma omp critical
                                     //{
                                     //cout << "idip=" << idip << "\tthread num=" << omp_get_thread_num() << '\n';
