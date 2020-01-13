@@ -24,6 +24,7 @@ set_target_properties(lemmacore PROPERTIES
 target_link_libraries (lemmacore Eigen3::Eigen)
 #target_link_libraries (lemmacore CxxTest)
 target_link_libraries (lemmacore ${YAML_CPP_LIBRARIES}) 
+target_link_libraries (lemmacore ${YAML_CPP_LIBRARY}) 
 
 # Linking
 if ( LEMMA_VTK6_SUPPORT OR LEMMA_VTK7_SUPPORT OR LEMMA_VTK8_SUPPORT ) 

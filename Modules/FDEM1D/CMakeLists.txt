@@ -12,6 +12,7 @@ set_target_properties(fdem1d PROPERTIES
 
 # Linking
 target_link_libraries(fdem1d "lemmacore")
+target_link_libraries(fdem1d ${YAML_CPP_LIBRARIES}) 
 
 if ( KIHA_EM1D )
 	target_link_libraries(fdem1d "kihaem1d")

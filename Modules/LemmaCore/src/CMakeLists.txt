@@ -1,5 +1,6 @@
 set (SOURCE 
 	${SOURCE}
+	${CMAKE_CURRENT_SOURCE_DIR}/ProgressBar.cpp                # external to Lemma
 	${CMAKE_CURRENT_SOURCE_DIR}/helper.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/LemmaObject.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ASCIIParser.cpp                # key 

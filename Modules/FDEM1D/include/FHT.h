@@ -185,6 +185,9 @@ namespace Lemma {
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<FHTKONG241>::WT;
     template<>
     const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT<IRONS>::WT;
+    // Clang wants generic declaration
+    template < HANKELTRANSFORMTYPE Type >
+    const Eigen::Matrix<Real, Eigen::Dynamic, 3>  FHT< Type >::WT;
 #endif
 
     template < HANKELTRANSFORMTYPE Type >

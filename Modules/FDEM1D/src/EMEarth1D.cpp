@@ -73,9 +73,6 @@ namespace Lemma {
     EMEarth1D::EMEarth1D( const ctor_key& key ) : LemmaObject( key ),
             Dipole(nullptr), Earth(nullptr), Receivers(nullptr), Antenna(nullptr),
             FieldsToCalculate(BOTH), HankelType(ANDERSON801), icalcinner(0), icalc(0)
-        //#ifdef HAVE_BOOST_PROGRESS
-        //    , disp(0)
-        //#endif
         {
     }
 
@@ -191,10 +188,6 @@ namespace Lemma {
 
     void EMEarth1D::CalculateWireAntennaFields(bool progressbar) {
 
-        #ifdef HAVE_BOOST_PROGRESS
-        boost::progress_display *disp;
-        #endif
-
         if (Earth == nullptr) {
             throw NullEarth();
         }
@@ -234,11 +227,11 @@ namespace Lemma {
             if ( Antenna->IsHorizontallyPlanar() && ( HankelType == ANDERSON801 || HankelType == FHTKEY201  || HankelType==FHTKEY101 ||
                                                       HankelType == FHTKEY51    || HankelType == FHTKONG61  || HankelType == FHTKONG121 ||
                                                       HankelType == FHTKONG241  || HankelType == IRONS )) {
-                #ifdef HAVE_BOOST_PROGRESS
+                std::unique_ptr<ProgressBar> mdisp;
                 if (progressbar) {
-                    disp = new boost::progress_display( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
+                    mdisp = std::make_unique< ProgressBar >( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
                 }
-                #endif
+
                 for (int ifreq=0; ifreq<Antenna->GetNumberOfFrequencies();++ifreq) {
                     Real wavef = 2.*PI* Antenna->GetFrequency(ifreq);
                     #ifdef LEMMAUSEOMP
@@ -252,24 +245,25 @@ namespace Lemma {
                     #endif
                     for (int irec=0; irec<Receivers->GetNumberOfPoints(); ++irec) {
                         SolveLaggedTxRxPair(irec, Hankel.get(), wavef, ifreq, AntCopy.get());
-                        #ifdef HAVE_BOOST_PROGRESS
-                        if (progressbar) ++(*disp);
-                        #endif
+                        if (progressbar) {
+                            ++ *mdisp;
+                        }
                     }
-                    #pragma omp barrier
                     #ifdef LEMMAUSEOMP
+                    #pragma omp barrier
                     }
                     #endif
                 }
+
+
             } else if (Receivers->GetNumberOfPoints() > Antenna->GetNumberOfFrequencies()) {
 
-                //std::cout << "freq parallel #1" << std::endl;
                 //** Progress display bar for long calculations */
-                #ifdef HAVE_BOOST_PROGRESS
+                std::unique_ptr<ProgressBar> mdisp;
                 if (progressbar) {
-                    disp = new boost::progress_display( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
+                    mdisp = std::make_unique< ProgressBar > ( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
                 }
-                #endif
+
                 // parallelise across receivers
                 #ifdef LEMMAUSEOMP
                 #pragma omp parallel
@@ -279,40 +273,7 @@ namespace Lemma {
                     // thread.
                     auto AntCopy = static_cast<PolygonalWireAntenna*>(Antenna.get())->ClonePA();
                     auto Hankel = HankelTransformFactory::NewSP( HankelType );
-/*
-                    std::shared_ptr<HankelTransform> Hankel;
-                    switch (HankelType) {
-                        case ANDERSON801:
-                            Hankel = FHTAnderson801::NewSP();
-                            break;
-                        case CHAVE:
-                            Hankel = GQChave::NewSP();
-                            break;
-                        case FHTKEY201:
-                            Hankel = FHTKey201::NewSP();
-                            break;
-                        case FHTKEY101:
-                            Hankel = FHTKey101::NewSP();
-                            break;
-                        case FHTKEY51:
-                            Hankel = FHTKey51::NewSP();
-                            break;
-                        case FHTKONG61:
-                            Hankel = FHT<FHTKONG61>::NewSP();
-                            break;
-                        case FHTKONG121:
-                            Hankel = FHT<FHTKONG121>::NewSP();
-                            break;
-                        case QWEKEY:
-                            std::cout << "QWEKEY" << std::endl;
-                            Hankel = QWEKey::NewSP();
-                            break;
-                        default:
-                            std::cerr << "Hankel transform cannot be created\n";
-                            exit(EXIT_FAILURE);
-                    }
-*/
-                    //for (int irec=tid; irec<Receivers->GetNumberOfPoints(); irec+=nthreads) {
+
                     #ifdef LEMMAUSEOMP
                     #pragma omp for schedule(static, 1) //nowait
                     #endif
@@ -336,9 +297,9 @@ namespace Lemma {
                         //std::cout << "Normal Path\n";
                         //std::cout << Receivers->GetHfield(0, irec) << std::endl;
                         //if (irec == 1) exit(0);
-                        #ifdef HAVE_BOOST_PROGRESS
-                        if (progressbar) ++(*disp);
-                        #endif
+                        if (progressbar) {
+                            ++ *mdisp;
+                        }
                     } // receiver loop
                 } // OMP_PARALLEL BLOCK
             } else if (Antenna->GetNumberOfFrequencies() > 8) {
@@ -352,30 +313,7 @@ namespace Lemma {
                         #endif
                         { // OpenMP Parallel Block
 
-                            std::shared_ptr<HankelTransform> Hankel;
-                            switch (HankelType) {
-                                case ANDERSON801:
-                                    Hankel = FHTAnderson801::NewSP();
-                                    break;
-                                case CHAVE:
-                                    Hankel = GQChave::NewSP();
-                                    break;
-                                case FHTKEY201:
-                                    Hankel = FHTKey201::NewSP();
-                                    break;
-                                case FHTKEY101:
-                                    Hankel = FHTKey101::NewSP();
-                                    break;
-                                case FHTKEY51:
-                                    Hankel = FHTKey51::NewSP();
-                                    break;
-                                case QWEKEY:
-                                    Hankel = QWEKey::NewSP();
-                                    break;
-                                default:
-                                    std::cerr << "Hankel transform cannot be created\n";
-                                    exit(EXIT_FAILURE);
-                            }
+                            auto Hankel = HankelTransformFactory::NewSP( HankelType );
                             #ifdef LEMMAUSEOMP
                             #pragma omp for schedule(static, 1)
                             #endif
@@ -390,19 +328,15 @@ namespace Lemma {
                             } // frequency loop
                         } // OMP_PARALLEL BLOCK
                     } // mask loop
-                    #ifdef HAVE_BOOST_PROGRESS
                     //if (Receivers->GetNumberOfPoints() > 100) {
-                    //    ++ disp;
+                    //    ++ mdisp;
                     //}
-                    #endif
                 } // receiver loop
-                //std::cout << "End freq parallel " << std::endl;
             } // Frequency Parallel
               else {
-                //std::cout << "parallel across #3 " << std::endl;
+                //std::cout << "parallel across transmitter dipoles " << std::endl;
                 for (int irec=0; irec<Receivers->GetNumberOfPoints(); ++irec) {
                     if (!Receivers->GetMask(irec)) {
-
                         static_cast<PolygonalWireAntenna*>(Antenna.get())->ApproximateWithElectricDipoles(Receivers->GetLocation(irec));
 //                         std::cout << "Not Masked " << std::endl;
 //                         std::cout << "n Freqs " << Antenna->GetNumberOfFrequencies() << std::endl;
@@ -411,35 +345,11 @@ namespace Lemma {
 //                             std::cout << "NO DIPOLES!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
 // //                            std::cout << "rec location " << Receivers->GetLocation(irec) << std::endl;
 // //                        }
-
                         #ifdef LEMMAUSEOMP
                         #pragma omp parallel
                         #endif
                         { // OpenMP Parallel Block
-                            std::shared_ptr<HankelTransform> Hankel;
-                            switch (HankelType) {
-                                case ANDERSON801:
-                                    Hankel = FHTAnderson801::NewSP();
-                                    break;
-                                case CHAVE:
-                                    Hankel = GQChave::NewSP();
-                                    break;
-                                case FHTKEY201:
-                                    Hankel = FHTKey201::NewSP();
-                                    break;
-                                case FHTKEY101:
-                                    Hankel = FHTKey101::NewSP();
-                                    break;
-                                case FHTKEY51:
-                                    Hankel = FHTKey51::NewSP();
-                                    break;
-                                case QWEKEY:
-                                    Hankel = QWEKey::NewSP();
-                                    break;
-                                default:
-                                    std::cerr << "Hankel transform cannot be created\n";
-                                    exit(EXIT_FAILURE);
-                            }
+                            auto Hankel = HankelTransformFactory::NewSP( HankelType );
                             for (int ifreq=0; ifreq<Antenna->GetNumberOfFrequencies(); ++ifreq) {
                                 #ifdef LEMMAUSEOMP
                                 #pragma omp for schedule(static, 1)
@@ -457,11 +367,9 @@ namespace Lemma {
                             } // frequency loop
                         } // OMP_PARALLEL BLOCK
                     } // mask loop
-                    #ifdef HAVE_BOOST_PROGRESS
                     //if (Receivers->GetNumberOfPoints() > 100) {
                     //    ++ disp;
                     //}
-                    #endif
                 } // receiver loop
            } // Polygonal parallel logic
         } else {
@@ -479,11 +387,6 @@ namespace Lemma {
             this->Dipole = nullptr;
         }
 
-        #ifdef HAVE_BOOST_PROGRESS
-        if (progressbar) {
-            delete disp;
-        }
-        #endif
     }
 
     #ifdef KIHALEE_EM1D

@@ -3,8 +3,8 @@ from setuptools.command.install import install
 from setuptools.dist import Distribution
 import sys
 
-if sys.version_info < (3,0):
-  sys.exit('Sorry, Python < 3.0 is not supported')
+if sys.version_info < (3,6):
+  sys.exit('Sorry, Python < 3.6 is not supported')
 
 class BinaryDistribution(Distribution):
     """Distribution which always forces a binary package with platform name"""
@@ -21,7 +21,7 @@ class InstallPlatlib(install):
 
 setup(
   name             = 'pyLemma',
-  version          = '0.0.11', 
+  version          = '0.0.13', 
   author           = 'Trevor Irons and others',
   author_email     = 'Trevor.Irons@lemmasoftware.org',
   description      = 'A short description of the app/lib',
