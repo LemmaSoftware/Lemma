@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <algorithm> 
 
 #define LENGTH_OF_PROGRESS_BAR 55
 #define PERCENTAGE_BIN_SIZE (100.0/LENGTH_OF_PROGRESS_BAR)

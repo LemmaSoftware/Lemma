@@ -280,7 +280,7 @@ namespace Lemma {
                     for (int irec=0; irec<Receivers->GetNumberOfPoints(); ++irec) {
                         if (!Receivers->GetMask(irec)) {
                             AntCopy->ApproximateWithElectricDipoles(Receivers->GetLocation(irec));
-                            for (unsigned int idip=0; idip<AntCopy->GetNumberOfDipoles(); ++idip) {
+                            for (int idip=0; idip < static_cast<int>(AntCopy->GetNumberOfDipoles()); ++idip) {
                                 auto tDipole = AntCopy->GetDipoleSource(idip);
                                 //#ifdef LEMMAUSEOMP
                                 //#pragma omp for schedule(static, 1)
@@ -318,7 +318,7 @@ namespace Lemma {
                             #pragma omp for schedule(static, 1)
                             #endif
                             for (int ifreq=0; ifreq<Antenna->GetNumberOfFrequencies(); ++ifreq) {
-                                for (unsigned int idip=0; idip<Antenna->GetNumberOfDipoles(); ++idip) {
+                                for (int idip=0; idip< static_cast<int>(Antenna->GetNumberOfDipoles()); ++idip) {
                                     auto tDipole = Antenna->GetDipoleSource(idip);
                                     // Propogation constant in free space
                                     Real wavef   = tDipole->GetAngularFrequency(ifreq) *
@@ -354,7 +354,7 @@ namespace Lemma {
                                 #ifdef LEMMAUSEOMP
                                 #pragma omp for schedule(static, 1)
                                 #endif
-                                for (unsigned int idip=0; idip<Antenna->GetNumberOfDipoles(); ++idip) {
+                                for (int idip=0; idip<static_cast<int>(Antenna->GetNumberOfDipoles()); ++idip) {
                                     //#pragma omp critical
                                     //{
                                     //cout << "idip=" << idip << "\tthread num=" << omp_get_thread_num() << '\n';

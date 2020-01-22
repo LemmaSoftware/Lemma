@@ -247,7 +247,8 @@ if (LEMMA_USE_BOOST)
 endif()
 
 if (LEMMA_PYTHON3_BINDINGS)
-    find_package(PythonLibs 3.0 REQUIRED)
+    #find_package(PythonLibs 3.0 REQUIRED)
+    #find_package(pythoninterp REQUIRED)
     find_package(pybind11 REQUIRED)
     #    find_package(Boost 1.64.0   REQUIRED COMPONENTS system python3 numpy3)
     # Is this OK for portability of non-python libraries

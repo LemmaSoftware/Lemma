@@ -24,7 +24,7 @@ else()
 
     ExternalProject_Add(YAML_CPP
         GIT_REPOSITORY  "https://github.com/jbeder/yaml-cpp.git" 
-        GIT_TAG  "yaml-cpp-0.6.2"  # "master" 
+        GIT_TAG  "yaml-cpp-0.6.3"  # "master" 
         UPDATE_COMMAND ""
         PATCH_COMMAND ""
         PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
@@ -77,9 +77,10 @@ if (LEMMA_PYTHON3_BINDINGS)
         message( STATUS "pybind11 was found" )
     else()
         message( STATUS "pybind11 was NOT found, please build or remove LEMMA_PYTHON3_BINDINGS" )
-	    ExternalProject_Add(pybind11
+	    find_package(PythonLibs 3.0 REQUIRED)
+        ExternalProject_Add(pybind11
 		    GIT_REPOSITORY "https://github.com/pybind/pybind11.git"
-		    GIT_TAG "v2.3.0" #"master"
+		    GIT_TAG "v2.4.3" # "master" #"v2.4.3" #"master"
 		    UPDATE_COMMAND ""
 		    PATCH_COMMAND ""
     	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/pybind11
