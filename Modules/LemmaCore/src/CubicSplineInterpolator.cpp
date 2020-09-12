@@ -173,16 +173,20 @@ namespace Lemma {
     //      Method:  Interpolate
     //--------------------------------------------------------------------------------------
     Real CubicSplineInterpolator::Interpolate ( const Real& x, int& i) {
+
         // O(n) search, could do bisection, but if these are sorted, then this is quick
-        while(Spline.x[i] < x && i<Spline.x.size()) {
+        while(Spline.x[i] < x && i<Spline.x.size()-1) {
             ++i;
         }
         --i;
 
 //         if ( x > Spline.x[i] ) {
-//             std::cout << "DOOM\t" << x << "\t" << i << "\t" << Spline.x[i];
-//             throw std::runtime_error("CubicSplineInterpolator::Interpolate ATTEMPT TO INTERPOLATE PAST LAST KNOT");
+//             std::cout << "DOOM in interplate\t x=" <<  x << "\ti=" << i << "\tSpline.x[i]=" << Spline.x[i] << std::endl;
+//             std::cout <<"Spline.x.size()" << Spline.x.size() << std::endl;
+//             std::cout << "Spline.x" << Spline.x.transpose() << std::endl;
+//             //throw std::runtime_error("CubicSplineInterpolator::Interpolate ATTEMPT TO INTERPOLATE PAST LAST KNOT");
 //         }
+
 
         return Spline.a[i] + Spline.b[i]*(x-Spline.x[i]) + Spline.c[i]*((x-Spline.x[i])*(x-Spline.x[i])) +
                Spline.d[i]*((x-Spline.x[i])*(x-Spline.x[i])*(x-Spline.x[i]) );

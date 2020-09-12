@@ -117,25 +117,43 @@ namespace Lemma {
 	// ====================  OPERATIONS    =======================
 
 	void PolygonalWireAntenna::ApproximateWithElectricDipoles(const Vector3r &rp) {
+
         // Only resplit if necessary. Save a few cycles if repeated
         if ( (rRepeat-rp).norm() > 1e-16 ) {
-		    Dipoles.clear();
+
+            Dipoles.clear();
 
             ///////////////////
 		    // dipole array, this has impoved performance over directly pushing
 		    std::vector< std::shared_ptr<DipoleSource> >       xDipoles;
 
-		    // loop over all segments
+            // check to see if loop is closed
+            /*
+            int lastPoint = Points.cols()-1;
+            if ( (Points.col(0) - Points.col(lastPoint)).norm() > 1e-3 ) {
+                AddGroundingPoint( Points.col(0), Points.col(1)-Points.col(0), xDipoles );
+            }
+            */
+
+		    // loop over all segments, TODO fix for closed loops
 		    int iseg;
-            for (iseg=0; iseg<NumberOfPoints-1; ++iseg) {
+            for (iseg=0; iseg<NumberOfPoints-1; ++iseg) { // closed loop
+            //for (iseg=1; iseg<NumberOfPoints-2; ++iseg) { // grounded wire
 			    InterpolateLineSegment(Points.col(iseg), Points.col(iseg+1), rp, xDipoles);
 		    }
 
-            // Check to see if the loop is closed, if not, assume its grounded on ends,
-            if ( (Points.col(0)-Points.col(iseg)).norm() > 1e-3 ) {
-                xDipoles[0]->SetType(GROUNDEDELECTRICDIPOLE);
-                xDipoles.back()->SetType(GROUNDEDELECTRICDIPOLE);
+            // check to see if loop is closed
+            /*
+            if ( (Points.col(lastPoint)-Points.col( lastPoint-1 )).norm() > 1e-3 ) {
+                AddGroundingPoint( Points.col(lastPoint), Points.col(lastPoint)-Points.col(lastPoint-1), xDipoles );
             }
+            */
+
+            // Check to see if the loop is closed, if not, assume its grounded on ends,
+            //if ( (Points.col(0)-Points.col(iseg)).norm() > 1e-3 ) {
+            //    xDipoles[0]->SetType(GROUNDEDELECTRICDIPOLE);
+            //    xDipoles.back()->SetType(GROUNDEDELECTRICDIPOLE);
+            //}
 
             Dipoles = std::move(xDipoles);
             rRepeat = rp;
@@ -146,6 +164,23 @@ namespace Lemma {
             }
         }
 	}
+
+    void PolygonalWireAntenna::AddGroundingPoint( const Vector3r &cp, const Vector3r& dir,
+                                std::vector< std::shared_ptr<DipoleSource> > &xDipoles) {
+		Real scale = (Real)(NumberOfTurns)*Current;
+        auto tx = DipoleSource::NewSP();
+		    tx->SetLocation(cp);
+		    tx->SetType(GROUNDINGPOINT);
+		    //tx->SetType(GROUNDEDELECTRICDIPOLE);
+		    //tx->SetType(MAGNETICDIPOLE);
+			tx->SetPolarisation(dir.array()); //dir.norm());
+			tx->SetFrequencies(Freqs);
+			tx->SetMoment(scale);
+			xDipoles.push_back(tx);
+        //std::cout << "cp " << cp.transpose() << std::endl;
+        //std::cout << "pol " << tx->GetPolarisation().transpose() << std::endl;
+        //std::cout << "moment " << tx->GetMoment() << std::endl;
+    }
 
 	Vector3r PolygonalWireAntenna::ClosestPointOnLine(const Vector3r &p1,
 					const Vector3r &p2, const Vector3r &tp) {

@@ -33,6 +33,12 @@ if ( LEMMA_VTK6_SUPPORT OR LEMMA_VTK7_SUPPORT OR LEMMA_VTK8_SUPPORT )
 #	target_link_libraries(lemmacore "matplot")
 endif()
 
+
+if ( LEMMA_VTK9_SUPPORT ) 
+	target_link_libraries(lemmacore ${visibility}VTK::CommonCore VTK::IOXML VTK::FiltersHyperTree)
+	vtk_module_autoinit(TARGETS lemmacore MODULES VTK::CommonCore VTK::IOXML VTK::FiltersHyperTree)
+endif()
+
 # find_package(yaml-cpp) does not seem to properly define library names...
 # a better solution than this is welcome 
 

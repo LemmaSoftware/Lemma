@@ -47,6 +47,7 @@ option ( LEMMA_BUILD_EXAMPLES       "Compile example Lemma applications" OFF )
 option ( LEMMA_USE_OPENMP           "Use OpenMP in Lemma" OFF )
 option ( LEMMA_BUILD_DOCUMENTATION  "Build Doxygen man pages" OFF )
 option ( LEMMA_VTK8_SUPPORT         "VTK 8.x library for visualisation and grids" OFF )
+option ( LEMMA_VTK9_SUPPORT         "VTK 9.x library for visualisation and grids" OFF )
 option ( LEMMA_PYTHON3_BINDINGS     "Compile Python 3 bindings" OFF )
 
 # We end up using this for all builds, TODO remove this variable but follow same path
@@ -99,11 +100,32 @@ if (CMAKE_CROSSCOMPILING)
         QUIET
         ) 
     endif()
+    if (LEMMA_VTK9_SUPPORT)                                                            # Visualisation 
+        find_package (VTK  9.0.1      
+        COMPONENTS 
+        CommonCore 
+        RenderingCore 
+        FiltersCore 
+        FiltersSources 
+        CommonDataModel 
+        FiltersHyperTree 
+        IOXML 
+        IOImage 
+        IOLegacy 
+        IOGeometry 
+        InteractionStyle 
+        RenderingAnnotation 
+        FiltersHybrid 
+        FiltersModeling 
+        RenderingVolumeOpenGL2
+        QUIET
+        ) 
+    endif()
 else()
     find_package (Eigen3   3.3 QUIET )  # Matrix/Vector & Math
     find_package (yaml-cpp 0.6 QUIET )  # Serialisation of classes 
-    if (LEMMA_VTK8_SUPPORT)
-        find_package (VTK  8.2.0 COMPONENTS
+    if (LEMMA_VTK9_SUPPORT)
+        find_package (VTK  9.0.1 COMPONENTS
         vtkCommonCore 
         vtkRenderingCore 
         vtkFiltersCore 
@@ -125,10 +147,10 @@ endif()
 
 INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
 
-if (VTK_VERSION VERSION_GREATER "8.2.0")
-    message( STATUS "${VTK_VERSION} is compatible: ${VTK_VERSION_COMPATIBLE} exact? ${VTK_VERSION_EXACT}" )
-    set (VTK_FOUND False) 
-endif()
+#if (VTK_VERSION VERSION_GREATER "8.2.0")
+#    message( STATUS "${VTK_VERSION} is compatible: ${VTK_VERSION_COMPATIBLE} exact? ${VTK_VERSION_EXACT}" )
+#    set (VTK_FOUND False) 
+#endif()
 
 if (VTK_FOUND)
     set(volumeRenderer volumerenderer.cxx)
@@ -160,7 +182,7 @@ message ( STATUS "VTK Found? " ${VTK_FOUND} )
 if ( NOT Eigen3_FOUND OR 
      NOT yaml-cpp_FOUND OR 
      (LEMMA_PYTHON3_BINDINGS AND NOT pybind11_FOUND) OR 
-     (LEMMA_VTK8_SUPPORT AND NOT VTK_FOUND) OR
+     (LEMMA_VTK9_SUPPORT AND NOT VTK_FOUND) OR
      (LEMMA_ENABLE_TESTING AND NOT CxxTest_FOUND) )
     message ( STATUS "Missing hard dependencies have been found, these will be downloaded any compiled." )
     message ( STATUS "This necessitates a two step build." )
@@ -354,9 +376,10 @@ endif()
 ########################################################################
 # add a target to generate API documentation with Doxyfile.in 
 # ALL make documentation build by default if possible
-find_package(Doxygen)
+if (LEMMA_BUILD_DOCUMENTATION)
+    find_package(Doxygen)
 	if(DOXYGEN_FOUND)
-	if (LEMMA_BUILD_DOCUMENTATION)
+    message( STATUS "LEMMA_BUILD_DOCUMENTATION must be positive" )
 # Custom header and footer option, enable in Doxygen 
 #	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Documentation/header.html
 #        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Documentation/header.html
@@ -371,7 +394,7 @@ find_package(Doxygen)
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 			COMMENT "Generating API documentation with Doxygen" VERBATIM
 		)
-	endif (LEMMA_BUILD_DOCUMENTATION)
 	endif(DOXYGEN_FOUND)
+endif (LEMMA_BUILD_DOCUMENTATION)
 
 # vim: set tabstop=4 shiftwidth=4 expandtab: 

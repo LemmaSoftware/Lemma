@@ -185,6 +185,8 @@ std::string enum2String( const DIPOLESOURCETYPE& Type ) {
             return std::string("GROUNDEDELECTRICDIPOLE");
         case UNGROUNDEDELECTRICDIPOLE:
             return std::string("UNGROUNDEDELECTRICDIPOLE");
+        case GROUNDINGPOINT:
+            return std::string("GROUNDINGPOINT");
         case MAGNETICDIPOLE:
             return std::string("MAGNETICDIPOLE");
         default:
@@ -258,6 +260,7 @@ DIPOLESOURCETYPE string2Enum<DIPOLESOURCETYPE>( const std::string& str ) {
     if      (str == "NOSOURCETYPE")              return NOSOURCETYPE;
     if      (str == "GROUNDEDELECTRICDIPOLE")    return GROUNDEDELECTRICDIPOLE;
     if      (str == "UNGROUNDEDELECTRICDIPOLE")  return UNGROUNDEDELECTRICDIPOLE;
+    if      (str == "GROUNDINGPOINT")            return GROUNDINGPOINT;
     if      (str == "MAGNETICDIPOLE")            return MAGNETICDIPOLE;
     else {
         throw std::runtime_error("string not recognized as DipoleSource");

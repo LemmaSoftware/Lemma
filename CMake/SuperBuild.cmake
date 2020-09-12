@@ -41,13 +41,13 @@ else()
     )
 endif()
 
-if ( LEMMA_VTK8_SUPPORT )
-    if ( NOT VTK_FOUND OR  VTK_VERSION VERSION_GREATER "8.2.0" )
+if ( LEMMA_VTK9_SUPPORT )
+    if ( NOT VTK_FOUND OR  VTK_VERSION VERSION_LESS "9.0.0" )
         message( STATUS "VTK > 8.20.0 was found! Version found: " ${VTK_VERSION}, ${VTK_USE_FILE} )
         message( STATUS "External build of VTK 8 has been added, this may take some time to build." )
-        ExternalProject_Add(VTK8
+        ExternalProject_Add(VTK9
         GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
-        GIT_TAG  "v8.2.0"
+        GIT_TAG  "v9.0.1"
         PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/vtk8
         CMAKE_ARGS
             -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
