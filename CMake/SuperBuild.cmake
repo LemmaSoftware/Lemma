@@ -8,7 +8,7 @@ else()
         ExternalProject_Add(EIGEN
 	    GIT_REPOSITORY "https://gitlab.com/libeigen/eigen.git"
         UPDATE_COMMAND "" 
-	    GIT_TAG "3.3.7" #"default"
+	    GIT_TAG "3.3.7" 
    	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
    	    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 		#CONFIGURE_COMMAND ""
@@ -29,7 +29,7 @@ else()
         PATCH_COMMAND ""
         PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
-                   -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+                   -DYAML_BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} 
                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} 
     	           -DYAML_CPP_BUILD_TESTS=OFF
                    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
