@@ -282,6 +282,8 @@ if (LEMMA_PYTHON3_BINDINGS)
     #include_directories(${PYTHON_INCLUDE_DIRS})
     #include_directories(${Boost_INCLUDE_DIRS})
     install ( FILES python/setup.py DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
+    install ( FILES python/long.md DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
+    install ( FILES python/publish.sh DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
     install ( DIRECTORY python/pyLemma DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
 endif()
 

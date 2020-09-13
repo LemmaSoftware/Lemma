@@ -77,8 +77,8 @@ if (LEMMA_PYTHON3_BINDINGS)
         message( STATUS "pybind11 was found" )
     else()
         message( STATUS "pybind11 was NOT found, please build or remove LEMMA_PYTHON3_BINDINGS" )
-        find_package (Python COMPONENTS Interpreter Development)
-	    find_package(PythonLibs 3.0 REQUIRED)
+        #find_package(Python COMPONENTS Interpreter Development REQUIRED)
+	#find_package(PythonLibs 3.0 REQUIRED)
         ExternalProject_Add(pybind11
 		    GIT_REPOSITORY "https://github.com/pybind/pybind11.git"
 		    GIT_TAG "v2.5.0" # "master" #"v2.4.3" #"master"
