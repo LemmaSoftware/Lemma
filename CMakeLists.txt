@@ -13,8 +13,8 @@ SET_PROPERTY(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
 ####################################################################################################
 # Lemma versioning, set Major, minor, and patch here                                               #
 set(LEMMA_VERSION_MAJOR "0")                                                                       #
-set(LEMMA_VERSION_MINOR "3")                                                                       #
-set(LEMMA_VERSION_PATCH "3")                                                                       #
+set(LEMMA_VERSION_MINOR "4")                                                                       #
+set(LEMMA_VERSION_PATCH "0")                                                                       #
 set(LEMMA_VERSION "\"${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}\"")      #
 set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}") #
 ####################################################################################################

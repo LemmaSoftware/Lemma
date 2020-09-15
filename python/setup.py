@@ -21,7 +21,7 @@ class InstallPlatlib(install):
 
 setup(
   name             = 'pyLemma',
-  version          = '0.1.0', 
+  version          = '0.4.0', 
   author           = 'Trevor Irons and others',
   author_email     = 'Trevor.Irons@lemmasoftware.org',
   description      = 'A short description of the app/lib',
