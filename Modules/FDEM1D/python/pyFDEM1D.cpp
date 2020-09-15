@@ -249,14 +249,14 @@ PYBIND11_MODULE(FDEM1D, m) {
         // modifiers
         .def("AttachWireAntenna", &Lemma::EMEarth1D::AttachWireAntenna,
             "Sets the wire antenna to use for calculations")
-        .def("AttachDipoleSOurce", &Lemma::EMEarth1D::AttachDipoleSource,
+        .def("AttachDipoleSource", &Lemma::EMEarth1D::AttachDipoleSource,
             "Sets a DipoleSource to use for calculations")
         .def("AttachFieldPoints", &Lemma::EMEarth1D::AttachFieldPoints,
             "Sets the FieldPoints to use for calculations")
         .def("AttachLayeredEarthEM", &Lemma::EMEarth1D::AttachLayeredEarthEM,
             "Sets the LayeredEarthEM to use for calculations")
 
-        .def("SetFieldToCalculate", &Lemma::EMEarth1D::SetFieldsToCalculate,
+        .def("SetFieldsToCalculate", &Lemma::EMEarth1D::SetFieldsToCalculate,
             "Sets which fields to calculate")
         .def("SetHankelTransformMethod", &Lemma::EMEarth1D::SetHankelTransformMethod,
             "Sets which Hankel transform to use")

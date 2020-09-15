@@ -118,6 +118,12 @@ namespace Lemma {
             /// Maximum dipole moment allowed
             Real maxDipoleMoment;
 
+            /// Adds grounding point to non-closed wire loop
+            void AddGroundingPoint(
+                            const Vector3r &cp,
+                            const Vector3r &dir,
+                            std::vector< std::shared_ptr<DipoleSource> > &Dipoles );
+
             /// appends
             void PushXYZDipoles( const Vector3r &step, const Vector3r &cp,
                             const Vector3r &dir,

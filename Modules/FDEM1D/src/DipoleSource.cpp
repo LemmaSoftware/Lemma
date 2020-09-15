@@ -183,6 +183,9 @@ namespace Lemma {
             case (UNGROUNDEDELECTRICDIPOLE):
                 this->Type = stype;
                 break;
+            case (GROUNDINGPOINT):
+                this->Type = stype;
+                break;
             case (MAGNETICDIPOLE):
                 this->Type = stype;
                 break;
@@ -479,6 +482,172 @@ namespace Lemma {
                                 ik[7] = KernelManager->AddKernel<TE, 7, INGROUND, INGROUND>( );
                                 ik[8] = KernelManager->AddKernel<TE, 8, INGROUND, INGROUND>( );
                                 ik[9] = KernelManager->AddKernel<TE, 9, INGROUND, INGROUND>( );
+                            }
+                            break;
+                        }
+                    }
+                break;
+
+            case (GROUNDINGPOINT):
+
+                if (std::abs(Pol[2]) > 0) { // z dipole
+
+                    switch(FieldsToCalculate) {
+
+                        case E:
+                            if (lays == 0 && layr == 0) {
+                                ik[10] = KernelManager->AddKernel<TM, 10, INAIR, INAIR>( );
+                                ik[11] = KernelManager->AddKernel<TM, 11, INAIR, INAIR>( );
+                            } else if (lays == 0 && layr > 0) {
+                                ik[10] = KernelManager->AddKernel<TM, 10, INAIR, INGROUND>( );
+                                ik[11] = KernelManager->AddKernel<TM, 11, INAIR, INGROUND>( );
+                            } else if (lays > 0 && layr == 0) {
+                                ik[10] = KernelManager->AddKernel<TM, 10, INGROUND, INAIR>( );
+                                ik[11] = KernelManager->AddKernel<TM, 11, INGROUND, INAIR>( );
+                            } else {
+                                ik[10] = KernelManager->AddKernel<TM, 10, INGROUND, INGROUND>( );
+                                ik[11] = KernelManager->AddKernel<TM, 11, INGROUND, INGROUND>( );
+                            }
+                            break;
+
+                        case H:
+                            if (lays == 0 && layr == 0) {
+                                ik[12] = KernelManager->AddKernel<TM, 12, INAIR, INAIR>( );
+                            } else if (lays == 0 && layr > 0) {
+                                ik[12] = KernelManager->AddKernel<TM, 12, INAIR, INGROUND>( );
+                            } else if (lays > 0 && layr == 0) {
+                                ik[12] = KernelManager->AddKernel<TM, 12, INGROUND, INAIR>( );
+                            } else {
+                                ik[12] = KernelManager->AddKernel<TM, 12, INGROUND, INGROUND>( );
+                            }
+                            break;
+
+
+                        case BOTH:
+                            if ( lays == 0 && layr == 0) {
+                                ik[10] = KernelManager->AddKernel<TM, 10, INAIR, INAIR>( );
+                                ik[11] = KernelManager->AddKernel<TM, 11, INAIR, INAIR>( );
+                                ik[12] = KernelManager->AddKernel<TM, 12, INAIR, INAIR>( );
+                            } else if (lays == 0 && layr > 0) {
+                                ik[10] = KernelManager->AddKernel<TM, 10, INAIR, INGROUND>( );
+                                ik[11] = KernelManager->AddKernel<TM, 11, INAIR, INGROUND>( );
+                                ik[12] = KernelManager->AddKernel<TM, 12, INAIR, INGROUND>( );
+                            } else if (lays > 0 && layr == 0) {
+                                ik[10] = KernelManager->AddKernel<TM, 10, INGROUND, INAIR>( );
+                                ik[11] = KernelManager->AddKernel<TM, 11, INGROUND, INAIR>( );
+                                ik[12] = KernelManager->AddKernel<TM, 12, INGROUND, INAIR>( );
+                            } else {
+                                ik[10] = KernelManager->AddKernel<TM, 10, INGROUND, INGROUND>( );
+                                ik[11] = KernelManager->AddKernel<TM, 11, INGROUND, INGROUND>( );
+                                ik[12] = KernelManager->AddKernel<TM, 12, INGROUND, INGROUND>( );
+                            }
+                        }
+                }
+                if (std::abs(Pol[1]) > 0 || std::abs(Pol[0]) > 0) { // x or y grounded HED dipole
+
+                    switch(FieldsToCalculate) {
+
+                        case E:
+                            if ( lays == 0 && layr == 0) {
+                                ik[0] = KernelManager->AddKernel<TM, 0, INAIR, INAIR>( );
+                                ik[1] = KernelManager->AddKernel<TM, 1, INAIR, INAIR>( );
+                                ik[4] = KernelManager->AddKernel<TM, 4, INAIR, INAIR>( );
+                                //ik[2] = KernelManager->AddKernel<TE, 2, INAIR, INAIR>( );
+                                //ik[3] = KernelManager->AddKernel<TE, 3, INAIR, INAIR>( );
+                            } else if (lays == 0 && layr > 0) {
+                                ik[0] = KernelManager->AddKernel<TM, 0, INAIR, INGROUND>( );
+                                ik[1] = KernelManager->AddKernel<TM, 1, INAIR, INGROUND>( );
+                                ik[4] = KernelManager->AddKernel<TM, 4, INAIR, INGROUND>( );
+                                //ik[2] = KernelManager->AddKernel<TE, 2, INAIR, INGROUND>( );
+                                //ik[3] = KernelManager->AddKernel<TE, 3, INAIR, INGROUND>( );
+                            } else if (lays > 0 && layr == 0) {
+                                ik[0] = KernelManager->AddKernel<TM, 0, INGROUND, INAIR>( );
+                                ik[1] = KernelManager->AddKernel<TM, 1, INGROUND, INAIR>( );
+                                ik[4] = KernelManager->AddKernel<TM, 4, INGROUND, INAIR>( );
+                                //ik[2] = KernelManager->AddKernel<TE, 2, INGROUND, INAIR>( );
+                                //ik[3] = KernelManager->AddKernel<TE, 3, INGROUND, INAIR>( );
+                            } else {
+                                ik[0] = KernelManager->AddKernel<TM, 0, INGROUND, INGROUND>( );
+                                ik[1] = KernelManager->AddKernel<TM, 1, INGROUND, INGROUND>( );
+                                ik[4] = KernelManager->AddKernel<TM, 4, INGROUND, INGROUND>( );
+                                //ik[2] = KernelManager->AddKernel<TE, 2, INGROUND, INGROUND>( );
+                                //ik[3] = KernelManager->AddKernel<TE, 3, INGROUND, INGROUND>( );
+                            }
+                            break;
+
+                        case H:
+                            if (lays == 0 && layr == 0) {
+                                ik[5] = KernelManager->AddKernel<TM, 5, INAIR, INAIR>( );
+                                ik[6] = KernelManager->AddKernel<TM, 6, INAIR, INAIR>( );
+                                //ik[7] = KernelManager->AddKernel<TE, 7, INAIR, INAIR>( );
+                                //ik[8] = KernelManager->AddKernel<TE, 8, INAIR, INAIR>( );
+                                //ik[9] = KernelManager->AddKernel<TE, 9, INAIR, INAIR>( );
+                            } else if (lays == 0 && layr > 0) {
+                                ik[5] = KernelManager->AddKernel<TM, 5, INAIR, INGROUND>( );
+                                ik[6] = KernelManager->AddKernel<TM, 6, INAIR, INGROUND>( );
+                                //ik[7] = KernelManager->AddKernel<TE, 7, INAIR, INGROUND>( );
+                                //ik[8] = KernelManager->AddKernel<TE, 8, INAIR, INGROUND>( );
+                                //ik[9] = KernelManager->AddKernel<TE, 9, INAIR, INGROUND>( );
+                            } else if (lays > 0 && layr == 0) {
+                                ik[5] = KernelManager->AddKernel<TM, 5, INGROUND, INAIR>( );
+                                ik[6] = KernelManager->AddKernel<TM, 6, INGROUND, INAIR>( );
+                                //ik[7] = KernelManager->AddKernel<TE, 7, INGROUND, INAIR>( );
+                                //ik[8] = KernelManager->AddKernel<TE, 8, INGROUND, INAIR>( );
+                                //ik[9] = KernelManager->AddKernel<TE, 9, INGROUND, INAIR>( );
+                            } else {
+                                ik[5] = KernelManager->AddKernel<TM, 5, INGROUND, INGROUND>( );
+                                ik[6] = KernelManager->AddKernel<TM, 6, INGROUND, INGROUND>( );
+                                //ik[7] = KernelManager->AddKernel<TE, 7, INGROUND, INGROUND>( );
+                                //ik[8] = KernelManager->AddKernel<TE, 8, INGROUND, INGROUND>( );
+                                //ik[9] = KernelManager->AddKernel<TE, 9, INGROUND, INGROUND>( );
+                            }
+                            break;
+
+                        case BOTH:
+                            if (lays == 0 && layr == 0) {
+                                ik[0] = KernelManager->AddKernel<TM, 0, INAIR, INAIR>( );
+                                ik[1] = KernelManager->AddKernel<TM, 1, INAIR, INAIR>( );
+                                ik[4] = KernelManager->AddKernel<TM, 4, INAIR, INAIR>( );
+                                //ik[2] = KernelManager->AddKernel<TE, 2, INAIR, INAIR>( );
+                                //ik[3] = KernelManager->AddKernel<TE, 3, INAIR, INAIR>( );
+                                ik[5] = KernelManager->AddKernel<TM, 5, INAIR, INAIR>( );
+                                ik[6] = KernelManager->AddKernel<TM, 6, INAIR, INAIR>( );
+                                //ik[7] = KernelManager->AddKernel<TE, 7, INAIR, INAIR>( );
+                                //ik[8] = KernelManager->AddKernel<TE, 8, INAIR, INAIR>( );
+                                //ik[9] = KernelManager->AddKernel<TE, 9, INAIR, INAIR>( );
+                            } else if (lays == 0 && layr > 0) {
+                                ik[0] = KernelManager->AddKernel<TM, 0, INAIR, INGROUND>( );
+                                ik[1] = KernelManager->AddKernel<TM, 1, INAIR, INGROUND>( );
+                                ik[4] = KernelManager->AddKernel<TM, 4, INAIR, INGROUND>( );
+                                //ik[2] = KernelManager->AddKernel<TE, 2, INAIR, INGROUND>( );
+                                //ik[3] = KernelManager->AddKernel<TE, 3, INAIR, INGROUND>( );
+                                ik[5] = KernelManager->AddKernel<TM, 5, INAIR, INGROUND>( );
+                                ik[6] = KernelManager->AddKernel<TM, 6, INAIR, INGROUND>( );
+                                //ik[7] = KernelManager->AddKernel<TE, 7, INAIR, INGROUND>( );
+                                //ik[8] = KernelManager->AddKernel<TE, 8, INAIR, INGROUND>( );
+                                //ik[9] = KernelManager->AddKernel<TE, 9, INAIR, INGROUND>( );
+                            } else if (lays > 0 && layr == 0) {
+                                ik[0] = KernelManager->AddKernel<TM, 0, INGROUND, INAIR>( );
+                                ik[1] = KernelManager->AddKernel<TM, 1, INGROUND, INAIR>( );
+                                ik[4] = KernelManager->AddKernel<TM, 4, INGROUND, INAIR>( );
+                                //ik[2] = KernelManager->AddKernel<TE, 2, INGROUND, INAIR>( );
+                                //ik[3] = KernelManager->AddKernel<TE, 3, INGROUND, INAIR>( );
+                                ik[5] = KernelManager->AddKernel<TM, 5, INGROUND, INAIR>( );
+                                ik[6] = KernelManager->AddKernel<TM, 6, INGROUND, INAIR>( );
+                                //ik[7] = KernelManager->AddKernel<TE, 7, INGROUND, INAIR>( );
+                                //ik[8] = KernelManager->AddKernel<TE, 8, INGROUND, INAIR>( );
+                                //ik[9] = KernelManager->AddKernel<TE, 9, INGROUND, INAIR>( );
+                            } else {
+                                ik[0] = KernelManager->AddKernel<TM, 0, INGROUND, INGROUND>( );
+                                ik[1] = KernelManager->AddKernel<TM, 1, INGROUND, INGROUND>( );
+                                ik[4] = KernelManager->AddKernel<TM, 4, INGROUND, INGROUND>( );
+                                //ik[2] = KernelManager->AddKernel<TE, 2, INGROUND, INGROUND>( );
+                                //ik[3] = KernelManager->AddKernel<TE, 3, INGROUND, INGROUND>( );
+                                ik[5] = KernelManager->AddKernel<TM, 5, INGROUND, INGROUND>( );
+                                ik[6] = KernelManager->AddKernel<TM, 6, INGROUND, INGROUND>( );
+                                //ik[7] = KernelManager->AddKernel<TE, 7, INGROUND, INGROUND>( );
+                                //ik[8] = KernelManager->AddKernel<TE, 8, INGROUND, INGROUND>( );
+                                //ik[9] = KernelManager->AddKernel<TE, 9, INGROUND, INGROUND>( );
                             }
                             break;
                         }
@@ -786,8 +955,6 @@ namespace Lemma {
                 exit(EXIT_FAILURE);
 
         }
-
-
     }
 
     void DipoleSource::UpdateFields( const int& ifreq, HankelTransform* Hankel, const Real& wavef) {
@@ -874,6 +1041,7 @@ namespace Lemma {
                                     Pol[0]*Moment*QPI*sp*f(9) );
                             }
                             break;
+
                         case BOTH:
                             f(0) = Hankel->Zgauss(0, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[0])) / KernelManager->GetRAWKernel(ik[0])->GetYm();
                             f(1) = Hankel->Zgauss(1, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[1])) / KernelManager->GetRAWKernel(ik[1])->GetYm();
@@ -912,6 +1080,128 @@ namespace Lemma {
                     }
                 }
                 break; // GROUNDEDELECTRICDIPOLE
+
+            case (GROUNDINGPOINT):
+                if (std::abs(Pol[2]) > 0) { // z dipole
+                    switch(FieldsToCalculate) {
+                        case E:
+                            f(10) = Hankel->Zgauss(10, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[10])) / KernelManager->GetRAWKernel(ik[10])->GetYm();
+                            f(11) = Hankel->Zgauss(11, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[11])) / KernelManager->GetRAWKernel(ik[11])->GetYm();
+                            this->Receivers->AppendEfield(ifreq, irec,
+                                -Pol[2]*QPI*cp*f(10)*Moment,
+                                -Pol[2]*QPI*sp*f(10)*Moment,
+                                 Pol[2]*QPI*f(11)*Moment);
+                            break;
+
+                        case H:
+                            f(12) = Hankel->Zgauss(12, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[12]));
+                            this->Receivers->AppendHfield(ifreq, irec,
+                                -Pol[2]*QPI*sp*f(12)*Moment,
+                                 Pol[2]*QPI*cp*f(12)*Moment,
+                                 0. );
+                            break;
+
+                        case BOTH:
+                            f(10) = Hankel->Zgauss(10, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[10])) / KernelManager->GetRAWKernel(ik[10])->GetYm();
+                            f(11) = Hankel->Zgauss(11, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[11])) / KernelManager->GetRAWKernel(ik[11])->GetYm();
+                            this->Receivers->AppendEfield(ifreq, irec,
+                                    -Pol[2]*QPI*cp*f(10)*Moment,
+                                    -Pol[2]*QPI*sp*f(10)*Moment,
+                                     Pol[2]*QPI*f(11)*Moment   );
+
+                            f(12) = Hankel->Zgauss(12, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[12]));
+                            this->Receivers->AppendHfield(ifreq, irec,
+                                    -Pol[2]*QPI*sp*f(12)*Moment,
+                                     Pol[2]*QPI*cp*f(12)*Moment,
+                                     0. );
+                    } // Fields to calculate Z polarity Electric dipole
+                }
+                if (std::abs(Pol[1]) > 0 || std::abs(Pol[0]) > 0) { // x or y dipole
+                    switch(FieldsToCalculate) {
+                        case E:
+                            f(2) = 0;//Hankel->Zgauss(2, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[2])) * KernelManager->GetRAWKernel(ik[2])->GetZs();
+                            f(3) = 0;//Hankel->Zgauss(3, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[3])) * KernelManager->GetRAWKernel(ik[3])->GetZs();
+                            f(0) = Hankel->Zgauss(0, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[0])) / KernelManager->GetRAWKernel(ik[0])->GetYm();
+                            f(1) = Hankel->Zgauss(1, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[1])) / KernelManager->GetRAWKernel(ik[1])->GetYm();
+                            f(4) = Hankel->Zgauss(4, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[4])) / KernelManager->GetRAWKernel(ik[4])->GetYm();
+                            if (std::abs(Pol[1]) > 0) {
+                                this->Receivers->AppendEfield(ifreq, irec,
+                                    0,0,0);
+                                    //Pol[1]*QPI*Moment*scp*(f(0)+f(2)),
+                                    //Pol[1]*QPI*Moment*((sps*f(0)+c2p*f(1)/rho)),
+                                    //Pol[1]*QPI*Moment*(f(0)+f(2)),
+                                    //Pol[1]*QPI*Moment*((f(0)+f(1)/rho)),
+                                    //Pol[1]*QPI*sp*f(4)*Moment);
+                                    // std dipole
+                                    //Pol[1]*QPI*scp*((f(0)-(Real)(2.)*f(1)/rho)+(f(2)-(Real)(2.)*f(3)/rho))*Moment ,
+                                    //Pol[1]*QPI*((sps*f(0)+c2p*f(1)/rho)-(cps*f(2)-c2p*f(3)/rho))*Moment,
+                                    //Pol[1]*QPI*sp*f(4)*Moment);
+                            }
+                            if (std::abs(Pol[0]) > 0) {
+                                this->Receivers->AppendEfield(ifreq, irec,
+                                    Pol[0]*Moment*QPI*((cps*f(0)-c2p*f(1)/rho)),          //-(sps*f(2)+c2p*f(3)/rho)),
+                                    Pol[0]*Moment*QPI*scp*((f(0)-(Real)(2.)*f(1)/rho)),   //+(f(2)-(Real)(2.)*f(3)/rho)),
+                                    Pol[0]*Moment*QPI*cp*f(4) );
+                            }
+                            break;
+                        case H:
+                            f(5) = Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[5]));
+                            f(6) = Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[6]));
+                            f(7) = Hankel->Zgauss(7, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[7]))*KernelManager->GetRAWKernel(ik[7])->GetZs()/KernelManager->GetRAWKernel(ik[7])->GetZm();
+                            f(8) = Hankel->Zgauss(8, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[8]))*KernelManager->GetRAWKernel(ik[8])->GetZs()/KernelManager->GetRAWKernel(ik[8])->GetZm();
+                            f(9) = Hankel->Zgauss(9, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[9]))*KernelManager->GetRAWKernel(ik[9])->GetZs()/KernelManager->GetRAWKernel(ik[9])->GetZm();
+                            if (std::abs(Pol[1]) > 0) {
+                                this->Receivers->AppendHfield(ifreq, irec,
+                                        Pol[1]*QPI*(sps*f(5)+c2p*f(6)/rho-cps*f(7)+c2p*f(8)/rho)*Moment,
+                                        Pol[1]*QPI*scp*(-f(5)+(Real)(2.)*f(6)/rho-f(7)+(Real)(2.)*f(8)/rho)*Moment,
+                                        -Pol[1]*QPI*cp*f(9)*Moment );
+                            }
+                            if (std::abs(Pol[0]) > 0) {
+                                this->Receivers->AppendHfield(ifreq, irec,
+                                    Pol[0]*Moment*QPI*scp*(f(5)-(Real)(2.)*f(6)/rho+f(7)-(Real)(2.)*f(8)/rho),
+                                    Pol[0]*Moment*QPI*(-cps*f(5)+c2p*f(6)/rho+sps*f(7)+c2p*f(8)/rho),
+                                    Pol[0]*Moment*QPI*sp*f(9) );
+                            }
+                            break;
+
+                        case BOTH:
+                            f(0) = Hankel->Zgauss(0, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[0])) / KernelManager->GetRAWKernel(ik[0])->GetYm();
+                            f(1) = Hankel->Zgauss(1, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[1])) / KernelManager->GetRAWKernel(ik[1])->GetYm();
+                            f(4) = Hankel->Zgauss(4, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[4])) / KernelManager->GetRAWKernel(ik[4])->GetYm();
+                            f(2) = Hankel->Zgauss(2, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[2])) * KernelManager->GetRAWKernel(ik[2])->GetZs();
+                            f(3) = Hankel->Zgauss(3, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[3])) * KernelManager->GetRAWKernel(ik[3])->GetZs();
+                            f(5) = Hankel->Zgauss(5, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[5]));
+                            f(6) = Hankel->Zgauss(6, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[6]));
+                            f(7) = Hankel->Zgauss(7, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[7]))*KernelManager->GetRAWKernel(ik[7])->GetZs()/KernelManager->GetRAWKernel(ik[7])->GetZm();
+                            f(8) = Hankel->Zgauss(8, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[8]))*KernelManager->GetRAWKernel(ik[8])->GetZs()/KernelManager->GetRAWKernel(ik[8])->GetZm();
+                            f(9) = Hankel->Zgauss(9, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[9]))*KernelManager->GetRAWKernel(ik[9])->GetZs()/KernelManager->GetRAWKernel(ik[9])->GetZm();
+
+                            if (std::abs(Pol[1]) > 0) {
+                                this->Receivers->AppendEfield(ifreq, irec,
+                                        Pol[1]*QPI*scp*((f(0)-(Real)(2.)*f(1)/rho)+(f(2)-(Real)(2.)*f(3)/rho))*Moment ,
+                                        Pol[1]*QPI*((sps*f(0)+c2p*f(1)/rho)-(cps*f(2)-c2p*f(3)/rho))*Moment,
+                                        Pol[1]*QPI*sp*f(4)*Moment);
+
+                                this->Receivers->AppendHfield(ifreq, irec,
+                                        Pol[1]*QPI*(sps*f(5)+c2p*f(6)/rho-cps*f(7)+c2p*f(8)/rho)*Moment,
+                                        Pol[1]*QPI*scp*(-f(5)+(Real)(2.)*f(6)/rho-f(7)+(Real)(2.)*f(8)/rho)*Moment,
+                                       -Pol[1]*QPI*cp*f(9)*Moment );
+                            }
+                            if (std::abs(Pol[0]) > 0) {
+                                this->Receivers->AppendEfield(ifreq, irec,
+                                    Pol[0]*Moment*QPI*((cps*f(0)-c2p*f(1)/rho)-(sps*f(2)+c2p*f(3)/rho)),
+                                    Pol[0]*Moment*QPI*scp*((f(0)-(Real)(2.)*f(1)/rho)+(f(2)-(Real)(2.)*f(3)/rho)),
+                                    Pol[0]*Moment*QPI*cp*f(4) );
+
+                                this->Receivers->AppendHfield(ifreq, irec,
+                                    Pol[0]*Moment*QPI*scp*(f(5)-(Real)(2.)*f(6)/rho+f(7)-(Real)(2.)*f(8)/rho),
+                                    Pol[0]*Moment*QPI*(-cps*f(5)+c2p*f(6)/rho+sps*f(7)+c2p*f(8)/rho),
+                                    Pol[0]*Moment*QPI*sp*f(9) );
+                            }
+                            break;
+                    }
+                }
+                break; // GROUNDINGPOINT
 
 
             case UNGROUNDEDELECTRICDIPOLE:
@@ -955,11 +1245,16 @@ namespace Lemma {
 
                     switch(FieldsToCalculate) {
                         case E:
-                            f(0) = 0;
-                            f(1) = 0;
+                            //f(0) = 0;
+                            //f(1) = 0;
+                            //f(2) = Hankel->Zgauss(2, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[2])) * KernelManager->GetRAWKernel(ik[2])->GetZs();
+                            //f(3) = Hankel->Zgauss(3, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[3])) * KernelManager->GetRAWKernel(ik[3])->GetZs();
+                            //f(4) = 0;
                             f(2) = Hankel->Zgauss(2, TE, 0, rho, wavef, KernelManager->GetRAWKernel(ik[2])) * KernelManager->GetRAWKernel(ik[2])->GetZs();
                             f(3) = Hankel->Zgauss(3, TE, 1, rho, wavef, KernelManager->GetRAWKernel(ik[3])) * KernelManager->GetRAWKernel(ik[3])->GetZs();
-                            f(4) = 0;
+                            f(0) = Hankel->Zgauss(0, TM, 0, rho, wavef, KernelManager->GetRAWKernel(ik[0])) / KernelManager->GetRAWKernel(ik[0])->GetYm();
+                            f(1) = Hankel->Zgauss(1, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[1])) / KernelManager->GetRAWKernel(ik[1])->GetYm();
+                            f(4) = Hankel->Zgauss(4, TM, 1, rho, wavef, KernelManager->GetRAWKernel(ik[4])) / KernelManager->GetRAWKernel(ik[4])->GetYm();
                             if (std::abs(Pol[1]) > 0) {
                                 this->Receivers->AppendEfield(ifreq, irec,
                                     Pol[1]*QPI*scp*((f(0)-(Real)(2.)*f(1)/rho)+(f(2)-(Real)(2.)*f(3)/rho))*Moment,
@@ -984,7 +1279,7 @@ namespace Lemma {
                                 this->Receivers->AppendHfield(ifreq, irec,
                                         Pol[1]*QPI*(sps*f(5)+c2p*f(6)/rho-cps*f(7)+c2p*f(8)/rho)*Moment,
                                         Pol[1]*QPI*scp*(-f(5)+(Real)(2.)*f(6)/rho-f(7)+(Real)(2.)*f(8)/rho)*Moment,
-                                        -Pol[1]*QPI*cp*f(9)*Moment );
+                                       -Pol[1]*QPI*cp*f(9)*Moment );
                             }
                             if (std::abs(Pol[0]) > 0) {
                                 this->Receivers->AppendHfield(ifreq, irec,
@@ -1036,7 +1331,6 @@ namespace Lemma {
                 break; // UNGROUNDEDELECTRICDIPOLE
 
             case MAGNETICDIPOLE:
-
                 //Hankel->ComputeRelated(rho, KernelManager);
                 if (std::abs(Pol[2]) > 0) { // z dipole
                     switch(FieldsToCalculate) {

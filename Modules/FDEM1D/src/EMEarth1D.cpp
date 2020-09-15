@@ -72,8 +72,7 @@ namespace Lemma {
     // TODO init large arrays here.
     EMEarth1D::EMEarth1D( const ctor_key& key ) : LemmaObject( key ),
             Dipole(nullptr), Earth(nullptr), Receivers(nullptr), Antenna(nullptr),
-            FieldsToCalculate(BOTH), HankelType(ANDERSON801), icalcinner(0), icalc(0)
-        {
+            FieldsToCalculate(BOTH), HankelType(ANDERSON801), icalcinner(0), icalc(0) {
     }
 
     EMEarth1D::~EMEarth1D() {
@@ -107,21 +106,36 @@ namespace Lemma {
     // ====================  ACCESS        ===================================
     void EMEarth1D::AttachDipoleSource( std::shared_ptr<DipoleSource> dipoleptr) {
         Dipole = dipoleptr;
-    }
-
-    void EMEarth1D::AttachLayeredEarthEM( std::shared_ptr<LayeredEarthEM> earthptr) {
-        Earth = earthptr;
+        if (Receivers != nullptr) {
+            // Check to make sure Receivers are set up for all calculations
+            switch(FieldsToCalculate) {
+                case E:
+                    if (Receivers->NumberOfBinsE != Dipole->GetNumberOfFrequencies())
+                        Receivers->SetNumberOfBinsE(Dipole->GetNumberOfFrequencies());
+                    break;
+                case H:
+                    if (Receivers->NumberOfBinsH != Dipole->GetNumberOfFrequencies())
+                        Receivers->SetNumberOfBinsH(Dipole->GetNumberOfFrequencies());
+                    break;
+                case BOTH:
+                    if (Receivers->NumberOfBinsH != Dipole->GetNumberOfFrequencies())
+                        Receivers->SetNumberOfBinsH(Dipole->GetNumberOfFrequencies());
+                    if (Receivers->NumberOfBinsE != Dipole->GetNumberOfFrequencies())
+                        Receivers->SetNumberOfBinsE(Dipole->GetNumberOfFrequencies());
+                    break;
+            }
+        }
     }
 
     void EMEarth1D::AttachFieldPoints( std::shared_ptr<FieldPoints> recptr) {
 
         Receivers = recptr;
         if (Receivers == nullptr) {
-            std::cout << "nullptr Receivers in emearth1d.cpp " << std::endl;
+            std::cerr << "nullptr Receivers in emearth1d.cpp " << std::endl;
             return;
         }
 
-        // This has an implicid need to first set a source before receivers, users
+        // This has an implicit need to first set a source before receivers, users
         // will not expect this. Fix
         if (Dipole != nullptr) {
             switch (FieldsToCalculate) {
@@ -150,6 +164,10 @@ namespace Lemma {
                     break;
             }
         }
+    }
+
+    void EMEarth1D::AttachLayeredEarthEM( std::shared_ptr<LayeredEarthEM> earthptr) {
+        Earth = earthptr;
     }
 
     void EMEarth1D::AttachWireAntenna(std::shared_ptr<WireAntenna> antennae) {
@@ -227,6 +245,7 @@ namespace Lemma {
             if ( Antenna->IsHorizontallyPlanar() && ( HankelType == ANDERSON801 || HankelType == FHTKEY201  || HankelType==FHTKEY101 ||
                                                       HankelType == FHTKEY51    || HankelType == FHTKONG61  || HankelType == FHTKONG121 ||
                                                       HankelType == FHTKONG241  || HankelType == IRONS )) {
+
                 std::unique_ptr<ProgressBar> mdisp;
                 if (progressbar) {
                     mdisp = std::make_unique< ProgressBar >( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
@@ -255,7 +274,6 @@ namespace Lemma {
                     #endif
                 }
 
-
             } else if (Receivers->GetNumberOfPoints() > Antenna->GetNumberOfFrequencies()) {
 
                 //** Progress display bar for long calculations */
@@ -280,7 +298,7 @@ namespace Lemma {
                     for (int irec=0; irec<Receivers->GetNumberOfPoints(); ++irec) {
                         if (!Receivers->GetMask(irec)) {
                             AntCopy->ApproximateWithElectricDipoles(Receivers->GetLocation(irec));
-                            for (unsigned int idip=0; idip<AntCopy->GetNumberOfDipoles(); ++idip) {
+                            for (int idip=0; idip < static_cast<int>(AntCopy->GetNumberOfDipoles()); ++idip) {
                                 auto tDipole = AntCopy->GetDipoleSource(idip);
                                 //#ifdef LEMMAUSEOMP
                                 //#pragma omp for schedule(static, 1)
@@ -318,7 +336,7 @@ namespace Lemma {
                             #pragma omp for schedule(static, 1)
                             #endif
                             for (int ifreq=0; ifreq<Antenna->GetNumberOfFrequencies(); ++ifreq) {
-                                for (unsigned int idip=0; idip<Antenna->GetNumberOfDipoles(); ++idip) {
+                                for (int idip=0; idip< static_cast<int>(Antenna->GetNumberOfDipoles()); ++idip) {
                                     auto tDipole = Antenna->GetDipoleSource(idip);
                                     // Propogation constant in free space
                                     Real wavef   = tDipole->GetAngularFrequency(ifreq) *
@@ -354,7 +372,7 @@ namespace Lemma {
                                 #ifdef LEMMAUSEOMP
                                 #pragma omp for schedule(static, 1)
                                 #endif
-                                for (int idip=0; idip < (int)Antenna->GetNumberOfDipoles(); ++idip) {
+                                for (int idip=0; idip<static_cast<int>(Antenna->GetNumberOfDipoles()); ++idip) {
                                     //#pragma omp critical
                                     //{
                                     //cout << "idip=" << idip << "\tthread num=" << omp_get_thread_num() << '\n';

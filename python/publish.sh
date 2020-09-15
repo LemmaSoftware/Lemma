@@ -2,8 +2,8 @@
 rm -rf build dist clean pyLemma.egg.info
 python setup.py build
 python setup.py bdist_wheel
-#auditwheel repair ./dist/pyLemma*.whl -w ./clean
-#twine upload build/* #clean/*
+auditwheel repair ./dist/pyLemma*.whl -w ./clean
+twine upload build/* #clean/*
 
 #rm -rf dist
 #python setup.py build

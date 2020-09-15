@@ -1338,7 +1338,7 @@ namespace Lemma {
         static bool called = false;
         if (!called) {
             std::cout << "WARNING\n";
-            std::cout << "Unspecialised PotentialBelowSourceLayer <" << Mode << " " << Ikernel << " "
+            std::cout << "Unspecialised RelPotentialBelowSourceLayer <" << Mode << " " << Ikernel << " "
                   << Isource << " " << Irecv << ">...this function will be slow\n\n";
             called = true;
         }
