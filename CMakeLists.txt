@@ -284,6 +284,7 @@ if (LEMMA_PYTHON3_BINDINGS)
     install ( FILES python/setup.py DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
     install ( FILES python/long.md DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
     install ( FILES python/publish.sh DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
+    install ( FILES README.md DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
     install ( DIRECTORY python/pyLemma DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
 endif()
 

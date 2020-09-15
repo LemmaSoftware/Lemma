@@ -19,7 +19,7 @@ class InstallPlatlib(install):
         if self.distribution.has_ext_modules():
             self.install_lib = self.install_platlib
 
-with open("../README.md", "r") as fh:
+with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
