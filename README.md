@@ -6,7 +6,7 @@ Lemma is an ElectroMagnetics Modelling API. Lemma is developed in the hopes that
 * Flexible 
 * Fast 
 * Object oriented 
-* Python bindings planned
+* Python bindings
 * VTK integration 
 
 ## Git 
