@@ -10,7 +10,7 @@ Lemma is an ElectroMagnetics Modelling API. Lemma is developed in the hopes that
 * VTK integration 
 
 ## Git 
-Lemma is hosted on several Git instances. Our main instance runs on Gitea and is at https://lemma.codes. 
+Lemma is hosted on several Git instances. Our main instance runs on Gitea and is at https://lemmasoftware.org. The project is also mirrored on GitHub. 
 
 ## Team 
 Lemma is and has been developed by several organisations and people, including: University of Utah, Colorado School of Mines, US Geological Survey. 
