@@ -4,10 +4,10 @@ Lemma is an ElectroMagnetics Modelling API. Lemma is developed in the hopes that
 * Written in C++ 
 * Test driven   
 * Flexible 
-* Fast 
+* Fast
 * Object oriented 
 * Python bindings
-* VTK integration 
+* VTK integration
 
 ## Git 
 Lemma is hosted on several Git instances. Our main instance runs on Gitea and is at https://lemmasoftware.org. The project is also mirrored on GitHub. 
