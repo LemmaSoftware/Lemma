@@ -1,5 +1,5 @@
 # About
-Lemma is an ElectroMagnetics Modelling API. Lemma is developed in the hopes that it will be helpful for academics, industry, and anyone else interested in geophysical  modelling.
+Lemma is an ElectroMagnetics Modelling API. Lemma is developed in the hopes that it will be helpful for academics, industry, and anyone else interested in geophysical modelling.
 
 * Written in C++ 
 * Test driven   
