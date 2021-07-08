@@ -270,6 +270,8 @@ if (LEMMA_USE_BOOST)
 		if(HAVE_BOOST_SPECIAL_FUNCTIONS)
 			add_definitions(-DHAVE_BOOST_SPECIAL_FUNCTIONS)
 		endif()
+    else()
+        message(FATAL_ERROR "Boost was not found, but was requested in CMake.")
 	endif()
 endif()
 

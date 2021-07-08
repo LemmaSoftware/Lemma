@@ -80,10 +80,10 @@ public:
 		Real dy = 20;
 		Real dz = 20;
 
-		int  nx = 13;
-		int  ny = 13;
-		int  nz = 13;
-        Delta = nx*ny*nz*1e-10;
+		int  nx = 5;  //13
+		int  ny = 5;  //13
+		int  nz = 5;  //13
+        Delta = nx*ny*nz*1e-9;
 
 		receivers->SetNumberOfPoints(nx*ny*nz);
 		int ir = 0;
@@ -119,29 +119,35 @@ public:
 
         // Put in a unit test that will be slow.
         std::cout << "MAGNETICDIPOLE Z polarisation" << std::endl;
-	    std::cout << "C++\n";
+        std::cout << "=====================================\n";
+	    std::cout << "Lemma/C++: ";
+        std::cout.flush();
 
   	    timer.begin();
 	    EmEarth->MakeCalc3();
 	    Real lemmaTime = timer.end();
+        std::cout << lemmaTime << " [s]" << std::endl;
 
         auto lc = receivers->GetEfield( 0 );
 
         #ifdef KIHALEE_EM1D
 	    receivers->ClearFields();
-        std::cout << "\nFORTRAN KiHa\n";
+        std::cout << "FORTRAN KiHa: ";
+        std::cout.flush();
+
   	    timer.begin();
  	    EmEarth->MakeCalc();
 	    Real kihaTime = timer.end();
 
-        auto fc = receivers->GetEfield( 0 ); //0,0);
+        std::cout << kihaTime << " [s]" << std::endl;
 
-        std::cout << "Lemma time:" << lemmaTime << "\tKiHa time:" << kihaTime << std::endl;
+        auto fc = receivers->GetEfield( 0 ); //0,0);
 
         std::cout.precision(16);
         std::cout << "Lemma norm |" << (lc).norm() << "|" << std::endl;
         std::cout << "KiHa norm  |" << (fc).norm() << "|" << std::endl;
-        std::cout << "Difference norm |" << (lc - fc).norm() << "|" << std::endl;
+        std::cout << "Difference norm |" << (lc - fc).norm() << "|\n";
+        std::cout << "Speedup:" << kihaTime/lemmaTime << "\n" << std::endl;
 
         TS_ASSERT_DELTA((lc-fc).norm(), 0.0, Delta);
         #endif
@@ -153,30 +159,33 @@ public:
 		dipole->SetPolarisation(XPOLARISATION);
 
         // Put in a unit test that will be slow.
-	    std::cout << "C++\n";
         std::cout << "MAGNETICDIPOLE X polarisation" << std::endl;
+        std::cout << "=====================================\n";
+	    std::cout << "Lemma/C++: ";
+        std::cout.flush();
 
   	    timer.begin();
 	    EmEarth->MakeCalc3();
 	    Real lemmaTime = timer.end();
+        std::cout << lemmaTime << " [s]" << std::endl;
 
         auto lc = receivers->GetEfield( 0 );
 
         #ifdef KIHALEE_EM1D
 	    receivers->ClearFields();
-        std::cout << "\nFORTRAN KiHa\n";
+        std::cout << "FORTRAN KiHa: ";
   	    timer.begin();
  	    EmEarth->MakeCalc();
 	    Real kihaTime = timer.end();
+        std::cout << kihaTime << " [s]" << std::endl;
 
         auto fc = receivers->GetEfield( 0 ); //0,0);
-
-        std::cout << "Lemma time:" << lemmaTime << "\tKiHa time:" << kihaTime << std::endl;
 
         std::cout.precision(16);
         std::cout << "Lemma norm |" << (lc).norm() << "|" << std::endl;
         std::cout << "KiHa norm  |" << (fc).norm() << "|" << std::endl;
-        std::cout << "Difference norm |" << (lc - fc).norm() << "|" << std::endl;
+        std::cout << "Difference norm |" << (lc - fc).norm() << "|\n";
+        std::cout << "Speedup:" << kihaTime/lemmaTime << "\n" << std::endl;
 
         TS_ASSERT_DELTA((lc-fc).norm(), 0.0, Delta);
         #endif
@@ -188,30 +197,34 @@ public:
 		dipole->SetPolarisation(YPOLARISATION);
 
         // Put in a unit test that will be slow.
-	    std::cout << "C++\n";
         std::cout << "MAGNETICDIPOLE Y polarisation" << std::endl;
+        std::cout << "=====================================\n";
+	    std::cout << "Lemma/C++: ";
+        std::cout.flush();
 
   	    timer.begin();
 	    EmEarth->MakeCalc3();
 	    Real lemmaTime = timer.end();
+        std::cout << lemmaTime << " [s]" << std::endl;
 
         auto lc = receivers->GetEfield( 0 );
 
         #ifdef KIHALEE_EM1D
 	    receivers->ClearFields();
-        std::cout << "\nFORTRAN KiHa\n";
+        std::cout << "FORTRAN KiHa: ";
+        std::cout.flush();
   	    timer.begin();
  	    EmEarth->MakeCalc();
 	    Real kihaTime = timer.end();
+        std::cout << kihaTime << " [s]" << std::endl;
 
         auto fc = receivers->GetEfield( 0 ); //0,0);
-
-        std::cout << "Lemma time:" << lemmaTime << "\tKiHa time:" << kihaTime << std::endl;
 
         std::cout.precision(16);
         std::cout << "Lemma norm |" << (lc).norm() << "|" << std::endl;
         std::cout << "KiHa norm  |" << (fc).norm() << "|" << std::endl;
-        std::cout << "Difference norm |" << (lc - fc).norm() << "|" << std::endl;
+        std::cout << "Difference norm |" << (lc - fc).norm() << "|\n";
+        std::cout << "Speedup:" << kihaTime/lemmaTime << "\n" << std::endl;
 
         TS_ASSERT_DELTA((lc-fc).norm(), 0.0, Delta);
         #endif
@@ -223,21 +236,66 @@ public:
 		dipole->SetPolarisation(XPOLARISATION);
 
         // Put in a unit test that will be slow.
-	    std::cout << "C++\n";
         std::cout << "GROUNDEDELECTRICDIPOLE X polarisation" << std::endl;
+        std::cout << "=====================================\n";
+	    std::cout << "Lemma/C++: ";
+        std::cout.flush();
 
   	    timer.begin();
 	    EmEarth->MakeCalc3();
 	    Real lemmaTime = timer.end();
+        std::cout << lemmaTime << " [s]" << std::endl;
 
         auto lc = receivers->GetEfield( 0 );
 
         #ifdef KIHALEE_EM1D
 	    receivers->ClearFields();
-        std::cout << "\nFORTRAN KiHa\n";
+        std::cout << "FORTRAN KiHa: ";
+        std::cout.flush();
   	    timer.begin();
  	    EmEarth->MakeCalc();
 	    Real kihaTime = timer.end();
+        std::cout << kihaTime << " [s]" << std::endl;
+
+        auto fc = receivers->GetEfield( 0 ); //0,0);
+
+        std::cout.precision(16);
+        std::cout << "Lemma norm |" << (lc).norm() << "|" << std::endl;
+        std::cout << "KiHa norm  |" << (fc).norm() << "|" << std::endl;
+        std::cout << "Difference norm |" << (lc - fc).norm() << "|\n";
+        std::cout << "Speedup:" << kihaTime/lemmaTime << "\n" << std::endl;
+
+        TS_ASSERT_DELTA((lc-fc).norm(), 0.0, Delta);
+        #endif
+   }
+
+   void test_Ey() {
+
+        dipole->SetType(GROUNDEDELECTRICDIPOLE);
+		dipole->SetPolarisation(YPOLARISATION);
+
+        // Put in a unit test that will be slow.
+        std::cout << "GROUNDEDELECTRICDIPOLE Y polarisation" << std::endl;
+        std::cout << "=====================================\n";
+	    std::cout << "Lemma/C++: ";
+        std::cout.flush();
+
+  	    timer.begin();
+	    EmEarth->MakeCalc3();
+	    Real lemmaTime = timer.end();
+        std::cout << lemmaTime << " [s]" << std::endl;
+
+        auto lc = receivers->GetEfield( 0 );
+
+        #ifdef KIHALEE_EM1D
+	    receivers->ClearFields();
+        std::cout << "KiHa/FORTRAN: ";
+        std::cout.flush();
+
+        timer.begin();
+ 	    EmEarth->MakeCalc();
+	    Real kihaTime = timer.end();
+        std::cout << kihaTime << " [s]" << std::endl;
 
         auto fc = receivers->GetEfield( 0 ); //0,0);
 
@@ -246,7 +304,50 @@ public:
         std::cout.precision(16);
         std::cout << "Lemma norm |" << (lc).norm() << "|" << std::endl;
         std::cout << "KiHa norm  |" << (fc).norm() << "|" << std::endl;
-        std::cout << "Difference norm |" << (lc - fc).norm() << "|" << std::endl;
+        std::cout << "Difference norm |" << (lc - fc).norm() << "|\n";
+        std::cout << "Speedup:" << kihaTime/lemmaTime << "\n" << std::endl;
+
+        TS_ASSERT_DELTA((lc-fc).norm(), 0.0, Delta);
+        #endif
+   }
+
+   void test_Ez() {
+
+        dipole->SetType(GROUNDEDELECTRICDIPOLE);
+		dipole->SetPolarisation(ZPOLARISATION);
+
+        // Put in a unit test that will be slow.
+        std::cout << "GROUNDEDELECTRICDIPOLE Z polarisation" << std::endl;
+        std::cout << "=====================================\n";
+	    std::cout << "Lemma/C++: ";
+        std::cout.flush();
+
+  	    timer.begin();
+	    EmEarth->MakeCalc3();
+	    Real lemmaTime = timer.end();
+        std::cout << lemmaTime << " [s]" << std::endl;
+
+        auto lc = receivers->GetEfield( 0 );
+
+        #ifdef KIHALEE_EM1D
+	    receivers->ClearFields();
+        std::cout << "KiHa/FORTRAN: ";
+        std::cout.flush();
+
+        timer.begin();
+ 	    EmEarth->MakeCalc();
+	    Real kihaTime = timer.end();
+        std::cout << kihaTime << " [s]" << std::endl;
+
+        auto fc = receivers->GetEfield( 0 ); //0,0);
+
+        std::cout << "Lemma time:" << lemmaTime << "\tKiHa time:" << kihaTime << std::endl;
+
+        std::cout.precision(16);
+        std::cout << "Lemma norm |" << (lc).norm() << "|" << std::endl;
+        std::cout << "KiHa norm  |" << (fc).norm() << "|" << std::endl;
+        std::cout << "Difference norm |" << (lc - fc).norm() << "|\n";
+        std::cout << "Speedup:" << kihaTime/lemmaTime << "\n" << std::endl;
 
         TS_ASSERT_DELTA((lc-fc).norm(), 0.0, Delta);
         #endif
