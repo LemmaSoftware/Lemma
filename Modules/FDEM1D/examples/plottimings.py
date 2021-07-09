@@ -56,7 +56,7 @@ for compiler in BENCH:
 
 plt.gca().set_yscale('log')    
 plt.gca().set_title( str(compiler) + " " + str(BENCH[compiler]["version"]) ) 
-plt.suptitle( cpuinfo.get_cpu_info()['brand'] ) 
+#plt.suptitle( cpuinfo.get_cpu_info()['brand'] ) 
 
 
 

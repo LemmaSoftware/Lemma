@@ -680,7 +680,7 @@ namespace Lemma {
         Real rho = (Receivers->GetLocation(irec).head<2>() - tDipole->GetLocation().head<2>()).norm();
         //Real rho = ( ((Receivers->GetLocation(irec) - tDipole->GetLocation()).head(2)).eval() ).norm();
 
-        tDipole->SetKernels(ifreq, FieldsToCalculate, Receivers, irec, Earth);
+        tDipole->SetKernels( ifreq, FieldsToCalculate, Receivers, irec, Earth );
         Hankel->ComputeRelated( rho, tDipole->GetKernelManager() );
         tDipole->UpdateFields( ifreq,  Hankel, wavef );
     }
@@ -755,6 +755,7 @@ namespace Lemma {
         #pragma omp parallel
         #endif
         { // OpenMP Parallel Block
+
             #ifdef LEMMAUSEOMP
             int tid = omp_get_thread_num();
             int nthreads = omp_get_num_threads();
@@ -763,6 +764,7 @@ namespace Lemma {
             int nthreads=1;
             #endif
             auto tDipole = Dipole->Clone();
+
             std::shared_ptr<HankelTransform> Hankel;
             switch (HankelType) {
                 case ANDERSON801:
@@ -787,6 +789,7 @@ namespace Lemma {
                     std::cerr << "Hankel transform cannot be created\n";
                     exit(EXIT_FAILURE);
             }
+
             if ( tDipole->GetNumberOfFrequencies() < Receivers->GetNumberOfPoints() ) {
                 for (int ifreq=0; ifreq<tDipole->GetNumberOfFrequencies(); ++ifreq) {
                     // Propogation constant in free space being input to Hankel

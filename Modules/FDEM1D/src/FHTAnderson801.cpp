@@ -1042,7 +1042,7 @@ namespace Lemma {
 		//Zans.resize(this->NumConv, (int)(this->kernelVec.size()));
 		//Zans.setZero();
         //Zwork = Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic>::Zero(801, (int)(this->kernelVec.size()));
-        Zans  = Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic>::Zero(this->NumConv, (int)(this->kernelVec.size()));
+        Zans = Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic>::Zero(this->NumConv, (int)(this->kernelVec.size()));
 
  		// 1010 Loop
  		for (int ilag=0; ilag < this->NumConv; ++ilag) {
