@@ -301,9 +301,10 @@
          @param NOSOURCETYPE is default.
          @param GROUNDEDELECTRICDIPOLE is an grounded electric dipole
          @param UNGROUNDEDELECTRICDIPOLE is an ungrounded electric dipole
+         @param GROUNDINGPOINT is a point of grounding in a bipole (or similiar) transmitter
          @param MAGNETICDIPOLE is a magnetic dipole
         */
-        enum DIPOLESOURCETYPE {NOSOURCETYPE, GROUNDEDELECTRICDIPOLE, UNGROUNDEDELECTRICDIPOLE, MAGNETICDIPOLE};
+        enum DIPOLESOURCETYPE {NOSOURCETYPE, GROUNDEDELECTRICDIPOLE, UNGROUNDEDELECTRICDIPOLE, GROUNDINGPOINT, MAGNETICDIPOLE};
 
         /// Only three polarizations are supported. They may be summed to
         /// approximate others

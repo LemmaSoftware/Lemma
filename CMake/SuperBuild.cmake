@@ -8,7 +8,7 @@ else()
         ExternalProject_Add(EIGEN
 	    GIT_REPOSITORY "https://gitlab.com/libeigen/eigen.git"
         UPDATE_COMMAND "" 
-	    GIT_TAG "3.3.7" #"default"
+	    GIT_TAG "3.3.7" 
    	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
    	    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 		#CONFIGURE_COMMAND ""
@@ -29,7 +29,7 @@ else()
         PATCH_COMMAND ""
         PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/yaml-cpp
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
-                   -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+                   -DYAML_BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} 
                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} 
     	           -DYAML_CPP_BUILD_TESTS=OFF
                    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
@@ -41,13 +41,13 @@ else()
     )
 endif()
 
-if ( LEMMA_VTK8_SUPPORT )
-    if ( NOT VTK_FOUND OR  VTK_VERSION VERSION_GREATER "8.2.0" )
+if ( LEMMA_VTK9_SUPPORT )
+    if ( NOT VTK_FOUND OR  VTK_VERSION VERSION_LESS "9.0.0" )
         message( STATUS "VTK > 8.20.0 was found! Version found: " ${VTK_VERSION}, ${VTK_USE_FILE} )
         message( STATUS "External build of VTK 8 has been added, this may take some time to build." )
-        ExternalProject_Add(VTK8
+        ExternalProject_Add(VTK9
         GIT_REPOSITORY "https://gitlab.kitware.com/vtk/vtk.git"
-        GIT_TAG  "v8.2.0"
+        GIT_TAG  "v9.0.1"
         PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/vtk8
         CMAKE_ARGS
             -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
@@ -78,10 +78,11 @@ if (LEMMA_PYTHON3_BINDINGS)
         message( STATUS "pybind11 was found" )
     else()
         message( STATUS "pybind11 was NOT found, please build or remove LEMMA_PYTHON3_BINDINGS" )
-	    find_package(PythonLibs 3.0 REQUIRED)
+        #find_package(Python COMPONENTS Interpreter Development REQUIRED)
+	#find_package(PythonLibs 3.0 REQUIRED)
         ExternalProject_Add(pybind11
 		    GIT_REPOSITORY "https://github.com/pybind/pybind11.git"
-		    GIT_TAG "v2.4.3" # "master" #"v2.4.3" #"master"
+		    GIT_TAG "v2.5.0" # "master" #"v2.4.3" #"master"
 		    UPDATE_COMMAND ""
 		    PATCH_COMMAND ""
     	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/pybind11

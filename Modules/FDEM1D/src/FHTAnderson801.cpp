@@ -940,7 +940,8 @@ namespace Lemma {
         icount = 0;
         Manager = KernelManager;
         this->kernelVec = KernelManager->GetSTLVector();
-        this->SetNumConv(nlag);
+        this->SetNumConv(nlag+1);
+
 #ifdef LEMMA_SINGLE_PRECISION
  		Compute(rho, 1, 1e-8);
 #else
@@ -958,7 +959,6 @@ namespace Lemma {
             SplineI->SetKnots( Arg, Zans.col(ii).imag() );
             splineVecImag.push_back(SplineI);
         }
-
     }
 
     void FHTAnderson801::SetLaggedArg(const Real& rho) {
@@ -998,7 +998,6 @@ namespace Lemma {
         // in release.
         #ifndef NDEBUG
 		if (rho<=0) {
-            //std::cout << "rho= " << rho << std::endl;
 			throw std::runtime_error("In Hankel 2 Argument rho <= 0; rho=" + to_string(rho) );
 		}
 
@@ -1043,7 +1042,7 @@ namespace Lemma {
 		//Zans.resize(this->NumConv, (int)(this->kernelVec.size()));
 		//Zans.setZero();
         //Zwork = Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic>::Zero(801, (int)(this->kernelVec.size()));
-        Zans  = Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic>::Zero(this->NumConv, (int)(this->kernelVec.size()));
+        Zans = Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic>::Zero(this->NumConv, (int)(this->kernelVec.size()));
 
  		// 1010 Loop
  		for (int ilag=0; ilag < this->NumConv; ++ilag) {

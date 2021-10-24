@@ -1682,7 +1682,6 @@ namespace Lemma {
     }
 
     // TODO in PotentialBelowSourceLayer:
-
     template<>
     Complex KernelEM1DSpec<TM, 0, INAIR, INGROUND>::PotentialBelowSourceLayer(const Real &ra) {
         Complex dd =  ((Real)(1.)+ReflCalc->rtd(1)*ReflCalc->cf(1));
@@ -1815,7 +1814,7 @@ namespace Lemma {
             }
             p += (ReflCalc->u(n)-ut) * ReflCalc->LayerDepth(n-1);
         }
-        Complex con = SR_SN(0, 0) * std::exp(ReflCalc->uk*ReflCalc->tx_z - ReflCalc->um*ReflCalc->rx_z+ p);
+        Complex con = SR_SN(0, 0) * std::exp(ReflCalc->uk*ReflCalc->tx_z - ReflCalc->um*ReflCalc->rx_z + p);
         if (ReflCalc->layr < ReflCalc->Earth->GetNumberOfLayers()-1) {
             con += SR_SN(0, 2) * ReflCalc->rtd(ReflCalc->layr) * std::exp(ReflCalc->uk*ReflCalc->tx_z-
                         ReflCalc->um*((Real)(2.)*ReflCalc->LayerDepth(ReflCalc->layr)-ReflCalc->rx_z)+p);

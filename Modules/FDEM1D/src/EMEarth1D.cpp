@@ -72,8 +72,7 @@ namespace Lemma {
     // TODO init large arrays here.
     EMEarth1D::EMEarth1D( const ctor_key& key ) : LemmaObject( key ),
             Dipole(nullptr), Earth(nullptr), Receivers(nullptr), Antenna(nullptr),
-            FieldsToCalculate(BOTH), HankelType(ANDERSON801), icalcinner(0), icalc(0)
-        {
+            FieldsToCalculate(BOTH), HankelType(ANDERSON801), icalcinner(0), icalc(0) {
     }
 
     EMEarth1D::~EMEarth1D() {
@@ -107,21 +106,36 @@ namespace Lemma {
     // ====================  ACCESS        ===================================
     void EMEarth1D::AttachDipoleSource( std::shared_ptr<DipoleSource> dipoleptr) {
         Dipole = dipoleptr;
-    }
-
-    void EMEarth1D::AttachLayeredEarthEM( std::shared_ptr<LayeredEarthEM> earthptr) {
-        Earth = earthptr;
+        if (Receivers != nullptr) {
+            // Check to make sure Receivers are set up for all calculations
+            switch(FieldsToCalculate) {
+                case E:
+                    if (Receivers->NumberOfBinsE != Dipole->GetNumberOfFrequencies())
+                        Receivers->SetNumberOfBinsE(Dipole->GetNumberOfFrequencies());
+                    break;
+                case H:
+                    if (Receivers->NumberOfBinsH != Dipole->GetNumberOfFrequencies())
+                        Receivers->SetNumberOfBinsH(Dipole->GetNumberOfFrequencies());
+                    break;
+                case BOTH:
+                    if (Receivers->NumberOfBinsH != Dipole->GetNumberOfFrequencies())
+                        Receivers->SetNumberOfBinsH(Dipole->GetNumberOfFrequencies());
+                    if (Receivers->NumberOfBinsE != Dipole->GetNumberOfFrequencies())
+                        Receivers->SetNumberOfBinsE(Dipole->GetNumberOfFrequencies());
+                    break;
+            }
+        }
     }
 
     void EMEarth1D::AttachFieldPoints( std::shared_ptr<FieldPoints> recptr) {
 
         Receivers = recptr;
         if (Receivers == nullptr) {
-            std::cout << "nullptr Receivers in emearth1d.cpp " << std::endl;
+            std::cerr << "nullptr Receivers in emearth1d.cpp " << std::endl;
             return;
         }
 
-        // This has an implicid need to first set a source before receivers, users
+        // This has an implicit need to first set a source before receivers, users
         // will not expect this. Fix
         if (Dipole != nullptr) {
             switch (FieldsToCalculate) {
@@ -150,6 +164,10 @@ namespace Lemma {
                     break;
             }
         }
+    }
+
+    void EMEarth1D::AttachLayeredEarthEM( std::shared_ptr<LayeredEarthEM> earthptr) {
+        Earth = earthptr;
     }
 
     void EMEarth1D::AttachWireAntenna(std::shared_ptr<WireAntenna> antennae) {
@@ -229,6 +247,7 @@ namespace Lemma {
             if ( Antenna->IsHorizontallyPlanar() && ( HankelType == ANDERSON801 || HankelType == FHTKEY201  || HankelType==FHTKEY101 ||
                                                       HankelType == FHTKEY51    || HankelType == FHTKONG61  || HankelType == FHTKONG121 ||
                                                       HankelType == FHTKONG241  || HankelType == IRONS )) {
+
                 std::unique_ptr<ProgressBar> mdisp;
                 if (progressbar) {
                     mdisp = std::make_unique< ProgressBar >( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );
@@ -256,7 +275,6 @@ namespace Lemma {
                     }
                     #endif
                 }
-
 
             } else if (Receivers->GetNumberOfPoints() > Antenna->GetNumberOfFrequencies()) {
 
@@ -664,7 +682,7 @@ namespace Lemma {
         Real rho = (Receivers->GetLocation(irec).head<2>() - tDipole->GetLocation().head<2>()).norm();
         //Real rho = ( ((Receivers->GetLocation(irec) - tDipole->GetLocation()).head(2)).eval() ).norm();
 
-        tDipole->SetKernels(ifreq, FieldsToCalculate, Receivers, irec, Earth);
+        tDipole->SetKernels( ifreq, FieldsToCalculate, Receivers, irec, Earth );
         Hankel->ComputeRelated( rho, tDipole->GetKernelManager() );
         tDipole->UpdateFields( ifreq,  Hankel, wavef );
     }
@@ -739,6 +757,7 @@ namespace Lemma {
         #pragma omp parallel
         #endif
         { // OpenMP Parallel Block
+
             #ifdef LEMMAUSEOMP
             int tid = omp_get_thread_num();
             int nthreads = omp_get_num_threads();
@@ -747,6 +766,7 @@ namespace Lemma {
             int nthreads=1;
             #endif
             auto tDipole = Dipole->Clone();
+
             std::shared_ptr<HankelTransform> Hankel;
             switch (HankelType) {
                 case ANDERSON801:
@@ -771,6 +791,7 @@ namespace Lemma {
                     std::cerr << "Hankel transform cannot be created\n";
                     exit(EXIT_FAILURE);
             }
+
             if ( tDipole->GetNumberOfFrequencies() < Receivers->GetNumberOfPoints() ) {
                 for (int ifreq=0; ifreq<tDipole->GetNumberOfFrequencies(); ++ifreq) {
                     // Propogation constant in free space being input to Hankel

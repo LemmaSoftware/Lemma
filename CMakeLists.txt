@@ -13,8 +13,8 @@ SET_PROPERTY(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
 ####################################################################################################
 # Lemma versioning, set Major, minor, and patch here                                               #
 set(LEMMA_VERSION_MAJOR "0")                                                                       #
-set(LEMMA_VERSION_MINOR "3")                                                                       #
-set(LEMMA_VERSION_PATCH "3")                                                                       #
+set(LEMMA_VERSION_MINOR "4")                                                                       #
+set(LEMMA_VERSION_PATCH "0")                                                                       #
 set(LEMMA_VERSION "\"${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}\"")      #
 set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}") #
 ####################################################################################################
@@ -47,6 +47,7 @@ option ( LEMMA_BUILD_EXAMPLES       "Compile example Lemma applications" OFF )
 option ( LEMMA_USE_OPENMP           "Use OpenMP in Lemma" OFF )
 option ( LEMMA_BUILD_DOCUMENTATION  "Build Doxygen man pages" OFF )
 option ( LEMMA_VTK8_SUPPORT         "VTK 8.x library for visualisation and grids" OFF )
+option ( LEMMA_VTK9_SUPPORT         "VTK 9.x library for visualisation and grids" OFF )
 option ( LEMMA_PYTHON3_BINDINGS     "Compile Python 3 bindings" OFF )
 
 # We end up using this for all builds, TODO remove this variable but follow same path
@@ -99,11 +100,32 @@ if (CMAKE_CROSSCOMPILING)
         QUIET
         ) 
     endif()
+    if (LEMMA_VTK9_SUPPORT)                                                            # Visualisation 
+        find_package (VTK  9.0.1      
+        COMPONENTS 
+        CommonCore 
+        RenderingCore 
+        FiltersCore 
+        FiltersSources 
+        CommonDataModel 
+        FiltersHyperTree 
+        IOXML 
+        IOImage 
+        IOLegacy 
+        IOGeometry 
+        InteractionStyle 
+        RenderingAnnotation 
+        FiltersHybrid 
+        FiltersModeling 
+        RenderingVolumeOpenGL2
+        QUIET
+        ) 
+    endif()
 else()
     find_package (Eigen3   3.3 QUIET )  # Matrix/Vector & Math
     find_package (yaml-cpp 0.6 QUIET )  # Serialisation of classes 
-    if (LEMMA_VTK8_SUPPORT)
-        find_package (VTK  8.2.0 COMPONENTS
+    if (LEMMA_VTK9_SUPPORT)
+        find_package (VTK  9.0.1 COMPONENTS
         vtkCommonCore 
         vtkRenderingCore 
         vtkFiltersCore 
@@ -125,14 +147,19 @@ endif()
 
 INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
 
-if (VTK_VERSION VERSION_GREATER "8.2.0")
-    message( STATUS "${VTK_VERSION} is compatible: ${VTK_VERSION_COMPATIBLE} exact? ${VTK_VERSION_EXACT}" )
-    set (VTK_FOUND False) 
-endif()
+#if (VTK_VERSION VERSION_GREATER "8.2.0")
+#    message( STATUS "${VTK_VERSION} is compatible: ${VTK_VERSION_COMPATIBLE} exact? ${VTK_VERSION_EXACT}" )
+#    set (VTK_FOUND False) 
+#endif()
 
 if (VTK_FOUND)
     set(volumeRenderer volumerenderer.cxx)
 	add_definitions(-DLEMMAUSEVTK) 
+	if (LEMMA_VTK8_SUPPORT)
+    add_definitions(-DLEMMA_VTK8_SUPPORT)
+    else (LEMMA_VTK9_SUPPORT) 
+    add_definitions(-DLEMMA_VTK9_SUPPORT)
+    endif()
 endif()
 
 if (LEMMA_BUILD_DOCUMENTATION)
@@ -160,7 +187,7 @@ message ( STATUS "VTK Found? " ${VTK_FOUND} )
 if ( NOT Eigen3_FOUND OR 
      NOT yaml-cpp_FOUND OR 
      (LEMMA_PYTHON3_BINDINGS AND NOT pybind11_FOUND) OR 
-     (LEMMA_VTK8_SUPPORT AND NOT VTK_FOUND) OR
+     (LEMMA_VTK9_SUPPORT AND NOT VTK_FOUND) OR
      (LEMMA_ENABLE_TESTING AND NOT CxxTest_FOUND) )
     message ( STATUS "Missing hard dependencies have been found, these will be downloaded any compiled." )
     message ( STATUS "This necessitates a two step build." )
@@ -243,6 +270,8 @@ if (LEMMA_USE_BOOST)
 		if(HAVE_BOOST_SPECIAL_FUNCTIONS)
 			add_definitions(-DHAVE_BOOST_SPECIAL_FUNCTIONS)
 		endif()
+    else()
+        message(FATAL_ERROR "Boost was not found, but was requested in CMake.")
 	endif()
 endif()
 
@@ -255,6 +284,9 @@ if (LEMMA_PYTHON3_BINDINGS)
     #include_directories(${PYTHON_INCLUDE_DIRS})
     #include_directories(${Boost_INCLUDE_DIRS})
     install ( FILES python/setup.py DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
+    install ( FILES python/long.md DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
+    install ( FILES python/publish.sh DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
+    install ( FILES README.md DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
     install ( DIRECTORY python/pyLemma DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
 endif()
 
@@ -359,9 +391,10 @@ endif()
 ########################################################################
 # add a target to generate API documentation with Doxyfile.in 
 # ALL make documentation build by default if possible
-find_package(Doxygen)
+if (LEMMA_BUILD_DOCUMENTATION)
+    find_package(Doxygen)
 	if(DOXYGEN_FOUND)
-	if (LEMMA_BUILD_DOCUMENTATION)
+    message( STATUS "LEMMA_BUILD_DOCUMENTATION must be positive" )
 # Custom header and footer option, enable in Doxygen 
 #	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Documentation/header.html
 #        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Documentation/header.html
@@ -376,7 +409,7 @@ find_package(Doxygen)
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 			COMMENT "Generating API documentation with Doxygen" VERBATIM
 		)
-	endif (LEMMA_BUILD_DOCUMENTATION)
 	endif(DOXYGEN_FOUND)
+endif (LEMMA_BUILD_DOCUMENTATION)
 
 # vim: set tabstop=4 shiftwidth=4 expandtab: 

@@ -1,13 +1,16 @@
 # About
-Lemma is an ElectroMagnetics Modelling API. Lemma is developed in the hopes that it will be helpful for academics, industry, and anyone else interested in modelling. 
+Lemma is an ElectroMagnetics Modelling API. Lemma is developed in the hopes that it will be helpful for academics, industry, and anyone else interested in geophysical modelling.
 
 * Written in C++ 
 * Test driven   
 * Flexible 
-* Fast 
+* Fast
 * Object oriented 
-* Python bindings planned
-* VTK integration 
+* Python bindings
+* VTK integration
+
+## Git 
+Lemma is hosted on several Git instances. Our main instance runs on Gitea and is at https://lemmasoftware.org. The project is also mirrored on GitHub. 
 
 ## Team 
 Lemma is and has been developed by several organisations and people, including: University of Utah, Colorado School of Mines, US Geological Survey. 

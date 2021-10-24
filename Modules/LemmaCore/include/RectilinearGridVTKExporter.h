@@ -26,7 +26,7 @@
 #include "LemmaObject.h"
 #include "RectilinearGrid.h"
 
-#include <vtkSmartPointer.h>
+#include "vtkSmartPointer.h"
 #include "vtkXMLRectilinearGridWriter.h"
 #include "vtkRectilinearGrid.h"
 #include "vtkDoubleArray.h"

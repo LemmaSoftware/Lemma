@@ -19,13 +19,16 @@ class InstallPlatlib(install):
         if self.distribution.has_ext_modules():
             self.install_lib = self.install_platlib
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
   name             = 'pyLemma',
-  version          = '0.0.13', 
+  version          = '0.4.0', 
   author           = 'Trevor Irons and others',
   author_email     = 'Trevor.Irons@lemmasoftware.org',
-  description      = 'A short description of the app/lib',
-  long_description = 'A longer one',
+  description      = 'PyLemma is a wrapper to Lemma',
+  long_description = long_description,
   classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

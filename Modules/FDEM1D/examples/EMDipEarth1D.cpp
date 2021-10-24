@@ -68,7 +68,7 @@ int main() {
 		Real oy =    20.;
 		Real depth = 18.10;
 		Real dz = 2.6;
-		int  nz = 1;
+		int  nz = 10000;
 
 		receivers->SetNumberOfPoints(nz);
 		int ir = 0;
@@ -83,6 +83,8 @@ int main() {
 
     auto EmEarth = EMEarth1D::NewSP();
         //EmEarth->SetHankelTransformMethod(DIGITALFILTERING);
+        EmEarth->SetHankelTransformMethod(CHAVE);
+
         EmEarth->SetFieldsToCalculate(BOTH); // Fortran needs this
 		EmEarth->AttachDipoleSource(dipole);
 		EmEarth->AttachLayeredEarthEM(earth);

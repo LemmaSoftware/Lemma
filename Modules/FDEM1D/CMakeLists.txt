@@ -10,6 +10,11 @@ set_target_properties(fdem1d PROPERTIES
     CXX_STANDARD_REQUIRED ON
 )
 
+if ( LEMMA_VTK9_SUPPORT ) 
+	target_link_libraries(fdem1d ${visibility}VTK::RenderingCore VTK::CommonDataModel)
+	vtk_module_autoinit(TARGETS fdem1d MODULES VTK::RenderingCore)
+endif()
+
 # Linking
 target_link_libraries(fdem1d "lemmacore")
 target_link_libraries(fdem1d ${YAML_CPP_LIBRARIES}) 
