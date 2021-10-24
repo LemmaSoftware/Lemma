@@ -164,6 +164,7 @@ namespace Lemma {
         HankelType = type;
     }
 
+    /*
     void EMEarth1D::Query() {
         std::cout << "EmEarth1D::Query()" << std::endl;
 
@@ -183,6 +184,7 @@ namespace Lemma {
 
         std::cout << "icalcinner " << icalcinner << std::endl;
     }
+    */
 
     // ====================  OPERATIONS    ===================================
 
@@ -258,7 +260,7 @@ namespace Lemma {
 
             } else if (Receivers->GetNumberOfPoints() > Antenna->GetNumberOfFrequencies()) {
 
-                //** Progress display bar for long calculations */
+                /* Progress display bar for long calculations */
                 std::unique_ptr<ProgressBar> mdisp;
                 if (progressbar) {
                     mdisp = std::make_unique< ProgressBar > ( Receivers->GetNumberOfPoints()*Antenna->GetNumberOfFrequencies() );

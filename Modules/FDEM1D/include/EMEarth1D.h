@@ -53,8 +53,7 @@ namespace Lemma {
     // =======================================================================
     class EMEarth1D : public LemmaObject {
 
-		friend std::ostream &operator<<(std::ostream &stream,
-			const EMEarth1D &ob);
+	friend std::ostream &operator<<(std::ostream &stream, const EMEarth1D &ob);
 
         public:
 
@@ -66,10 +65,10 @@ namespace Lemma {
             explicit EMEarth1D ( const ctor_key& );
 
             /** Default protected constructor. */
-			EMEarth1D ( const YAML::Node& node, const ctor_key& );
+            EMEarth1D ( const YAML::Node& node, const ctor_key& );
 
             /** Default protected constructor. */
-            ~EMEarth1D ();
+            virtual ~EMEarth1D ();
 
             /**
              *  Returns pointer to new EMEarth1D. Location is
@@ -81,7 +80,7 @@ namespace Lemma {
 
             /** stream debugging info to std::out
              */
-            void Query();
+            //void Query();
 
             /** YAML Serializing method
              */

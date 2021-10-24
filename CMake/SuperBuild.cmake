@@ -74,6 +74,7 @@ endif()
 
 if (LEMMA_PYTHON3_BINDINGS)
     if (pybind11_FOUND)
+	    find_package(PythonLibs 3.0 REQUIRED)
         message( STATUS "pybind11 was found" )
     else()
         message( STATUS "pybind11 was NOT found, please build or remove LEMMA_PYTHON3_BINDINGS" )

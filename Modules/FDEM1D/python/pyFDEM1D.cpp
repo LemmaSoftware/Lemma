@@ -27,7 +27,6 @@ namespace py = pybind11;
 PYBIND11_MODULE(FDEM1D, m) {
 
     py::add_ostream_redirect(m, "ostream_redirect");
-
     m.doc() = "Python binding of Lemma::FDEM1D, additional details can be found at https://lemmasoftware.org";
 
 
@@ -230,18 +229,20 @@ PYBIND11_MODULE(FDEM1D, m) {
             "Calculates complex resistivity based on cole-cole parameters")
         ;
 
+
     py::class_<Lemma::EMEarth1D, std::shared_ptr<Lemma::EMEarth1D> >
         EMEarth1D(m, "EMEarth1D");
 
         // lifecycle
         EMEarth1D.def(py::init(&Lemma::EMEarth1D::NewSP))
+/*
         //.def_static("DeSerialize", py::overload_cast<const std::string&>
         //    (&Lemma::EMEarth1D::DeSerialize),"Construct object from yaml representation")
 
         // print
         .def("Serialize", &Lemma::EMEarth1D::Print, "YAML representation of the class")
         .def("__repr__", &Lemma::EMEarth1D::Print)
-
+	
         // accessors
         .def("GetName", &Lemma::EMEarth1D::GetName, "Returns the name of the class")
         .def("GetFieldPoints", &Lemma::EMEarth1D::GetFieldPoints, "Returns the FieldPoint class")
@@ -264,14 +265,17 @@ PYBIND11_MODULE(FDEM1D, m) {
             "Sets the TxRx mode flag")
 
         //methods
-#ifdef KIHALEE_EM1D
+	#ifdef KIHALEE_EM1D
         .def("MakeCalc", &Lemma::EMEarth1D::MakeCalc, "Calls KiHa Lee's EM1D FORTRAN77 code")
-#endif
+	#endif
 
         .def("MakeCalc3", &Lemma::EMEarth1D::MakeCalc3, "Native Lemma EM calculation")
         .def("CalculateWireAntennaFields", &Lemma::EMEarth1D::CalculateWireAntennaFields,
             "Native Lemma calculation of a wire antenna")
+*/
+	
         ;
+
 
     py::class_<Lemma::FieldPoints, std::shared_ptr<Lemma::FieldPoints> >
         FieldPoints(m, "FieldPoints");
@@ -334,8 +338,6 @@ PYBIND11_MODULE(FDEM1D, m) {
         .def("ClearFields", &Lemma::FieldPoints::ClearFields, "Clears calculated fields")
         .def("MaskPoint", &Lemma::FieldPoints::MaskPoint, "Masks the index resulting in no calculation")
         .def("UnMaskPoint", &Lemma::FieldPoints::UnMaskPoint, "Unmasks the index resulting in a calculation")
-
+	
         ;
 }
-
-

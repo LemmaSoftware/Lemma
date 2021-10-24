@@ -7,6 +7,8 @@ target_link_libraries(pyLemmaCore PRIVATE pybind11::module lemmacore )
 set_target_properties(pyLemmaCore PROPERTIES PREFIX "${PYTHON_MODULE_PREFIX}"
                                              SUFFIX "${PYTHON_MODULE_EXTENSION}"
                                              OUTPUT_NAME "LemmaCore"
+					     CXX_STANDARD 14 
+					     CXX_STANDARD_REQUIRED ON
 )
 
 
