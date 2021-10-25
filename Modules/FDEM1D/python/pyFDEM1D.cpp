@@ -242,7 +242,7 @@ PYBIND11_MODULE(FDEM1D, m) {
         // print
         .def("Serialize", &Lemma::EMEarth1D::Print, "YAML representation of the class")
         .def("__repr__", &Lemma::EMEarth1D::Print)
-	
+
         // accessors
         .def("GetName", &Lemma::EMEarth1D::GetName, "Returns the name of the class")
         .def("GetFieldPoints", &Lemma::EMEarth1D::GetFieldPoints, "Returns the FieldPoint class")
@@ -273,7 +273,7 @@ PYBIND11_MODULE(FDEM1D, m) {
         .def("CalculateWireAntennaFields", &Lemma::EMEarth1D::CalculateWireAntennaFields,
             "Native Lemma calculation of a wire antenna")
 */
-	
+
         ;
 
 
@@ -338,6 +338,6 @@ PYBIND11_MODULE(FDEM1D, m) {
         .def("ClearFields", &Lemma::FieldPoints::ClearFields, "Clears calculated fields")
         .def("MaskPoint", &Lemma::FieldPoints::MaskPoint, "Masks the index resulting in no calculation")
         .def("UnMaskPoint", &Lemma::FieldPoints::UnMaskPoint, "Unmasks the index resulting in a calculation")
-	
+
         ;
 }
