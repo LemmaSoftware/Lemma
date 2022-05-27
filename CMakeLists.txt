@@ -14,7 +14,7 @@ SET_PROPERTY(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
 # Lemma versioning, set Major, minor, and patch here                                               #
 set(LEMMA_VERSION_MAJOR "0")                                                                       #
 set(LEMMA_VERSION_MINOR "4")                                                                       #
-set(LEMMA_VERSION_PATCH "0")                                                                       #
+set(LEMMA_VERSION_PATCH "1")                                                                       #
 set(LEMMA_VERSION "\"${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}\"")      #
 set(LEMMA_VERSION_NOQUOTES "${LEMMA_VERSION_MAJOR}.${LEMMA_VERSION_MINOR}.${LEMMA_VERSION_PATCH}") #
 ####################################################################################################
@@ -49,6 +49,7 @@ option ( LEMMA_BUILD_DOCUMENTATION  "Build Doxygen man pages" OFF )
 option ( LEMMA_VTK8_SUPPORT         "VTK 8.x library for visualisation and grids" OFF )
 option ( LEMMA_VTK9_SUPPORT         "VTK 9.x library for visualisation and grids" OFF )
 option ( LEMMA_PYTHON3_BINDINGS     "Compile Python 3 bindings" OFF )
+option ( LEMMA_MATLAB_MEX           "Build Matlab mex files for selected examples" OFF )
 
 # We end up using this for all builds, TODO remove this variable but follow same path
 #option (CMAKE_CROSSCOMPILING "Target different arch than you are on" OFF)
@@ -72,7 +73,7 @@ if (CMAKE_CROSSCOMPILING)
 #    endif()
 
     find_package (yaml-cpp 0.6    PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Serialisation of classes 
-    find_package (Eigen3   3.3    PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Matrix/Vector & Math
+    find_package (Eigen3   3.4    PATHS ${CMAKE_INSTALL_PREFIX}  NO_DEFAULT_PATH) # Matrix/Vector & Math
 
     if (LEMMA_PYTHON3_BINDINGS)
         find_package(pybind11 PATHS ${CMAKE_INSTALL_PREFIX} NO_DEFAULT_PATH)           # Python 3 bindings
@@ -288,6 +289,11 @@ if (LEMMA_PYTHON3_BINDINGS)
     install ( FILES python/publish.sh DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
     install ( FILES README.md DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
     install ( DIRECTORY python/pyLemma DESTINATION ${CMAKE_INSTALL_PREFIX}/pyLemma/ ) 
+endif()
+
+if (LEMMA_MATLAB_MEX)
+    find_package(Matlab REQUIRED)
+    #matlab_add_mex(NAME mex_file_name SRC source_file.cpp)   
 endif()
 
 ####################

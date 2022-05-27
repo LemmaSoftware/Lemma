@@ -8,7 +8,7 @@ else()
         ExternalProject_Add(EIGEN
 	    GIT_REPOSITORY "https://gitlab.com/libeigen/eigen.git"
         UPDATE_COMMAND "" 
-	    GIT_TAG "3.3.7" 
+	    GIT_TAG "3.4.0" 
    	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/eigen
    	    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 		#CONFIGURE_COMMAND ""

@@ -40,6 +40,10 @@ if (LEMMA_PYTHON3_BINDINGS)
 	add_subdirectory(python)
 endif()
 
+if (LEMMA_MATLAB_MEX)
+	add_subdirectory(matlab)
+endif()
+
 # Install
 install ( TARGETS fdem1d DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )
 install ( FILES include/FDEM1D  DESTINATION ${CMAKE_INSTALL_PREFIX}/include/Lemma ) 
